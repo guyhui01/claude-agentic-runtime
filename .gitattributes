@@ -1,0 +1,11 @@
+# Normalisation des fins de ligne — cohérence cross-platform (Windows/Unix/CI).
+# Le dépôt stocke en LF ; chaque poste rend selon sa plateforme à la sortie.
+* text=auto eol=lf
+
+# Fichiers binaires : aucune normalisation.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.ico binary
