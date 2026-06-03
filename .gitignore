@@ -1,0 +1,37 @@
+# Secrets & environnement
+.env
+.env.*
+*.local
+secrets/
+*.key
+*.pem
+
+# Catalogue importé (dépendance read-only — jamais committé ici)
+/vendor/claude-agents/
+/.catalog-cache/
+
+# Node / TypeScript (Claude Agent SDK)
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+
+# Python (si SDK Python)
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+
+# Sorties de run du runtime (stores locaux)
+/runs/
+/logs/
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
