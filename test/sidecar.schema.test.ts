@@ -184,12 +184,6 @@ describe("ISO 25012 — exactitude (identifiants/chemins bien-formés)", () => {
   });
 });
 
-// --- Vérifications complémentaires (hors portée JSON Schema) ---
-// Les 2 caractéristiques ISO 25012 restantes ne sont pas encodables dans le
-// schéma seul : elles nécessitent un parcours de l'index / du système de fichiers.
-// À compléter par Guy (brique 0, étape suivante).
-describe("ISO 25012 — vérifications complémentaires (test runtime)", () => {
-  it.todo("exactitude référentielle : chaque dependsOn pointe vers un id existant");
-  it.todo("accessibilité : chaque path/source.file est joignable sur disque");
-  it.todo("exactitude : unicité globale des id sur tout l'index");
-});
+// Les 2 caractéristiques ISO 25012 hors portée d'un JSON Schema (exactitude
+// référentielle, accessibilité) + l'unicité des id sont couvertes par
+// test/sidecar.integrity.test.ts (fonctions src/sidecar/integrity.ts).

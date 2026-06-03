@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "catalog": { "name": "claude-agents", "version": "v3.25.0" },
+  "generatedAt": "2026-06-03T14:00:00Z",
+  "assets": [
+    {
+      "id": "skill-user-stories",
+      "type": "skill",
+      "path": "skills/user-stories/SKILL.md",
+      "title": "User Stories",
+      "description": "Rédaction de User Stories INVEST.",
+      "catalogVersion": "v3.25.0",
+      "source": { "file": "skills/user-stories/SKILL.md", "catalogTag": "v3.25.0" }
+    },
+    {
+      "id": "AGENT-CADRAGE",
+      "type": "agent",
+      "path": "AGENT-CADRAGE.md",
+      "title": "Agent Cadrage",
+      "description": "Agent de cadrage produit.",
+      "catalogVersion": "v3.25.0",
+      "source": { "file": "AGENT-CADRAGE.md", "catalogTag": "v3.25.0" },
+      "dependsOn": ["skill-user-stories"]
+    },
+    {
+      "id": "WF-001",
+      "type": "workflow",
+      "path": "workflows/WF-001.md",
+      "title": "Cadrage",
+      "description": "Workflow de cadrage WF-001.",
+      "catalogVersion": "v3.25.0",
+      "source": { "file": "workflows/WF-001.md", "catalogTag": "v3.25.0" },
+      "dependsOn": ["AGENT-CADRAGE"]
+    }
+  ]
+}
