@@ -1,6 +1,7 @@
 # Note de cadrage — POC `claude-agentic-runtime`
 
-> Statut : **brouillon à valider (Guy)** · Date : 2026-06-03 · Auteur : Guy HUIBONHOA (assisté Claude Opus 4.8)
+> Statut : **VALIDÉE par Guy — 2026-06-03** · Auteur : Guy HUIBONHOA (assisté Claude Opus 4.8)
+> Référentiels qualité ISO appliqués dans la construction du repo (cf. ADR-0006) : ISO/IEC/IEEE 42010 · ISO/IEC 25012 · ISO/IEC 25010 · ISO/IEC 42001.
 > Document fondateur du repo. Aucune ligne de code n'est écrite avant validation de cette note.
 
 ---
