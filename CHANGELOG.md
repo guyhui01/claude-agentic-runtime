@@ -14,7 +14,9 @@
 - **`test/sidecar.schema.test.ts`** : 18 cas valides/invalides (un par caractéristique) couvrant les 5 caractéristiques natives au schéma.
 - **`src/sidecar/types.ts`** : miroir TypeScript du sidecar (premier code `src/`).
 - **`src/sidecar/integrity.ts`** : les 2 caractéristiques ISO 25012 hors portée d'un JSON Schema, encodées comme fonctions pures réutilisables par le loader — `checkReferentialIntegrity` (exactitude référentielle `dependsOn`→`id`), `checkAccessibility` (joignabilité disque, refus défensif des chemins absolus/`..`) — plus `checkUniqueIds` (unicité globale des `id`) et l'agrégat `checkIntegrity`.
-- **`test/sidecar.integrity.test.ts`** + **`test/fixtures/catalog/`** : mini-catalogue factice hermétique (sidecar + 3 fichiers prose) ; 8 cas (nominal + dégradés). Total suite : **26 tests verts**, `typecheck` strict OK.
+- **`test/sidecar.integrity.test.ts`** + **`test/fixtures/catalog/`** : mini-catalogue factice hermétique (sidecar + 3 fichiers prose) ; 8 cas (nominal + dégradés).
+- **`src/loader/load-sidecar.ts`** : Loader fail-closed (ADR-0004) — pipeline ordonné à court-circuit `parse` → `schema` (ajv) → `integrity`, retournant un `Sidecar` typé ou levant une `SidecarValidationError` qui agrège **tous** les problèmes (`LoadIssue[]` horodatés par étape). Schéma compilé une seule fois (cache module) ; `catalogRoot` par défaut = dossier du sidecar. Ne lance pas l'intégrité si le schéma échoue (forme non fiable).
+- **`test/loader.test.ts`** : 7 cas couvrant les 3 étapes + l'usage effectif de `catalogRoot`. Total suite : **33 tests verts**, `typecheck` strict OK.
 
 ### Notes
 - Choix d'encodage : pas de champ `format` redondant, pas de checksum/score (relèverait d'ISO 25024, **différé** par ADR-0006), validation par `pattern` plutôt que `format` → aucune dépendance `ajv-formats` ajoutée.
