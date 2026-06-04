@@ -6,7 +6,7 @@
 
 ---
 
-## 1. État actuel (2026-06-03)
+## 1. État actuel (2026-06-04)
 
 **Brique 0 (Loader) — bouclée.**
 
@@ -16,16 +16,25 @@
 | Contrôles d'intégrité | `src/sidecar/integrity.ts` | 2 restantes : exactitude référentielle, accessibilité réelle + unicité des id |
 | Loader fail-closed | `src/loader/load-sidecar.ts` | orchestre schéma + intégrité (ADR-0004) |
 | Types | `src/sidecar/types.ts` | miroir TypeScript du sidecar |
-| Tests | `test/` (+ fixture hermétique) | **33 tests verts**, `typecheck` strict OK |
+
+**Brique 1 (contrats de handoff) — bouclée (2026-06-04, Opus 4.8).**
+
+| Élément | Fichier | Rôle |
+|---|---|---|
+| Types de contrat | `src/handoff/types.ts` | `StepContract { stepId, input?, output }` + `HandoffIssue` |
+| Validateur | `src/handoff/validate-handoff.ts` | `checkContractCompatibility` (statique, shallow) + `validateHandoff` (runtime, fail-closed) ; ajv2020 réutilisé du loader |
+| Tests | `test/handoff.test.ts` | 7 cas (compat statique + runtime amont/aval + agrégation) |
+
+**Total : 40 tests verts, `typecheck` strict OK.** Source des contrats = fixtures pour l'instant (décision : câblage à la vraie source repoussé à l'intégration SDK §2.4 — YAGNI, brique 0 non touchée).
 
 ---
 
 ## 2. Feuille de route (par priorité)
 
-### 2.1 — Brique 1 : contrats de handoff typés *(cœur de valeur)*
-- I/O schématisé (JSON Schema) entre les étapes de la spine **WF-001 → WF-002 → WF-003**.
-- C'est ce que le Claude Agent SDK **ne fournit pas** (note §4). Priorité haute.
-- Réutilise le pattern de validation ajv déjà en place (loader).
+### 2.1 — Brique 1 : contrats de handoff typés ✅ *(cœur de valeur — FAIT 2026-06-04)*
+- ✅ I/O schématisé (JSON Schema) validé entre étapes, en réutilisant le pattern ajv du loader.
+- ✅ Deux niveaux ADR-0004 : compatibilité **statique** amont↔aval + validation **runtime** fail-closed du payload.
+- ▶️ **Reste à câbler** (à l'intégration SDK §2.4) : la **source réelle** des schémas de contrat (sidecar étendu vs manifeste) — aujourd'hui en fixtures.
 
 ### 2.2 — Brique 2 : un eval gate
 - Un garde-fou qualité branché sur **une** sortie d'agent (ex. conformité du livrable de cadrage WF-001).
