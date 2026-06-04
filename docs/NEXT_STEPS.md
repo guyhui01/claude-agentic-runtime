@@ -33,7 +33,16 @@
 | Gate | `src/eval/eval-gate.ts` | `runEvalGate` (évalue, ne lève jamais) + `assertGatePassed` (applique, fail-closed) |
 | Tests | `test/eval-gate.test.ts` | 6 cas (DoD cadrage WF-001 : pass · advisory non bloquant · fail bloquant · check défensif · fail-closed) |
 
-**Total : 46 tests verts, `typecheck` strict OK.** Source des contrats/critères = fixtures pour l'instant (décision : câblage à la vraie source repoussé à l'intégration SDK §2.4 — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
+**§2.4-A (adaptateur catalogue → SDK) — bouclé (2026-06-04, Opus 4.8).**
+
+| Élément | Fichier | Rôle |
+|---|---|---|
+| Adaptateur | `src/sdk/to-agent-definition.ts` | `Asset` (+ prose `.md`) → `AgentDefinition` du SDK ; lecture seule (ADR-0001), défauts read-only + overrides (data gap §2.1) |
+| Tests | `test/sdk-adapter.test.ts` | 5 cas (mapping prose→prompt · défauts · overrides · refus non-agent · anti-traversal) |
+
+Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `AgentDefinition`, `query({prompt, options})`).
+
+**Total : 51 tests verts, `typecheck` strict OK.** Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
 
 ---
 
@@ -54,14 +63,17 @@
 - À planifier comme chantier `claude-agents` quand on voudra produire un vrai sidecar à partir de la prose. Le schéma de ce repo sert de contrat de référence.
 
 ### 2.4 — Intégration Claude Agent SDK *(exécution de la spine)*
-- Brancher le loader → définitions SDK → exécution WF-001→003.
-- ⚠️ **Vérifier le nom exact du package SDK avant install** (cf. [[feedback-verification-factuelle]]).
+- ✅ **§2.4-A FAIT (2026-06-04)** : package vérifié (`@anthropic-ai/claude-agent-sdk`, cf. [[feedback-verification-factuelle]]) + adaptateur `Asset → AgentDefinition` (lecture seule, testé, sans réseau).
+- ▶️ **§2.4-B — exécuteur de la spine (À FAIRE, sous condition)** : appeler `query()` et dérouler WF-001→002→003 en branchant les contrats de handoff (brique 1) entre étapes + l'eval gate (brique 2) sur chaque sortie.
+  - **Prérequis externes** : `ANTHROPIC_API_KEY` configurée + **budget coût** (appel API payant ; cadrer `maxBudgetUsd`/`maxTurns`). À lancer **sur accord explicite Guy**.
+  - C'est ce run de bout en bout qui **atteint le déclencheur d'audit ISO §3.4** (« quand la spine s'exécute »).
 
 ### 2.5 — Pipeline CI
 - Validation schémas + eval gate + **PR de bump** du catalogue épinglé (note §9, livrable 6 ; pattern Dependabot/Renovate, ADR-0002).
 
 ### 2.6 — Dette technique connue
 - **Montée `vitest` 2 → 4** (chantier dédié). Faille `esbuild` du serveur de dev **non exposée** ; aucune urgence, mais à tracer.
+- **`npm audit` après ajout du SDK** : 5 vulnérabilités (4 modérées, 1 critique) dans les deps transitives de `@anthropic-ai/claude-agent-sdk`. Pas de `audit fix --force` (casse). À réévaluer aux montées de version du SDK ; sans impact sur l'adaptateur (type-only) ni les tests.
 
 ---
 
