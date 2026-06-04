@@ -5,22 +5,44 @@
 
 ---
 
-## [Unreleased] — Brique 0 (Loader) — en cours
+## [Unreleased]
 > Modèle : Claude Opus 4.8
 
 ### Added
-- **Dépendances verrouillées** : `package-lock.json` généré au premier `npm install` (52 paquets). vitest maintenu en `^2.1` (montée vitest 4 reportée en chantier dédié ; faille esbuild côté serveur de dev non exposée).
-- **`schema/sidecar.schema.json`** (JSON Schema 2020-12) : index machine-lisible du catalogue, encodant de façon **exécutable** 5 des 7 caractéristiques ISO/IEC 25012 retenues (ADR-0006) — complétude, cohérence (`if/then` par type), crédibilité (`source` = `{file, catalogTag}`), actualité (tag épinglé + horodatage), exactitude/accessibilité bien-formées. Conformité portée par `type` (enum formats ouverts) + `$schema` + `additionalProperties:false`. `path`/`source.file` anti-traversal (pas de `/` initial ni `..`).
-- **`test/sidecar.schema.test.ts`** : 18 cas valides/invalides (un par caractéristique) couvrant les 5 caractéristiques natives au schéma.
-- **`src/sidecar/types.ts`** : miroir TypeScript du sidecar (premier code `src/`).
-- **`src/sidecar/integrity.ts`** : les 2 caractéristiques ISO 25012 hors portée d'un JSON Schema, encodées comme fonctions pures réutilisables par le loader — `checkReferentialIntegrity` (exactitude référentielle `dependsOn`→`id`), `checkAccessibility` (joignabilité disque, refus défensif des chemins absolus/`..`) — plus `checkUniqueIds` (unicité globale des `id`) et l'agrégat `checkIntegrity`.
-- **`test/sidecar.integrity.test.ts`** + **`test/fixtures/catalog/`** : mini-catalogue factice hermétique (sidecar + 3 fichiers prose) ; 8 cas (nominal + dégradés).
-- **`src/loader/load-sidecar.ts`** : Loader fail-closed (ADR-0004) — pipeline ordonné à court-circuit `parse` → `schema` (ajv) → `integrity`, retournant un `Sidecar` typé ou levant une `SidecarValidationError` qui agrège **tous** les problèmes (`LoadIssue[]` horodatés par étape). Schéma compilé une seule fois (cache module) ; `catalogRoot` par défaut = dossier du sidecar. Ne lance pas l'intégrité si le schéma échoue (forme non fiable).
-- **`test/loader.test.ts`** : 7 cas couvrant les 3 étapes + l'usage effectif de `catalogRoot`. Total suite : **33 tests verts**, `typecheck` strict OK.
+- **§2.4-A — adaptateur catalogue → SDK** (`src/sdk/to-agent-definition.ts`) : transforme un `Asset` de type *agent* (+ sa prose `.md`) en `AgentDefinition` du Claude Agent SDK (`prompt` = prose, `description` = description du sidecar). Lecture seule (ADR-0001), garde anti-traversal, défauts read-only (`Read`/`Grep`/`Glob`) + `overrides` explicites en attendant que le sidecar porte `tools`/`model`/`mcp` (*data gap*, cf. `NEXT_STEPS §2.1`). 5 tests ; suite portée à **51 tests verts**.
+- **Dépendance `@anthropic-ai/claude-agent-sdk`** (`^0.3.162`) : package vérifié (API `query({prompt, options})`, type `AgentDefinition`). Première moitié de l'intégration SDK, **sans réseau ni appel facturé**.
+
+### Changed
+- **`docs/NEXT_STEPS.md`** : briques 1 & 2 et §2.4-A actées ; prérequis §2.4-B précisé — **auth OAuth abonnement uniquement**, jamais `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement budget), standby *fail-closed* à la limite de quota + caps par run (`maxBudgetUsd`/`maxTurns`/`permissionMode:"plan"`).
+
+### Security
+- `npm audit` après ajout du SDK : 5 vulnérabilités (4 modérées, 1 critique) en **dépendances transitives** de `@anthropic-ai/claude-agent-sdk` ; pas de `audit fix --force` (casse). Sans impact sur l'adaptateur (type-only) ni les tests ; à réévaluer aux montées de version du SDK.
 
 ### Notes
-- Choix d'encodage : pas de champ `format` redondant, pas de checksum/score (relèverait d'ISO 25024, **différé** par ADR-0006), validation par `pattern` plutôt que `format` → aucune dépendance `ajv-formats` ajoutée.
-- Le sidecar de production n'est pas dans ce repo (ADR-0003) : il est importé épinglé depuis `claude-agents` ; `checkAccessibility` résout les chemins relativement à un `catalogRoot` injecté (jamais hardcodé).
+- Règle d'auth/budget consignée (mémoire projet) : OAuth abonnement, jamais de clé métrée. Vérifié 2026-06-04 : `ANTHROPIC_API_KEY` absente aux 3 scopes (session/User/Machine) — règle déjà structurellement tenue.
+
+---
+
+## [0.2.0] — 2026-06-04 — Socle d'exécution : Loader + contrats + eval gate
+> Modèle : Claude Opus 4.8
+>
+> Premier socle de **code** du runtime (la 0.1.0 était documentaire). Briques 0, 1 et 2 du POC. **46 tests verts**, `typecheck` strict OK.
+
+### Added
+- **Brique 0 — Loader sidecar (fail-closed)** :
+  - **`schema/sidecar.schema.json`** (JSON Schema 2020-12) : index machine-lisible du catalogue, encodant de façon **exécutable** 5 des 7 caractéristiques ISO/IEC 25012 retenues (ADR-0006) — complétude, cohérence (`if/then` par type), crédibilité (`source` = `{file, catalogTag}`), actualité (tag épinglé + horodatage), exactitude/accessibilité bien-formées. `path`/`source.file` anti-traversal (pas de `/` initial ni `..`).
+  - **`src/sidecar/types.ts`** : miroir TypeScript du sidecar.
+  - **`src/sidecar/integrity.ts`** : les 2 caractéristiques ISO 25012 hors portée d'un JSON Schema — `checkReferentialIntegrity` (`dependsOn`→`id`), `checkAccessibility` (joignabilité disque, refus défensif des chemins absolus/`..`) — plus `checkUniqueIds` (unicité globale des `id`) et l'agrégat `checkIntegrity`.
+  - **`src/loader/load-sidecar.ts`** : pipeline ordonné à court-circuit `parse` → `schema` (ajv) → `integrity`, retournant un `Sidecar` typé ou levant une `SidecarValidationError` qui agrège **tous** les problèmes (`LoadIssue[]` par étape). Schéma compilé une seule fois (cache module) ; `catalogRoot` par défaut = dossier du sidecar ; intégrité non lancée si le schéma échoue.
+  - Tests : `sidecar.schema.test.ts` (18), `sidecar.integrity.test.ts` (8) + fixture hermétique `test/fixtures/catalog/`, `loader.test.ts` (7).
+- **Brique 1 — contrats de handoff typés** (`src/handoff/{types,validate-handoff}.ts`) : `checkContractCompatibility` (statique *shallow* : champs `required` de l'aval promis par la sortie amont) + `validateHandoff` (runtime fail-closed : payload conforme à la sortie amont ET à l'entrée aval), `HandoffValidationError` agrégée, ajv2020/strict réutilisé du loader. Comble le vide que le SDK ne couvre pas — la cohérence I/O inter-étapes. 7 tests.
+- **Brique 2 — eval gate déterministe** (`src/eval/{types,eval-gate}.ts`) : critères `blocking`/`advisory` (check défensif), `runEvalGate` (ÉVALUE — ne lève jamais, produit le rapport-preuve même en succès) + `assertGatePassed` (APPLIQUE — fail-closed). Pas de LLM-as-judge (POC ; extension ultérieure, même interface `Criterion`). Fixture = DoD du cadrage WF-001. 6 tests.
+- **`package.json`** : version 0.1.0 → 0.2.0 ; `package-lock.json` (premier `npm install`, 52 paquets).
+
+### Notes
+- Choix d'encodage sidecar : pas de champ `format` redondant, pas de checksum/score (ISO 25024 **différé**, ADR-0006), validation par `pattern` plutôt que `format` → aucune dépendance `ajv-formats`.
+- Le sidecar de production n'est pas dans ce repo (ADR-0003) : importé épinglé depuis `claude-agents` ; `checkAccessibility` résout les chemins via un `catalogRoot` injecté (jamais hardcodé).
+- vitest maintenu en `^2.1` (montée v4 = chantier dédié ; faille esbuild côté serveur de dev non exposée).
 
 ---
 
@@ -35,5 +57,9 @@
 - **Licence MIT** (`LICENSE`) © 2026 Guy HUIBONHOA.
 
 ### Notes
-- Aucun code à ce stade. Prochaine étape : plan détaillé de la **brique 0 (Loader)** à valider avant écriture.
-- `claude-agents` (catalogue SSOT) reste **intact** ; ce repo n'a aucun droit d'écriture dessus.
+- Aucun code à ce stade. `claude-agents` (catalogue SSOT) reste **intact** ; ce repo n'a aucun droit d'écriture dessus.
+
+---
+
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/guyhui01/claude-agentic-runtime/releases/tag/v0.2.0
