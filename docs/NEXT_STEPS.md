@@ -25,7 +25,15 @@
 | Validateur | `src/handoff/validate-handoff.ts` | `checkContractCompatibility` (statique, shallow) + `validateHandoff` (runtime, fail-closed) ; ajv2020 réutilisé du loader |
 | Tests | `test/handoff.test.ts` | 7 cas (compat statique + runtime amont/aval + agrégation) |
 
-**Total : 40 tests verts, `typecheck` strict OK.** Source des contrats = fixtures pour l'instant (décision : câblage à la vraie source repoussé à l'intégration SDK §2.4 — YAGNI, brique 0 non touchée).
+**Brique 2 (eval gate) — bouclée (2026-06-04, Opus 4.8).**
+
+| Élément | Fichier | Rôle |
+|---|---|---|
+| Types | `src/eval/types.ts` | `Criterion` (déterministe, `blocking`/`advisory`) + `GateReport` (preuve d'audit) |
+| Gate | `src/eval/eval-gate.ts` | `runEvalGate` (évalue, ne lève jamais) + `assertGatePassed` (applique, fail-closed) |
+| Tests | `test/eval-gate.test.ts` | 6 cas (DoD cadrage WF-001 : pass · advisory non bloquant · fail bloquant · check défensif · fail-closed) |
+
+**Total : 46 tests verts, `typecheck` strict OK.** Source des contrats/critères = fixtures pour l'instant (décision : câblage à la vraie source repoussé à l'intégration SDK §2.4 — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
 
 ---
 
@@ -36,9 +44,10 @@
 - ✅ Deux niveaux ADR-0004 : compatibilité **statique** amont↔aval + validation **runtime** fail-closed du payload.
 - ▶️ **Reste à câbler** (à l'intégration SDK §2.4) : la **source réelle** des schémas de contrat (sidecar étendu vs manifeste) — aujourd'hui en fixtures.
 
-### 2.2 — Brique 2 : un eval gate
-- Un garde-fou qualité branché sur **une** sortie d'agent (ex. conformité du livrable de cadrage WF-001).
-- Fail-closed, cohérent avec le modèle de propagation gardée (ADR-0004).
+### 2.2 — Brique 2 : un eval gate ✅ *(FAIT 2026-06-04)*
+- ✅ Garde-fou qualité déterministe sur la sortie d'une étape (DoD du cadrage WF-001 en fixture).
+- ✅ Fail-closed (`assertGatePassed`), évaluation traçable séparée (`runEvalGate` produit la preuve même en succès) — cohérent ADR-0004 + posture ISO 19011.
+- ▶️ **Reste à câbler** (intégration SDK §2.4) : les critères réels par étape, sourcés depuis le catalogue (cf. §2.1, même décision de source).
 
 ### 2.3 — Générateur de sidecar *(hors ce repo)*
 - **Conformité ADR-0003** : le générateur appartient à **`claude-agents`** (généré + validé en CI côté catalogue). Le runtime ne fait que **lire**.
