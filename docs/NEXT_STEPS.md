@@ -65,7 +65,8 @@ Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `Agent
 ### 2.4 — Intégration Claude Agent SDK *(exécution de la spine)*
 - ✅ **§2.4-A FAIT (2026-06-04)** : package vérifié (`@anthropic-ai/claude-agent-sdk`, cf. [[feedback-verification-factuelle]]) + adaptateur `Asset → AgentDefinition` (lecture seule, testé, sans réseau).
 - ▶️ **§2.4-B — exécuteur de la spine (À FAIRE, sous condition)** : appeler `query()` et dérouler WF-001→002→003 en branchant les contrats de handoff (brique 1) entre étapes + l'eval gate (brique 2) sur chaque sortie.
-  - **Prérequis externes** : `ANTHROPIC_API_KEY` configurée + **budget coût** (appel API payant ; cadrer `maxBudgetUsd`/`maxTurns`). À lancer **sur accord explicite Guy**.
+  - **Prérequis auth (règle budget)** : **OAuth abonnement Pro/Max uniquement** (`claude` login) — **NE PAS** définir `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement). À la limite de quota : échec *fail-closed*, pas de bascule payante. Vérifié 2026-06-04 : variable absente aux 3 scopes (règle déjà tenue). Voir memory `feedback-budget-quota-abonnement`.
+  - **Garde par run** : `maxBudgetUsd` bas + `maxTurns` faible + `permissionMode: "plan"` (read-only). À lancer **sur accord explicite Guy + run observé**.
   - C'est ce run de bout en bout qui **atteint le déclencheur d'audit ISO §3.4** (« quand la spine s'exécute »).
 
 ### 2.5 — Pipeline CI
