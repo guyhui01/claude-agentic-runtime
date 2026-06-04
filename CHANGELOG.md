@@ -13,6 +13,8 @@
 - **§2.4-A — adaptateur catalogue → SDK** (`src/sdk/to-agent-definition.ts`) : transforme un `Asset` de type *agent* (+ sa prose `.md`) en `AgentDefinition` du Claude Agent SDK (`prompt` = prose, `description` = description du sidecar). Lecture seule (ADR-0001), garde anti-traversal, défauts read-only (`Read`/`Grep`/`Glob`) + `overrides` explicites en attendant que le sidecar porte `tools`/`model`/`mcp` (*data gap*, cf. `NEXT_STEPS §2.1`). 5 tests ; suite portée à **51 tests verts**.
 - **Dépendance `@anthropic-ai/claude-agent-sdk`** (`^0.3.162`) : package vérifié (API `query({prompt, options})`, type `AgentDefinition`). Première moitié de l'intégration SDK, **sans réseau ni appel facturé**.
 
+- **ADR-0007 — source des contrats/critères tranchée (§2.4-B.2)** (`docs/adr/0007-...md`) : **manifeste de spine propriété du runtime** — contrats en JSON Schema (donnée) + critères référencés par `id` depuis un registre TS (code déterministe, pas de DSL prématuré), croisés avec le sidecar (descriptif, inchangé — ADR-0003). Fait décisif : un `Criterion.check` est du code, non sérialisable en sidecar. Référencé dans README + NEXT_STEPS §2.4-B.2.
+
 ### Changed
 - **`docs/NEXT_STEPS.md`** : briques 1 & 2 et §2.4-A actées ; prérequis §2.4-B précisé — **auth OAuth abonnement uniquement**, jamais `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement budget), standby *fail-closed* à la limite de quota + caps par run (`maxBudgetUsd`/`maxTurns`/`permissionMode:"plan"`).
 
