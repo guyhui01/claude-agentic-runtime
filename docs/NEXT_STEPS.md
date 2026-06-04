@@ -42,7 +42,9 @@
 
 Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `AgentDefinition`, `query({prompt, options})`).
 
-**Total : 51 tests verts, `typecheck` strict OK.** Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
+**§2.4-B.1 (orchestrateur de spine, hors-ligne) — bouclé (2026-06-04, Opus 4.8).** `src/orchestrator/{types,run-spine}.ts` : `runSpine` + `StepRunner` injectable, pré-vol statique + eval gate + handoff fail-closed + provenance/`GateReport` tracés (cf. §2.4-B ci-dessous).
+
+**Total : 57 tests verts, `typecheck` strict OK.** Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
 
 ---
 
@@ -64,7 +66,9 @@ Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `Agent
 
 ### 2.4 — Intégration Claude Agent SDK *(exécution de la spine)*
 - ✅ **§2.4-A FAIT (2026-06-04)** : package vérifié (`@anthropic-ai/claude-agent-sdk`, cf. [[feedback-verification-factuelle]]) + adaptateur `Asset → AgentDefinition` (lecture seule, testé, sans réseau).
-- ▶️ **§2.4-B — exécuteur de la spine (À FAIRE, sous condition)** : appeler `query()` et dérouler WF-001→002→003 en branchant les contrats de handoff (brique 1) entre étapes + l'eval gate (brique 2) sur chaque sortie.
+- ✅ **§2.4-B.1 — orchestrateur + runner injectable (HORS-LIGNE, FAIT 2026-06-04, Opus 4.8)** : `src/orchestrator/{types,run-spine}.ts`. `runSpine` déroule WF-001→002→003 en branchant un **runner injectable** (abstraction de `query()`, mocké), l'**eval gate** (brique 2, fail-closed) et les **contrats de handoff** (brique 1, fail-closed) ; **pré-vol statique** des contrats adjacents avant exécution ; orchestrateur **pur** (zéro disque/réseau) ; **provenance** (`assetId`/`catalogTag`) + **`GateReport`** consignés dans une trace conservée même en échec. 6 tests hermétiques → **57 tests verts**, `typecheck` strict OK. Source des contrats/critères encore en fixtures.
+- ▶️ **§2.4-B.2 — source des contrats/critères (À TRANCHER, hors-ligne)** : aujourd'hui en fixtures. Choix d'architecture à arbitrer — **étendre le sidecar** (porté par le catalogue, généré/validé en CI côté `claude-agents`, ADR-0003) **vs manifeste de spine dédié** au runtime. Décision à présenter avec reco + ADR avant implémentation.
+- ▶️ **§2.4-B.3 — run live de la spine (À FAIRE, sous condition)** : remplacer le runner mock par un adaptateur enveloppant `query()` et dérouler WF-001→002→003 pour de vrai.
   - **Prérequis auth (règle budget)** : **OAuth abonnement Pro/Max uniquement** (`claude` login) — **NE PAS** définir `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement). À la limite de quota : échec *fail-closed*, pas de bascule payante. Vérifié 2026-06-04 : variable absente aux 3 scopes (règle déjà tenue). Voir memory `feedback-budget-quota-abonnement`.
   - **Garde par run** : `maxBudgetUsd` bas + `maxTurns` faible + `permissionMode: "plan"` (read-only). À lancer **sur accord explicite Guy + run observé**.
   - C'est ce run de bout en bout qui **atteint le déclencheur d'audit ISO §3.4** (« quand la spine s'exécute »).
