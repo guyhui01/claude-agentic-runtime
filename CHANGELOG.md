@@ -31,6 +31,7 @@
 
 ### Security
 - **§2.6 — `npm audit` : 5 vulnérabilités → 0** après montée `vitest` 4 (chaîne esbuild/vite/vite-node/@vitest/mocker). **Correction factuelle** : ces vulnérabilités étaient des deps transitives de **vitest** (dev), non du SDK `@anthropic-ai/claude-agent-sdk` (mention erronée d'une entrée [Unreleased] antérieure). `found 0 vulnerabilities` confirmé.
+- **Posture de sécurité du dépôt activée (2026-06-08)** : alertes de vulnérabilité Dependabot **ON** + correctifs de sécurité automatiques **ON** (`automated-security-fixes` : `{enabled:true, paused:false}`). Toute future faille sera détectée et corrigée en PR tracée (cohérent ADR-0002). Réglages GitHub côté dépôt (hors fichiers versionnés) ; le `dependabot.yml` (bumps de version) reste le pendant versionné.
 
 ### Notes
 - Règle d'auth/budget consignée (mémoire projet) : OAuth abonnement, jamais de clé métrée. Vérifié 2026-06-04 : `ANTHROPIC_API_KEY` absente aux 3 scopes (session/User/Machine) — règle déjà structurellement tenue.

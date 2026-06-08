@@ -89,6 +89,7 @@ Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `Agent
 ### 2.6 — Dette technique ✅ *(SOLDÉE 2026-06-08, Opus 4.8)*
 - ✅ **Montée `vitest` 2 → 4** (`^4.1.8`) faite : **94 tests verts** sur vitest 4, `typecheck` strict OK, aucune régression ni changement de config.
 - ✅ **`npm audit` : 5 vulnérabilités → 0**. Correction factuelle : elles provenaient de la chaîne **vitest 2 → vite → esbuild** (dev), PAS du SDK ; la montée v4 les purge (`found 0 vulnerabilities`).
+- ✅ **Posture de sécurité du dépôt activée** : alertes de vulnérabilité Dependabot + correctifs de sécurité automatiques **ON** (réglages GitHub côté dépôt). Détection + PR de fix automatiques pour toute future faille (cohérent ADR-0002).
 
 ---
 
