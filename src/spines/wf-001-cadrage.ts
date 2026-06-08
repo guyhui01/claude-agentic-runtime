@@ -28,36 +28,17 @@
  */
 
 import type { SpineManifest } from "../manifest/types.js";
-import type { JsonSchema } from "../handoff/types.js";
 import type { Criterion } from "../eval/types.js";
 import { CriterionRegistry } from "../eval/criteria-registry.js";
-
-// --- Helpers de schéma (JSON Schema 2020-12, compatibles ajv strict) ---------
-
-/** Fabrique un schéma objet `{ type, required, properties }`. */
-function objSchema(
-  required: string[],
-  properties: Record<string, JsonSchema>,
-): JsonSchema {
-  return { type: "object", required, properties };
-}
-const arr: JsonSchema = { type: "array" };
-const str: JsonSchema = { type: "string" };
-
-// --- Helpers de prédicat (lecture défensive de la sortie `unknown`) ----------
-
-function asRecord(o: unknown): Record<string, unknown> {
-  return (o ?? {}) as Record<string, unknown>;
-}
-function nonEmptyArray(v: unknown): v is unknown[] {
-  return Array.isArray(v) && v.length > 0;
-}
-function arrayLenBetween(v: unknown, min: number, max: number): boolean {
-  return Array.isArray(v) && v.length >= min && v.length <= max;
-}
-function nonEmptyString(v: unknown): v is string {
-  return typeof v === "string" && v.trim().length > 0;
-}
+import {
+  objSchema,
+  arr,
+  str,
+  asRecord,
+  nonEmptyArray,
+  arrayLenBetween,
+  nonEmptyString,
+} from "./spine-helpers.js";
 
 // =============================================================================
 // CRITÈRES — un par exigence de DoD, tracés à WF-001 (v1.2)

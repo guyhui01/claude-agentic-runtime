@@ -1,0 +1,29 @@
+version: 2
+
+# Bumps de dépendances en PR tracées (§2.5 NEXT_STEPS) — cohérent ADR-0002 :
+# la propagation d'une nouvelle version est un acte EXPLICITE et tracé (PR), jamais
+# implicite. NB : le catalogue `claude-agents` n'est PAS une dépendance npm
+# (consommé en lecture seule via sidecar, épinglé par `catalogTag`) ; son bump
+# reste un commit manuel tracé, hors périmètre Dependabot.
+
+updates:
+  # Dépendances npm (SDK, ajv, vitest, typescript, @types/node).
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dev-dependencies:
+        dependency-type: development
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+
+  # Actions des workflows GitHub (checkout, setup-node…).
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "ci(deps)"

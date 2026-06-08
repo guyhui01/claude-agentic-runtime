@@ -77,17 +77,18 @@ Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `Agent
   - **Prérequis auth (règle budget)** : **OAuth abonnement Pro/Max uniquement** (`claude` login) — **NE PAS** définir `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement). À la limite de quota : échec *fail-closed*, pas de bascule payante. Vérifié 2026-06-04 : variable absente aux 3 scopes (règle déjà tenue). Voir memory `feedback-budget-quota-abonnement`.
   - **Garde par run** : `maxBudgetUsd` bas + `maxTurns` faible + `permissionMode: "plan"` (read-only). À lancer **sur accord explicite Guy + run observé**.
   - C'est ce run de bout en bout qui **atteint le déclencheur d'audit ISO §3.4** (« quand la spine s'exécute »).
-- ▶️ **§2.4-B.4 — autres spines réelles (À FAIRE, hors-ligne, même méthode que WF-001)** : modéliser chaque workflow restant comme son **propre backbone** (sous-ensemble séquentiel non conditionnel), agents réels + critères DoD, sur le modèle de `src/spines/wf-001-cadrage.ts` (1 fichier `src/spines/wf-0XX-*.ts` + tests hermétiques dédiés par spine). Décision actée 2026-06-07 : on ne fait PAS une macro-chaîne WF-001→002→003 (trop grossière) ; chaque workflow a sa propre spine.
-  - [ ] **Spine WF-002 — Delivery Agile SAFe** (`workflows/WF-002-delivery-safe.md`) : backbone parmi les 6 agents core (PRODUCT-MANAGER-SAFE, RELEASE-TRAIN-ENGINEER, PO-SAFE, SCRUM-MASTER, QA-AGILE, CHEF-PROJET-IA) ; DoD à tracer : PI Objectives validés · Program Backlog WSJF · plan sprint · reporting CODIR.
-  - [ ] **Spine WF-003 — Lancement Application IA** (`workflows/WF-003-lancement-app-ia.md`) : backbone parmi les agents core (FINANCIAL-ANALYST, PROMPT-ENGINEER, AI-ARCHITECT, DEV-PYTHON-IA|DEV-TYPESCRIPT-IA, QA-AGILE, DEVOPS-CLOUD, SECURITE-IA) ; DoD à tracer : business case · architecture · code · CI/CD · audit sécurité (OWASP LLM Top 10).
-  - [ ] Étendre le sidecar intérimaire (puis le générateur §2.3) aux agents de WF-002/003.
+- ✅ **§2.4-B.4 — autres spines réelles FAITES (2026-06-08, Opus 4.8, hors-ligne)** : chaque workflow modélisé comme son **propre backbone** (sous-ensemble séquentiel non conditionnel), agents réels + critères DoD, sur le modèle de `src/spines/wf-001-cadrage.ts`. Helpers de schéma/prédicat factorisés dans `src/spines/spine-helpers.ts` (DRY, partagés par les 3 spines ; WF-001 refactoré sans changement de comportement).
+  - [x] **Spine WF-002 — Delivery Agile SAFe** (`src/spines/wf-002-delivery.ts`) : backbone STEP-01→02→03→04→06 (PRODUCT-MANAGER-SAFE, RELEASE-TRAIN-ENGINEER, PO-SAFE, SCRUM-MASTER, CHEF-PROJET-IA) ; QA (STEP-05, parallèle) et CHANGE (STEP-07, conditionnel) hors backbone. 14 critères DoD (vote confiance > 3.5, 3-5 PI Objectives, 5-10 US, reporting CODIR). 5 tests hermétiques.
+  - [x] **Spine WF-003 — Lancement Application IA** (`src/spines/wf-003-lancement.ts`) : backbone complet des 7 agents core STEP-00→06 (FINANCIAL-ANALYST, PROMPT-ENGINEER, AI-ARCHITECT, DEV-PYTHON-IA, QA-AGILE, DEVOPS-CLOUD, SECURITE-IA) ; fork DEV-TYPESCRIPT-IA (optionnel) hors backbone. 18 critères DoD (Go financier, coverage ≥ 80 %, taux réussite ≥ 90 %, golden dataset 20-50, 0 Critical OWASP LLM, < 2 High). 6 tests hermétiques.
+  - [ ] Étendre le sidecar intérimaire (puis le générateur §2.3) aux agents de WF-002/003 — **dépend du générateur §2.3 (repo `claude-agents`)** ; en attendant, sidecar intérimaire dans `test/spine-wf-002.test.ts` et `test/spine-wf-003.test.ts`.
 
-### 2.5 — Pipeline CI
-- Validation schémas + eval gate + **PR de bump** du catalogue épinglé (note §9, livrable 6 ; pattern Dependabot/Renovate, ADR-0002).
+### 2.5 — Pipeline CI ✅ *(FAIT 2026-06-08, Opus 4.8)*
+- ✅ **Workflow CI** (`.github/workflows/ci.yml`) : `npm ci` + `typecheck` strict + `npm test` sur matrice Node 20/22, `push`/`PR` vers `main` (la suite couvre validation schémas ajv + eval gates, fail-closed). `concurrency` + `permissions: contents read`.
+- ✅ **Dependabot** (`.github/dependabot.yml`) : bumps npm + github-actions hebdomadaires en **PR tracées** (cohérent ADR-0002). Le catalogue `claude-agents` n'étant pas une dépendance npm (épinglé par `catalogTag`), son bump reste un commit manuel tracé — hors périmètre Dependabot.
 
-### 2.6 — Dette technique connue
-- **Montée `vitest` 2 → 4** (chantier dédié). Faille `esbuild` du serveur de dev **non exposée** ; aucune urgence, mais à tracer.
-- **`npm audit` après ajout du SDK** : 5 vulnérabilités (4 modérées, 1 critique) dans les deps transitives de `@anthropic-ai/claude-agent-sdk`. Pas de `audit fix --force` (casse). À réévaluer aux montées de version du SDK ; sans impact sur l'adaptateur (type-only) ni les tests.
+### 2.6 — Dette technique ✅ *(SOLDÉE 2026-06-08, Opus 4.8)*
+- ✅ **Montée `vitest` 2 → 4** (`^4.1.8`) faite : **94 tests verts** sur vitest 4, `typecheck` strict OK, aucune régression ni changement de config.
+- ✅ **`npm audit` : 5 vulnérabilités → 0**. Correction factuelle : elles provenaient de la chaîne **vitest 2 → vite → esbuild** (dev), PAS du SDK ; la montée v4 les purge (`found 0 vulnerabilities`).
 
 ---
 

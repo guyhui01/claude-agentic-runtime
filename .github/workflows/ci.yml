@@ -1,0 +1,46 @@
+name: CI
+
+# Validation continue (§2.5 NEXT_STEPS) : typecheck strict + suite de tests.
+# Les tests couvrent la validation des schémas (ajv : sidecar.schema + intégrité)
+# et les eval gates (briques 1/2 + spines réelles WF-001/002/003), fail-closed.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Annule les exécutions précédentes encore en cours sur la même ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: typecheck + tests (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install (clean, lockfile-faithful)
+        run: npm ci
+
+      - name: Typecheck (strict)
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
