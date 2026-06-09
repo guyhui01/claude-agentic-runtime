@@ -128,7 +128,9 @@ const STEP03_CRITERIA: Criterion[] = [
     check: (o) => {
       const backlog = asRecord(o)["backlog"];
       if (!Array.isArray(backlog)) return false;
-      const gabarit = /en tant que .+ je veux .+ afin de /i;
+      // Tolère l'élision française correcte : « En tant qu'assuré… afin d'éviter… »
+      // (le regex naïf `que `/`de ` rejetait à tort un français grammaticalement juste).
+      const gabarit = /en tant qu['’e].+je veux.+afin d['’e]/i;
       return backlog.every((us) => gabarit.test(String(asRecord(us)["statement"] ?? "")));
     },
   },
@@ -235,7 +237,13 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       output: objSchema(["backlog", "epics"], {
         backlog: arrOf(
           objSchema(["statement", "priorite", "estimation", "dod"], {
-            statement: str,
+            // Description = nudge advisory `po-us-format-invest` (gabarit INVEST),
+            // communiquée à l'agent via l'injection de format, sans contrainte dure.
+            statement: {
+              type: "string",
+              description:
+                "User Story au gabarit INVEST : « En tant que <rôle> je veux <action> afin de <bénéfice> ».",
+            },
             priorite: str,
             estimation: num,
             dod: str,
@@ -253,10 +261,23 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       // Resserré pour aligner la sortie de l'agent sur les critères : chaque
       // scénario porte given/when/then (clés exactes attendues par la gate).
       output: objSchema(["gherkin", "planTest"], {
-        gherkin: arrOf(
-          objSchema(["given", "when", "then"], { given: str, when: str, then: str }),
-          { min: 1 },
-        ),
+        // Description de tableau = nudge advisory `qa-cas-erreur-et-limite` :
+        // couvrir, au-delà du nominal, au moins un cas erreur et un cas limite.
+        gherkin: {
+          type: "array",
+          minItems: 1,
+          description:
+            "Au-delà du nominal, couvrir AU MOINS un scénario `type:\"erreur\"` et un `type:\"limite\"`.",
+          items: objSchema(["given", "when", "then"], {
+            given: str,
+            when: str,
+            then: str,
+            type: {
+              type: "string",
+              description: "nominal | erreur | limite",
+            },
+          }),
+        },
         planTest: str,
       }),
       criteriaIds: STEP04_CRITERIA.map((c) => c.id),

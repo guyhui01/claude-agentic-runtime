@@ -8,7 +8,10 @@
  * les y épingler aligne la sortie de l'agent sur ce que la gate vérifie.
  */
 import { describe, it, expect } from "vitest";
-import { WF_001_CADRAGE_MANIFEST } from "../src/spines/wf-001-cadrage.js";
+import {
+  WF_001_CADRAGE_MANIFEST,
+  WF_001_CADRAGE_CRITERIA,
+} from "../src/spines/wf-001-cadrage.js";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function stepOutput(stepId: string): any {
@@ -39,5 +42,35 @@ describe("WF-001 — schémas de sortie alignés sur les critères de gate", () 
     expect(out.properties.gherkin.items.required).toEqual(
       expect.arrayContaining(["given", "when", "then"]),
     );
+  });
+
+  // --- Nudges advisory communiqués via descriptions (cadrage « plein pot ») ---
+  it("STEP-03 : `statement` décrit le gabarit INVEST (advisory po-us-format-invest)", () => {
+    const out = stepOutput("STEP-03");
+    expect(out.properties.backlog.items.properties.statement.description).toMatch(
+      /en tant que/i,
+    );
+  });
+
+  it("STEP-04 : gherkin décrit la couverture erreur/limite + porte `type` (advisory qa-cas-erreur-et-limite)", () => {
+    const out = stepOutput("STEP-04");
+    expect(out.properties.gherkin.description).toMatch(/erreur/i);
+    expect(out.properties.gherkin.description).toMatch(/limite/i);
+    expect(out.properties.gherkin.items.properties.type).toBeDefined();
+  });
+
+  it("po-us-format-invest accepte l'élision française correcte (qu'/d')", () => {
+    const invest = WF_001_CADRAGE_CRITERIA.find((c) => c.id === "po-us-format-invest");
+    expect(invest).toBeDefined();
+    // Élision : « En tant qu'assuré … afin d'éviter … » (français grammatical).
+    expect(
+      invest!.check({ backlog: [{ statement: "En tant qu'assuré, je veux X afin d'éviter Y" }] }),
+    ).toBe(true);
+    // Forme non élidée également acceptée.
+    expect(
+      invest!.check({ backlog: [{ statement: "En tant que utilisateur je veux X afin de Y" }] }),
+    ).toBe(true);
+    // Hors gabarit : rejeté.
+    expect(invest!.check({ backlog: [{ statement: "Je veux un truc" }] })).toBe(false);
   });
 });
