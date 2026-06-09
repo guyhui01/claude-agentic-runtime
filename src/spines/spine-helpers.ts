@@ -26,6 +26,22 @@ export const str: JsonSchema = { type: "string" };
 export const num: JsonSchema = { type: "number" };
 export const obj: JsonSchema = { type: "object" };
 
+/**
+ * Tableau borné d'items typés : `{ type:"array", minItems?, maxItems?, items? }`.
+ * Quand le schéma est injecté au prompt (run live), `items` + bornes COMMUNIQUENT
+ * le contrat exact à l'agent — alignant sa sortie sur les critères d'eval gate.
+ */
+export function arrOf(
+  items?: JsonSchema,
+  bounds: { min?: number; max?: number } = {},
+): JsonSchema {
+  const s: JsonSchema = { type: "array" };
+  if (items !== undefined) s.items = items;
+  if (bounds.min !== undefined) s.minItems = bounds.min;
+  if (bounds.max !== undefined) s.maxItems = bounds.max;
+  return s;
+}
+
 // --- Prédicats de lecture défensive ------------------------------------------
 
 export function asRecord(o: unknown): Record<string, unknown> {

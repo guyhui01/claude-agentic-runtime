@@ -33,7 +33,9 @@ import { CriterionRegistry } from "../eval/criteria-registry.js";
 import {
   objSchema,
   arr,
+  arrOf,
   str,
+  num,
   asRecord,
   nonEmptyArray,
   arrayLenBetween,
@@ -226,14 +228,37 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       stepId: "STEP-03",
       assetId: "AGENT-PO-SCRUM",
       input: objSchema(["besoins", "perimetre"], { besoins: arr, perimetre: { type: "object" } }),
-      output: objSchema(["backlog", "epics"], { backlog: arr, epics: arr }),
+      // Schéma de sortie RESSERRÉ pour COMMUNIQUER le contrat à l'agent (run live) :
+      // forme exacte des US (statement/priorite/estimation/dod) + bornes du DoD
+      // (8–15 US, 3–5 épics). Sans cela, un vrai agent diverge (cf. run live
+      // 2026-06-09 : 24 US / 9 épics, champ `userStory` ≠ `statement`).
+      output: objSchema(["backlog", "epics"], {
+        backlog: arrOf(
+          objSchema(["statement", "priorite", "estimation", "dod"], {
+            statement: str,
+            priorite: str,
+            estimation: num,
+            dod: str,
+          }),
+          { min: 8, max: 15 },
+        ),
+        epics: arrOf(undefined, { min: 3, max: 5 }),
+      }),
       criteriaIds: STEP03_CRITERIA.map((c) => c.id),
     },
     {
       stepId: "STEP-04",
       assetId: "AGENT-QA-AGILE",
       input: objSchema(["backlog"], { backlog: arr }),
-      output: objSchema(["gherkin", "planTest"], { gherkin: arr, planTest: str }),
+      // Resserré pour aligner la sortie de l'agent sur les critères : chaque
+      // scénario porte given/when/then (clés exactes attendues par la gate).
+      output: objSchema(["gherkin", "planTest"], {
+        gherkin: arrOf(
+          objSchema(["given", "when", "then"], { given: str, when: str, then: str }),
+          { min: 1 },
+        ),
+        planTest: str,
+      }),
       criteriaIds: STEP04_CRITERIA.map((c) => c.id),
     },
   ],
