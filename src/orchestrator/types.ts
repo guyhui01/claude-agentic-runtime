@@ -12,7 +12,7 @@
  */
 
 import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
-import type { StepContract } from "../handoff/types.js";
+import type { StepContract, JsonSchema } from "../handoff/types.js";
 import type { Criterion } from "../eval/types.js";
 import type { GateReport } from "../eval/types.js";
 
@@ -33,6 +33,12 @@ export interface StepRunCall {
   agent: AgentDefinition;
   /** Entrée de l'étape : sortie de l'étape amont, ou entrée initiale pour l'amorce. */
   input: unknown;
+  /**
+   * Schéma de sortie attendu (= `contract.output`). Fourni par l'orchestrateur pour
+   * que le runner puisse IMPOSER le format à l'agent (instruction « JSON conforme »)
+   * et parser sa réponse. Optionnel : un runner mocké peut l'ignorer.
+   */
+  outputSchema?: JsonSchema;
 }
 
 /** Résultat brut d'une étape, tel que rendu par le runner (avant gate/handoff). */

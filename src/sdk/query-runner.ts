@@ -16,6 +16,13 @@
  *   3. Caps DURS par étape (`maxBudgetUsd` bas + `maxTurns` faible), jamais
  *      dépassés même si l'agent en demande davantage.
  *   4. Tout résultat non-`success` (budget/tours/erreur) ⇒ on lève (fail-closed).
+ *
+ * Format de sortie IMPOSÉ (§2.4-B.3) : quand l'appel porte un `outputSchema`
+ * (= `contract.output`), le runner ajoute au prompt une instruction « réponds
+ * UNIQUEMENT par un JSON conforme à ce schéma », puis PARSE la réponse en objet.
+ * Une réponse non parsable en objet ⇒ on lève (fail-closed) : c'est la brique qui
+ * permet aux eval gates / handoffs (qui attendent des objets) de s'appliquer au
+ * live. Sans `outputSchema`, comportement inchangé (sortie texte brute).
  */
 
 import { query as sdkQuery } from "@anthropic-ai/claude-agent-sdk";
@@ -51,6 +58,49 @@ export const DEFAULT_CAPS: QueryRunnerCaps = {
   maxBudgetUsd: 1.0,
   maxTurns: 8,
 };
+
+/** Instruction de format ajoutée au prompt quand un `outputSchema` est fourni. */
+function formatInstruction(schema: object): string {
+  return (
+    "\n\n---\n" +
+    "FORMAT DE SORTIE IMPOSÉ : réponds UNIQUEMENT par un objet JSON valide — " +
+    "aucun texte, aucune explication, aucune balise hors du JSON — STRICTEMENT " +
+    "conforme à ce JSON Schema :\n" +
+    JSON.stringify(schema)
+  );
+}
+
+/**
+ * Parse une réponse texte en objet JSON (fail-closed). Tolère un objet JSON nu,
+ * une clôture ```json … ``` ou du bruit autour de l'objet. Lève si rien d'exploitable.
+ */
+export function parseJsonObject(text: string, stepId: string): object {
+  const tryParse = (s: string): unknown => {
+    try {
+      return JSON.parse(s);
+    } catch {
+      return undefined;
+    }
+  };
+  const trimmed = text.trim();
+  let parsed: unknown = tryParse(trimmed);
+  if (parsed === undefined) {
+    const fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) parsed = tryParse(fence[1]!.trim());
+  }
+  if (parsed === undefined) {
+    const first = trimmed.indexOf("{");
+    const last = trimmed.lastIndexOf("}");
+    if (first !== -1 && last > first) parsed = tryParse(trimmed.slice(first, last + 1));
+  }
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new QueryRunnerError(
+      `étape "${stepId}" : réponse non conforme au format imposé — objet JSON attendu, ` +
+        `reçu du contenu non parsable en objet.`,
+    );
+  }
+  return parsed;
+}
 
 /**
  * Signature minimale du `query()` injecté : une étape entre (prompt + options),
@@ -92,8 +142,11 @@ export function createQueryRunner(deps: QueryRunnerDeps = {}): StepRunner {
     }
 
     const { agent, input } = call;
-    const promptText =
-      typeof input === "string" ? input : JSON.stringify(input);
+    let promptText = typeof input === "string" ? input : JSON.stringify(input);
+    // Format imposé : on instruit l'agent de produire le JSON attendu par l'étape.
+    if (call.outputSchema !== undefined) {
+      promptText += formatInstruction(call.outputSchema);
+    }
 
     // Caps DURS : on plafonne TOUJOURS, même si l'agent demande davantage.
     const maxTurns = Math.min(agent.maxTurns ?? caps.maxTurns, caps.maxTurns);
@@ -131,11 +184,17 @@ export function createQueryRunner(deps: QueryRunnerDeps = {}): StepRunner {
       );
     }
 
-    // Succès : on privilégie la sortie structurée si présente, sinon le texte.
-    const output =
-      result.structured_output !== undefined
-        ? result.structured_output
-        : result.result;
+    // Succès. Priorité à la sortie structurée native du SDK si présente. Sinon,
+    // si un format est imposé, on PARSE le texte en objet (fail-closed) ; à défaut,
+    // on rend le texte brut (comportement historique).
+    let output: unknown;
+    if (result.structured_output !== undefined) {
+      output = result.structured_output;
+    } else if (call.outputSchema !== undefined) {
+      output = parseJsonObject(result.result, call.stepId);
+    } else {
+      output = result.result;
+    }
     return { output };
   };
 }

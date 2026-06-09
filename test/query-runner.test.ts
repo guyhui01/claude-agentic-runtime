@@ -138,3 +138,63 @@ describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", 
     await expect(runner(call())).rejects.toThrow(/sans message de résultat/);
   });
 });
+
+describe("createQueryRunner — format de sortie imposé (outputSchema)", () => {
+  const schema = {
+    type: "object",
+    required: ["besoins"],
+    properties: { besoins: { type: "array" } },
+  };
+
+  it("injecte l'instruction de format + le schéma dans le prompt", async () => {
+    const q = fakeQuery([successResult({ result: '{"besoins":["x"]}' })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await runner(call({ outputSchema: schema }));
+    expect(q.lastParams!.prompt).toContain("FORMAT DE SORTIE IMPOSÉ");
+    expect(q.lastParams!.prompt).toContain(JSON.stringify(schema));
+  });
+
+  it("n'altère PAS le prompt quand aucun outputSchema n'est fourni", async () => {
+    const q = fakeQuery([successResult({ result: "ok" })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await runner(call({ input: { brief: "x" } }));
+    expect(q.lastParams!.prompt).toBe(JSON.stringify({ brief: "x" }));
+  });
+
+  it("parse la réponse texte en OBJET quand outputSchema fourni", async () => {
+    const q = fakeQuery([successResult({ result: '{"besoins":["réduire le délai"]}' })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    const res = await runner(call({ outputSchema: schema }));
+    expect(res.output).toEqual({ besoins: ["réduire le délai"] });
+  });
+
+  it("tolère une clôture markdown ```json autour du JSON", async () => {
+    const q = fakeQuery([
+      successResult({ result: 'Voici le livrable :\n```json\n{"besoins":["a"]}\n```' }),
+    ]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    const res = await runner(call({ outputSchema: schema }));
+    expect(res.output).toEqual({ besoins: ["a"] });
+  });
+
+  it("FAIL-CLOSED : réponse en prose non parsable malgré outputSchema → lève", async () => {
+    const q = fakeQuery([successResult({ result: "Le cadrage consiste à analyser les besoins." })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await expect(runner(call({ outputSchema: schema }))).rejects.toBeInstanceOf(QueryRunnerError);
+  });
+
+  it("FAIL-CLOSED : un tableau JSON n'est pas un objet → lève", async () => {
+    const q = fakeQuery([successResult({ result: "[1,2,3]" })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await expect(runner(call({ outputSchema: schema }))).rejects.toBeInstanceOf(QueryRunnerError);
+  });
+
+  it("structured_output natif reste prioritaire (pas de parsing de texte)", async () => {
+    const q = fakeQuery([
+      successResult({ result: "texte ignoré", structured_output: { besoins: ["s"] } }),
+    ]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    const res = await runner(call({ outputSchema: schema }));
+    expect(res.output).toEqual({ besoins: ["s"] });
+  });
+});

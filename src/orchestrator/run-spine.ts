@@ -89,11 +89,14 @@ export async function runSpine(
     const step = steps[i]!;
     const { stepId } = step.contract;
 
-    // 1. Exécution de l'étape via le runner injecté.
+    // 1. Exécution de l'étape via le runner injecté. On transmet le schéma de
+    //    sortie du contrat : le runner peut s'en servir pour imposer le format
+    //    JSON à l'agent (live) ; un runner mocké est libre de l'ignorer.
     const { output } = await runner({
       stepId,
       agent: step.agent,
       input,
+      outputSchema: step.contract.output,
     });
 
     // 2. Eval gate (brique 2) — la preuve (GateReport) est produite même en succès.
