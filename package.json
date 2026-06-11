@@ -3,8 +3,8 @@
   "version": "0.3.0",
   "description": "Runtime agentique exécutant le catalogue claude-agents (lecture seule) via le Claude Agent SDK.",
   "type": "module",
-  "license": "MIT",
-  "author": "Guy HUIBONHOA",
+  "license": "BUSL-1.1",
+  "author": "Guy HUI-BON-HOA",
   "engines": {
     "node": ">=20"
   },

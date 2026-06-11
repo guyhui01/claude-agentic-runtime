@@ -1,7 +1,7 @@
 # ADR-0002 — Import du catalogue épinglé et versionné
 
 - **Statut** : Accepté (2026-06-03)
-- **Décideur** : Guy HUIBONHOA (assisté Claude Opus 4.8)
+- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
 - **Contexte projet** : POC `claude-agentic-runtime`
 
 ## Contexte

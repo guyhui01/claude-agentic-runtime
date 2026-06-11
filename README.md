@@ -63,9 +63,13 @@ Claude Agent SDK (substrat d'exécution) · JSON Schema (contrats + sidecar) · 
 
 ## Licence
 
-[MIT](LICENSE) © 2026 Guy HUIBONHOA.
+[Business Source License 1.1](LICENSE) © 2026 Guy HUI-BON-HOA.
 
-> **Dépendance d'exécution propriétaire** : ce code est sous MIT, mais le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
+- **Usage non-production** (développement, test, évaluation) : libre, sous les termes de la BSL.
+- **Usage en production** : requiert une licence commerciale → voir [`COMMERCIAL.md`](COMMERCIAL.md).
+- **Bascule automatique** : le 2030-06-12 (*Change Date*), ce code passe sous **Apache License 2.0**.
+
+> **Dépendance d'exécution propriétaire** : indépendamment de la BSL ci-dessus, le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
 
 ## Outillage
 

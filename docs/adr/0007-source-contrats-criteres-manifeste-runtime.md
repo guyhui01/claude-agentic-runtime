@@ -1,7 +1,7 @@
 # ADR-0007 — Contrats de handoff & critères d'eval gate : manifeste de spine propriété du runtime
 
 - **Statut** : Accepté (2026-06-04)
-- **Décideur** : Guy HUIBONHOA (assisté Claude Opus 4.8)
+- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
 - **Contexte projet** : POC `claude-agentic-runtime` — §2.4-B.2
 
 ## Contexte

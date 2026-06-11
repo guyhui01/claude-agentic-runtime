@@ -2,7 +2,7 @@
 
 - **Date** : 2026-06-11
 - **Modèle Claude** : Claude Opus 4.8
-- **Auditeur** : Guy HUIBONHOA (assisté Claude Opus 4.8)
+- **Auditeur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
 - **Nature** : auto-évaluation interne (*gap analysis*), **PAS une certification** (cf. [ADR-0006](../adr/0006-referentiels-qualite.md), ROI de certification nul en solo).
 - **Posture** : ISO 19011 — objectivité, preuves **factuelles** (citation `fichier:ligne`, sorties de tests, run live réel), indépendance. **Verdict défavorable assumé si la preuve l'impose.**
 - **Déclencheur** ([ADR-0006](../adr/0006-referentiels-qualite.md) §révision, [NEXT_STEPS](../NEXT_STEPS.md) §3.4) : run live WF-001 « plein pot » abouti le 2026-06-09 (la spine s'exécute) → condition d'audit **atteinte**, avant toute industrialisation.
@@ -32,7 +32,7 @@
 | Run live WF-001 | CHANGELOG [Unreleased] + [NEXT_STEPS §2.4-B.3](../NEXT_STEPS.md) | `completed` « plein pot » 2026-06-09 — **0 critère en échec** (blocking + advisory), 3 agents en live, OAuth abonnement |
 | Garde clé API (env) | `echo $ANTHROPIC_API_KEY` | **non définie** (règle budget structurellement tenue) |
 | Propreté dépôt | `git ls-files \| grep DS_Store` | aucun `.DS_Store` suivi ; `.gitignore:34` le couvre |
-| Licence | `LICENSE`, `package.json:6`, `README.md:66` | **MIT** © 2026 Guy HUIBONHOA |
+| Licence | `LICENSE`, `package.json:6`, `README.md:66` | **MIT** © 2026 Guy HUI-BON-HOA |
 
 ---
 

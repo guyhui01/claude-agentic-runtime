@@ -2,7 +2,7 @@
 
 - **Date** : 2026-06-11
 - **Modèle Claude** : Claude Opus 4.8
-- **Auteur** : Guy HUIBONHOA (assisté Claude Opus 4.8)
+- **Auteur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
 - **Origine** : remédiation **P4** de l'[audit qualité ISO v1](audit_qualite_iso_v1.md) — le déclencheur ISO 5230 d'[ADR-0006](../adr/0006-referentiels-qualite.md) (« au moment de fixer la licence ») est **atteint** : licence du projet fixée à **MIT** (`LICENSE`, `package.json`, `README.md`).
 - **Objet** : inventaire des licences des dépendances + verdict de **compatibilité avec une distribution sous MIT**. Contrôle **factuel** (lecture des `package.json` réels), pas déclaratif.
 - **Portée** : POC solo *asset portfolio* → inventaire léger reproductible (pas de SBOM outillé : YAGNI, cf. règle de simplicité de maintenance).

@@ -84,7 +84,7 @@ _Rien pour l'instant._
 - **6 ADR fondateurs** (`docs/adr/`) : consommateur read-only · import épinglé versionné · sidecar propriété du catalogue · propagation gardée par eval gates · feedback par PR humaine · **référentiels qualité (42010/25012/25010/42001 retenus ; 25024/23894/5230 différés ; 27001/12207/15288/26511+/19770 écartés)**.
 - **`docs/ARCHITECTURE.md`** : couches, diagramme Mermaid, description d'architecture ISO/IEC/IEEE 42010 (parties prenantes / préoccupations / points de vue), modèle de propagation Dependabot-like.
 - **Base projet GitHub** : `README.md`, ce `CHANGELOG.md`, `CONTRIBUTING.md`, `CODEOWNERS`, `.gitignore`, gabarit de PR.
-- **Licence MIT** (`LICENSE`) © 2026 Guy HUIBONHOA.
+- **Licence MIT** (`LICENSE`) © 2026 Guy HUI-BON-HOA.
 
 ### Notes
 - Aucun code à ce stade. `claude-agents` (catalogue SSOT) reste **intact** ; ce repo n'a aucun droit d'écriture dessus.
