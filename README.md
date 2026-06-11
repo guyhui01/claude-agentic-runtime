@@ -1,5 +1,7 @@
 # claude-agentic-runtime
 
+[![License: BUSL 1.1](https://img.shields.io/badge/license-BUSL--1.1-blue.svg)](LICENSE)
+
 > **Compilateur de gouvernance** au-dessus du **Claude Agent SDK** : lit le catalogue déclaratif [`claude-agents`](https://github.com/guyhui01/claude-agents), **valide ses contrats**, puis l'exécute via le SDK — qui porte le moteur.
 > **Statut : POC / asset de portfolio** — `v0.2.0` : Loader + contrats de handoff + eval gate livrés (51 tests verts) ; intégration SDK en cours.
 
