@@ -6,6 +6,10 @@
 ---
 
 ## [Unreleased]
+
+_Rien pour l'instant._
+
+## [0.3.0] — 2026-06-11 — POC exécutable de bout en bout (run live WF-001) + audit qualité ISO v1
 > Modèle : Claude Opus 4.8
 
 ### Fixed
