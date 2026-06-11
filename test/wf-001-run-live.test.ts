@@ -14,16 +14,23 @@
  * Lancement : `LIVE_RUN=1 npx vitest run test/wf-001-run-live.test.ts`
  */
 import { describe, it, expect } from "vitest";
-import { existsSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { runWf001 } from "../src/spines/run-wf-001.js";
 
-/** Fichier de capture du résultat (observabilité, indépendant du reporter vitest). */
-const RESULT_FILE = process.env.LIVE_RESULT_FILE ?? "/tmp/wf-001-live-result.json";
-
 const HERE = fileURLToPath(new URL(".", import.meta.url));
+/**
+ * Fichier de capture du résultat (observabilité, indépendant du reporter vitest).
+ * Remédiation audit ISO v1 (P3) : trace PERSISTANTE dans le repo (`docs/audit/live-runs/`),
+ * plus de `/tmp` éphémère. Le `.json` brut est gitignoré ; la trace anonymisée est
+ * committée sur décision après revue (cf. `docs/audit/live-runs/README.md`).
+ */
+const RESULT_FILE =
+  process.env.LIVE_RESULT_FILE ??
+  join(HERE, "..", "docs", "audit", "live-runs", "wf-001-live-result.json");
+
 const CATALOG_ROOT =
   process.env.CATALOG_ROOT ?? join(HERE, "..", "..", "claude-catalogue");
 const SIDECAR = join(CATALOG_ROOT, "sidecar.json");
@@ -62,6 +69,7 @@ describe.skipIf(!ENABLED)("WF-001 — RUN LIVE (facturé, observé)", () => {
       console.log("====================================\n");
 
       // Capture garantie sur disque (statut + verdicts + sorties tracées).
+      mkdirSync(dirname(RESULT_FILE), { recursive: true });
       writeFileSync(
         RESULT_FILE,
         JSON.stringify(
