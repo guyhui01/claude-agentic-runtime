@@ -65,6 +65,8 @@ Claude Agent SDK (substrat d'exécution) · JSON Schema (contrats + sidecar) · 
 
 [MIT](LICENSE) © 2026 Guy HUIBONHOA.
 
+> **Dépendance d'exécution propriétaire** : ce code est sous MIT, mais le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
+
 ## Outillage
 
 Documentation et conception assistées par **Claude Opus 4.8** (modèle en cours d'utilisation).
