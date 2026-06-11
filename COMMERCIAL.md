@@ -20,8 +20,10 @@ Sont notamment concernés :
 
 ## Bascule automatique (Change Date)
 
-Le **2030-06-12**, chaque version concernée bascule automatiquement sous **Apache License 2.0**
-et ces restrictions de production disparaissent pour cette version.
+**Quatre ans après la publication** d'une version donnée, celle-ci bascule automatiquement
+sous **Apache License 2.0** et ses restrictions de production disparaissent. La date de
+bascule est donc propre à chaque version (ex. une version publiée en 2029 devient open
+source en 2033).
 
 ## Contact
 
