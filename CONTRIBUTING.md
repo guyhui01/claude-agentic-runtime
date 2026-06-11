@@ -1,6 +1,6 @@
 # Contribuer à `claude-agentic-runtime`
 
-> Repo en français · UTF-8 · solo (Guy HUIBONHOA), mais discipline maintenue pour la qualité et le signal portfolio.
+> Repo en français · UTF-8 · solo (Guy HUI-BON-HOA), mais discipline maintenue pour la qualité et le signal portfolio.
 
 ## Invariants non négociables (voir `docs/adr/`)
 1. **Read-only sur `claude-agents`** : aucune écriture vers le catalogue, jamais (ADR-0001).
