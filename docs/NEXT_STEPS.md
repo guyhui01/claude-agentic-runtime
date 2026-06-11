@@ -12,8 +12,8 @@
 
 | Élément | Fichier | Couverture ISO 25012 |
 |---|---|---|
-| Schéma sidecar (JSON Schema 2020-12) | `schema/sidecar.schema.json` | 5 caractéristiques natives : complétude, cohérence, crédibilité, actualité, exactitude/accessibilité bien-formées |
-| Contrôles d'intégrité | `src/sidecar/integrity.ts` | 2 restantes : exactitude référentielle, accessibilité réelle + unicité des id |
+| Schéma sidecar (JSON Schema 2020-12) | `schema/sidecar.schema.json` | 5 caractéristiques portées PLEINEMENT : complétude, cohérence, crédibilité, actualité, **conformité** (enum `type`) + amorce *bien-formée* d'exactitude (`id`) et d'accessibilité (`path`/`source.file` anti-traversal) |
+| Contrôles d'intégrité | `src/sidecar/integrity.ts` | COMPLÈTENT exactitude (référentielle + unicité des id) et accessibilité (joignabilité réelle), hors portée d'un JSON Schema → total **7** caractéristiques (cf. audit v1 P1 : la formule « 5+2 » était inexacte) |
 | Loader fail-closed | `src/loader/load-sidecar.ts` | orchestre schéma + intégrité (ADR-0004) |
 | Types | `src/sidecar/types.ts` | miroir TypeScript du sidecar |
 
@@ -105,7 +105,7 @@ Mesurer, preuve à l'appui, l'écart entre l'état du repo et les **4 référent
 ### 3.2 — Périmètre (les 4 référentiels retenus)
 | Axe | Norme | Ce qui est audité |
 |---|---|---|
-| **Données** | ISO/IEC 25012:2008 | Le sidecar encode-t-il réellement les **7 caractéristiques** annoncées ? (5 schéma + 2 intégrité). Recalcul/contrôle, pas de déclaratif. |
+| **Données** | ISO/IEC 25012:2008 | Le sidecar encode-t-il réellement les **7 caractéristiques** retenues ? (5 pleinement au schéma — dont conformité — + exactitude/accessibilité réparties schéma↔intégrité ; cf. audit v1 P1). Recalcul/contrôle, pas de déclaratif. |
 | **Architecture** | ISO/IEC/IEEE 42010:2022 | `ARCHITECTURE.md` + ADR : parties prenantes / préoccupations / points de vue complets et cohérents. |
 | **Logiciel / runtime** | ISO/IEC 25010 | Fiabilité (fail-closed), maintenabilité (tests, types stricts), sécurité (anti-traversal, read-only). |
 | **Gouvernance IA** | ISO/IEC 42001:2023 | Principes, risques, cycle de vie ; cohérence des invariants (read-only, propagation gardée). |
@@ -117,7 +117,7 @@ Mesurer, preuve à l'appui, l'écart entre l'état du repo et les **4 référent
 
 ### 3.4 — Déclenchement *(condition, pas date fixe — POC solo)*
 Clause de révision ADR-0006 : audit déclenché à un **jalon majeur**, c'est-à-dire :
-- **Fin de POC** : après la livraison de la **brique 2** (eval gate), quand la spine WF-001→003 s'exécute ;
+- **Fin de POC** : après la livraison de la **brique 2** (eval gate), quand le backbone d'un workflow (ex. WF-001) s'exécute ;
 - **ET avant toute industrialisation** (passage du statut « asset portfolio » à « produit de mission »).
 
 ### 3.5 — Livrable ✅ *(FAIT 2026-06-11, Opus 4.8)*

@@ -64,7 +64,7 @@ Conformément au standard de description d'architecture (référentiel retenu, c
 |---|---|---|
 | **Dépendance** | Sens unique runtime→catalogue, read-only | Diagramme ci-dessus + [ADR-0001](adr/0001-consommateur-read-only.md) |
 | **Données** | Qualité du catalogue/sidecar (ISO 25012) | Sidecar + JSON Schema (brique 0) |
-| **Exécution** | Orchestration de la spine WF-001→003 | Couches §ci-dessus |
+| **Exécution** | Orchestration du backbone d'un workflow (ex. WF-001) | Couches §ci-dessus |
 | **Gouvernance** | Propagation gardée, feedback par PR humaine | §propagation + [ADR-0004](adr/0004-propagation-gardee-eval-gates.md)/[0005](adr/0005-feedback-par-pr-humaine.md) |
 
 ## Modèle de propagation (Dependabot/Renovate-like)
