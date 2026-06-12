@@ -60,7 +60,8 @@ Intégration **Claude Agent SDK** : adaptateur `Asset → AgentDefinition` (§2.
 - [x] Run live WF-001 de bout en bout (gates *blocking* + *advisory* vertes) + audit qualité ISO v1
 - [x] Spines WF-002 / WF-003 modélisées + testées (hors-ligne)
 - [x] CI (typecheck strict + tests, Node 20/22) + Dependabot
-- [ ] Indexer les agents de WF-002/003 au sidecar (repo `claude-agents`) → run live WF-002/003
+- [x] Indexer les agents de WF-002/003 au sidecar (repo `claude-agents`) — 14 assets, consommable, défaut `CATALOG_ROOT` réaligné
+- [ ] Run live WF-002/003 de bout en bout (sur accord explicite + run observé)
 
 ## Stack
 

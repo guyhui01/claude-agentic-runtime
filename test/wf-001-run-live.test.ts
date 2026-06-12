@@ -19,6 +19,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { runWf001 } from "../src/spines/run-wf-001.js";
+import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 /**
@@ -31,16 +32,13 @@ const RESULT_FILE =
   process.env.LIVE_RESULT_FILE ??
   join(HERE, "..", "docs", "audit", "live-runs", "wf-001-live-result.json");
 
-const CATALOG_ROOT =
-  process.env.CATALOG_ROOT ?? join(HERE, "..", "..", "claude-catalogue");
-const SIDECAR = join(CATALOG_ROOT, "sidecar.json");
-const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR);
+const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
 describe.skipIf(!ENABLED)("WF-001 — RUN LIVE (facturé, observé)", () => {
   it(
     "déroule la spine WF-001 en live (capé, read-only)",
     async () => {
-      const sidecar = loadSidecar(SIDECAR, CATALOG_ROOT);
+      const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
       const res = await runWf001({
         sidecar,
         catalogRoot: CATALOG_ROOT,

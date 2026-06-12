@@ -16,18 +16,13 @@
  */
 import { describe, it, expect } from "vitest";
 import { existsSync } from "node:fs";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { toAgentDefinition } from "../src/sdk/to-agent-definition.js";
 import { assembleWf001Spine } from "../src/spines/run-wf-001.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
 import type { StepRunner } from "../src/orchestrator/types.js";
+import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 
-const HERE = fileURLToPath(new URL(".", import.meta.url));
-const CATALOG_ROOT =
-  process.env.CATALOG_ROOT ?? join(HERE, "..", "..", "claude-catalogue");
-const SIDECAR_PATH = join(CATALOG_ROOT, "sidecar.json");
 const HAVE_CATALOG = existsSync(SIDECAR_PATH);
 
 // Sorties d'étape conformes au DoD (mêmes formes que spine-wf-001.test.ts).
@@ -62,11 +57,15 @@ describe.skipIf(!HAVE_CATALOG)("spine WF-001 — sidecar RÉEL (prêt pour run l
     const sc = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
     expect(sc.catalog.name).toBe("claude-agents");
     expect(sc.catalog.version).toMatch(/^v\d+\.\d+\.\d+$/);
-    expect(sc.assets.map((a) => a.id).sort()).toEqual([
-      "AGENT-BUSINESS-ANALYST",
-      "AGENT-PO-SCRUM",
-      "AGENT-QA-AGILE",
-    ]);
+    // Le backbone WF-001 doit être RÉSOLUBLE depuis le sidecar réel : on vérifie
+    // l'INCLUSION des 3 ids, pas l'inventaire exact. L'inventaire complet du
+    // catalogue (14 assets) est la propriété du générateur `claude-agents` + son
+    // `--check` en CI ; le runtime ne dépend que de ce qu'il consomme (ADR-0002/0003),
+    // donc un nouvel agent indexé ne doit pas casser ce test WF-001.
+    const ids = new Set(sc.assets.map((a) => a.id));
+    for (const id of ["AGENT-BUSINESS-ANALYST", "AGENT-PO-SCRUM", "AGENT-QA-AGILE"]) {
+      expect(ids).toContain(id);
+    }
   });
 
   it("assemble + déroule la spine avec prose réelle → completed, 3 verdicts pass", async () => {
