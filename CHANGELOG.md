@@ -8,12 +8,23 @@
 ## [Unreleased]
 > Modèle : Claude Opus 4.8
 
+### ✨ Added
+- **Câblage run live WF-002 / WF-003** (`src/spines/run-wf-002.ts`, `run-wf-003.ts`) : `assembleWf00X` + `runWf00X`, strictement calqués sur `run-wf-001.ts` (manifeste réel + registre + résolveur d'agent + `createQueryRunner`, mêmes gardes fail-closed).
+- **Schémas de sortie RESSERRÉS** des spines WF-002/003 (`wf-002-delivery.ts`, `wf-003-lancement.ts`) — application de la leçon WF-001 : le schéma injecté **==** le contrat vérifié par la gate. Bornes de comptage bloquantes → `minItems/maxItems` ; champs imbriqués bloquants → `required` ; critères **advisory** → `description` seulement (jamais de contrainte dure). Le contrat reste compatible avec les sidecars intérimaires existants.
+- **Preuve hors-ligne** : tests hermétiques de câblage (`run-wf-00X.test.ts` : mock conforme → `completed` ; eval gate → `failed` fail-closed ; gardes budget/config) **et** tests « sidecar réel » (`run-wf-00X-real-sidecar.test.ts` : `loadSidecar` du vrai `sidecar.json` → prose réelle → `assembleWf00X` → `runSpine` → `completed`, skip propre si catalogue absent). Sorties conformes factorisées en fixtures partagées (`test/fixtures/wf-00X-outputs.ts`, DRY).
+- **Harnais de run live gardés** (`wf-002-run-live.test.ts`, `wf-003-run-live.test.ts`, `LIVE_RUN=1`) : capture persistante dans `docs/audit/live-runs/` (artefact P3), skip par défaut → CI verte, aucun appel facturé.
+
 ### 📝 Changed
 - **Tests « sidecar réel »** : le sidecar du catalogue `claude-agents` passe à **14 assets** (indexation des backbones WF-002/003, `claude-agents` v3.26.2). `run-wf-001-real-sidecar.test.ts` — assertion de périmètre passée d'une **égalité stricte** (3 ids figés) à une **inclusion** (backbone WF-001 ⊂ assets) : le runtime ne dépend que de ce qu'il consomme ; l'inventaire exact est la propriété du générateur catalogue + son `--check` CI (ADR-0002/0003). Un nouvel agent indexé ne casse plus ce test.
 - **Défaut `CATALOG_ROOT`** réaligné sur le repo **réel** `claude-agents` via un point de vérité unique `test/catalog-root.ts` (le défaut figé `claude-catalogue` était un vestige de renommage qui consommait un clone stale en silence). Fin de la duplication du défaut dans `run-wf-001-real-sidecar` + `wf-001-run-live`.
 
+### ⬆️ Dependencies
+- **`@anthropic-ai/claude-agent-sdk`** 0.3.162 → **0.3.176** (Dependabot #4, rebasé et re-validé : `query()`/types OK).
+- **`typescript`** ^5.6 → **^6.0** (6.0.3) et **`@types/node`** ^22 → **^25** (25.9.3) (Dependabot #3, bump majeur TS validé sur l'artefact réel : `tsc --noEmit` strict OK + suite verte).
+- **`actions/checkout`** v4 → **v6** dans la CI (Dependabot #2).
+
 ### Notes
-- Suite **111 verts**, `typecheck` strict OK. Reste : run live WF-002/003 (sur accord explicite + run observé), cf. `docs/NEXT_STEPS.md` §2.4-B.4.
+- Suite **123 verts** (6 skip : 3 harnais live + skips « catalogue absent »), `typecheck` strict OK. Reste : **run live observé** WF-002 puis WF-003 (sur accord explicite), qui clôt l'artefact P3.
 
 ## [0.3.0] — 2026-06-11 — POC exécutable de bout en bout (run live WF-001) + audit qualité ISO v1
 > Modèle : Claude Opus 4.8

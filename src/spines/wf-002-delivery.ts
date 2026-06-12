@@ -21,8 +21,7 @@ import { CriterionRegistry } from "../eval/criteria-registry.js";
 import {
   objSchema,
   arr,
-  str,
-  num,
+  arrOf,
   obj,
   asRecord,
   nonEmptyArray,
@@ -210,11 +209,20 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
     {
       stepId: "STEP-01",
       assetId: "AGENT-PRODUCT-MANAGER-SAFE",
-      // amorce : contexte ART = entrée initiale de runSpine
+      // amorce : contexte ART = entrée initiale de runSpine.
+      // Resserré (cf. leçon WF-001) : le schéma injecté COMMUNIQUE le contrat
+      // que la gate vérifie — 1–10 features, chacune avec un WSJF (number).
       output: objSchema(["visionBoard", "featuresWsjf"], {
-        visionBoard: str,
-        featuresWsjf: arr,
-        leanBusinessCase: str,
+        visionBoard: { type: "string", description: "Vision board PI (synthèse 1 page)." },
+        featuresWsjf: arrOf(
+          objSchema(["wsjf"], {
+            feature: { type: "string", description: "Intitulé de la feature." },
+            wsjf: { type: "number", description: "Score WSJF (Weighted Shortest Job First)." },
+          }),
+          { min: 1, max: 10 },
+        ),
+        // Nudge advisory pm-lean-business-case (pas de contrainte dure).
+        leanBusinessCase: { type: "string", description: "Lean Business Case des features majeures." },
       }),
       criteriaIds: STEP01_CRITERIA.map((c) => c.id),
     },
@@ -223,9 +231,21 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-RELEASE-TRAIN-ENGINEER",
       input: objSchema(["featuresWsjf"], { featuresWsjf: arr }),
       output: objSchema(["programBoard", "voteConfiance"], {
-        programBoard: arr,
-        voteConfiance: num,
-        roamRisks: arr,
+        programBoard: arrOf(
+          objSchema([], {
+            from: { type: "string", description: "Équipe/feature source de la dépendance." },
+            to: { type: "string", description: "Équipe/feature cible." },
+            dep: { type: "string", description: "Nature de la dépendance." },
+          }),
+          { min: 1 },
+        ),
+        // Seuil bloquant rte-vote-confiance-seuil communiqué en description.
+        voteConfiance: {
+          type: "number",
+          description: "Vote de confiance ART sur 5 ; doit être > 3.5 pour passer.",
+        },
+        // Nudge advisory rte-roam-risks-present.
+        roamRisks: { type: "array", description: "Risques ROAM (Resolved/Owned/Accepted/Mitigated)." },
       }),
       criteriaIds: STEP02_CRITERIA.map((c) => c.id),
     },
@@ -234,8 +254,18 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-PO-SAFE",
       input: objSchema(["programBoard"], { programBoard: arr }),
       output: objSchema(["piObjectives", "backlogSprint"], {
-        piObjectives: arr,
-        backlogSprint: arr,
+        piObjectives: arrOf(
+          { type: "string", description: "PI Objective SMART." },
+          { min: 3, max: 5 },
+        ),
+        backlogSprint: arrOf(
+          objSchema([], {
+            statement: { type: "string", description: "User Story du sprint 1." },
+            // Nudge advisory posafe-wsjf-par-feature (non requis).
+            wsjf: { type: "number", description: "Score WSJF de la US." },
+          }),
+          { min: 5, max: 10 },
+        ),
       }),
       criteriaIds: STEP03_CRITERIA.map((c) => c.id),
     },
@@ -244,8 +274,14 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-SCRUM-MASTER",
       input: objSchema(["backlogSprint"], { backlogSprint: arr }),
       output: objSchema(["sprintGoal", "sprintPlan"], {
-        sprintGoal: str,
-        sprintPlan: obj,
+        sprintGoal: { type: "string", description: "Sprint Goal unique." },
+        // Forecast bloquant : usEngagees (non vide) + storyPoints (number).
+        sprintPlan: objSchema(["usEngagees", "storyPoints"], {
+          usEngagees: arrOf({ type: "string", description: "US engagée au sprint 1." }, { min: 1 }),
+          storyPoints: { type: "number", description: "Story points engagés (forecast)." },
+        }),
+        // Nudge advisory sm-impediments-listes.
+        impediments: { type: "array", description: "Impediments du sprint 1." },
       }),
       criteriaIds: STEP04_CRITERIA.map((c) => c.id),
     },
@@ -254,8 +290,17 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-CHEF-PROJET-IA",
       input: objSchema(["sprintPlan"], { sprintPlan: obj }),
       output: objSchema(["noteCodir", "dashboard"], {
-        noteCodir: str,
-        dashboard: obj,
+        noteCodir: { type: "string", description: "Note CODIR (1 page)." },
+        // Bloquant cp-dashboard-avancement-risques : avancement ET risques présents.
+        dashboard: objSchema(["avancement", "risques"], {
+          avancement: { type: "string", description: "Avancement du PI (ex. « 32% »)." },
+          risques: { type: "array", description: "Risques suivis." },
+        }),
+        // Nudge advisory cp-evm-cpi-spi (cpi/spi non requis pour ne pas bloquer).
+        evm: objSchema([], {
+          cpi: { type: "number", description: "Cost Performance Index." },
+          spi: { type: "number", description: "Schedule Performance Index." },
+        }),
       }),
       criteriaIds: STEP06_CRITERIA.map((c) => c.id),
     },

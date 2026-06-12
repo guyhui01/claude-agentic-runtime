@@ -54,7 +54,7 @@ const happyOutputs: Record<string, unknown> = {
   },
   "STEP-01": {
     systemPrompt: "Tu es l'assistant RAG du portail.",
-    baselineTest: Array.from({ length: 8 }, (_, i) => ({ cas: i, type: i < 5 ? "nominal" : "limite" })),
+    baselineTest: Array.from({ length: 8 }, (_, i) => ({ cas: `cas-${i}`, type: i < 5 ? "nominal" : "limite" })),
     strategieTokens: "Cache prompt + few-shot 3 exemples",
   },
   "STEP-02": {
