@@ -6,7 +6,9 @@
 
 ---
 
-## 1. État actuel (2026-06-04)
+## 1. État actuel (mis à jour 2026-06-13)
+
+> **Snapshot courant** : POC **backbone complet** — les 3 workflows (WF-001, WF-002, WF-003) **prouvés en live** (`completed`), publié en **`v0.4.0`** (tag annoté + GitHub Release). Audit qualité ISO v1 livré ; remédiations **P1–P4 closes**, **P5 non retenu** (cf. §3.5). Suite **~126 verts** (catalogue présent), `typecheck` strict OK. Backlog **vide** ; prochaine étape **conditionnelle** = industrialisation → activer ISO 23894/25024 (§3.4). Le journal des briques ci-dessous documente la **construction historique** (dates d'origine conservées).
 
 **Brique 0 (Loader) — bouclée.**
 
@@ -46,7 +48,7 @@ Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `Agent
 
 **§2.4-B.2 (manifeste de spine + registre de critères, hors-ligne) — bouclé (2026-06-04, Opus 4.8, [ADR-0007](adr/0007-source-contrats-criteres-manifeste-runtime.md)).** `src/manifest/{types,load-manifest}.ts` + `src/eval/criteria-registry.ts` : `loadSpine` assemble un manifeste en `SpineStep[]`, croisements fail-closed sidecar/registre (cf. §2.4-B.2 ci-dessous).
 
-**Total : 64 tests verts, `typecheck` strict OK.** Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
+**Total à l'achèvement §2.4-B.2 (2026-06-04) : 64 tests verts, `typecheck` strict OK** (état à jour : *Snapshot courant* en tête de §1). Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
 
 ---
 
