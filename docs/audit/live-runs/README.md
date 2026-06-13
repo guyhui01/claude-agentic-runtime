@@ -10,4 +10,6 @@ Remédiation **P3** de l'[audit qualité ISO v1](../audit_qualite_iso_v1.md) : c
 
 ## État
 
-> ⚠️ Aucune trace committée à ce jour : le run live « plein pot » du **2026-06-09** a précédé ce mécanisme et sa capture `/tmp` n'a pas survécu. La première trace versionnée sera produite au **prochain run live** (Piste A — WF-002/003 ou re-run WF-001), facturé, sur accord explicite. P3 (mécanisme) est traité ; l'artefact suivra honnêtement une exécution réelle, jamais une reconstruction manuelle.
+> ✅ **Première trace versionnée : `wf-003-live-result.json`** — run live WF-003 « Lancement Application IA » du **2026-06-13**, facturé et observé sur accord explicite. Statut **`completed`**, **7/7 étapes `pass`** (STEP-00 → STEP-06), cap budget respecté. Revue P3 effectuée : cas synthétique « assureur » avec placeholders, **aucune donnée client réelle ni secret** — commit via `git add -f`. P3 (mécanisme **et** artefact) est désormais traité par une exécution réelle, jamais une reconstruction manuelle.
+>
+> Le run « plein pot » du **2026-06-09** précédait ce mécanisme et sa capture `/tmp` n'avait pas survécu — d'où l'attente d'un run live ultérieur pour produire le premier artefact, désormais en place.
