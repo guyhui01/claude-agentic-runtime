@@ -6,9 +6,12 @@
 ---
 
 ## [Unreleased]
+
+## [0.4.0] - 2026-06-13
 > Modèle : Claude Opus 4.8
 
 ### ✨ Added
+- **Première trace live versionnée — WF-003 `completed`** (`docs/audit/live-runs/wf-003-live-result.json`) : run live « Lancement Application IA » du 2026-06-13, **7/7 étapes `pass`** (STEP-00 → STEP-06), cap budget respecté. Revue P3 OK (cas synthétique, aucune donnée réelle/secret) → commit `git add -f`. **Clôt l'artefact P3** (mécanisme **et** preuve par exécution réelle). Valide en live le correctif « structured output natif » à STEP-03.
 - **Câblage run live WF-002 / WF-003** (`src/spines/run-wf-002.ts`, `run-wf-003.ts`) : `assembleWf00X` + `runWf00X`, strictement calqués sur `run-wf-001.ts` (manifeste réel + registre + résolveur d'agent + `createQueryRunner`, mêmes gardes fail-closed).
 - **Schémas de sortie RESSERRÉS** des spines WF-002/003 (`wf-002-delivery.ts`, `wf-003-lancement.ts`) — application de la leçon WF-001 : le schéma injecté **==** le contrat vérifié par la gate. Bornes de comptage bloquantes → `minItems/maxItems` ; champs imbriqués bloquants → `required` ; critères **advisory** → `description` seulement (jamais de contrainte dure). Le contrat reste compatible avec les sidecars intérimaires existants.
 - **Preuve hors-ligne** : tests hermétiques de câblage (`run-wf-00X.test.ts` : mock conforme → `completed` ; eval gate → `failed` fail-closed ; gardes budget/config) **et** tests « sidecar réel » (`run-wf-00X-real-sidecar.test.ts` : `loadSidecar` du vrai `sidecar.json` → prose réelle → `assembleWf00X` → `runSpine` → `completed`, skip propre si catalogue absent). Sorties conformes factorisées en fixtures partagées (`test/fixtures/wf-00X-outputs.ts`, DRY).
@@ -26,7 +29,7 @@
 - **`actions/checkout`** v4 → **v6** dans la CI (Dependabot #2).
 
 ### Notes
-- Suite **123 verts** (6 skip : 3 harnais live + skips « catalogue absent »), `typecheck` strict OK. Reste : **run live observé** WF-002 puis WF-003 (sur accord explicite), qui clôt l'artefact P3.
+- Suite **123 verts** (6 skip : 3 harnais live + skips « catalogue absent »), `typecheck` strict OK. **Run live WF-003 observé et probant (`completed`, 7/7)** → artefact P3 clos. Reste optionnel : run live observé WF-002 (sur accord explicite).
 
 ## [0.3.0] — 2026-06-11 — POC exécutable de bout en bout (run live WF-001) + audit qualité ISO v1
 > Modèle : Claude Opus 4.8
