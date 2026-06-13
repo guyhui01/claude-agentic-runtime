@@ -20,11 +20,16 @@ import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { runWf002 } from "../src/spines/run-wf-002.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { makeStepProgressHook } from "./live-progress.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_FILE =
   process.env.LIVE_RESULT_FILE ??
   join(HERE, "..", "docs", "audit", "live-runs", "wf-002-live-result.json");
+// Trace de progression incrémentale (gitignorée), sondable en direct (cf. WF-003).
+const PROGRESS_FILE =
+  process.env.LIVE_PROGRESS_FILE ??
+  join(HERE, "..", "docs", "audit", "live-runs", "wf-002-live-progress.json");
 
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
@@ -42,6 +47,7 @@ describe.skipIf(!ENABLED)("WF-002 — RUN LIVE (facturé, observé)", () => {
             "Program Increment, équipes web et mobile.",
         },
         runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
+        onStep: makeStepProgressHook(PROGRESS_FILE),
       });
 
       console.log("\n===== RÉSULTAT RUN LIVE WF-002 =====");
@@ -77,6 +83,6 @@ describe.skipIf(!ENABLED)("WF-002 — RUN LIVE (facturé, observé)", () => {
 
       expect(["completed", "failed"]).toContain(res.status);
     },
-    600_000,
+    1_800_000,
   );
 });

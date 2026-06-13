@@ -21,6 +21,7 @@ import {
 } from "../handoff/validate-handoff.js";
 import type { StepContract } from "../handoff/types.js";
 import { runEvalGate, assertGatePassed, EvalGateError } from "../eval/eval-gate.js";
+import type { GateReport } from "../eval/types.js";
 import type {
   SpineStep,
   SpineResult,
@@ -35,6 +36,28 @@ export class SpineConfigError extends Error {
     this.name = "SpineConfigError";
   }
 }
+
+/**
+ * Événement de progression émis par `runSpine` au franchissement de chaque étape
+ * (OBSERVABILITÉ pure, sans effet sur le déroulé) : `start` avant l'appel runner,
+ * `done` une fois la gate évaluée (avec son `verdict`, même si l'étape bloque).
+ * Permet à un appelant (ex. harnais de run live) de tracer l'avancement EN DIRECT
+ * — utile pour un run long où le résultat final n'arrive qu'à la toute fin.
+ */
+export interface StepProgressEvent {
+  phase: "start" | "done";
+  /** Index 0-based de l'étape dans la spine. */
+  index: number;
+  /** Nombre total d'étapes. */
+  total: number;
+  stepId: string;
+  assetId: string;
+  /** Verdict de la gate — présent uniquement en phase `done`. */
+  verdict?: GateReport["verdict"];
+}
+
+/** Hook d'observabilité par étape (synchrone, ne doit pas lever). */
+export type StepProgressHook = (event: StepProgressEvent) => void;
 
 /**
  * Consumer sentinelle pour valider la sortie de l'étape terminale : sans `input`,
@@ -54,6 +77,7 @@ export async function runSpine(
   steps: SpineStep[],
   runner: StepRunner,
   initialInput: unknown = {},
+  onStep?: StepProgressHook,
 ): Promise<SpineResult> {
   if (steps.length === 0) {
     throw new SpineConfigError("spine vide : au moins une étape est requise");
@@ -88,6 +112,9 @@ export async function runSpine(
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i]!;
     const { stepId } = step.contract;
+    const { assetId } = step.provenance;
+
+    onStep?.({ phase: "start", index: i, total: steps.length, stepId, assetId });
 
     // 1. Exécution de l'étape via le runner injecté. On transmet le schéma de
     //    sortie du contrat : le runner peut s'en servir pour imposer le format
@@ -102,6 +129,7 @@ export async function runSpine(
     // 2. Eval gate (brique 2) — la preuve (GateReport) est produite même en succès.
     const gate = runEvalGate(stepId, step.criteria, output);
     traces.push({ provenance: step.provenance, output, gate });
+    onStep?.({ phase: "done", index: i, total: steps.length, stepId, assetId, verdict: gate.verdict });
     try {
       assertGatePassed(gate);
     } catch (e) {

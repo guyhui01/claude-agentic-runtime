@@ -19,11 +19,18 @@ import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { runWf003 } from "../src/spines/run-wf-003.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { makeStepProgressHook } from "./live-progress.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_FILE =
   process.env.LIVE_RESULT_FILE ??
   join(HERE, "..", "docs", "audit", "live-runs", "wf-003-live-result.json");
+// Trace de PROGRESSION incrémentale (gitignorée) : écrite à chaque étape, donc
+// exploitable même si le run est interrompu (timeout / limite de session). Permet
+// de SONDER l'avancement EN DIRECT pendant un run d'arrière-plan.
+const PROGRESS_FILE =
+  process.env.LIVE_PROGRESS_FILE ??
+  join(HERE, "..", "docs", "audit", "live-runs", "wf-003-live-progress.json");
 
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
@@ -32,6 +39,7 @@ describe.skipIf(!ENABLED)("WF-003 — RUN LIVE (facturé, observé)", () => {
     "déroule la spine WF-003 en live (capé, read-only)",
     async () => {
       const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
+
       const res = await runWf003({
         sidecar,
         catalogRoot: CATALOG_ROOT,
@@ -41,6 +49,7 @@ describe.skipIf(!ENABLED)("WF-003 — RUN LIVE (facturé, observé)", () => {
             "du business case au déploiement sécurisé.",
         },
         runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
+        onStep: makeStepProgressHook(PROGRESS_FILE),
       });
 
       console.log("\n===== RÉSULTAT RUN LIVE WF-003 =====");
@@ -76,6 +85,6 @@ describe.skipIf(!ENABLED)("WF-003 — RUN LIVE (facturé, observé)", () => {
 
       expect(["completed", "failed"]).toContain(res.status);
     },
-    600_000,
+    1_800_000,
   );
 });

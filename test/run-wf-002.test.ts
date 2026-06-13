@@ -4,6 +4,7 @@ import { runWf002, Wf002ConfigError } from "../src/spines/run-wf-002.js";
 import type { AgentResolver } from "../src/manifest/load-manifest.js";
 import type { QueryFn } from "../src/sdk/query-runner.js";
 import { QueryRunnerError } from "../src/sdk/query-runner.js";
+import type { StepProgressEvent } from "../src/orchestrator/run-spine.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 import { wf002HappyOutputs as happyOutputs } from "./fixtures/wf-002-outputs.js";
 
@@ -114,5 +115,24 @@ describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
     await expect(
       runWf002({ sidecar, runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv } }),
     ).rejects.toBeInstanceOf(Wf002ConfigError);
+  });
+
+  it("onStep (observabilité) : émet start+done par étape, dans l'ordre, avec verdict", async () => {
+    const events: StepProgressEvent[] = [];
+    const res = await runWf002({
+      sidecar,
+      resolveAgent,
+      runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv },
+      onStep: (e) => events.push(e),
+    });
+    expect(res.status).toBe("completed");
+    // 5 étapes × (start, done) = 10 événements.
+    expect(events).toHaveLength(10);
+    expect(events.filter((e) => e.phase === "start").map((e) => e.stepId)).toEqual([
+      "STEP-01", "STEP-02", "STEP-03", "STEP-04", "STEP-06",
+    ]);
+    expect(events.filter((e) => e.phase === "done").every((e) => e.verdict === "pass")).toBe(true);
+    expect(events[0]).toMatchObject({ phase: "start", stepId: "STEP-01", index: 0, total: 5 });
+    expect(events[1]).toMatchObject({ phase: "done", stepId: "STEP-01", verdict: "pass" });
   });
 });

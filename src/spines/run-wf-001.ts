@@ -22,7 +22,7 @@
 import type { Sidecar } from "../sidecar/types.js";
 import type { SpineStep, SpineResult } from "../orchestrator/types.js";
 import { loadSpine, type AgentResolver } from "../manifest/load-manifest.js";
-import { runSpine } from "../orchestrator/run-spine.js";
+import { runSpine, type StepProgressHook } from "../orchestrator/run-spine.js";
 import { toAgentDefinition } from "../sdk/to-agent-definition.js";
 import { createQueryRunner, type QueryRunnerDeps } from "../sdk/query-runner.js";
 import {
@@ -52,6 +52,8 @@ export interface RunWf001Options {
   resolveAgent?: AgentResolver;
   /** Dépendances du runner `query()` (caps/env/query injectable). */
   runnerDeps?: QueryRunnerDeps;
+  /** Hook d'observabilité par étape (progression d'un run live long). */
+  onStep?: StepProgressHook;
 }
 
 /**
@@ -91,5 +93,5 @@ export async function runWf001(opts: RunWf001Options): Promise<SpineResult> {
 
   const steps = assembleWf001Spine(opts.sidecar, resolveAgent);
   const runner = createQueryRunner(opts.runnerDeps);
-  return runSpine(steps, runner, opts.initialInput ?? {});
+  return runSpine(steps, runner, opts.initialInput ?? {}, opts.onStep);
 }
