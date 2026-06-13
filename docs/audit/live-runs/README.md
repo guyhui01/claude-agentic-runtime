@@ -10,6 +10,8 @@ Remédiation **P3** de l'[audit qualité ISO v1](../audit_qualite_iso_v1.md) : c
 
 ## État
 
-> ✅ **Première trace versionnée : `wf-003-live-result.json`** — run live WF-003 « Lancement Application IA » du **2026-06-13**, facturé et observé sur accord explicite. Statut **`completed`**, **7/7 étapes `pass`** (STEP-00 → STEP-06), cap budget respecté. Revue P3 effectuée : cas synthétique « assureur » avec placeholders, **aucune donnée client réelle ni secret** — commit via `git add -f`. P3 (mécanisme **et** artefact) est désormais traité par une exécution réelle, jamais une reconstruction manuelle.
+> ✅ **Traces versionnées (runs live probants du 2026-06-13, facturés et observés sur accord explicite)**, revue P3 OK (cas synthétiques, aucune donnée client réelle ni secret), commit via `git add -f` :
+> - **`wf-003-live-result.json`** — WF-003 « Lancement Application IA », statut **`completed`**, **7/7 étapes `pass`** (STEP-00 → STEP-06), cap budget respecté. Valide en live le correctif « structured output natif » à STEP-03.
+> - **`wf-002-live-result.json`** — WF-002 « Delivery », statut **`completed`**, **5/5 étapes `pass`**. Run antérieur du même jour (avant les commits de session, dont le fix STEP-03) : artefact historique valide, non re-rejoué post-fix.
 >
-> Le run « plein pot » du **2026-06-09** précédait ce mécanisme et sa capture `/tmp` n'avait pas survécu — d'où l'attente d'un run live ultérieur pour produire le premier artefact, désormais en place.
+> P3 (mécanisme **et** artefacts) est désormais traité par des exécutions réelles, jamais une reconstruction manuelle. Le run « plein pot » du **2026-06-09** précédait ce mécanisme et sa capture `/tmp` n'avait pas survécu.

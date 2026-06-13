@@ -29,7 +29,7 @@
 - **`actions/checkout`** v4 → **v6** dans la CI (Dependabot #2).
 
 ### Notes
-- Suite verte, `typecheck` strict OK. Décompte selon l'environnement : **126 passed / 6 skipped** catalogue `claude-agents` présent (les 6 skips = **3 harnais live facturés** `LIVE_RUN` + **3 marqueurs `runIf`** des blocs « catalogue absent », inactifs car le catalogue est là ; les validations « sidecar réel » tournent et passent). En CI sans catalogue, la combinaison est symétrique (validations sidecar skippées, marqueurs actifs). **Run live WF-003 observé et probant (`completed`, 7/7)** → artefact P3 clos. Reste optionnel : run live observé WF-002 (sur accord explicite).
+- Suite verte, `typecheck` strict OK. Décompte selon l'environnement : **126 passed / 6 skipped** catalogue `claude-agents` présent (les 6 skips = **3 harnais live facturés** `LIVE_RUN` + **3 marqueurs `runIf`** des blocs « catalogue absent », inactifs car le catalogue est là ; les validations « sidecar réel » tournent et passent). En CI sans catalogue, la combinaison est symétrique (validations sidecar skippées, marqueurs actifs). **Runs live observés et probants : WF-003 (`completed`, 7/7) et WF-002 (`completed`, 5/5)** → artefact P3 clos, les deux traces versionnées dans `docs/audit/live-runs/`.
 
 ## [0.3.0] — 2026-06-11 — POC exécutable de bout en bout (run live WF-001) + audit qualité ISO v1
 > Modèle : Claude Opus 4.8
