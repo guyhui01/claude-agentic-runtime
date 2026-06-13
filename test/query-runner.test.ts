@@ -154,6 +154,20 @@ describe("createQueryRunner — format de sortie imposé (outputSchema)", () => 
     expect(q.lastParams!.prompt).toContain(JSON.stringify(schema));
   });
 
+  it("impose le schéma NATIVEMENT au SDK via outputFormat json_schema", async () => {
+    const q = fakeQuery([successResult({ result: '{"besoins":["x"]}' })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await runner(call({ outputSchema: schema }));
+    expect(q.lastParams!.options!.outputFormat).toEqual({ type: "json_schema", schema });
+  });
+
+  it("ne définit pas outputFormat en l'absence d'outputSchema", async () => {
+    const q = fakeQuery([successResult({ result: "ok" })]);
+    const runner = createQueryRunner({ query: q, env: emptyEnv });
+    await runner(call());
+    expect(q.lastParams!.options!.outputFormat).toBeUndefined();
+  });
+
   it("n'altère PAS le prompt quand aucun outputSchema n'est fourni", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });

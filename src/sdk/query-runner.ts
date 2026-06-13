@@ -161,6 +161,17 @@ export function createQueryRunner(deps: QueryRunnerDeps = {}): StepRunner {
     if (agent.tools) options.allowedTools = agent.tools;
     if (agent.disallowedTools) options.disallowedTools = agent.disallowedTools;
     if (agent.model) options.model = agent.model;
+    // Format imposé NATIVEMENT : le SDK contraint la sortie au schéma et remplit
+    // `structured_output` (avec ses propres retries). Bien plus robuste que de
+    // parser un texte — notamment pour les sorties chargées (code) où un JSON
+    // rédigé à la main par le modèle casse facilement. Le parsing texte ci-dessous
+    // reste un filet de sécurité si le SDK ne fournit pas `structured_output`.
+    if (call.outputSchema !== undefined) {
+      options.outputFormat = {
+        type: "json_schema",
+        schema: call.outputSchema as unknown as Record<string, unknown>,
+      };
+    }
 
     let result: SDKResultMessage | undefined;
     for await (const message of query({ prompt: promptText, options })) {
