@@ -1,9 +1,9 @@
 # claude-agentic-runtime
 
-[![License: BUSL 1.1](https://img.shields.io/badge/license-BUSL--1.1-blue.svg)](LICENSE)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-blue.svg)](LICENSE)
 
 > **Compilateur de gouvernance** au-dessus du **Claude Agent SDK** : lit le catalogue déclaratif [`claude-agents`](https://github.com/guyhui01/claude-agents), **valide ses contrats**, puis l'exécute via le SDK — qui porte le moteur.
-> **Statut : POC exécutable / asset de portfolio** — `v0.3.0` : backbone WF-001 **exécuté en live de bout en bout** (vrais agents + vrai catalogue, toutes gates *blocking* et *advisory* vertes), CI verte, **111 tests** · audit qualité ISO v1 livré. Spines WF-002/003 modélisées et testées (run live en attente de leur indexation au sidecar — repo `claude-agents`).
+> **Statut : POC exécutable / asset de portfolio** — `v0.5.0` : backbone complet, les **3 workflows (WF-001/002/003) prouvés en live de bout en bout** (vrais agents + vrai catalogue, toutes gates *blocking* et *advisory* vertes), CI verte, **126 tests verts** (6 *skipped*) · audit qualité ISO v1 livré (remédiations P1–P4 closes).
 
 ## Pourquoi ce repo
 
@@ -69,13 +69,13 @@ Claude Agent SDK (substrat d'exécution) · JSON Schema (contrats + sidecar) · 
 
 ## Licence
 
-[Business Source License 1.1](LICENSE) © 2026 Guy HUI-BON-HOA.
+[PolyForm Noncommercial License 1.0.0](LICENSE) © 2026 Guy HUI-BON-HOA.
 
-- **Usage non-production** (développement, test, évaluation) : libre, sous les termes de la BSL.
-- **Usage en production** : requiert une licence commerciale → voir [`COMMERCIAL.md`](COMMERCIAL.md).
-- **Bascule automatique** : **4 ans après la publication** de chaque version (*Change Date* glissante), celle-ci passe sous **Apache License 2.0**.
+- **Usage non-commercial** (recherche, étude, projets personnels, organisations à but non lucratif) : libre, sous les termes de la licence.
+- **Tout usage commercial** : requiert une licence commerciale → voir [`COMMERCIAL.md`](COMMERCIAL.md).
+- **Protection permanente** : pas de bascule open source (la licence ne prévoit pas de *Change Date*).
 
-> **Dépendance d'exécution propriétaire** : indépendamment de la BSL ci-dessus, le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
+> **Dépendance d'exécution propriétaire** : indépendamment de la licence ci-dessus, le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
 
 ## Outillage
 

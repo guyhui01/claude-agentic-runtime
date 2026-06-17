@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-17
+> Modèle : Claude Opus 4.8
+
+### 🔄 Changed
+- **Relicensing : Business Source License 1.1 → PolyForm Noncommercial License 1.0.0** (`LICENSE`). Abandon de la bascule automatique vers Apache 2.0 (*Change Date* à 4 ans) au profit d'une **protection non-commerciale permanente** : tout usage commercial requiert désormais une licence séparée, sans expiration. Texte standard PolyForm (identifiant SPDX `PolyForm-Noncommercial-1.0.0`) + deux `Required Notice` (copyright Guy HUI-BON-HOA + contact commercial). Mises en cohérence : badge et section « Licence » du `README.md`, champ `license` de `package.json`, et `COMMERCIAL.md` (libre = usage non-commercial ; payant = tout usage commercial ; section « bascule » remplacée par « protection permanente »). **Bump mineur** : pré-1.0 (POC / asset de portfolio), le changement de termes de licence est tracé comme évolution notable sans signaler une GA.
+
 ## [0.4.0] - 2026-06-13
 > Modèle : Claude Opus 4.8
 
