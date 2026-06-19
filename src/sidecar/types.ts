@@ -1,28 +1,28 @@
 /**
- * Types du manifeste sidecar (cf. schema/sidecar.schema.json, ADR-0003).
- * Source de vérité = le JSON Schema ; ces types en sont le miroir TypeScript
- * pour le loader (brique 0) et les contrôles d'intégrité.
+ * Sidecar manifest types (see schema/sidecar.schema.json, ADR-0003).
+ * Source of truth = the JSON Schema; these types are its TypeScript mirror
+ * for the loader (brick 0) and the integrity checks.
  */
 
 export type AssetType = "agent" | "skill" | "workflow";
 
 export interface AssetSource {
-  /** Chemin relatif du fichier prose audité (provenance — ISO 25012 crédibilité). */
+  /** Relative path of the audited prose file (provenance — ISO 25012 credibility). */
   file: string;
-  /** Tag épinglé du catalogue (ADR-0002). */
+  /** Pinned catalog tag (ADR-0002). */
   catalogTag: string;
 }
 
 export interface Asset {
   id: string;
   type: AssetType;
-  /** Chemin relatif vers le fichier prose, résolu sous le catalogRoot. */
+  /** Relative path to the prose file, resolved under catalogRoot. */
   path: string;
   title: string;
   description: string;
   catalogVersion: string;
   source: AssetSource;
-  /** Arêtes de dépendance (ids d'autres assets). Absent pour une feuille (skill). */
+  /** Dependency edges (ids of other assets). Absent for a leaf (skill). */
   dependsOn?: string[];
 }
 
