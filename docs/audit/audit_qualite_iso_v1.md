@@ -1,175 +1,175 @@
-# Audit qualité ISO — `claude-agentic-runtime` (v1)
+# ISO quality audit — `claude-agentic-runtime` (v1)
 
-- **Date** : 2026-06-11
-- **Modèle Claude** : Claude Opus 4.8
-- **Auditeur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Nature** : auto-évaluation interne (*gap analysis*), **PAS une certification** (cf. [ADR-0006](../adr/0006-referentiels-qualite.md), ROI de certification nul en solo).
-- **Posture** : ISO 19011 — objectivité, preuves **factuelles** (citation `fichier:ligne`, sorties de tests, run live réel), indépendance. **Verdict défavorable assumé si la preuve l'impose.**
-- **Déclencheur** ([ADR-0006](../adr/0006-referentiels-qualite.md) §révision, [NEXT_STEPS](../NEXT_STEPS.md) §3.4) : run live WF-001 « plein pot » abouti le 2026-06-09 (la spine s'exécute) → condition d'audit **atteinte**, avant toute industrialisation.
+- **Date**: 2026-06-11
+- **Claude model**: Claude Opus 4.8
+- **Auditor**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Nature**: internal self-assessment (*gap analysis*), **NOT a certification** (see [ADR-0006](../adr/0006-referentiels-qualite.md), zero certification ROI solo).
+- **Posture**: ISO 19011 — objectivity, **factual** evidence (`file:line` citation, test outputs, real live run), independence. **Unfavorable verdict owned if the evidence demands it.**
+- **Trigger** ([ADR-0006](../adr/0006-referentiels-qualite.md) §review, [NEXT_STEPS](../NEXT_STEPS.md) §3.4): "full-throttle" WF-001 live run completed on 2026-06-09 (the spine executes) → audit condition **reached**, before any industrialization.
 
 ---
 
-## 0. Synthèse exécutive
+## 0. Executive summary
 
-| Axe | Norme | Verdict | Réserve principale |
+| Axis | Standard | Verdict | Main reservation |
 |---|---|---|---|
-| **Données** | ISO/IEC 25012:2008 | 🟡 **Conforme avec réserve** | Les 7 caractéristiques sont réellement encodées et exécutables, mais la **décomposition documentée « 5 schéma + 2 intégrité » est inexacte** (conformité omise ; exactitude/accessibilité réparties). |
-| **Architecture** | ISO/IEC/IEEE 42010:2022 | 🟡 **Conforme avec réserve** | Parties prenantes / préoccupations / points de vue complets, mais un point de vue cite une **nomenclature obsolète** (« spine WF-001→003 »). |
-| **Logiciel / runtime** | ISO/IEC 25010 | 🟢 **Conforme** | Fiabilité (fail-closed), maintenabilité (types stricts, 111 tests), sécurité (anti-traversal, read-only, garde clé) avérées. Note d'observabilité (run live capturé en `/tmp`, non versionné). |
-| **Gouvernance IA** | ISO/IEC 42001:2023 | 🟢 **Conforme** | Invariants tracés (ADR-0001/0004/0005), honnêteté des garanties explicite. Analyse de risque IA seulement implicite (cf. ISO 23894 différée). |
+| **Data** | ISO/IEC 25012:2008 | 🟡 **Conforming with reservation** | The 7 characteristics are really encoded and executable, but the **documented "5 schema + 2 integrity" decomposition is inexact** (compliance omitted; accuracy/accessibility split). |
+| **Architecture** | ISO/IEC/IEEE 42010:2022 | 🟡 **Conforming with reservation** | Stakeholders / concerns / viewpoints complete, but one viewpoint cites an **obsolete naming** ("spine WF-001→003"). |
+| **Software / runtime** | ISO/IEC 25010 | 🟢 **Conforming** | Reliability (fail-closed), maintainability (strict types, 111 tests), security (anti-traversal, read-only, key guard) demonstrated. Observability note (live run captured in `/tmp`, not versioned). |
+| **AI governance** | ISO/IEC 42001:2023 | 🟢 **Conforming** | Invariants traced (ADR-0001/0004/0005), explicit honesty about guarantees. AI risk analysis only implicit (see ISO 23894, deferred). |
 
-**Verdict global** : socle **solide et défendable**. Aucune non-conformité majeure. Les réserves sont **documentaires/factuelles** (cohérence des énoncés), pas des défauts de conception. Le plan de remédiation (§7) est à dominante « correction de wording » + 2 déclencheurs de normes différées à acter.
+**Overall verdict**: a **solid and defensible** foundation. No major non-conformance. The reservations are **documentary/factual** (consistency of the statements), not design flaws. The remediation plan (§7) is mostly "wording fixes" + 2 deferred-standard triggers to record.
 
 ---
 
-## 1. Corpus de preuves (reproductible)
+## 1. Evidence corpus (reproducible)
 
-| Preuve | Source | Constat au 2026-06-11 |
+| Evidence | Source | Finding on 2026-06-11 |
 |---|---|---|
-| Suite de tests | `npx vitest run` | **111 passés, 2 skippés** (run live gardés `LIVE_RUN=1`), 16 fichiers |
-| Typage strict | `npm run typecheck` (`tsc --noEmit`) | **OK**, zéro erreur |
-| Vulnérabilités | `npm audit` | **0 vulnérabilité** |
-| Run live WF-001 | CHANGELOG [Unreleased] + [NEXT_STEPS §2.4-B.3](../NEXT_STEPS.md) | `completed` « plein pot » 2026-06-09 — **0 critère en échec** (blocking + advisory), 3 agents en live, OAuth abonnement |
-| Garde clé API (env) | `echo $ANTHROPIC_API_KEY` | **non définie** (règle budget structurellement tenue) |
-| Propreté dépôt | `git ls-files \| grep DS_Store` | aucun `.DS_Store` suivi ; `.gitignore:34` le couvre |
-| Licence | `LICENSE`, `package.json:6`, `README.md:66` | **MIT** © 2026 Guy HUI-BON-HOA |
+| Test suite | `npx vitest run` | **111 passed, 2 skipped** (live runs guarded by `LIVE_RUN=1`), 16 files |
+| Strict typing | `npm run typecheck` (`tsc --noEmit`) | **OK**, zero error |
+| Vulnerabilities | `npm audit` | **0 vulnerability** |
+| WF-001 live run | CHANGELOG [Unreleased] + [NEXT_STEPS §2.4-B.3](../NEXT_STEPS.md) | `completed` "full-throttle" 2026-06-09 — **0 failing criterion** (blocking + advisory), 3 agents live, subscription OAuth |
+| API-key guard (env) | `echo $ANTHROPIC_API_KEY` | **unset** (budget rule structurally held) |
+| Repo cleanliness | `git ls-files \| grep DS_Store` | no tracked `.DS_Store`; `.gitignore:34` covers it |
+| License | `LICENSE`, `package.json:6`, `README.md:66` | **MIT** © 2026 Guy HUI-BON-HOA |
 
 ---
 
-## 2. Axe Données — ISO/IEC 25012:2008
+## 2. Data axis — ISO/IEC 25012:2008
 
-**Question d'audit** ([NEXT_STEPS §3.2](../NEXT_STEPS.md)) : le sidecar encode-t-il *réellement* les 7 caractéristiques annoncées ? Recalcul, pas de déclaratif.
+**Audit question** ([NEXT_STEPS §3.2](../NEXT_STEPS.md)): does the sidecar *really* encode the 7 announced characteristics? Recompute, not declarative.
 
-### 2.1 Recensement effectif des caractéristiques encodées
+### 2.1 Actual census of the encoded characteristics
 
-| # | Caractéristique ISO 25012 | Encodage réel | Preuve |
+| # | ISO 25012 characteristic | Real encoding | Evidence |
 |---|---|---|---|
-| 1 | **Complétude** | Schéma : `assets` `minItems: 1` | `schema/sidecar.schema.json` (`assets`) |
-| 2 | **Cohérence** | Schéma : arêtes `dependsOn` + `if/then` par `type` | idem (`$defs/asset` `allOf`) |
-| 3 | **Crédibilité** | Schéma : `source = {file, catalogTag}` (provenance) | idem (`source`) |
-| 4 | **Actualité** | Schéma : `catalogTag` épinglé + `generatedAt` (ISO 8601) | idem (`generatedAt`, `catalog.version`) |
-| 5 | **Conformité** | Schéma : `type` enum `agent\|skill\|workflow` | idem (`type`, annoté « ISO 25012 : conformité ») |
-| 6 | **Exactitude** | Schéma : `id` bien-formé (pattern) **+ intégrité** : unicité (`checkUniqueIds`) + référentielle (`checkReferentialIntegrity`) | `src/sidecar/integrity.ts:23,38` |
-| 7 | **Accessibilité** | Schéma : `path`/`source.file` anti-traversal (pattern) **+ intégrité** : joignabilité réelle (`checkAccessibility`) | `src/sidecar/integrity.ts:61` |
+| 1 | **Completeness** | Schema: `assets` `minItems: 1` | `schema/sidecar.schema.json` (`assets`) |
+| 2 | **Consistency** | Schema: `dependsOn` edges + `if/then` per `type` | same (`$defs/asset` `allOf`) |
+| 3 | **Credibility** | Schema: `source = {file, catalogTag}` (provenance) | same (`source`) |
+| 4 | **Currentness** | Schema: pinned `catalogTag` + `generatedAt` (ISO 8601) | same (`generatedAt`, `catalog.version`) |
+| 5 | **Compliance** | Schema: `type` enum `agent\|skill\|workflow` | same (`type`, annotated "ISO 25012: compliance") |
+| 6 | **Accuracy** | Schema: well-formed `id` (pattern) **+ integrity**: uniqueness (`checkUniqueIds`) + referential (`checkReferentialIntegrity`) | `src/sidecar/integrity.ts:23,38` |
+| 7 | **Accessibility** | Schema: `path`/`source.file` anti-traversal (pattern) **+ integrity**: real reachability (`checkAccessibility`) | `src/sidecar/integrity.ts:61` |
 
-**Couverture par les tests** : `test/sidecar.schema.test.ts` (18 cas) + `test/sidecar.integrity.test.ts` (8 cas) → la qualité des données est **exécutable**, pas déclarative. ✅ Point fort réel et différenciant.
+**Test coverage**: `test/sidecar.schema.test.ts` (18 cases) + `test/sidecar.integrity.test.ts` (8 cases) → data quality is **executable**, not declarative. ✅ A real, differentiating strength.
 
-### 2.2 Critère → preuve → verdict
+### 2.2 Criterion → evidence → verdict
 
-| Critère | Preuve | Verdict |
+| Criterion | Evidence | Verdict |
 |---|---|---|
-| Les 7 caractéristiques retenues (ADR-0006) sont encodées | Tableau §2.1 : 7/7 présentes, dont 5 pleinement au schéma + 2 (exactitude, accessibilité) réparties schéma↔intégrité | **Conforme** |
-| L'encodage est exécutable (non déclaratif) | 26 tests verts (schéma 18 + intégrité 8), fail-closed au chargement (`src/loader/load-sidecar.ts`) | **Conforme** |
-| La **décomposition documentée** est exacte | ❌ **Écart** : la formule « **5 schéma + 2 intégrité** » (CHANGELOG [0.2.0], [NEXT_STEPS §1 l.15](../NEXT_STEPS.md), `$id` du schéma) **omet `conformité`** de l'énumération des « 5 », et compte `exactitude`/`accessibilité` comme purement « intégrité » alors qu'elles sont **bien-formées dès le schéma**. Le **total de 7 tient**, la **ventilation non**. | **Partiel** |
+| The 7 chosen characteristics (ADR-0006) are encoded | §2.1 table: 7/7 present, of which 5 fully at the schema + 2 (accuracy, accessibility) split schema↔integrity | **Conforming** |
+| The encoding is executable (not declarative) | 26 green tests (schema 18 + integrity 8), fail-closed at load (`src/loader/load-sidecar.ts`) | **Conforming** |
+| The **documented decomposition** is exact | ❌ **Gap**: the "**5 schema + 2 integrity**" formula (CHANGELOG [0.2.0], [NEXT_STEPS §1 l.15](../NEXT_STEPS.md), schema `$id`) **omits `compliance`** from the "5" enumeration, and counts `accuracy`/`accessibility` as purely "integrity" whereas they are **well-formed from the schema**. The **total of 7 holds**, the **breakdown does not**. | **Partial** |
 
-> **Constat ISO 19011 (verdict nuancé assumé)** : la substance est conforme (7 caractéristiques réellement encodées et testées), mais l'**énoncé** qui la décrit est inexact. Un évaluateur externe qui recompte trouvera 5 caractéristiques pleinement au schéma (dont `conformité`, non listée) + 2 réparties — pas « 5+2 » disjoints. À corriger pour que la documentation dise la vérité du code (cf. P1).
+> **ISO 19011 finding (nuanced verdict owned)**: the substance is conforming (7 characteristics really encoded and tested), but the **statement** describing it is inexact. An external reviewer who recounts will find 5 characteristics fully at the schema (including `compliance`, not listed) + 2 split — not "5+2" disjoint. To fix so that the documentation tells the truth of the code (see P1).
 
 ---
 
-## 3. Axe Architecture — ISO/IEC/IEEE 42010:2022
+## 3. Architecture axis — ISO/IEC/IEEE 42010:2022
 
-**Question d'audit** : parties prenantes / préoccupations / points de vue complets et cohérents.
+**Audit question**: stakeholders / concerns / viewpoints complete and consistent.
 
-| Critère 42010 | Preuve | Verdict |
+| 42010 criterion | Evidence | Verdict |
 |---|---|---|
-| Parties prenantes identifiées | `ARCHITECTURE.md:54-60` — 4 PP (owner, catalogue, évaluateur externe, exécution SDK) avec préoccupation principale | **Conforme** |
-| Préoccupations rattachées | idem | **Conforme** |
-| Points de vue (viewpoints) → vues | `ARCHITECTURE.md:62-68` — 4 points de vue (Dépendance, Données, Exécution, Gouvernance), chacun rattaché à une vue/ADR | **Conforme** |
-| Décisions tracées (correspondance ADR) | 7 ADR (`docs/adr/0001`→`0007`), invariants listés `ARCHITECTURE.md:42-48` | **Conforme** |
-| **Cohérence** des énoncés | ❌ **Écart mineur** : le point de vue « Exécution » (`ARCHITECTURE.md:67`) parle d'« Orchestration de la spine **WF-001→003** » — **nomenclature placeholder obsolète**. [NEXT_STEPS §2.4-B.3 l.74](../NEXT_STEPS.md) précise explicitement que l'unité réellement exécutable est le **backbone d'UN workflow** (ex. WF-001), pas une macro-chaîne WF-001→003. | **Partiel** |
+| Stakeholders identified | `ARCHITECTURE.md:54-60` — 4 stakeholders (owner, catalog, external reviewer, SDK execution) with a primary concern | **Conforming** |
+| Concerns attached | same | **Conforming** |
+| Viewpoints → views | `ARCHITECTURE.md:62-68` — 4 viewpoints (Dependency, Data, Execution, Governance), each attached to a view/ADR | **Conforming** |
+| Decisions traced (ADR correspondence) | 7 ADRs (`docs/adr/0001`→`0007`), invariants listed `ARCHITECTURE.md:42-48` | **Conforming** |
+| **Consistency** of the statements | ❌ **Minor gap**: the "Execution" viewpoint (`ARCHITECTURE.md:67`) speaks of "Orchestration of the **WF-001→003** spine" — **obsolete placeholder naming**. [NEXT_STEPS §2.4-B.3 l.74](../NEXT_STEPS.md) explicitly states that the actually executable unit is the **backbone of ONE workflow** (e.g. WF-001), not a WF-001→003 macro-chain. | **Partial** |
 
-> **Verdict axe : Conforme avec réserve.** La description d'architecture est structurée conformément au standard. Le seul écart est une **incohérence interne** entre `ARCHITECTURE.md` (terme historique) et `NEXT_STEPS.md` (clarification ultérieure) → à aligner (P2).
+> **Axis verdict: Conforming with reservation.** The architecture description is structured per the standard. The only gap is an **internal inconsistency** between `ARCHITECTURE.md` (historical term) and `NEXT_STEPS.md` (later clarification) → to align (P2).
 
 ---
 
-## 4. Axe Logiciel / runtime — ISO/IEC 25010
+## 4. Software / runtime axis — ISO/IEC 25010
 
-**Questions d'audit** : fiabilité (fail-closed), maintenabilité (tests, types stricts), sécurité (anti-traversal, read-only, garde clé API).
+**Audit questions**: reliability (fail-closed), maintainability (tests, strict types), security (anti-traversal, read-only, API-key guard).
 
-### 4.1 Fiabilité
+### 4.1 Reliability
 
-| Critère | Preuve | Verdict |
+| Criterion | Evidence | Verdict |
 |---|---|---|
-| Chargement fail-closed | `src/loader/load-sidecar.ts` (parse→schéma→intégrité, court-circuit, `SidecarValidationError` agrégée) | **Conforme** |
-| Handoff fail-closed | `src/handoff/validate-handoff.ts` (`validateHandoff` lève si non conforme amont/aval) | **Conforme** |
-| Eval gate fail-closed | `src/eval/eval-gate.ts` (`assertGatePassed`) ; `runEvalGate` produit la preuve même en succès | **Conforme** |
-| Run live échoue **proprement** | Run du 2026-06-09 : 1ᵉʳ run `failed` fail-closed à STEP-03 (écart de contrat, **résultat valide tracé**) avant correctif | **Conforme** (la défaillance est *contrôlée*) |
+| Fail-closed loading | `src/loader/load-sidecar.ts` (parse→schema→integrity, short-circuit, aggregated `SidecarValidationError`) | **Conforming** |
+| Fail-closed handoff | `src/handoff/validate-handoff.ts` (`validateHandoff` throws if non-conforming upstream/downstream) | **Conforming** |
+| Fail-closed eval gate | `src/eval/eval-gate.ts` (`assertGatePassed`); `runEvalGate` produces evidence even on success | **Conforming** |
+| Live run fails **cleanly** | Run of 2026-06-09: 1st run `failed` fail-closed at STEP-03 (contract mismatch, **valid result traced**) before fix | **Conforming** (the failure is *controlled*) |
 
-### 4.2 Maintenabilité
+### 4.2 Maintainability
 
-| Critère | Preuve | Verdict |
+| Criterion | Evidence | Verdict |
 |---|---|---|
-| Typage strict | `npm run typecheck` OK (zéro erreur) | **Conforme** |
-| Couverture par tests | 111 tests verts / 16 fichiers ; tests **hermétiques** (`query` injectable → zéro réseau) | **Conforme** |
-| DRY / factorisation | `src/spines/spine-helpers.ts` partagé par les 3 spines (WF-001 refactoré sans changement de comportement) | **Conforme** |
-| Dette technique | §2.6 soldée : `vitest` 2→4, `npm audit` 5→0 | **Conforme** |
+| Strict typing | `npm run typecheck` OK (zero error) | **Conforming** |
+| Test coverage | 111 green tests / 16 files; **hermetic** tests (`query` injectable → zero network) | **Conforming** |
+| DRY / factoring | `src/spines/spine-helpers.ts` shared by the 3 spines (WF-001 refactored with no behavior change) | **Conforming** |
+| Technical debt | §2.6 cleared: `vitest` 2→4, `npm audit` 5→0 | **Conforming** |
 
-### 4.3 Sécurité
+### 4.3 Security
 
-| Critère | Preuve | Verdict |
+| Criterion | Evidence | Verdict |
 |---|---|---|
-| Anti-traversal | Schéma : `path`/`source.file` pattern `^(?!/)(?!.*\.\.).+$` **+** double garde `src/sidecar/integrity.ts:61-72` (refus absolus / `..`) | **Conforme** |
-| Read-only forcé | `src/sdk/query-runner.ts:159` — `permissionMode: "plan"` forcé, non surchargeable (ADR-0001) | **Conforme** |
-| Garde clé API métrée | `src/sdk/query-runner.ts:137` — refus AVANT tout appel si `ANTHROPIC_API_KEY` défini (OAuth abonnement uniquement) | **Conforme** |
-| Caps durs par run | `src/sdk/query-runner.ts:152-157` — `maxTurns`/`maxBudgetUsd` plafonnés même si l'agent demande plus | **Conforme** |
-| Surface de vulnérabilités | `npm audit` = 0 ; posture Dependabot + correctifs auto ON | **Conforme** |
+| Anti-traversal | Schema: `path`/`source.file` pattern `^(?!/)(?!.*\.\.).+$` **+** double guard `src/sidecar/integrity.ts:61-72` (rejects absolute / `..`) | **Conforming** |
+| Read-only forced | `src/sdk/query-runner.ts:159` — `permissionMode: "plan"` forced, not overridable (ADR-0001) | **Conforming** |
+| Metered API-key guard | `src/sdk/query-runner.ts:137` — refuse BEFORE any call if `ANTHROPIC_API_KEY` is set (subscription OAuth only) | **Conforming** |
+| Hard per-run caps | `src/sdk/query-runner.ts:152-157` — `maxTurns`/`maxBudgetUsd` capped even if the agent asks for more | **Conforming** |
+| Vulnerability surface | `npm audit` = 0; Dependabot posture + auto fixes ON | **Conforming** |
 
-> **Note d'observabilité (non bloquante)** : le résultat structuré du run live est capturé via `LIVE_RESULT_FILE` (défaut `/tmp/wf-001-live-result.json`, `test/wf-001-run-live.test.ts`) — **éphémère, non versionné**. La preuve d'exécution « plein pot » subsiste seulement en **prose** (CHANGELOG / NEXT_STEPS). Acceptable pour un POC, mais la traçabilité d'audit gagnerait à versionner une trace anonymisée (P3).
+> **Observability note (non-blocking)**: the live run's structured result is captured via `LIVE_RESULT_FILE` (default `/tmp/wf-001-live-result.json`, `test/wf-001-run-live.test.ts`) — **ephemeral, not versioned**. The "full-throttle" execution evidence survives only as **prose** (CHANGELOG / NEXT_STEPS). Acceptable for a POC, but audit traceability would benefit from versioning an anonymized trace (P3).
 
-> **Verdict axe : Conforme.** Fiabilité, maintenabilité et sécurité étayées par des preuves factuelles convergentes.
+> **Axis verdict: Conforming.** Reliability, maintainability, and security are backed by convergent factual evidence.
 
 ---
 
-## 5. Axe Gouvernance IA — ISO/IEC 42001:2023
+## 5. AI governance axis — ISO/IEC 42001:2023
 
-**Questions d'audit** : principes, risques, cycle de vie ; cohérence des invariants (read-only ADR-0001, propagation gardée ADR-0004).
+**Audit questions**: principles, risks, lifecycle; consistency of invariants (read-only ADR-0001, guarded propagation ADR-0004).
 
-| Critère 42001 | Preuve | Verdict |
+| 42001 criterion | Evidence | Verdict |
 |---|---|---|
-| Principes de gouvernance explicites | 7 ADR ; invariants `ARCHITECTURE.md:42-48` (read-only, épinglage, sidecar SSOT, propagation gardée, feedback PR humaine) | **Conforme** |
-| Invariant read-only | ADR-0001 + `permissionMode:"plan"` forcé (`query-runner.ts:159`) + adaptateur lecture seule | **Conforme** |
-| Propagation **gardée** (contrôle de risque) | ADR-0004 (validation contrats + eval gates en CI, *fail-closed*, merge humain) | **Conforme** |
-| Feedback sans write-back automatique | ADR-0005 (PR humaine uniquement) | **Conforme** |
-| **Honnêteté des garanties** (anti-faux-signal) | ADR-0004 §« Limite explicite », ADR-0007 §« Limite explicite » : les limites sont écrites, pas dissimulées | **Conforme** (exemplaire) |
-| Cycle de vie maîtrisé | ADR-0002 (bump explicite tracé) + CI (§2.5) + CHANGELOG/NEXT_STEPS docs-as-code | **Conforme** |
-| Gestion de risque IA **formalisée** | Eval gates = contrôle de risque *de facto* (le run live a matérialisé puis traité un risque réel : divergence de contrat). Pas de **registre de risques** formel → relève d'ISO 23894 **différée** (§6) | **Conforme** au périmètre 42001 ; risque formel → cf. P5 |
+| Explicit governance principles | 7 ADRs; invariants `ARCHITECTURE.md:42-48` (read-only, pinning, sidecar SSOT, guarded propagation, human-PR feedback) | **Conforming** |
+| Read-only invariant | ADR-0001 + forced `permissionMode:"plan"` (`query-runner.ts:159`) + read-only adapter | **Conforming** |
+| **Guarded** propagation (risk control) | ADR-0004 (contract validation + eval gates in CI, *fail-closed*, human merge) | **Conforming** |
+| Feedback without automatic write-back | ADR-0005 (human PR only) | **Conforming** |
+| **Honesty about guarantees** (anti-false-signal) | ADR-0004 §"Explicit limit", ADR-0007 §"Explicit limit": the limits are written, not hidden | **Conforming** (exemplary) |
+| Controlled lifecycle | ADR-0002 (explicit tracked bump) + CI (§2.5) + CHANGELOG/NEXT_STEPS docs-as-code | **Conforming** |
+| **Formalized** AI risk management | Eval gates = *de facto* risk control (the live run materialized then handled a real risk: contract divergence). No formal **risk register** → falls under ISO 23894, **deferred** (§6) | **Conforming** to the 42001 scope; formal risk → see P5 |
 
-> **Verdict axe : Conforme.** Les invariants de gouvernance sont cohérents, tracés et **réellement appliqués dans le code** (pas seulement déclarés). La posture d'honnêteté (limites explicites) est un point fort aligné ISO 19011.
+> **Axis verdict: Conforming.** The governance invariants are consistent, traced, and **really applied in the code** (not just declared). The honesty posture (explicit limits) is a strength aligned with ISO 19011.
 
 ---
 
-## 6. Normes différées — révision du statut ([NEXT_STEPS §3.3](../NEXT_STEPS.md))
+## 6. Deferred standards — status review ([NEXT_STEPS §3.3](../NEXT_STEPS.md))
 
-| Norme différée | Déclencheur ([ADR-0006](../adr/0006-referentiels-qualite.md)) | Statut au 2026-06-11 | Décision |
+| Deferred standard | Trigger ([ADR-0006](../adr/0006-referentiels-qualite.md)) | Status on 2026-06-11 | Decision |
 |---|---|---|---|
-| **ISO/IEC 25024:2015** (métriques qualité données) | « quand on veut des métriques **chiffrées** » | Le run live a produit des **comptages de facto** (13 US, 5 épics, 7 scénarios) mais **aucun système de métriques** formel | **Reste différée** — réévaluable si reporting qualité catalogue souhaité |
-| **ISO/IEC 23894:2023** (AI risk management) | « quand les eval gates évoluent vers une **gestion de risque formalisée** » | Gates déterministes en place ; un risque réel **matérialisé puis traité** au run live, mais **pas de registre de risques** | **Déclencheur en approche** — recommandé si industrialisation (P5) |
-| **ISO/IEC 5230 (OpenChain)** (conformité licences) | « au moment de **fixer la licence** » | ⚠️ **Déclencheur ATTEINT** : licence **fixée à MIT** (`LICENSE`, `package.json:6`, `README.md:66`) — l'« à définir » d'ADR-0006 est résolu | **À activer (P4)** : contrôle de compatibilité des licences des dépendances avec MIT |
+| **ISO/IEC 25024:2015** (data-quality metrics) | "when we want **quantified** metrics" | The live run produced **de facto counts** (13 US, 5 epics, 7 scenarios) but **no formal metrics system** | **Stays deferred** — re-assessable if catalog quality reporting is wanted |
+| **ISO/IEC 23894:2023** (AI risk management) | "when the eval gates evolve toward **formalized risk management**" | Deterministic gates in place; a real risk **materialized then handled** at the live run, but **no risk register** | **Trigger approaching** — recommended if industrialization (P5) |
+| **ISO/IEC 5230 (OpenChain)** (license compliance) | "when **setting the license**" | ⚠️ **Trigger REACHED**: license **set to MIT** (`LICENSE`, `package.json:6`, `README.md:66`) — the "to be defined" of ADR-0006 is resolved | **To activate (P4)**: check dependency-license compatibility with MIT |
 
 ---
 
-## 7. Plan de remédiation priorisé
+## 7. Prioritized remediation plan
 
-| # | Priorité | Action | Cible | Effort | Impact |
+| # | Priority | Action | Target | Effort | Impact |
 |---|---|---|---|---|---|
-| **P1** | 🔴 Haute | Corriger la **décomposition ISO 25012** : énoncer les **7 caractéristiques** avec leur lieu d'encodage exact (5 pleinement au schéma — dont `conformité` — + `exactitude`/`accessibilité` réparties schéma↔intégrité). Remplacer la formule trompeuse « 5 schéma + 2 intégrité ». | `schema/sidecar.schema.json` (`$id` desc), `CHANGELOG.md` [0.2.0], `NEXT_STEPS.md` §1 l.15 | Faible | Crédibilité / honnêteté de la doc (axe Données → Conforme) |
-| **P2** | 🟠 Moyenne | Aligner le **point de vue « Exécution »** sur la nomenclature réelle : « backbone d'un workflow » au lieu de « spine WF-001→003 ». | `ARCHITECTURE.md:67` | Faible | Cohérence inter-docs (axe Architecture → Conforme) |
-| **P3** | 🟡 Basse | **Versionner une trace** du run live « plein pot » (résultat structuré anonymisé) comme artefact d'audit, au lieu du `/tmp` éphémère. | nouveau `docs/audit/` ou fixture | Faible | Traçabilité d'audit (observabilité) |
-| **P4** | 🟠 Moyenne | **ISO 5230 déclenché** : vérifier la compatibilité des licences des dépendances (`@anthropic-ai/claude-agent-sdk`, `ajv`, `vitest`…) avec MIT ; consigner le résultat. | nouveau contrôle / note | Faible | Conformité licences (norme différée activée) |
-| **P5** | 🟡 Basse (si industrialisation) | **ISO 23894** : registre de risques IA léger (le run live a déjà fourni un cas réel : divergence de contrat → resserrement de schéma). | `docs/` | Moyen | Gestion de risque formalisée (au passage produit→mission) |
+| **P1** | 🔴 High | Fix the **ISO 25012 decomposition**: state the **7 characteristics** with their exact encoding location (5 fully at the schema — including `compliance` — + `accuracy`/`accessibility` split schema↔integrity). Replace the misleading "5 schema + 2 integrity" formula. | `schema/sidecar.schema.json` (`$id` desc), `CHANGELOG.md` [0.2.0], `NEXT_STEPS.md` §1 l.15 | Low | Doc credibility / honesty (Data axis → Conforming) |
+| **P2** | 🟠 Medium | Align the **"Execution" viewpoint** to the real naming: "a workflow backbone" instead of "spine WF-001→003". | `ARCHITECTURE.md:67` | Low | Cross-doc consistency (Architecture axis → Conforming) |
+| **P3** | 🟡 Low | **Version a trace** of the "full-throttle" live run (anonymized structured result) as an audit artifact, instead of the ephemeral `/tmp`. | new `docs/audit/` or a fixture | Low | Audit traceability (observability) |
+| **P4** | 🟠 Medium | **ISO 5230 triggered**: check the compatibility of dependency licenses (`@anthropic-ai/claude-agent-sdk`, `ajv`, `vitest`…) with MIT; record the result. | new check / note | Low | License compliance (deferred standard activated) |
+| **P5** | 🟡 Low (if industrialization) | **ISO 23894**: a lightweight AI risk register (the live run already provided a real case: contract divergence → schema tightening). | `docs/` | Medium | Formalized risk management (at the product→engagement transition) |
 
-> **Aucune action ne touche le code de production** (cohérent avec la contrainte d'audit : lecture/analyse seule). P1/P2 sont des corrections documentaires ; P3/P4/P5 sont des ajouts de traçabilité/gouvernance.
+> **No action touches production code** (consistent with the audit constraint: read/analysis only). P1/P2 are documentary fixes; P3/P4/P5 are traceability/governance additions.
 
 ---
 
 ## 8. Conclusion
 
-Le POC `claude-agentic-runtime` présente une **qualité réelle et défendable** sur les 4 axes retenus. La thèse — *vrais agents + vrai catalogue + handoffs/gates déterministes → workflow qui aboutit en live, qualité contrôlée, read-only, capé* — est **empiriquement validée** par le run live « plein pot » du 2026-06-09.
+The `claude-agentic-runtime` POC shows **real and defensible quality** across the 4 chosen axes. The thesis — *real agents + real catalog + deterministic handoffs/gates → a workflow that succeeds live, controlled quality, read-only, capped* — is **empirically validated** by the "full-throttle" live run of 2026-06-09.
 
-Les écarts relevés sont **honnêtes et circonscrits** : ils concernent la **précision des énoncés documentaires** (P1, P2) et l'**activation de deux normes différées** dont les déclencheurs sont désormais atteints ou proches (P4 licences, P5 risque), **non la conception**. Aucun faux signal de qualité n'a été détecté ; au contraire, la documentation expose ses propres limites (ADR-0004/0007).
+The gaps found are **honest and circumscribed**: they concern the **precision of the documentary statements** (P1, P2) and the **activation of two deferred standards** whose triggers are now reached or close (P4 licenses, P5 risk), **not the design**. No false quality signal was detected; on the contrary, the documentation exposes its own limits (ADR-0004/0007).
 
-**Avant industrialisation** (passage « asset portfolio » → « produit de mission »), traiter P1, P2 et P4 est recommandé ; P3 et P5 deviennent prioritaires si une mission client l'exige.
+**Before industrialization** (moving from "portfolio asset" to "engagement product"), handling P1, P2, and P4 is recommended; P3 and P5 become priorities if a client engagement requires it.
 
 ---
 
-> Rapport élaboré avec **Claude Opus 4.8** (2026-06-11). Posture d'audit ISO 19011 — preuves factuelles, indépendance, verdict nuancé assumé.
+> Report produced with **Claude Opus 4.8** (2026-06-11). ISO 19011 audit posture — factual evidence, independence, nuanced verdict owned.

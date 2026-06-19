@@ -1,30 +1,30 @@
-# Contribuer à `claude-agentic-runtime`
+# Contributing to `claude-agentic-runtime`
 
-> Repo en français · UTF-8 · solo (Guy HUI-BON-HOA), mais discipline maintenue pour la qualité et le signal portfolio.
+> Repo in English · UTF-8 · solo (Guy HUI-BON-HOA), but discipline kept for quality and portfolio signal.
 
-## Invariants non négociables (voir `docs/adr/`)
-1. **Read-only sur `claude-agents`** : aucune écriture vers le catalogue, jamais (ADR-0001).
-2. **Import du catalogue épinglé** sur tag exact ; propagation = bump explicite (ADR-0002).
-3. **Sidecar** = propriété du catalogue (ADR-0003).
-4. **Propagation gardée** par eval gates + validation de contrats (ADR-0004).
-5. **Feedback vers le catalogue** uniquement par **PR humaine** (ADR-0005).
+## Non-negotiable invariants (see `docs/adr/`)
+1. **Read-only on `claude-agents`**: no writes to the catalog, ever (ADR-0001).
+2. **Catalog import pinned** to an exact tag; propagation = explicit bump (ADR-0002).
+3. **Sidecar** = owned by the catalog (ADR-0003).
+4. **Propagation guarded** by eval gates + contract validation (ADR-0004).
+5. **Feedback to the catalog** only through a **human PR** (ADR-0005).
 
-## Décisions d'architecture
-Toute décision structurante = **un ADR** dans `docs/adr/` (format Nygard : Statut · Contexte · Décision · Conséquences · Alternatives écartées). Numérotation `NNNN-titre.md`.
+## Architecture decisions
+Every structural decision = **one ADR** in `docs/adr/` (Nygard format: Status · Context · Decision · Consequences · Rejected alternatives). Numbering `NNNN-title.md`.
 
 ## Commits (Conventional Commits)
-`<type>(<scope>): <description>` — types : `feat` · `fix` · `refactor` · `chore` · `docs` · `test` · `ci`.
+`<type>(<scope>): <description>` — types: `feat` · `fix` · `refactor` · `chore` · `docs` · `test` · `ci`.
 
 ## Versioning (SemVer)
-- **Major** : rupture de contrat / d'architecture.
-- **Minor** : nouvelle brique / capacité.
-- **Patch** : corrections.
-- Chaque release → entrée `CHANGELOG.md` avec **mention du modèle Claude** utilisé.
+- **Major**: contract or architecture break.
+- **Minor**: new building block / capability.
+- **Patch**: fixes.
+- Every release → a `CHANGELOG.md` entry with the **Claude model used**.
 
-## Qualité
-- Référentiels appliqués : **ISO/IEC/IEEE 42010** (architecture), **ISO/IEC 25012** (données), **ISO/IEC 25010** (runtime), **ISO/IEC 42001** (gouvernance IA) — cf. ADR-0006.
-- Anonymisation : aucun client réel (héritée du catalogue).
-- Vérification factuelle : tout chiffre/norme/libellé publié est vérifié (pas d'invention).
+## Quality
+- Standards applied: **ISO/IEC/IEEE 42010** (architecture), **ISO/IEC 25012** (data), **ISO/IEC 25010** (runtime), **ISO/IEC 42001** (AI governance) — see ADR-0006.
+- Anonymization: no real client (inherited from the catalog).
+- Fact-checking: every published figure/standard/label is verified (nothing invented).
 
 ## Push
-Push sur `main` **uniquement sur accord explicite**. Jamais de `--force` ni `--no-verify` sans accord.
+Push to `main` **only on explicit approval**. Never `--force` or `--no-verify` without approval.

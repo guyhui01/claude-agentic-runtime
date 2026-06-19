@@ -1,5 +1,5 @@
-# Traces de runs live brutes : ne pas committer sans revue/anonymisation (P3).
-# La trace anonymisée d'un run probant est ajoutée explicitement (git add -f).
+# Raw live-run traces: do not commit without review/anonymization (P3).
+# The anonymized trace of a conclusive run is added explicitly (git add -f).
 *.json
 !.gitignore
 !README.md

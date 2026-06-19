@@ -1,36 +1,36 @@
-# Licence commerciale — claude-agentic-runtime
+# Commercial license — claude-agentic-runtime
 
-Ce projet est distribué sous **PolyForm Noncommercial License 1.0.0** (voir [`LICENSE`](LICENSE)).
+This project is distributed under the **PolyForm Noncommercial License 1.0.0** (see [`LICENSE`](LICENSE)).
 
-## Ce qui est libre
+## What is free
 
-Sous la PolyForm Noncommercial, vous pouvez librement, **sans licence commerciale**, copier,
-modifier, redistribuer et utiliser le code **à toute fin non commerciale**, notamment :
+Under PolyForm Noncommercial, you may freely, **without a commercial license**, copy,
+modify, redistribute, and use the code **for any noncommercial purpose**, in particular:
 
-- recherche, étude personnelle, expérimentation et test au bénéfice de la connaissance publique ;
-- projets personnels, amateurs ou de loisir, sans application commerciale anticipée ;
-- usage par une organisation à but non lucratif (association, établissement d'enseignement,
-  organisme public de recherche, institution publique…).
+- research, personal study, experimentation, and testing for the benefit of public knowledge;
+- personal, hobby, or recreational projects, with no anticipated commercial application;
+- use by a nonprofit organization (association, educational institution,
+  public research body, public institution, etc.).
 
-## Ce qui requiert une licence commerciale
+## What requires a commercial license
 
-**Tout usage commercial** du runtime nécessite une licence commerciale auprès du Licensor.
-Sont notamment concernés :
+**Any commercial use** of the runtime requires a commercial license from the Licensor.
+This notably includes:
 
-- l'exploitation du runtime dans le cadre d'une activité commerciale (y compris en interne) ;
-- son intégration dans un produit ou service proposé à des tiers ;
-- toute offre hébergée ou managée s'appuyant sur le runtime.
+- operating the runtime as part of a commercial activity (including internally);
+- integrating it into a product or service offered to third parties;
+- any hosted or managed offering built on the runtime.
 
-## Protection permanente
+## Permanent protection
 
-Contrairement à une *Business Source License*, la PolyForm Noncommercial **ne prévoit aucune
-bascule automatique** vers une licence open source : la restriction d'usage commercial est
-**permanente** et s'applique à toutes les versions.
+Unlike a *Business Source License*, PolyForm Noncommercial provides **no automatic
+switch** to an open-source license: the commercial-use restriction is
+**permanent** and applies to all versions.
 
 ## Contact
 
-Pour obtenir une licence commerciale ou discuter d'un arrangement spécifique :
+To obtain a commercial license or discuss a specific arrangement:
 
 **Guy HUI-BON-HOA** — guy.hui@proton.me
 
-Merci d'indiquer : l'organisation, le cas d'usage envisagé, et le volume / périmètre de déploiement.
+Please include: your organization, the intended use case, and the deployment volume / scope.

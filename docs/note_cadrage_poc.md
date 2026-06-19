@@ -1,119 +1,119 @@
-# Note de cadrage — POC `claude-agentic-runtime`
+# Scoping note — POC `claude-agentic-runtime`
 
-> Statut : **VALIDÉE par Guy — 2026-06-03** · Auteur : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-> Référentiels qualité ISO appliqués dans la construction du repo (cf. ADR-0006) : ISO/IEC/IEEE 42010 · ISO/IEC 25012 · ISO/IEC 25010 · ISO/IEC 42001.
-> Document fondateur du repo. Aucune ligne de code n'est écrite avant validation de cette note.
+> Status: **VALIDATED by Guy — 2026-06-03** · Author: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+> ISO quality standards applied in building the repo (see ADR-0006): ISO/IEC/IEEE 42010 · ISO/IEC 25012 · ISO/IEC 25010 · ISO/IEC 42001.
+> Founding document of the repo. No line of code is written before this note is validated.
 
 ---
 
-## 1. Objectif & nature du projet
+## 1. Objective & nature of the project
 
-Construire un **runtime agentique exécutable** qui consomme le catalogue déclaratif `claude-agents` (rôles, skills, workflows) comme **source de vérité unique**, et l'exécute via le **Claude Agent SDK**.
+Build a **runnable agentic runtime** that consumes the declarative `claude-agents` catalog (roles, skills, workflows) as the **single source of truth**, and executes it through the **Claude Agent SDK**.
 
-- **Finalité retenue : asset de portfolio** (démonstrateur de maturité d'architecture agentique d'entreprise orientée delivery). Pas un produit de mission à ce stade.
-- **Critère de poursuite** : si le POC prouve sa valeur « en mission 6 mois », industrialisation ; sinon, il reste un showcase soigné et on s'arrête là (règle anti-usine-à-gaz, 80/20).
+- **Chosen purpose: portfolio asset** (demonstrator of enterprise agentic-architecture maturity, delivery-oriented). Not an engagement product at this stage.
+- **Continuation criterion**: if the POC proves its value "in a 6-month engagement", industrialize; otherwise it stays a polished showcase and we stop there (anti-over-engineering rule, 80/20).
 
-## 2. Positionnement dans l'écosystème de repos
+## 2. Positioning in the repo ecosystem
 
-| Repo | Rôle | Mutabilité depuis le runtime |
+| Repo | Role | Mutability from the runtime |
 |---|---|---|
-| `claude-agents` | **SSOT** : catalogue déclaratif pur, audité (grille v2.8) | **Lecture seule** |
-| **`claude-agentic-runtime`** (ce repo) | Consommateur : exécution, eval, état de run | Écrit uniquement **ses propres** stores |
-| `claude-projects` | Projets clients (existant, séparé) | Hors périmètre |
+| `claude-agents` | **SSOT**: pure declarative catalog, audited (rubric v2.8) | **Read-only** |
+| **`claude-agentic-runtime`** (this repo) | Consumer: execution, eval, run state | Writes only **its own** stores |
+| `claude-projects` | Client projects (existing, separate) | Out of scope |
 
-**Direction de dépendance unique** : `runtime → lit → catalogue`. Jamais l'inverse.
+**One-way dependency direction**: `runtime → reads → catalog`. Never the reverse.
 
-## 3. Invariants d'architecture (non négociables)
+## 3. Architecture invariants (non-negotiable)
 
-1. **Consommateur read-only** : le runtime n'a aucun droit d'écriture sur `claude-agents` (token CI *read-only*, repos séparés).
-2. **Import versionné & épinglé** : dépendance sur **tag exact** (ex. `claude-agents@v3.25.0`), jamais une plage `^`/`~`. La propagation est un **bump explicite tracé** (commit + CHANGELOG runtime).
-3. **Sidecar propriété du catalogue** : le manifeste machine-lisible (index JSON/YAML) est **généré et validé en CI dans `claude-agents`** ; le runtime ne fait que le lire. Le corps prose du catalogue reste intact et auditable.
-4. **Propagation gardée** : tout bump de version passe par validation de contrats + eval gates (cf. §6) ; *fail-closed* si rouge.
-5. **Feedback par PR humaine** : un signal du runtime (eval, trust) qui suggère d'améliorer le catalogue remonte **via une PR humaine normale** (revue + CHANGELOG), **jamais** par write-back automatique.
+1. **Read-only consumer**: the runtime has no write access to `claude-agents` (*read-only* CI token, separate repos).
+2. **Versioned & pinned import**: dependency on an **exact tag** (e.g. `claude-agents@v3.25.0`), never a `^`/`~` range. Propagation is an **explicit tracked bump** (commit + runtime CHANGELOG).
+3. **Sidecar owned by the catalog**: the machine-readable manifest (JSON/YAML index) is **generated and validated in CI inside `claude-agents`**; the runtime only reads it. The catalog's prose body stays intact and auditable.
+4. **Guarded propagation**: every version bump goes through contract validation + eval gates (see §6); *fail-closed* if red.
+5. **Feedback through a human PR**: a runtime signal (eval, trust) suggesting an improvement to the catalog flows back **through a normal human PR** (review + CHANGELOG), **never** through automatic write-back.
 
-> Ces 5 invariants sont formalisés en **ADR** dans `docs/adr/` (voir §8).
+> These 5 invariants are formalized as **ADRs** in `docs/adr/` (see §8).
 
-## 4. Périmètre du POC
+## 4. POC scope
 
-### Dans le périmètre — la *spine delivery*
-Exécuter de bout en bout la colonne : **`WF-001 cadrage` → `WF-002 delivery SAFe` → `WF-003 lancement app`**, en consommant les agents/skills du catalogue.
+### In scope — the *delivery spine*
+Run end to end the spine: **`WF-001 scoping` → `WF-002 SAFe delivery` → `WF-003 app launch`**, by consuming the catalog's agents/skills.
 
-### Les 3 briques à construire (le reste est porté par le SDK)
-| # | Brique | Valeur |
+### The 3 blocks to build (the rest is carried by the SDK)
+| # | Block | Value |
 |---|---|---|
-| **0** | **Loader** catalogue → définitions SDK (lecture du sidecar) + contrat de lisibilité | Fondation : rend le catalogue exécutable |
-| **1** | **Contrats de handoff typés** (I/O schématisé entre étapes de workflow) | Cœur de valeur — le SDK ne le fournit pas |
-| **2** | **1 eval gate** branché sur une sortie d'agent (ex. conformité du livrable de cadrage) | Garde-fou de qualité runtime |
+| **0** | **Loader** catalog → SDK definitions (sidecar read) + readability contract | Foundation: makes the catalog executable |
+| **1** | **Typed handoff contracts** (schematized I/O between workflow steps) | Core value — the SDK does not provide it |
+| **2** | **1 eval gate** plugged onto an agent output (e.g. conformance of the scoping deliverable) | Runtime quality guardrail |
 
-### Hors périmètre POC
-- **État/mémoire partagée** et **routeur d'orchestration** → **fournis par le Claude Agent SDK** (à configurer, pas à bâtir).
-- **Enrichissement du catalogue MCP** → post-POC (Jira/Confluence existants ou stubs suffisent).
-- Eval suite complète, multi-spines, UI → post-POC.
+### Out of POC scope
+- **Shared state/memory** and **orchestration router** → **provided by the Claude Agent SDK** (to configure, not to build).
+- **MCP catalog enrichment** → post-POC (existing Jira/Confluence or stubs are enough).
+- Full eval suite, multi-spines, UI → post-POC.
 
 ## 5. Stack
 
-- **Substrat d'exécution** : Claude Agent SDK (sub-agents, routing d'outils, état, MCP) — **on ne réécrit pas de moteur**.
-- **Modèle** : Opus 4.8 (raisonnement/orchestration), Sonnet 4.6 (étapes haut volume) — tiers à arbitrer par étape.
-- **Validation** : JSON Schema (contrats + sidecar), exécutée en CI.
+- **Execution substrate**: Claude Agent SDK (sub-agents, tool routing, state, MCP) — **we do not rewrite an engine**.
+- **Model**: Opus 4.8 (reasoning/orchestration), Sonnet 4.6 (high-volume steps) — tier to be decided per step.
+- **Validation**: JSON Schema (contracts + sidecar), run in CI.
 
-## 6. Modèle de propagation (pattern Dependabot/Renovate)
+## 6. Propagation model (Dependabot/Renovate pattern)
 
-| Étape | Acteur | Auto ? |
+| Step | Actor | Auto? |
 |---|---|---|
-| Détecter une nouvelle version du catalogue | CI / bot | ✅ |
-| Lancer validation de contrats + eval gates | CI | ✅ (preuve) |
-| Ouvrir une **PR de bump** si vert / la bloquer si rouge | CI / bot | ✅ |
-| **Merger la PR** (adopter la version) | **Humain (Guy)** | ❌ décision |
+| Detect a new catalog version | CI / bot | ✅ |
+| Run contract validation + eval gates | CI | ✅ (evidence) |
+| Open a **bump PR** if green / block it if red | CI / bot | ✅ |
+| **Merge the PR** (adopt the version) | **Human (Guy)** | ❌ decision |
 
-→ L'automatisation **vérifie** (preuve), l'humain **décide** (merge). Aucun write-back automatique. *(Pas d'« agent de propagation » dédié au POC : un workflow CI + merge humain suffit — re-packageable en agent plus tard si valeur démontrée.)*
+→ Automation **checks** (evidence), the human **decides** (merge). No automatic write-back. *(No dedicated "propagation agent" for the POC: a CI workflow + human merge is enough — re-packageable as an agent later if value is shown.)*
 
-### Garde-fou contrat I/O — formulation exacte
-> Défense en profondeur : **validation statique de contrat** + **eval gates comportementaux** + **épinglage**. Garantit qu'**aucune rupture de contrat _non détectée_ ne peut se propager** (la PR de bump échoue en CI = *fail-closed*).
+### I/O contract guardrail — exact wording
+> Defense in depth: **static contract validation** + **behavioral eval gates** + **pinning**. Guarantees that **no _undetected_ contract break can propagate** (the bump PR fails in CI = *fail-closed*).
 >
-> ⚠️ **N'équivaut pas à « aucune régression possible »** : un test ne couvre que ce qu'il teste ; une régression sémantique à l'intérieur d'un contrat valide peut subsister. Promettre l'infaillibilité serait un faux signal.
+> ⚠️ **Does not amount to "no regression possible"**: a test only covers what it tests; a semantic regression inside a valid contract can remain. Promising infallibility would be a false signal.
 
-## 7. Best practices & recommandations retenues
+## 7. Best practices & recommendations retained
 
-- **Formats ouverts** comme identité native : `AGENTS.md` (guidance repo), Agent Skills, MCP `server.json` — ne pas inventer un format propriétaire.
-- **Front-matter `AGENTS.md`** : rappel — la spec **1.0 n'en définit pas** ; l'ajout (`description`/`tags`) est une **proposition 1.1 non mergée** (mai 2026). Tout fichier doit rester lisible **si le bloc YAML est retiré** → ne pas en dépendre pour la portabilité.
-- **Registry / SSOT** : le catalogue est le registre autoritaire ; toute la gouvernance en dépend.
-- **Validation CI à chaque PR** : JSON Schema, unicité des identifiants, accessibilité des URLs, scan sécurité.
-- **Gouvernance documentée par ADR** (Architecture Decision Records) — un fichier court par décision, daté, dans `docs/adr/` ; signal de maturité pour un livrable portfolio. **Pas de gros `BESTPRACTICES.md` monolithique** (anti-usine-à-gaz).
-- **SemVer + CHANGELOG** côté runtime, comme pour le catalogue.
-- **Anonymisation** : héritée du catalogue ; aucun client réel dans le runtime non plus.
+- **Open formats** as native identity: `AGENTS.md` (repo guidance), Agent Skills, MCP `server.json` — do not invent a proprietary format.
+- **`AGENTS.md` front-matter**: reminder — the **1.0 spec does not define one**; the addition (`description`/`tags`) is an **unmerged 1.1 proposal** (May 2026). Every file must stay readable **if the YAML block is removed** → do not depend on it for portability.
+- **Registry / SSOT**: the catalog is the authoritative registry; all governance depends on it.
+- **CI validation on each PR**: JSON Schema, identifier uniqueness, URL accessibility, security scan.
+- **Governance documented through ADRs** (Architecture Decision Records) — one short dated file per decision, in `docs/adr/`; a maturity signal for a portfolio deliverable. **No big monolithic `BESTPRACTICES.md`** (anti-over-engineering).
+- **SemVer + CHANGELOG** on the runtime side, as for the catalog.
+- **Anonymization**: inherited from the catalog; no real client in the runtime either.
 
-## 8. ADR à créer (1 page chacun, `docs/adr/`)
+## 8. ADRs to create (1 page each, `docs/adr/`)
 
-- `ADR-001` — Consommateur read-only du catalogue
-- `ADR-002` — Import épinglé versionné (tag exact, bump explicite)
-- `ADR-003` — Sidecar propriété du catalogue (généré + validé en CI côté `claude-agents`)
-- `ADR-004` — Propagation gardée par eval gates + validation de contrats
-- `ADR-005` — Feedback runtime → catalogue uniquement par PR humaine
+- `ADR-001` — Read-only consumer of the catalog
+- `ADR-002` — Pinned versioned import (exact tag, explicit bump)
+- `ADR-003` — Sidecar owned by the catalog (generated + validated in CI on the `claude-agents` side)
+- `ADR-004` — Propagation guarded by eval gates + contract validation
+- `ADR-005` — Runtime → catalog feedback only through a human PR
 
-## 9. Livrables du POC
+## 9. POC deliverables
 
-1. `loader/` — lecture du sidecar catalogue → définitions Agent SDK.
-2. `contracts/` — schémas I/O typés des étapes WF-001→003 (JSON Schema).
-3. `gates/` — 1 eval gate opérationnel sur une sortie d'agent.
-4. Exécution démontrée de la spine WF-001→003 + trace de run.
-5. `docs/adr/` (5 ADR) + `README.md` + `ARCHITECTURE.md` + `CHANGELOG.md`.
-6. Pipeline CI : validation schémas + eval gate + PR de bump catalogue.
+1. `loader/` — read the catalog sidecar → Agent SDK definitions.
+2. `contracts/` — typed I/O schemas of the WF-001→003 steps (JSON Schema).
+3. `gates/` — 1 operational eval gate on an agent output.
+4. Demonstrated execution of the WF-001→003 spine + run trace.
+5. `docs/adr/` (5 ADRs) + `README.md` + `ARCHITECTURE.md` + `CHANGELOG.md`.
+6. CI pipeline: schema validation + eval gate + catalog bump PR.
 
-## 10. Critère de succès (POC)
+## 10. Success criteria (POC)
 
-- La spine **WF-001→003 s'exécute** en consommant le catalogue épinglé, sans aucune écriture vers `claude-agents`.
-- Un **changement de contrat I/O** simulé dans une nouvelle version du catalogue **fait échouer la PR de bump** en CI (preuve du *fail-closed*).
-- La gouvernance (read-only, sidecar, ADR) est **lisible et défendable** par un évaluateur technique externe.
+- The **WF-001→003 spine executes** by consuming the pinned catalog, with no write to `claude-agents`.
+- A simulated **I/O contract change** in a new catalog version **makes the bump PR fail** in CI (proof of *fail-closed*).
+- Governance (read-only, sidecar, ADR) is **readable and defensible** by an external technical reviewer.
 
-## 11. Risques & garde-fous
+## 11. Risks & guardrails
 
-| Risque | Garde-fou |
+| Risk | Guardrail |
 |---|---|
-| **Usine à gaz** (sur-ingénierie) | Périmètre 3 briques ; SDK pour le reste ; critère « mission 6 mois » |
-| **ROI faible** (curiosité technique) | Finalité portfolio assumée ; arrêt après POC si valeur non prouvée |
-| **Dérive catalogue/runtime** | SSOT unique + read-only + import épinglé |
-| **Surclaim de fiabilité** | Formulation honnête du garde-fou (§6) |
+| **Over-engineering** | 3-block scope; SDK for the rest; "6-month engagement" criterion |
+| **Low ROI** (technical curiosity) | Portfolio purpose owned; stop after POC if value not proven |
+| **Catalog/runtime drift** | Single SSOT + read-only + pinned import |
+| **Overclaiming reliability** | Honest wording of the guardrail (§6) |
 
-## 12. Prochaine étape
+## 12. Next step
 
-Sur validation de cette note : rédiger les **5 ADR** + le `README.md` du repo, **puis seulement** démarrer la brique 0 (loader). Plan détaillé de la brique 0 à valider avant écriture de code.
+On validation of this note: write the **5 ADRs** + the repo `README.md`, **then only** start block 0 (loader). Detailed block-0 plan to validate before writing code.

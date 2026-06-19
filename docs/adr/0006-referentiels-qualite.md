@@ -1,39 +1,39 @@
-# ADR-0006 — Référentiels qualité retenus, différés et écartés
+# ADR-0006 — Quality standards retained, deferred, and rejected
 
-- **Statut** : Accepté (2026-06-03)
-- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Contexte projet** : POC `claude-agentic-runtime`
+- **Status**: Accepted (2026-06-03)
+- **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Project context**: POC `claude-agentic-runtime`
 
-## Contexte
-Le projet vise une qualité maximale des **données, docs, architecture et runtime**, sans tomber dans la sur-ingénierie (POC portfolio solo). On fixe les référentiels ISO **appliqués comme cadre méthodologique** — **pas comme objectif de certification** (sans ROI en solo ; la valeur est la rigueur + le signal portfolio).
+## Context
+The project aims for maximum quality of **data, docs, architecture, and runtime**, without falling into over-engineering (solo portfolio POC). We set the ISO standards **applied as a methodological framework** — **not as a certification goal** (no ROI solo; the value is rigor + portfolio signal).
 
-## Décision
+## Decision
 
-### Retenus (appliqués dès maintenant)
-| Axe | Norme | Application |
+### Retained (applied right now)
+| Axis | Standard | Application |
 |---|---|---|
-| Architecture | **ISO/IEC/IEEE 42010:2022** | Description d'architecture : parties prenantes · préoccupations · points de vue (cf. `ARCHITECTURE.md`) + ADR |
-| Données (catalogue + sidecar) | **ISO/IEC 25012:2008** | Sous-ensemble des 15 caractéristiques encodé dans le JSON Schema du sidecar (exactitude, complétude, cohérence, crédibilité, actualité, accessibilité, conformité) |
-| Logiciel / runtime | **ISO/IEC 25010** | Exigences non-fonctionnelles du runtime (fiabilité, maintenabilité, sécurité) |
-| Gouvernance IA | **ISO/IEC 42001:2023** | Principes de gouvernance, risques, cycle de vie d'un système d'IA (ombrelle) |
+| Architecture | **ISO/IEC/IEEE 42010:2022** | Architecture description: stakeholders · concerns · viewpoints (see `ARCHITECTURE.md`) + ADR |
+| Data (catalog + sidecar) | **ISO/IEC 25012:2008** | A subset of the 15 characteristics encoded in the sidecar's JSON Schema (accuracy, completeness, consistency, credibility, currentness, accessibility, compliance) |
+| Software / runtime | **ISO/IEC 25010** | Non-functional requirements of the runtime (reliability, maintainability, security) |
+| AI governance | **ISO/IEC 42001:2023** | Governance principles, risks, AI-system lifecycle (umbrella) |
 
-### Différés (à ajouter quand le contexte le justifie)
-| Norme | Déclencheur d'activation |
+### Deferred (to add when the context justifies it)
+| Standard | Activation trigger |
 |---|---|
-| **ISO/IEC 25024:2015** (mesure de la qualité des données) | Quand on veut des **métriques chiffrées** de qualité du catalogue/sidecar |
-| **ISO/IEC 23894:2023** (AI risk management) | Quand les **eval gates** (brique 2) évoluent vers une gestion de risque formalisée |
-| **ISO/IEC 5230 (OpenChain)** (conformité licences open source) | Au moment de **fixer la licence** du repo (cf. README « à définir ») |
+| **ISO/IEC 25024:2015** (data quality measurement) | When we want **quantified metrics** of catalog/sidecar quality |
+| **ISO/IEC 23894:2023** (AI risk management) | When the **eval gates** (block 2) evolve toward formalized risk management |
+| **ISO/IEC 5230 (OpenChain)** (open-source license compliance) | When **setting the repo license** (see README "to be defined") |
 
-### Écartés (sur-ingénierie pour ce POC — décision explicite)
-ISO/IEC 27001 (ISMS) · ISO/IEC 12207 / 15288 (cycles de vie complets) · série ISO/IEC 26511+ (gestion documentaire) · ISO/IEC 19770 (ITAM). Trop lourdes, ROI quasi nul pour un POC portfolio solo.
+### Rejected (over-engineering for this POC — explicit decision)
+ISO/IEC 27001 (ISMS) · ISO/IEC 12207 / 15288 (full lifecycles) · the ISO/IEC 26511+ series (documentation management) · ISO/IEC 19770 (ITAM). Too heavy, near-zero ROI for a solo portfolio POC.
 
-## Conséquences
-### Positives
-- Qualité **traçable et défendable** sur les 4 axes ; signal de maturité fort.
-- La qualité des données devient **exécutable** (25012 dans le JSON Schema), pas déclarative.
+## Consequences
+### Positive
+- **Traceable and defensible** quality across the 4 axes; a strong maturity signal.
+- Data quality becomes **executable** (25012 in the JSON Schema), not declarative.
 
-### Négatives / coûts
-- Maintenance des schémas + de la section architecture 42010.
+### Negative / costs
+- Maintenance of the schemas + the 42010 architecture section.
 
-## Révision
-Les normes différées sont **réévaluées** à chaque franchissement d'étape majeure (fin POC, industrialisation).
+## Review
+The deferred standards are **re-assessed** at each major milestone (end of POC, industrialization).
