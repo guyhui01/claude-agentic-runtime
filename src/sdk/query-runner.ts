@@ -59,14 +59,13 @@ export const DEFAULT_CAPS: QueryRunnerCaps = {
   maxTurns: 8,
 };
 
-/** Format instruction appended to the prompt when an `outputSchema` is provided.
- *  NOTE: the returned string stays in French (asserted by query-runner.test.ts → R3 cat B). */
+/** Format instruction appended to the prompt when an `outputSchema` is provided. */
 function formatInstruction(schema: object): string {
   return (
     "\n\n---\n" +
-    "FORMAT DE SORTIE IMPOSÉ : réponds UNIQUEMENT par un objet JSON valide — " +
-    "aucun texte, aucune explication, aucune balise hors du JSON — STRICTEMENT " +
-    "conforme à ce JSON Schema :\n" +
+    "ENFORCED OUTPUT FORMAT: answer ONLY with a valid JSON object — " +
+    "no text, no explanation, no markup outside the JSON — STRICTLY " +
+    "conforming to this JSON Schema:\n" +
     JSON.stringify(schema)
   );
 }
@@ -184,9 +183,8 @@ export function createQueryRunner(deps: QueryRunnerDeps = {}): StepRunner {
 
     // Guard 4: stream with no result, or an error result ⇒ fail-closed.
     if (!result) {
-      // NOTE: message kept in French — asserted by query-runner.test.ts (R3 cat B).
       throw new QueryRunnerError(
-        `étape "${call.stepId}" : flux terminé sans message de résultat`,
+        `step "${call.stepId}": stream ended with no result message`,
       );
     }
     if (result.subtype !== "success") {

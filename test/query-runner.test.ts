@@ -135,7 +135,7 @@ describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", 
   it("lève fail-closed si le flux se termine sans message de résultat", async () => {
     const q = fakeQuery([]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
-    await expect(runner(call())).rejects.toThrow(/sans message de résultat/);
+    await expect(runner(call())).rejects.toThrow(/stream ended with no result message/);
   });
 });
 
@@ -150,7 +150,7 @@ describe("createQueryRunner — format de sortie imposé (outputSchema)", () => 
     const q = fakeQuery([successResult({ result: '{"besoins":["x"]}' })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call({ outputSchema: schema }));
-    expect(q.lastParams!.prompt).toContain("FORMAT DE SORTIE IMPOSÉ");
+    expect(q.lastParams!.prompt).toContain("ENFORCED OUTPUT FORMAT");
     expect(q.lastParams!.prompt).toContain(JSON.stringify(schema));
   });
 
