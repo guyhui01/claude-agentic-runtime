@@ -1,21 +1,21 @@
 /**
- * Câblage du run de la spine WF-003 « Lancement Application IA » (§2.4-B.4) —
- * assemble le manifeste réel (`WF_003_LANCEMENT_MANIFEST`) en `SpineStep[]` via
- * `loadSpine`, puis le déroule avec `runSpine` branché sur le runner `query()`.
+ * Wiring for the WF-003 "AI Application Launch" spine run (§2.4-B.4) —
+ * assembles the real manifest (`WF_003_LANCEMENT_MANIFEST`) into `SpineStep[]` via
+ * `loadSpine`, then runs it with `runSpine` wired to the `query()` runner.
  *
- * Strictement calqué sur `run-wf-001.ts` / `run-wf-002.ts` (même contrat
- * d'injection, mêmes gardes) : l'orchestrateur ne change pas, ce module assemble
- * manifeste + registre + résolveur d'agent + runner.
+ * Strictly modeled on `run-wf-001.ts` / `run-wf-002.ts` (same injection contract,
+ * same guards): the orchestrator does not change, this module assembles
+ * manifest + registry + agent resolver + runner.
  *
- * Injection :
- *   - `resolveAgent` : prod = `toAgentDefinition(asset, catalogRoot)` (prose réelle,
- *     ADR-0001 read-only) ; test = stub injecté.
- *   - `runnerDeps`   : transmis à `createQueryRunner` (caps, env, `query` injectable
- *     → test hermétique sans réseau ni appel facturé).
+ * Injection:
+ *   - `resolveAgent`: prod = `toAgentDefinition(asset, catalogRoot)` (real prose,
+ *     ADR-0001 read-only); tests = injected stub.
+ *   - `runnerDeps`  : passed to `createQueryRunner` (caps, env, injectable `query`
+ *     → hermetic test with no network or billed call).
  *
- * ⚠️ Run LIVE réel : uniquement avec le `query()` du SDK + sidecar réel + OAuth
- * abonnement (jamais `ANTHROPIC_API_KEY`, garde du runner) — sur accord explicite
- * + run observé (NEXT_STEPS §2.4-B.4).
+ * ⚠️ Real LIVE run: only with the SDK's `query()` + a real sidecar + OAuth
+ * subscription (never `ANTHROPIC_API_KEY`, a runner guard) — on explicit approval
+ * + an observed run (NEXT_STEPS §2.4-B.4).
  */
 
 import type { Sidecar } from "../sidecar/types.js";
@@ -29,7 +29,7 @@ import {
   buildWf003LancementRegistry,
 } from "./wf-003-lancement.js";
 
-/** Erreur de configuration de l'appel (paramètres insuffisants). */
+/** Call configuration error (insufficient parameters). */
 export class Wf003ConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -38,26 +38,26 @@ export class Wf003ConfigError extends Error {
 }
 
 export interface RunWf003Options {
-  /** Sidecar du catalogue épinglé (réel en prod, intérimaire en test). */
+  /** Pinned catalog sidecar (real in prod, interim in tests). */
   sidecar: Sidecar;
-  /** Brief projet = entrée initiale de la spine. */
+  /** Project brief = the spine's initial input. */
   initialInput?: unknown;
   /**
-   * Racine du catalogue pour lire la prose des agents (`toAgentDefinition`).
-   * Requis sauf si `resolveAgent` est fourni.
+   * Catalog root used to read the agents' prose (`toAgentDefinition`).
+   * Required unless `resolveAgent` is provided.
    */
   catalogRoot?: string;
-  /** Résolveur d'agent injecté (test) ; à défaut, dérivé de `catalogRoot`. */
+  /** Injected agent resolver (tests); otherwise derived from `catalogRoot`. */
   resolveAgent?: AgentResolver;
-  /** Dépendances du runner `query()` (caps/env/query injectable). */
+  /** `query()` runner dependencies (caps/env/injectable query). */
   runnerDeps?: QueryRunnerDeps;
-  /** Hook d'observabilité par étape (progression d'un run live long). */
+  /** Per-step observability hook (progress of a long live run). */
   onStep?: StepProgressHook;
 }
 
 /**
- * Assemble le backbone WF-003 en `SpineStep[]` (manifeste réel + registre de
- * critères + résolveur). Fail-closed via `loadSpine` (croisements sidecar/registre).
+ * Assembles the WF-003 backbone into `SpineStep[]` (real manifest + criteria
+ * registry + resolver). Fail-closed via `loadSpine` (sidecar/registry cross-checks).
  */
 export function assembleWf003Spine(
   sidecar: Sidecar,
@@ -72,9 +72,9 @@ export function assembleWf003Spine(
 }
 
 /**
- * Déroule la spine WF-003 de bout en bout : assemblage puis `runSpine` branché
- * sur le runner `query()`. Renvoie le `SpineResult`, ou lève pour une config
- * insuffisante / une erreur runner non rattrapée (fail-closed).
+ * Runs the WF-003 spine end to end: assembly then `runSpine` wired to the
+ * `query()` runner. Returns the `SpineResult`, or throws on insufficient config /
+ * an uncaught runner error (fail-closed).
  */
 export async function runWf003(opts: RunWf003Options): Promise<SpineResult> {
   let resolveAgent: AgentResolver;
@@ -84,7 +84,7 @@ export async function runWf003(opts: RunWf003Options): Promise<SpineResult> {
     const root = opts.catalogRoot;
     if (root === undefined) {
       throw new Wf003ConfigError(
-        "runWf003 : fournir `catalogRoot` (résolution via toAgentDefinition) ou `resolveAgent`.",
+        "runWf003: provide `catalogRoot` (resolution via toAgentDefinition) or `resolveAgent`.",
       );
     }
     resolveAgent = (asset) => toAgentDefinition(asset, root);

@@ -1,18 +1,18 @@
 /**
- * Spine réelle — backbone déterministe de WF-002 « Delivery Agile SAFe » (§2.4-B.4).
+ * Real spine — deterministic backbone of WF-002 "SAFe Agile Delivery" (§2.4-B.4).
  *
- * Sourcé du vrai workflow `claude-agents/workflows/WF-002-delivery-safe.md` (v1.1).
- * Backbone = colonne vertébrale SÉQUENTIELLE, hors étapes parallèles/conditionnelles :
+ * Sourced from the real workflow `claude-agents/workflows/WF-002-delivery-safe.md` (v1.1).
+ * Backbone = the SEQUENTIAL spine, excluding parallel/conditional steps:
  *   STEP-01 (PRODUCT-MANAGER-SAFE) → STEP-02 (RELEASE-TRAIN-ENGINEER)
  *   → STEP-03 (PO-SAFE) → STEP-04 (SCRUM-MASTER) → STEP-06 (CHEF-PROJET-IA).
- * Exclus du backbone : STEP-05 (QA-AGILE, « parallèle possible avec STEP-04 ») et
- * STEP-07 (CHANGE-MANAGER, branche conditionnelle « changement majeur ? »).
+ * Excluded from the backbone: STEP-05 (QA-AGILE, "possibly parallel with STEP-04") and
+ * STEP-07 (CHANGE-MANAGER, conditional branch "major change?").
  *
- * Conformité ADR identique à WF-001 (ADR-0007 manifeste runtime, critères
- * déterministes ISO 19011). Chaque critère trace un `output_attendu` /
- * `condition_passage` d'une fiche d'étape de WF-002.
+ * ADR compliance identical to WF-001 (ADR-0007 runtime manifest, deterministic
+ * ISO 19011 criteria). Each criterion traces an `output_attendu` /
+ * `condition_passage` from a WF-002 step sheet.
  *
- * `assetId` attendus comme assets « agent » dans le sidecar du catalogue épinglé.
+ * `assetId` values expected as "agent" assets in the pinned catalog's sidecar.
  */
 
 import type { SpineManifest } from "../manifest/types.js";
@@ -32,23 +32,23 @@ import {
 } from "./spine-helpers.js";
 
 // =============================================================================
-// CRITÈRES — tracés à WF-002 (v1.1)
+// CRITERIA — traced to WF-002 (v1.1)
 // =============================================================================
 
 /**
  * STEP-01 — AGENT-PRODUCT-MANAGER-SAFE.
- * DoD : vision board PI · top 10 features priorisées WSJF · Lean Business Case.
+ * DoD: PI vision board · top 10 WSJF-prioritized features · Lean Business Case.
  */
 const STEP01_CRITERIA: Criterion[] = [
   {
     id: "pm-vision-board-present",
-    description: "STEP-01 : vision board PI non vide",
+    description: "STEP-01: PI vision board non-empty",
     severity: "blocking",
     check: (o) => nonEmptyString(asRecord(o)["visionBoard"]),
   },
   {
     id: "pm-features-wsjf-1-10",
-    description: "STEP-01 : 1 à 10 features priorisées, chacune avec score WSJF (number)",
+    description: "STEP-01: 1 to 10 prioritized features, each with a WSJF score (number)",
     severity: "blocking",
     check: (o) => {
       const f = asRecord(o)["featuresWsjf"];
@@ -58,7 +58,7 @@ const STEP01_CRITERIA: Criterion[] = [
   },
   {
     id: "pm-lean-business-case",
-    description: "STEP-01 : Lean Business Case présent pour les features majeures",
+    description: "STEP-01: Lean Business Case present for the major features",
     severity: "advisory",
     check: (o) => nonEmptyString(asRecord(o)["leanBusinessCase"]),
   },
@@ -66,24 +66,24 @@ const STEP01_CRITERIA: Criterion[] = [
 
 /**
  * STEP-02 — AGENT-RELEASE-TRAIN-ENGINEER.
- * DoD : Program Board (dépendances) · ROAM risks · vote de confiance (> 3.5/5).
+ * DoD: Program Board (dependencies) · ROAM risks · confidence vote (> 3.5/5).
  */
 const STEP02_CRITERIA: Criterion[] = [
   {
     id: "rte-program-board-non-vide",
-    description: "STEP-02 : Program Board avec dépendances non vide",
+    description: "STEP-02: Program Board with dependencies non-empty",
     severity: "blocking",
     check: (o) => nonEmptyArray(asRecord(o)["programBoard"]),
   },
   {
     id: "rte-vote-confiance-seuil",
-    description: "STEP-02 : condition de passage — vote de confiance > 3.5/5",
+    description: "STEP-02: passing condition — confidence vote > 3.5/5",
     severity: "blocking",
     check: (o) => numberAtLeast(asRecord(o)["voteConfiance"], 3.5),
   },
   {
     id: "rte-roam-risks-present",
-    description: "STEP-02 : ROAM risks documentés (tableau présent)",
+    description: "STEP-02: ROAM risks documented (array present)",
     severity: "advisory",
     check: (o) => Array.isArray(asRecord(o)["roamRisks"]),
   },
@@ -91,24 +91,24 @@ const STEP02_CRITERIA: Criterion[] = [
 
 /**
  * STEP-03 — AGENT-PO-SAFE.
- * DoD : 3-5 PI Objectives SMART · backlog sprint 1 de 5-10 US · WSJF par feature.
+ * DoD: 3-5 SMART PI Objectives · sprint 1 backlog of 5-10 US · WSJF per feature.
  */
 const STEP03_CRITERIA: Criterion[] = [
   {
     id: "posafe-pi-objectives-3-5",
-    description: "STEP-03 : 3 à 5 PI Objectives (SMART)",
+    description: "STEP-03: 3 to 5 PI Objectives (SMART)",
     severity: "blocking",
     check: (o) => arrayLenBetween(asRecord(o)["piObjectives"], 3, 5),
   },
   {
     id: "posafe-backlog-sprint-5-10",
-    description: "STEP-03 : backlog sprint 1 de 5 à 10 User Stories",
+    description: "STEP-03: sprint 1 backlog of 5 to 10 User Stories",
     severity: "blocking",
     check: (o) => arrayLenBetween(asRecord(o)["backlogSprint"], 5, 10),
   },
   {
     id: "posafe-wsjf-par-feature",
-    description: "STEP-03 : chaque US du backlog porte un score WSJF (number)",
+    description: "STEP-03: each backlog US carries a WSJF score (number)",
     severity: "advisory",
     check: (o) => {
       const b = asRecord(o)["backlogSprint"];
@@ -120,20 +120,20 @@ const STEP03_CRITERIA: Criterion[] = [
 
 /**
  * STEP-04 — AGENT-SCRUM-MASTER.
- * DoD : Sprint Goal unique · sprint plan validé (forecast US + story points) ·
- * impediments listés.
+ * DoD: single Sprint Goal · validated sprint plan (US forecast + story points) ·
+ * impediments listed.
  */
 const STEP04_CRITERIA: Criterion[] = [
   {
     id: "sm-sprint-goal-unique",
-    description: "STEP-04 : Sprint Goal unique non vide",
+    description: "STEP-04: single Sprint Goal non-empty",
     severity: "blocking",
     check: (o) => nonEmptyString(asRecord(o)["sprintGoal"]),
   },
   {
     id: "sm-sprint-plan-forecast",
     description:
-      "STEP-04 : sprint plan avec forecast — `usEngagees` non vide ET `storyPoints` (number)",
+      "STEP-04: sprint plan with forecast — `usEngagees` non-empty AND `storyPoints` (number)",
     severity: "blocking",
     check: (o) => {
       const p = asRecord(asRecord(o)["sprintPlan"]);
@@ -142,7 +142,7 @@ const STEP04_CRITERIA: Criterion[] = [
   },
   {
     id: "sm-impediments-listes",
-    description: "STEP-04 : impediments sprint 1 listés (tableau présent)",
+    description: "STEP-04: sprint 1 impediments listed (array present)",
     severity: "advisory",
     check: (o) => Array.isArray(asRecord(o)["impediments"]),
   },
@@ -150,19 +150,19 @@ const STEP04_CRITERIA: Criterion[] = [
 
 /**
  * STEP-06 — AGENT-CHEF-PROJET-IA.
- * DoD : dashboard PI (objectifs/capacité/avancement/risques) · note CODIR 1 page ·
+ * DoD: PI dashboard (objectives/capacity/progress/risks) · 1-page CODIR note ·
  * EVM (CPI/SPI).
  */
 const STEP06_CRITERIA: Criterion[] = [
   {
     id: "cp-note-codir-presente",
-    description: "STEP-06 : note CODIR (1 page) non vide",
+    description: "STEP-06: CODIR note (1 page) non-empty",
     severity: "blocking",
     check: (o) => nonEmptyString(asRecord(o)["noteCodir"]),
   },
   {
     id: "cp-dashboard-avancement-risques",
-    description: "STEP-06 : dashboard PI portant au moins `avancement` ET `risques`",
+    description: "STEP-06: PI dashboard carrying at least `avancement` AND `risques`",
     severity: "blocking",
     check: (o) => {
       const d = asRecord(asRecord(o)["dashboard"]);
@@ -171,7 +171,7 @@ const STEP06_CRITERIA: Criterion[] = [
   },
   {
     id: "cp-evm-cpi-spi",
-    description: "STEP-06 : EVM sprint avec CPI et SPI (numbers)",
+    description: "STEP-06: sprint EVM with CPI and SPI (numbers)",
     severity: "advisory",
     check: (o) => {
       const e = asRecord(asRecord(o)["evm"]);
@@ -180,7 +180,7 @@ const STEP06_CRITERIA: Criterion[] = [
   },
 ];
 
-/** Tous les critères de la spine WF-002 (ordre du backbone). */
+/** All criteria of the WF-002 spine (backbone order). */
 export const WF_002_DELIVERY_CRITERIA: Criterion[] = [
   ...STEP01_CRITERIA,
   ...STEP02_CRITERIA,
@@ -189,18 +189,18 @@ export const WF_002_DELIVERY_CRITERIA: Criterion[] = [
   ...STEP06_CRITERIA,
 ];
 
-/** Construit un registre frais peuplé des critères de la spine WF-002. */
+/** Builds a fresh registry populated with the WF-002 spine criteria. */
 export function buildWf002DeliveryRegistry(): CriterionRegistry {
   return new CriterionRegistry().registerAll(WF_002_DELIVERY_CRITERIA);
 }
 
 // =============================================================================
-// MANIFESTE — backbone WF-002 (contrats I/O + références de critères par id)
+// MANIFEST — WF-002 backbone (I/O contracts + criteria references by id)
 // =============================================================================
 
 /**
- * Contrats conçus pour un handoff linéaire fail-closed : la sortie de chaque
- * étape promet le champ requis par l'entrée de l'aval immédiat
+ * Contracts designed for a linear fail-closed handoff: each step's output
+ * promises the field required by the immediate downstream input
  * (featuresWsjf → programBoard → backlogSprint → sprintPlan).
  */
 export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
@@ -209,9 +209,9 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
     {
       stepId: "STEP-01",
       assetId: "AGENT-PRODUCT-MANAGER-SAFE",
-      // amorce : contexte ART = entrée initiale de runSpine.
-      // Resserré (cf. leçon WF-001) : le schéma injecté COMMUNIQUE le contrat
-      // que la gate vérifie — 1–10 features, chacune avec un WSJF (number).
+      // seed: ART context = runSpine's initial input.
+      // Tightened (cf. WF-001 lesson): the injected schema COMMUNICATES the contract
+      // the gate verifies — 1–10 features, each with a WSJF (number).
       output: objSchema(["visionBoard", "featuresWsjf"], {
         visionBoard: { type: "string", description: "Vision board PI (synthèse 1 page)." },
         featuresWsjf: arrOf(
@@ -221,7 +221,7 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
           }),
           { min: 1, max: 10 },
         ),
-        // Nudge advisory pm-lean-business-case (pas de contrainte dure).
+        // Advisory nudge pm-lean-business-case (no hard constraint).
         leanBusinessCase: { type: "string", description: "Lean Business Case des features majeures." },
       }),
       criteriaIds: STEP01_CRITERIA.map((c) => c.id),
@@ -239,12 +239,12 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
           }),
           { min: 1 },
         ),
-        // Seuil bloquant rte-vote-confiance-seuil communiqué en description.
+        // Blocking threshold rte-vote-confiance-seuil communicated in the description.
         voteConfiance: {
           type: "number",
           description: "Vote de confiance ART sur 5 ; doit être > 3.5 pour passer.",
         },
-        // Nudge advisory rte-roam-risks-present.
+        // Advisory nudge rte-roam-risks-present.
         roamRisks: { type: "array", description: "Risques ROAM (Resolved/Owned/Accepted/Mitigated)." },
       }),
       criteriaIds: STEP02_CRITERIA.map((c) => c.id),
@@ -261,7 +261,7 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
         backlogSprint: arrOf(
           objSchema([], {
             statement: { type: "string", description: "User Story du sprint 1." },
-            // Nudge advisory posafe-wsjf-par-feature (non requis).
+            // Advisory nudge posafe-wsjf-par-feature (not required).
             wsjf: { type: "number", description: "Score WSJF de la US." },
           }),
           { min: 5, max: 10 },
@@ -275,12 +275,12 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       input: objSchema(["backlogSprint"], { backlogSprint: arr }),
       output: objSchema(["sprintGoal", "sprintPlan"], {
         sprintGoal: { type: "string", description: "Sprint Goal unique." },
-        // Forecast bloquant : usEngagees (non vide) + storyPoints (number).
+        // Blocking forecast: usEngagees (non-empty) + storyPoints (number).
         sprintPlan: objSchema(["usEngagees", "storyPoints"], {
           usEngagees: arrOf({ type: "string", description: "US engagée au sprint 1." }, { min: 1 }),
           storyPoints: { type: "number", description: "Story points engagés (forecast)." },
         }),
-        // Nudge advisory sm-impediments-listes.
+        // Advisory nudge sm-impediments-listes.
         impediments: { type: "array", description: "Impediments du sprint 1." },
       }),
       criteriaIds: STEP04_CRITERIA.map((c) => c.id),
@@ -291,12 +291,12 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       input: objSchema(["sprintPlan"], { sprintPlan: obj }),
       output: objSchema(["noteCodir", "dashboard"], {
         noteCodir: { type: "string", description: "Note CODIR (1 page)." },
-        // Bloquant cp-dashboard-avancement-risques : avancement ET risques présents.
+        // Blocking cp-dashboard-avancement-risques: avancement AND risques present.
         dashboard: objSchema(["avancement", "risques"], {
           avancement: { type: "string", description: "Avancement du PI (ex. « 32% »)." },
           risques: { type: "array", description: "Risques suivis." },
         }),
-        // Nudge advisory cp-evm-cpi-spi (cpi/spi non requis pour ne pas bloquer).
+        // Advisory nudge cp-evm-cpi-spi (cpi/spi not required so as not to block).
         evm: objSchema([], {
           cpi: { type: "number", description: "Cost Performance Index." },
           spi: { type: "number", description: "Schedule Performance Index." },
