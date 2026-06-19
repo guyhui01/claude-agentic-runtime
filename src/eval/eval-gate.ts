@@ -1,14 +1,14 @@
 /**
- * Eval gate (brique 2) — exécute des critères déterministes sur la sortie d'une
- * étape et en produit un rapport d'audit.
+ * Eval gate (brick 2) — runs deterministic criteria over a step's output
+ * and produces an audit report.
  *
- * Séparation explicite (cohérent ADR-0004 : « l'automatisation vérifie, l'humain
- * décide ») :
- *   - runEvalGate()      : ÉVALUE — ne lève jamais, retourne toujours la preuve ;
- *   - assertGatePassed() : APPLIQUE — fail-closed, lève si le verdict est "fail".
+ * Explicit separation (consistent with ADR-0004: "automation verifies, the
+ * human decides"):
+ *   - runEvalGate()      : EVALUATES — never throws, always returns the evidence;
+ *   - assertGatePassed() : ENFORCES — fail-closed, throws if the verdict is "fail".
  *
- * Verdict : "fail" dès qu'UN critère `blocking` n'est pas satisfait. Les critères
- * `advisory` non satisfaits sont rapportés mais ne changent pas le verdict.
+ * Verdict: "fail" as soon as ONE `blocking` criterion is not satisfied. Unsatisfied
+ * `advisory` criteria are reported but do not change the verdict.
  */
 
 import type {
@@ -18,7 +18,7 @@ import type {
   Verdict,
 } from "./types.js";
 
-/** Erreur fail-closed portant le rapport complet (preuve des critères échoués). */
+/** Fail-closed error carrying the full report (evidence of failed criteria). */
 export class EvalGateError extends Error {
   readonly report: GateReport;
 
@@ -28,14 +28,14 @@ export class EvalGateError extends Error {
     );
     const summary = failed.map((r) => r.id).join(", ");
     super(
-      `Eval gate "${report.stepId}" échouée (${failed.length} critère(s) bloquant(s) : ${summary})`,
+      `Eval gate "${report.stepId}" failed (${failed.length} blocking criterion(s): ${summary})`,
     );
     this.name = "EvalGateError";
     this.report = report;
   }
 }
 
-/** Évalue un critère en isolant toute exception (défensif : une exception = échec). */
+/** Evaluates a criterion, isolating any exception (defensive: an exception = failure). */
 function evaluate(criterion: Criterion, output: unknown): CriterionResult {
   let passed: boolean;
   try {
@@ -52,8 +52,8 @@ function evaluate(criterion: Criterion, output: unknown): CriterionResult {
 }
 
 /**
- * ÉVALUE la sortie d'une étape contre une liste de critères. Ne lève jamais :
- * retourne toujours le rapport (preuve d'audit), verdict inclus.
+ * EVALUATES a step's output against a list of criteria. Never throws:
+ * always returns the report (audit evidence), verdict included.
  */
 export function runEvalGate(
   stepId: string,
@@ -70,8 +70,8 @@ export function runEvalGate(
 }
 
 /**
- * APPLIQUE la gate (fail-closed) : lève si le verdict est "fail".
- * @throws {EvalGateError} si au moins un critère bloquant a échoué.
+ * ENFORCES the gate (fail-closed): throws if the verdict is "fail".
+ * @throws {EvalGateError} if at least one blocking criterion failed.
  */
 export function assertGatePassed(report: GateReport): void {
   if (report.verdict === "fail") throw new EvalGateError(report);

@@ -1,19 +1,19 @@
 /**
- * Helpers partagés des spines réelles (§2.4-B.3/B.4) — fabriques de schémas
- * JSON (contrats de handoff) et prédicats de lecture défensive (critères d'eval
- * gate). Factorisés depuis `wf-001-cadrage.ts` pour éviter la duplication entre
- * spines (DRY, coût de maintenance).
+ * Shared helpers for the real spines (§2.4-B.3/B.4) — JSON schema factories
+ * (handoff contracts) and defensive-read predicates (eval gate criteria).
+ * Factored out of `wf-001-cadrage.ts` to avoid duplication across spines
+ * (DRY, maintenance cost).
  *
- * Les schémas sont en JSON Schema 2020-12, compatibles ajv strict (loader §0).
- * Les prédicats lisent une sortie `unknown` sans jamais lever (un critère qui
- * échoue renvoie `false`, il ne casse pas la gate — cf. eval-gate.ts).
+ * The schemas are JSON Schema 2020-12, compatible with strict ajv (loader §0).
+ * The predicates read an `unknown` output without ever throwing (a failing
+ * criterion returns `false`, it does not break the gate — see eval-gate.ts).
  */
 
 import type { JsonSchema } from "../handoff/types.js";
 
-// --- Fabriques de schéma -----------------------------------------------------
+// --- Schema factories --------------------------------------------------------
 
-/** Schéma objet `{ type:"object", required, properties }`. */
+/** Object schema `{ type:"object", required, properties }`. */
 export function objSchema(
   required: string[],
   properties: Record<string, JsonSchema>,
@@ -27,9 +27,10 @@ export const num: JsonSchema = { type: "number" };
 export const obj: JsonSchema = { type: "object" };
 
 /**
- * Tableau borné d'items typés : `{ type:"array", minItems?, maxItems?, items? }`.
- * Quand le schéma est injecté au prompt (run live), `items` + bornes COMMUNIQUENT
- * le contrat exact à l'agent — alignant sa sortie sur les critères d'eval gate.
+ * Bounded array of typed items: `{ type:"array", minItems?, maxItems?, items? }`.
+ * When the schema is injected into the prompt (run live), `items` + bounds
+ * COMMUNICATE the exact contract to the agent — aligning its output with the
+ * eval gate criteria.
  */
 export function arrOf(
   items?: JsonSchema,
@@ -42,7 +43,7 @@ export function arrOf(
   return s;
 }
 
-// --- Prédicats de lecture défensive ------------------------------------------
+// --- Defensive-read predicates -----------------------------------------------
 
 export function asRecord(o: unknown): Record<string, unknown> {
   return (o ?? {}) as Record<string, unknown>;

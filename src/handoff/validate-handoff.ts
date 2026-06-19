@@ -1,19 +1,19 @@
 /**
- * Validation des contrats de handoff (brique 1) — réutilise le pattern ajv du
- * loader (brique 0) : ajv2020, allErrors, issues agrégées, fail-closed.
+ * Handoff contract validation (brick 1) — reuses the loader's ajv pattern
+ * (brick 0): ajv2020, allErrors, aggregated issues, fail-closed.
  *
- * Deux niveaux, complémentaires (ADR-0004 : « validation statique + fail-closed ») :
- *   - checkContractCompatibility(producer, consumer) : STATIQUE (design-time).
- *       Chaque champ `required` de l'entrée aval est-il promis par la sortie amont ?
- *       Ne lève pas : retourne la liste des manques (vide = compatible).
- *   - validateHandoff(producer, consumer, payload) : RUNTIME.
- *       Le payload satisfait-il la sortie promise (amont) ET l'entrée attendue
- *       (aval) ? Fail-closed : lève en agrégeant TOUTES les issues des deux côtés.
+ * Two complementary levels (ADR-0004: "static validation + fail-closed"):
+ *   - checkContractCompatibility(producer, consumer): STATIC (design-time).
+ *       Is each `required` field of the downstream input promised by the upstream output?
+ *       Does not throw: returns the list of gaps (empty = compatible).
+ *   - validateHandoff(producer, consumer, payload): RUNTIME.
+ *       Does the payload satisfy the promised output (upstream) AND the expected
+ *       input (downstream)? Fail-closed: throws, aggregating ALL issues from both sides.
  *
- * Limite assumée (cf. ADR-0004, note d'honnêteté) : la vérification statique est
- * *shallow* — présence des champs requis de 1er niveau seulement. Elle ne prouve
- * ni l'équivalence sémantique ni la compatibilité de types imbriqués. Promettre
- * l'infaillibilité serait un faux signal ; la validation runtime reste le garde-fou.
+ * Deliberate limitation (see ADR-0004, honesty note): the static check is
+ * *shallow* — presence of top-level required fields only. It proves neither
+ * semantic equivalence nor nested type compatibility. Promising infallibility
+ * would be a false signal; runtime validation remains the guardrail.
  */
 
 import { Ajv2020 } from "ajv/dist/2020.js";
@@ -25,20 +25,20 @@ import type {
   HandoffStage,
 } from "./types.js";
 
-/** Erreur agrégeant tous les problèmes d'un handoff (amont + aval). */
+/** Error aggregating all problems of a handoff (upstream + downstream). */
 export class HandoffValidationError extends Error {
   readonly issues: HandoffIssue[];
 
   constructor(issues: HandoffIssue[]) {
     const summary = issues.map((i) => `[${i.stage}] ${i.message}`).join(" ; ");
-    super(`Handoff invalide (${issues.length} problème(s)) : ${summary}`);
+    super(`Invalid handoff (${issues.length} problem(s)): ${summary}`);
     this.name = "HandoffValidationError";
     this.issues = issues;
   }
 }
 
-// Une instance ajv partagée ; un validateur compilé une fois par schéma
-// (cache par identité d'objet — les contrats sont des objets stables).
+// One shared ajv instance; a validator compiled once per schema
+// (cache by object identity — contracts are stable objects).
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 const cache = new WeakMap<JsonSchema, ValidateFunction>();
 
@@ -51,7 +51,7 @@ function getValidator(schema: JsonSchema): ValidateFunction {
   return validate;
 }
 
-/** Convertit les erreurs ajv d'une étape en issues de handoff typées. */
+/** Converts a step's ajv errors into typed handoff issues. */
 function toIssues(
   validate: ValidateFunction,
   stage: HandoffStage,
@@ -69,17 +69,17 @@ function toIssues(
 }
 
 /**
- * STATIQUE — vérifie que la sortie promise par l'amont couvre l'entrée requise
- * par l'aval (présence des champs `required` de 1er niveau dans les `properties`
- * de la sortie amont). Un aval sans `input` est compatible par construction.
- * @returns la liste des champs requis non promis (vide = compatible).
+ * STATIC — checks that the output promised upstream covers the input required
+ * downstream (presence of top-level `required` fields in the upstream output's
+ * `properties`). A downstream step without `input` is compatible by construction.
+ * @returns the list of required fields that are not promised (empty = compatible).
  */
 export function checkContractCompatibility(
   producer: StepContract,
   consumer: StepContract,
 ): HandoffIssue[] {
   const input = consumer.input;
-  if (input === undefined) return []; // aval d'amorce : rien à garantir
+  if (input === undefined) return []; // seed downstream: nothing to guarantee
 
   const required = Array.isArray(input["required"])
     ? (input["required"] as string[])
@@ -97,7 +97,7 @@ export function checkContractCompatibility(
       issues.push({
         stage: "compat",
         code: "MISSING_PRODUCED_FIELD",
-        message: `l'aval "${consumer.stepId}" requiert "${field}", non promis par la sortie de "${producer.stepId}"`,
+        message: `downstream "${consumer.stepId}" requires "${field}", not promised by the output of "${producer.stepId}"`,
         path: field,
       });
     }
@@ -106,11 +106,11 @@ export function checkContractCompatibility(
 }
 
 /**
- * RUNTIME — valide un payload réel au franchissement amont→aval, fail-closed :
- *   1. payload conforme à `producer.output` (l'amont tient sa promesse) ;
- *   2. payload conforme à `consumer.input`  (l'aval accepte ce qu'il reçoit).
- * Les issues des deux étapes sont agrégées avant de lever.
- * @throws {HandoffValidationError} si l'une des deux validations échoue.
+ * RUNTIME — validates a real payload as it crosses upstream→downstream, fail-closed:
+ *   1. payload conforms to `producer.output` (upstream keeps its promise);
+ *   2. payload conforms to `consumer.input`  (downstream accepts what it receives).
+ * Issues from both steps are aggregated before throwing.
+ * @throws {HandoffValidationError} if either validation fails.
  */
 export function validateHandoff(
   producer: StepContract,

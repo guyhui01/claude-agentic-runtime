@@ -1,31 +1,31 @@
 /**
- * Types des eval gates (brique 2) — garde-fou qualité comportemental sur la
- * sortie d'une étape, AU-DELÀ de la conformité de schéma (brique 1).
- * Références : ADR-0004 (« eval gates comportementaux », propagation fail-closed)
- * et ISO/IEC 25010 (qualité du runtime).
+ * Eval gate types (brick 2) — behavioral quality guardrail on a step's
+ * output, BEYOND schema conformance (brick 1).
+ * References: ADR-0004 ("behavioral eval gates", fail-closed propagation)
+ * and ISO/IEC 25010 (runtime quality).
  *
- * Choix assumé (POC) : critères DÉTERMINISTES (règles), pas de LLM-as-judge.
- * Reproductible, testable hermétiquement, auditable (posture ISO 19011). Le
- * juge-LLM reste une extension ultérieure (même interface `Criterion`), à
- * n'introduire que si une règle déterministe ne suffit pas (YAGNI).
+ * Deliberate choice (POC): DETERMINISTIC criteria (rules), no LLM-as-judge.
+ * Reproducible, hermetically testable, auditable (ISO 19011 stance). The
+ * LLM judge stays a later extension (same `Criterion` interface), to be
+ * introduced only if a deterministic rule is not enough (YAGNI).
  */
 
-/** Gravité d'un critère : `blocking` fait échouer la gate ; `advisory` informe sans bloquer. */
+/** Criterion severity: `blocking` fails the gate; `advisory` informs without blocking. */
 export type Severity = "blocking" | "advisory";
 
-/** Verdict global d'une gate. */
+/** Overall verdict of a gate. */
 export type Verdict = "pass" | "fail";
 
-/** Un critère d'évaluation : une règle nommée et son prédicat sur la sortie. */
+/** An evaluation criterion: a named rule and its predicate over the output. */
 export interface Criterion {
   id: string;
   description: string;
   severity: Severity;
-  /** Prédicat déterministe : `true` = satisfait. Une exception = critère échoué (défensif). */
+  /** Deterministic predicate: `true` = satisfied. An exception = failed criterion (defensive). */
   check: (output: unknown) => boolean;
 }
 
-/** Résultat unitaire d'un critère évalué (trace d'audit). */
+/** Unit result of an evaluated criterion (audit trace). */
 export interface CriterionResult {
   id: string;
   description: string;
@@ -34,8 +34,8 @@ export interface CriterionResult {
 }
 
 /**
- * Rapport d'une gate — preuve d'audit (ISO 19011) : verdict + détail par critère.
- * Produit aussi bien en `pass` qu'en `fail`, pour la traçabilité.
+ * Gate report — audit evidence (ISO 19011): verdict + per-criterion detail.
+ * Produced both on `pass` and on `fail`, for traceability.
  */
 export interface GateReport {
   stepId: string;

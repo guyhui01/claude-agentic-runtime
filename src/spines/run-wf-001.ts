@@ -1,22 +1,22 @@
 /**
- * Câblage du run de la spine WF-001 (§2.4-B.3, étape 2) — assemble le manifeste
- * réel (`WF_001_CADRAGE_MANIFEST`) en `SpineStep[]` via `loadSpine`, puis le
- * déroule avec `runSpine` branché sur le runner `query()` (`createQueryRunner`).
+ * Wiring for the WF-001 spine run (§2.4-B.3, step 2) — assembles the real
+ * manifest (`WF_001_CADRAGE_MANIFEST`) into `SpineStep[]` via `loadSpine`, then
+ * runs it with `runSpine` wired to the `query()` runner (`createQueryRunner`).
  *
- * C'est le point d'entrée du run de bout en bout. Il reste PUR vis-à-vis de
- * l'orchestrateur (qui ne change pas) : ce module ne fait qu'assembler les
- * briques existantes (manifeste + registre + résolveur d'agent + runner).
+ * This is the end-to-end run entry point. It stays PURE with respect to the
+ * orchestrator (which does not change): this module only assembles the existing
+ * bricks (manifest + registry + agent resolver + runner).
  *
- * Injection :
- *   - `resolveAgent` : en prod = `toAgentDefinition(asset, catalogRoot)` (lit la
- *     prose du catalogue, ADR-0001 read-only) ; en test = stub injecté.
- *   - `runnerDeps`   : transmis tel quel à `createQueryRunner` (caps, env, et
- *     `query` injectable → test hermétique sans réseau ni appel facturé).
+ * Injection:
+ *   - `resolveAgent`: in prod = `toAgentDefinition(asset, catalogRoot)` (reads the
+ *     catalog prose, ADR-0001 read-only); in tests = injected stub.
+ *   - `runnerDeps`  : passed as-is to `createQueryRunner` (caps, env, and an
+ *     injectable `query` → hermetic test with no network or billed call).
  *
- * ⚠️ Run LIVE réel : il ne s'exécute que si l'appelant fournit le `query()` du
- * SDK (défaut de `createQueryRunner`) AVEC un sidecar réel + l'auth OAuth
- * abonnement (jamais `ANTHROPIC_API_KEY`, garde portée par le runner) — à lancer
- * sur accord explicite + run observé (NEXT_STEPS §2.4-B.3).
+ * ⚠️ Real LIVE run: it only executes if the caller provides the SDK's `query()`
+ * (the `createQueryRunner` default) WITH a real sidecar + OAuth subscription auth
+ * (never `ANTHROPIC_API_KEY`, a guard enforced by the runner) — to be launched on
+ * explicit approval + an observed run (NEXT_STEPS §2.4-B.3).
  */
 
 import type { Sidecar } from "../sidecar/types.js";
@@ -30,7 +30,7 @@ import {
   buildWf001CadrageRegistry,
 } from "./wf-001-cadrage.js";
 
-/** Erreur de configuration de l'appel (paramètres insuffisants). */
+/** Call configuration error (insufficient parameters). */
 export class Wf001ConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -39,26 +39,26 @@ export class Wf001ConfigError extends Error {
 }
 
 export interface RunWf001Options {
-  /** Sidecar du catalogue épinglé (réel en prod, intérimaire en test). */
+  /** Pinned catalog sidecar (real in prod, interim in tests). */
   sidecar: Sidecar;
-  /** Brief client = entrée initiale de la spine. */
+  /** Client brief = the spine's initial input. */
   initialInput?: unknown;
   /**
-   * Racine du catalogue pour lire la prose des agents (`toAgentDefinition`).
-   * Requis sauf si `resolveAgent` est fourni.
+   * Catalog root used to read the agents' prose (`toAgentDefinition`).
+   * Required unless `resolveAgent` is provided.
    */
   catalogRoot?: string;
-  /** Résolveur d'agent injecté (test) ; à défaut, dérivé de `catalogRoot`. */
+  /** Injected agent resolver (tests); otherwise derived from `catalogRoot`. */
   resolveAgent?: AgentResolver;
-  /** Dépendances du runner `query()` (caps/env/query injectable). */
+  /** `query()` runner dependencies (caps/env/injectable query). */
   runnerDeps?: QueryRunnerDeps;
-  /** Hook d'observabilité par étape (progression d'un run live long). */
+  /** Per-step observability hook (progress of a long live run). */
   onStep?: StepProgressHook;
 }
 
 /**
- * Assemble le backbone WF-001 en `SpineStep[]` (manifeste réel + registre de
- * critères + résolveur). Fail-closed via `loadSpine` (croisements sidecar/registre).
+ * Assembles the WF-001 backbone into `SpineStep[]` (real manifest + criteria
+ * registry + resolver). Fail-closed via `loadSpine` (sidecar/registry cross-checks).
  */
 export function assembleWf001Spine(
   sidecar: Sidecar,
@@ -73,9 +73,9 @@ export function assembleWf001Spine(
 }
 
 /**
- * Déroule la spine WF-001 de bout en bout : assemblage puis `runSpine` branché
- * sur le runner `query()`. Renvoie le `SpineResult` (traces + verdicts), ou lève
- * pour une config insuffisante / une erreur runner non rattrapée (fail-closed).
+ * Runs the WF-001 spine end to end: assembly then `runSpine` wired to the
+ * `query()` runner. Returns the `SpineResult` (traces + verdicts), or throws on
+ * insufficient config / an uncaught runner error (fail-closed).
  */
 export async function runWf001(opts: RunWf001Options): Promise<SpineResult> {
   let resolveAgent: AgentResolver;
@@ -85,7 +85,7 @@ export async function runWf001(opts: RunWf001Options): Promise<SpineResult> {
     const root = opts.catalogRoot;
     if (root === undefined) {
       throw new Wf001ConfigError(
-        "runWf001 : fournir `catalogRoot` (résolution via toAgentDefinition) ou `resolveAgent`.",
+        "runWf001: provide `catalogRoot` (resolution via toAgentDefinition) or `resolveAgent`.",
       );
     }
     resolveAgent = (asset) => toAgentDefinition(asset, root);

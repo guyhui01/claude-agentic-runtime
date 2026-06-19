@@ -1,8 +1,8 @@
 /**
- * Contrôles d'intégrité du sidecar — les 2 caractéristiques ISO/IEC 25012
- * (exactitude référentielle, accessibilité) qu'un JSON Schema ne peut pas
- * porter seul, plus l'unicité globale des id. Réutilisable par le loader
- * (brique 0) : un sidecar présentant une issue doit être rejeté au chargement.
+ * Sidecar integrity checks — the 2 ISO/IEC 25012 characteristics
+ * (referential accuracy, accessibility) that a JSON Schema cannot
+ * carry on its own, plus global id uniqueness. Reusable by the loader
+ * (brick 0): a sidecar with any issue must be rejected at load time.
  */
 
 import { existsSync } from "node:fs";
@@ -20,7 +20,7 @@ export interface IntegrityIssue {
   assetId: string;
 }
 
-/** ISO 25012 — exactitude : unicité globale des id sur tout l'index. */
+/** ISO 25012 — accuracy: global id uniqueness across the whole index. */
 export function checkUniqueIds(sidecar: Sidecar): IntegrityIssue[] {
   const seen = new Set<string>();
   const duplicates = new Set<string>();
@@ -31,11 +31,11 @@ export function checkUniqueIds(sidecar: Sidecar): IntegrityIssue[] {
   return [...duplicates].map((id) => ({
     code: "DUPLICATE_ID",
     assetId: id,
-    message: `id dupliqué : "${id}"`,
+    message: `duplicate id: "${id}"`,
   }));
 }
 
-/** ISO 25012 — exactitude référentielle : chaque dependsOn pointe vers un id existant. */
+/** ISO 25012 — referential accuracy: every dependsOn points to an existing id. */
 export function checkReferentialIntegrity(sidecar: Sidecar): IntegrityIssue[] {
   const ids = new Set(sidecar.assets.map((asset) => asset.id));
   const issues: IntegrityIssue[] = [];
@@ -45,7 +45,7 @@ export function checkReferentialIntegrity(sidecar: Sidecar): IntegrityIssue[] {
         issues.push({
           code: "DANGLING_REFERENCE",
           assetId: asset.id,
-          message: `"${asset.id}" dépend d'un id inexistant : "${dep}"`,
+          message: `"${asset.id}" depends on a non-existent id: "${dep}"`,
         });
       }
     }
@@ -54,9 +54,9 @@ export function checkReferentialIntegrity(sidecar: Sidecar): IntegrityIssue[] {
 }
 
 /**
- * ISO 25012 — accessibilité : chaque `path` et `source.file` est joignable
- * sous `catalogRoot`. Refus défensif des chemins absolus ou remontant hors du
- * root (double garde avec le pattern anti-traversal du schéma).
+ * ISO 25012 — accessibility: every `path` and `source.file` is reachable
+ * under `catalogRoot`. Defensive rejection of absolute paths or paths
+ * escaping the root (double guard with the schema's anti-traversal pattern).
  */
 export function checkAccessibility(
   sidecar: Sidecar,
@@ -74,7 +74,7 @@ export function checkAccessibility(
         issues.push({
           code: "MISSING_FILE",
           assetId: asset.id,
-          message: `fichier introuvable sous le catalogue : "${relative}"`,
+          message: `file not found under the catalog: "${relative}"`,
         });
       }
     }
@@ -82,7 +82,7 @@ export function checkAccessibility(
   return issues;
 }
 
-/** Agrège les 3 contrôles d'intégrité. Liste vide = sidecar intègre. */
+/** Aggregates the 3 integrity checks. Empty list = sidecar is sound. */
 export function checkIntegrity(
   sidecar: Sidecar,
   catalogRoot: string,

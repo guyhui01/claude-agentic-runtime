@@ -1,17 +1,17 @@
 /**
- * Exécuteur de la spine (§2.4-B.1) — déroule une suite d'étapes en branchant
- * runner injecté + eval gate (brique 2) + contrats de handoff (brique 1) +
- * provenance, fail-closed.
+ * Spine executor (§2.4-B.1) — runs a sequence of steps, wiring the injected
+ * runner + eval gate (brick 2) + handoff contracts (brick 1) + provenance,
+ * fail-closed.
  *
- * Garanties (cohérentes ADR-0004 « propagation gardée » + ISO 19011) :
- *   - PRÉ-VOL STATIQUE : la compatibilité des contrats adjacents est vérifiée
- *     AVANT tout appel runner ; un mismatch design-time échoue sans rien exécuter.
- *   - PAR ÉTAPE, dans l'ordre : exécution → eval gate (fail-closed) → handoff
- *     vers l'aval (fail-closed). La sortie d'une étape n'est propagée qu'une fois
- *     ces deux gardes franchies.
- *   - PREUVE PRÉSERVÉE : `traces` est rempli jusqu'à l'étape atteinte, y compris
- *     l'étape fautive si elle a produit un rapport de gate avant de bloquer.
- *   - PUR : aucun accès disque ni réseau ; le seul effet passe par le runner.
+ * Guarantees (consistent with ADR-0004 "guarded propagation" + ISO 19011):
+ *   - STATIC PRE-FLIGHT: the compatibility of adjacent contracts is checked
+ *     BEFORE any runner call; a design-time mismatch fails without running anything.
+ *   - PER STEP, in order: execution → eval gate (fail-closed) → handoff to the
+ *     downstream step (fail-closed). A step's output is propagated only once both
+ *     of these guards are cleared.
+ *   - EVIDENCE PRESERVED: `traces` is filled up to the reached step, including
+ *     the offending step if it produced a gate report before blocking.
+ *   - PURE: no disk or network access; the only effect goes through the runner.
  */
 
 import {
@@ -29,7 +29,7 @@ import type {
   StepRunner,
 } from "./types.js";
 
-/** Erreur de cohérence de la spine elle-même (config invalide, pré-vol). */
+/** Consistency error of the spine itself (invalid config, pre-flight). */
 export class SpineConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -38,40 +38,40 @@ export class SpineConfigError extends Error {
 }
 
 /**
- * Événement de progression émis par `runSpine` au franchissement de chaque étape
- * (OBSERVABILITÉ pure, sans effet sur le déroulé) : `start` avant l'appel runner,
- * `done` une fois la gate évaluée (avec son `verdict`, même si l'étape bloque).
- * Permet à un appelant (ex. harnais de run live) de tracer l'avancement EN DIRECT
- * — utile pour un run long où le résultat final n'arrive qu'à la toute fin.
+ * Progress event emitted by `runSpine` as each step is crossed (pure
+ * OBSERVABILITY, no effect on the flow): `start` before the runner call,
+ * `done` once the gate is evaluated (with its `verdict`, even if the step blocks).
+ * Lets a caller (e.g. a live-run harness) trace progress LIVE — useful for a
+ * long run where the final result only arrives at the very end.
  */
 export interface StepProgressEvent {
   phase: "start" | "done";
-  /** Index 0-based de l'étape dans la spine. */
+  /** 0-based index of the step in the spine. */
   index: number;
-  /** Nombre total d'étapes. */
+  /** Total number of steps. */
   total: number;
   stepId: string;
   assetId: string;
-  /** Verdict de la gate — présent uniquement en phase `done`. */
+  /** Gate verdict — present only in the `done` phase. */
   verdict?: GateReport["verdict"];
 }
 
-/** Hook d'observabilité par étape (synchrone, ne doit pas lever). */
+/** Per-step observability hook (synchronous, must not throw). */
 export type StepProgressHook = (event: StepProgressEvent) => void;
 
 /**
- * Consumer sentinelle pour valider la sortie de l'étape terminale : sans `input`,
- * `validateHandoff` ne vérifie que le respect de la sortie promise (producer-output).
+ * Sentinel consumer to validate the terminal step's output: without `input`,
+ * `validateHandoff` only checks compliance with the promised output (producer-output).
  */
 function terminalSink(producer: StepContract): StepContract {
   return { stepId: `${producer.stepId}::sink`, output: {} };
 }
 
 /**
- * Déroule la spine `steps` avec le `runner` injecté, en partant de `initialInput`.
- * Ne lève pas pour un échec de garde attendu (eval gate / handoff) : renvoie un
- * `SpineResult { status: "failed", failure, traces }`. Lève uniquement pour une
- * erreur de configuration (`SpineConfigError`) ou une faute inattendue du runner.
+ * Runs the spine `steps` with the injected `runner`, starting from `initialInput`.
+ * Does not throw on an expected guard failure (eval gate / handoff): returns a
+ * `SpineResult { status: "failed", failure, traces }`. Throws only on a
+ * configuration error (`SpineConfigError`) or an unexpected runner fault.
  */
 export async function runSpine(
   steps: SpineStep[],
@@ -80,19 +80,19 @@ export async function runSpine(
   onStep?: StepProgressHook,
 ): Promise<SpineResult> {
   if (steps.length === 0) {
-    throw new SpineConfigError("spine vide : au moins une étape est requise");
+    throw new SpineConfigError("empty spine: at least one step is required");
   }
 
-  // Cohérence interne : provenance.stepId === contract.stepId pour chaque étape.
+  // Internal consistency: provenance.stepId === contract.stepId for each step.
   for (const s of steps) {
     if (s.provenance.stepId !== s.contract.stepId) {
       throw new SpineConfigError(
-        `incohérence d'étape : provenance "${s.provenance.stepId}" ≠ contrat "${s.contract.stepId}"`,
+        `step inconsistency: provenance "${s.provenance.stepId}" ≠ contract "${s.contract.stepId}"`,
       );
     }
   }
 
-  // Pré-vol STATIQUE (design-time) : contrats adjacents compatibles, AVANT exécution.
+  // STATIC pre-flight (design-time): adjacent contracts compatible, BEFORE execution.
   for (let i = 0; i < steps.length - 1; i++) {
     const issues = checkContractCompatibility(
       steps[i]!.contract,
@@ -101,7 +101,7 @@ export async function runSpine(
     if (issues.length > 0) {
       const summary = issues.map((x) => x.message).join(" ; ");
       throw new SpineConfigError(
-        `contrats incompatibles "${steps[i]!.contract.stepId}"→"${steps[i + 1]!.contract.stepId}" : ${summary}`,
+        `incompatible contracts "${steps[i]!.contract.stepId}"→"${steps[i + 1]!.contract.stepId}": ${summary}`,
       );
     }
   }
@@ -116,9 +116,9 @@ export async function runSpine(
 
     onStep?.({ phase: "start", index: i, total: steps.length, stepId, assetId });
 
-    // 1. Exécution de l'étape via le runner injecté. On transmet le schéma de
-    //    sortie du contrat : le runner peut s'en servir pour imposer le format
-    //    JSON à l'agent (live) ; un runner mocké est libre de l'ignorer.
+    // 1. Run the step via the injected runner. We pass the contract's output
+    //    schema: the runner may use it to enforce the JSON format on the agent
+    //    (live); a mocked runner is free to ignore it.
     const { output } = await runner({
       stepId,
       agent: step.agent,
@@ -126,7 +126,7 @@ export async function runSpine(
       outputSchema: step.contract.output,
     });
 
-    // 2. Eval gate (brique 2) — la preuve (GateReport) est produite même en succès.
+    // 2. Eval gate (brick 2) — the evidence (GateReport) is produced even on success.
     const gate = runEvalGate(stepId, step.criteria, output);
     traces.push({ provenance: step.provenance, output, gate });
     onStep?.({ phase: "done", index: i, total: steps.length, stepId, assetId, verdict: gate.verdict });
@@ -143,7 +143,7 @@ export async function runSpine(
       throw e;
     }
 
-    // 3. Handoff (brique 1) — vers l'aval, ou validation producer-output terminale.
+    // 3. Handoff (brick 1) — to the downstream step, or terminal producer-output validation.
     const next = steps[i + 1];
     const consumer = next ? next.contract : terminalSink(step.contract);
     try {

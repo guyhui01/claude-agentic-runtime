@@ -1,12 +1,12 @@
 /**
- * Adaptateur catalogue → SDK (§2.4-A). Transforme un `Asset` validé du sidecar
- * + sa prose en `AgentDefinition` du Claude Agent SDK (@anthropic-ai/claude-agent-sdk).
+ * Catalog → SDK adapter (§2.4-A). Turns a validated sidecar `Asset` + its prose
+ * into a Claude Agent SDK `AgentDefinition` (@anthropic-ai/claude-agent-sdk).
  *
- * Lecture seule (ADR-0001) : on LIT la prose du catalogue, on n'écrit jamais.
+ * Read-only (ADR-0001): we READ the catalog prose, we never write.
  *
- * Surface le « data gap » : le sidecar actuel ne porte pas `tools` / `model` /
- * `mcpServers` / `skills` (décision de source repoussée, cf. NEXT_STEPS §2.1).
- * En attendant, défauts CONSERVATEURS read-only + paramètre `overrides` explicite.
+ * Surfaces the "data gap": the current sidecar does not carry `tools` / `model` /
+ * `mcpServers` / `skills` (sourcing decision deferred, see NEXT_STEPS §2.1).
+ * In the meantime, CONSERVATIVE read-only defaults + an explicit `overrides` parameter.
  */
 
 import { readFileSync } from "node:fs";
@@ -14,7 +14,7 @@ import { isAbsolute, join, normalize } from "node:path";
 import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
 import type { Asset } from "../sidecar/types.js";
 
-/** Outils par défaut : strictement lecture (ADR-0001), tant que le catalogue ne déclare rien. */
+/** Default tools: strictly read-only (ADR-0001), as long as the catalog declares nothing. */
 export const DEFAULT_READONLY_TOOLS: readonly string[] = ["Read", "Grep", "Glob"];
 
 export interface AgentDefinitionOverrides {
@@ -24,19 +24,19 @@ export interface AgentDefinitionOverrides {
   maxTurns?: number;
 }
 
-/** Lit la prose d'un asset sous `catalogRoot` (garde anti-traversal, cohérent integrity.ts). */
+/** Reads an asset's prose under `catalogRoot` (anti-traversal guard, consistent with integrity.ts). */
 function readProse(asset: Asset, catalogRoot: string): string {
   const normalized = normalize(asset.path);
   if (isAbsolute(normalized) || normalized.startsWith("..")) {
-    throw new Error(`chemin d'asset non sûr (hors catalogue) : "${asset.path}"`);
+    throw new Error(`unsafe asset path (outside the catalog): "${asset.path}"`);
   }
   return readFileSync(join(catalogRoot, normalized), "utf-8");
 }
 
 /**
- * Transforme un `Asset` de type "agent" en `AgentDefinition` SDK
- * (`prompt` = prose du `.md`, `description` = description du sidecar).
- * @throws si l'asset n'est pas un agent, si le chemin est non sûr, ou si la prose est illisible.
+ * Turns an "agent"-type `Asset` into an SDK `AgentDefinition`
+ * (`prompt` = prose of the `.md`, `description` = sidecar description).
+ * @throws if the asset is not an agent, if the path is unsafe, or if the prose is unreadable.
  */
 export function toAgentDefinition(
   asset: Asset,
@@ -45,7 +45,7 @@ export function toAgentDefinition(
 ): AgentDefinition {
   if (asset.type !== "agent") {
     throw new Error(
-      `toAgentDefinition attend un asset "agent", reçu "${asset.type}" (${asset.id})`,
+      `toAgentDefinition expects an "agent" asset, received "${asset.type}" (${asset.id})`,
     );
   }
 

@@ -1,35 +1,35 @@
 /**
- * Manifeste de spine (ADR-0007, §2.4-B.2) — propriété du RUNTIME.
+ * Spine manifest (ADR-0007, §2.4-B.2) — owned by the RUNTIME.
  *
- * Décrit *comment exécuter* une spine (ordre des étapes, contrat I/O, critères),
- * par opposition au sidecar qui décrit *ce qui existe* (ADR-0003, inchangé).
+ * Describes *how to run* a spine (step order, I/O contract, criteria), as
+ * opposed to the sidecar which describes *what exists* (ADR-0003, unchanged).
  *
- * Séparation des natures (le fait décisif d'ADR-0007) :
- *   - le **contrat** est de la DONNÉE (JSON Schema) → porté inline ici ;
- *   - les **critères** sont du CODE → référencés par `id`, résolus via le
+ * Separation of natures (the decisive fact of ADR-0007):
+ *   - the **contract** is DATA (JSON Schema) → carried inline here;
+ *   - the **criteria** are CODE → referenced by `id`, resolved via the
  *     `CriterionRegistry`.
  *
- * Le `loadSpine` croise `assetId` avec le sidecar (l'asset existe et est un
- * agent) pour garantir la cohérence SSOT, fail-closed.
+ * `loadSpine` cross-checks `assetId` against the sidecar (the asset exists and
+ * is an agent) to guarantee SSOT consistency, fail-closed.
  */
 
 import type { JsonSchema } from "../handoff/types.js";
 
-/** Une étape du manifeste : pointe un asset du catalogue + son contrat + ses critères. */
+/** A manifest step: points to a catalog asset + its contract + its criteria. */
 export interface ManifestStep {
-  /** id logique de l'étape dans la spine (devient `provenance.stepId` et `contract.stepId`). */
+  /** logical id of the step in the spine (becomes `provenance.stepId` and `contract.stepId`). */
   stepId: string;
-  /** id d'un asset agent du sidecar à exécuter (croisé fail-closed au chargement). */
+  /** id of an agent asset in the sidecar to run (cross-checked fail-closed at load time). */
   assetId: string;
-  /** Schéma d'entrée (absent = étape d'amorce). */
+  /** Input schema (absent = seed step). */
   input?: JsonSchema;
-  /** Schéma de sortie promis par l'étape. */
+  /** Output schema promised by the step. */
   output: JsonSchema;
-  /** `id` de critères d'eval gate, résolus via le registre. */
+  /** Eval gate criteria `id` values, resolved via the registry. */
   criteriaIds: string[];
 }
 
-/** Manifeste complet d'une spine ordonnée. */
+/** Complete manifest of an ordered spine. */
 export interface SpineManifest {
   spineId: string;
   steps: ManifestStep[];

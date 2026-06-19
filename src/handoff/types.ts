@@ -1,31 +1,31 @@
 /**
- * Types des contrats de handoff (brique 1) — I/O typé entre étapes de workflow.
- * Référence : ADR-0004 (validation statique des contrats + propagation fail-closed).
+ * Handoff contract types (brick 1) — typed I/O between workflow steps.
+ * Reference: ADR-0004 (static contract validation + fail-closed propagation).
  *
- * Le Claude Agent SDK exécute les étapes mais ne garantit PAS que la sortie de
- * l'étape N satisfait l'entrée attendue de l'étape N+1. C'est ce vide — la
- * cohérence I/O inter-étapes — que ce module comble. C'est le cœur de valeur
- * non commoditisé du runtime (cf. docs/NEXT_STEPS.md §2.1).
+ * The Claude Agent SDK runs the steps but does NOT guarantee that step N's
+ * output satisfies step N+1's expected input. This gap — inter-step I/O
+ * consistency — is what this module fills. It is the runtime's non-commoditized
+ * core value (see docs/NEXT_STEPS.md §2.1).
  */
 
-/** Objet JSON Schema (2020-12) porté par un contrat. Validé via ajv au runtime. */
+/** JSON Schema (2020-12) object carried by a contract. Validated via ajv at runtime. */
 export type JsonSchema = Record<string, unknown>;
 
-/** Contrat I/O d'une étape de workflow (cf. Sidecar.assets[].id pour `stepId`). */
+/** I/O contract of a workflow step (see Sidecar.assets[].id for `stepId`). */
 export interface StepContract {
-  /** id de l'étape/asset producteur ou consommateur. */
+  /** id of the producing or consuming step/asset. */
   stepId: string;
-  /** Schéma de ce que l'étape accepte en entrée. Absent = étape d'amorce (pas de handoff entrant). */
+  /** Schema of what the step accepts as input. Absent = seed step (no incoming handoff). */
   input?: JsonSchema;
-  /** Schéma de ce que l'étape promet en sortie. */
+  /** Schema of what the step promises as output. */
   output: JsonSchema;
 }
 
 /**
- * Étape de validation d'un handoff :
- *  - `compat`          : vérification statique amont↔aval (design-time) ;
- *  - `producer-output` : le payload runtime respecte la sortie promise par l'amont ;
- *  - `consumer-input`  : le payload runtime respecte l'entrée attendue par l'aval.
+ * Handoff validation stage:
+ *  - `compat`          : static upstream↔downstream check (design-time);
+ *  - `producer-output` : the runtime payload matches the output promised upstream;
+ *  - `consumer-input`  : the runtime payload matches the input expected downstream.
  */
 export type HandoffStage = "compat" | "producer-output" | "consumer-input";
 
@@ -33,6 +33,6 @@ export interface HandoffIssue {
   stage: HandoffStage;
   code: string;
   message: string;
-  /** Chemin JSON (validation runtime) ou nom de champ (compat statique), si applicable. */
+  /** JSON path (runtime validation) or field name (static compat), if applicable. */
   path?: string;
 }

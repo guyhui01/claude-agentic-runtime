@@ -1,30 +1,29 @@
 /**
- * Spine réelle — backbone déterministe de WF-001 « Cadrage Produit IA » (§2.4-B.3).
+ * Real spine — deterministic backbone of WF-001 "AI Product Scoping" (§2.4-B.3).
  *
- * Premier manifeste de spine sourcé d'un VRAI workflow du catalogue `claude-agents`
- * (`workflows/WF-001-cadrage-produit-ia.md`, v1.2), par opposition aux fixtures
- * génériques de `test/manifest.test.ts`. C'est l'intrant « manifeste réel + vrais
- * critères » exigé par NEXT_STEPS §2.4-B.3 avant le branchement de `query()`.
+ * First spine manifest sourced from a REAL workflow of the `claude-agents` catalog
+ * (`workflows/WF-001-cadrage-produit-ia.md`, v1.2), as opposed to the generic
+ * fixtures of `test/manifest.test.ts`. This is the "real manifest + real criteria"
+ * input required by NEXT_STEPS §2.4-B.3 before wiring in `query()`.
  *
- * Périmètre = la COLONNE VERTÉBRALE séquentielle de WF-001, c.-à-d. ses étapes
- * non conditionnelles :
+ * Scope = the sequential BACKBONE of WF-001, i.e. its non-conditional steps:
  *   STEP-01 (BUSINESS-ANALYST) → STEP-03 (PO-SCRUM) → STEP-04 (QA-AGILE).
- * STEP-02 (UX-DESIGNER) et STEP-05/06 (CHANGE-MANAGER / PRODUCT-MANAGER-SAFE) sont
- * des branches conditionnelles (`condition_activation` dans le workflow) : hors
- * backbone, elles seront modélisées comme variantes ultérieurement (YAGNI ici).
+ * STEP-02 (UX-DESIGNER) and STEP-05/06 (CHANGE-MANAGER / PRODUCT-MANAGER-SAFE) are
+ * conditional branches (`condition_activation` in the workflow): outside the
+ * backbone, they will be modeled as variants later (YAGNI here).
  *
- * Conformité ADR :
- *   - ADR-0007 : le manifeste (contrats = donnée, critères = code référencés par id)
- *     est propriété du RUNTIME ; il croise le sidecar (descriptif, ADR-0003) au
- *     chargement via `loadSpine`.
- *   - Critères DÉTERMINISTES (pas de LLM-as-judge) : reproductibles et auditables
- *     (ISO 19011). Chacun trace un point de `output_attendu` / `condition_passage`
- *     d'une fiche d'étape de WF-001.
+ * ADR compliance:
+ *   - ADR-0007: the manifest (contracts = data, criteria = code referenced by id)
+ *     is owned by the RUNTIME; it cross-checks the sidecar (descriptive, ADR-0003)
+ *     at load time via `loadSpine`.
+ *   - DETERMINISTIC criteria (no LLM-as-judge): reproducible and auditable
+ *     (ISO 19011). Each one traces a point of `output_attendu` / `condition_passage`
+ *     from a WF-001 step sheet.
  *
- * Les `assetId` (`AGENT-BUSINESS-ANALYST`, `AGENT-PO-SCRUM`, `AGENT-QA-AGILE`)
- * doivent exister comme assets « agent » dans le sidecar du catalogue épinglé.
- * Au run live (§2.4-B.3) ce sidecar provient de `claude-agents` (générateur §2.3) ;
- * en attendant, `test/spine-wf-001.test.ts` fournit un sidecar intérimaire.
+ * The `assetId` values (`AGENT-BUSINESS-ANALYST`, `AGENT-PO-SCRUM`, `AGENT-QA-AGILE`)
+ * must exist as "agent" assets in the pinned catalog's sidecar. At run live
+ * (§2.4-B.3) this sidecar comes from `claude-agents` (generator §2.3); in the
+ * meantime, `test/spine-wf-001.test.ts` provides an interim sidecar.
  */
 
 import type { SpineManifest } from "../manifest/types.js";
@@ -43,31 +42,31 @@ import {
 } from "./spine-helpers.js";
 
 // =============================================================================
-// CRITÈRES — un par exigence de DoD, tracés à WF-001 (v1.2)
+// CRITERIA — one per DoD requirement, traced to WF-001 (v1.2)
 // =============================================================================
 
 /**
  * STEP-01 — AGENT-BUSINESS-ANALYST.
- * DoD (output_attendu) : carte des besoins · parties prenantes avec rôles ·
- * périmètre in/out · (AS-IS si applicable) · questions ouvertes.
+ * DoD (output_attendu): needs map · stakeholders with roles · in/out scope ·
+ * (AS-IS if applicable) · open questions.
  */
 const STEP01_CRITERIA: Criterion[] = [
   {
     id: "ba-besoins-non-vide",
-    description: "STEP-01 : carte des besoins (job-to-be-done) non vide",
+    description: "STEP-01: needs map (job-to-be-done) non-empty",
     severity: "blocking",
     check: (o) => nonEmptyArray(asRecord(o)["besoins"]),
   },
   {
     id: "ba-parties-prenantes-non-vide",
-    description: "STEP-01 : liste des parties prenantes non vide",
+    description: "STEP-01: stakeholder list non-empty",
     severity: "blocking",
     check: (o) => nonEmptyArray(asRecord(o)["partiesPrenantes"]),
   },
   {
     id: "ba-perimetre-in-out",
     description:
-      "STEP-01 : périmètre fonctionnel explicite — `in` non vide ET `out` présent (in/out scope)",
+      "STEP-01: explicit functional scope — `in` non-empty AND `out` present (in/out scope)",
     severity: "blocking",
     check: (o) => {
       const p = asRecord(asRecord(o)["perimetre"]);
@@ -77,7 +76,7 @@ const STEP01_CRITERIA: Criterion[] = [
   {
     id: "ba-questions-ouvertes-presentes",
     description:
-      "STEP-01 : questions ouvertes listées (tableau présent, même vide si brief limpide)",
+      "STEP-01: open questions listed (array present, even if empty when the brief is clear)",
     severity: "advisory",
     check: (o) => Array.isArray(asRecord(o)["questionsOuvertes"]),
   },
@@ -85,20 +84,20 @@ const STEP01_CRITERIA: Criterion[] = [
 
 /**
  * STEP-03 — AGENT-PO-SCRUM.
- * DoD (output_attendu) : 8 à 15 User Stories · chaque US avec priorité + estimation
- * (story points) + DoD · backlog ordonné · épics de regroupement (3-5 max).
+ * DoD (output_attendu): 8 to 15 User Stories · each US with priority + estimate
+ * (story points) + DoD · ordered backlog · grouping epics (3-5 max).
  */
 const STEP03_CRITERIA: Criterion[] = [
   {
     id: "po-backlog-8-15",
-    description: "STEP-03 : backlog de 8 à 15 User Stories",
+    description: "STEP-03: backlog of 8 to 15 User Stories",
     severity: "blocking",
     check: (o) => arrayLenBetween(asRecord(o)["backlog"], 8, 15),
   },
   {
     id: "po-us-champs-requis",
     description:
-      "STEP-03 : chaque US porte statement + priorite + estimation (number) + dod",
+      "STEP-03: each US carries statement + priorite + estimation (number) + dod",
     severity: "blocking",
     check: (o) => {
       const backlog = asRecord(o)["backlog"];
@@ -116,20 +115,20 @@ const STEP03_CRITERIA: Criterion[] = [
   },
   {
     id: "po-epics-3-5",
-    description: "STEP-03 : 3 à 5 épics de regroupement",
+    description: "STEP-03: 3 to 5 grouping epics",
     severity: "blocking",
     check: (o) => arrayLenBetween(asRecord(o)["epics"], 3, 5),
   },
   {
     id: "po-us-format-invest",
     description:
-      "STEP-03 : chaque US suit le gabarit « En tant que … je veux … afin de … »",
+      "STEP-03: each US follows the « En tant que … je veux … afin de … » template",
     severity: "advisory",
     check: (o) => {
       const backlog = asRecord(o)["backlog"];
       if (!Array.isArray(backlog)) return false;
-      // Tolère l'élision française correcte : « En tant qu'assuré… afin d'éviter… »
-      // (le regex naïf `que `/`de ` rejetait à tort un français grammaticalement juste).
+      // Tolerates correct French elision: « En tant qu'assuré… afin d'éviter… »
+      // (the naive `que `/`de ` regex wrongly rejected grammatically valid French).
       const gabarit = /en tant qu['’e].+je veux.+afin d['’e]/i;
       return backlog.every((us) => gabarit.test(String(asRecord(us)["statement"] ?? "")));
     },
@@ -138,20 +137,20 @@ const STEP03_CRITERIA: Criterion[] = [
 
 /**
  * STEP-04 — AGENT-QA-AGILE.
- * DoD (output_attendu) : critères d'acceptation Gherkin (Given/When/Then) par US
- * sélectionnée · cas nominaux + erreur + limites · plan de test sprint 1.
+ * DoD (output_attendu): Gherkin acceptance criteria (Given/When/Then) per selected
+ * US · nominal + error + boundary cases · sprint 1 test plan.
  */
 const STEP04_CRITERIA: Criterion[] = [
   {
     id: "qa-gherkin-non-vide",
-    description: "STEP-04 : au moins un scénario Gherkin produit",
+    description: "STEP-04: at least one Gherkin scenario produced",
     severity: "blocking",
     check: (o) => nonEmptyArray(asRecord(o)["gherkin"]),
   },
   {
     id: "qa-given-when-then",
     description:
-      "STEP-04 : chaque scénario porte given + when + then (non vides)",
+      "STEP-04: each scenario carries given + when + then (non-empty)",
     severity: "blocking",
     check: (o) => {
       const scenarios = asRecord(o)["gherkin"];
@@ -168,14 +167,14 @@ const STEP04_CRITERIA: Criterion[] = [
   },
   {
     id: "qa-plan-test-present",
-    description: "STEP-04 : plan de test sprint 1 non vide",
+    description: "STEP-04: sprint 1 test plan non-empty",
     severity: "blocking",
     check: (o) => nonEmptyString(asRecord(o)["planTest"]),
   },
   {
     id: "qa-cas-erreur-et-limite",
     description:
-      "STEP-04 : couverture au-delà du nominal — au moins un cas `erreur` et un cas `limite`",
+      "STEP-04: coverage beyond the nominal — at least one `erreur` case and one `limite` case",
     severity: "advisory",
     check: (o) => {
       const scenarios = asRecord(o)["gherkin"];
@@ -186,27 +185,27 @@ const STEP04_CRITERIA: Criterion[] = [
   },
 ];
 
-/** Tous les critères de la spine WF-001 (ordre des étapes). */
+/** All criteria of the WF-001 spine (step order). */
 export const WF_001_CADRAGE_CRITERIA: Criterion[] = [
   ...STEP01_CRITERIA,
   ...STEP03_CRITERIA,
   ...STEP04_CRITERIA,
 ];
 
-/** Construit un registre frais peuplé des critères de la spine WF-001. */
+/** Builds a fresh registry populated with the WF-001 spine criteria. */
 export function buildWf001CadrageRegistry(): CriterionRegistry {
   return new CriterionRegistry().registerAll(WF_001_CADRAGE_CRITERIA);
 }
 
 // =============================================================================
-// MANIFESTE — backbone WF-001 (contrats I/O + références de critères par id)
+// MANIFEST — WF-001 backbone (I/O contracts + criteria references by id)
 // =============================================================================
 
 /**
- * Manifeste de la spine de cadrage. Les contrats sont conçus pour que la sortie
- * d'une étape satisfasse à la fois sa propre promesse ET l'entrée de l'aval
- * (handoff fail-closed) : `besoins`+`perimetre` portés par STEP-01 alimentent
- * STEP-03 ; `backlog` porté par STEP-03 alimente STEP-04.
+ * Manifest of the scoping spine. The contracts are designed so that a step's
+ * output satisfies both its own promise AND the downstream input (fail-closed
+ * handoff): `besoins`+`perimetre` carried by STEP-01 feed STEP-03; `backlog`
+ * carried by STEP-03 feeds STEP-04.
  */
 export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
   spineId: "WF-001-cadrage-backbone",
@@ -214,7 +213,7 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
     {
       stepId: "STEP-01",
       assetId: "AGENT-BUSINESS-ANALYST",
-      // amorce : pas d'`input` (brief client = entrée initiale de runSpine)
+      // seed: no `input` (client brief = runSpine's initial input)
       output: objSchema(
         ["besoins", "partiesPrenantes", "perimetre"],
         {
@@ -230,15 +229,16 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       stepId: "STEP-03",
       assetId: "AGENT-PO-SCRUM",
       input: objSchema(["besoins", "perimetre"], { besoins: arr, perimetre: { type: "object" } }),
-      // Schéma de sortie RESSERRÉ pour COMMUNIQUER le contrat à l'agent (run live) :
-      // forme exacte des US (statement/priorite/estimation/dod) + bornes du DoD
-      // (8–15 US, 3–5 épics). Sans cela, un vrai agent diverge (cf. run live
-      // 2026-06-09 : 24 US / 9 épics, champ `userStory` ≠ `statement`).
+      // TIGHTENED output schema to COMMUNICATE the contract to the agent (run live):
+      // exact US shape (statement/priorite/estimation/dod) + DoD bounds
+      // (8–15 US, 3–5 epics). Without it, a real agent diverges (cf. live run
+      // 2026-06-09: 24 US / 9 epics, field `userStory` ≠ `statement`).
       output: objSchema(["backlog", "epics"], {
         backlog: arrOf(
           objSchema(["statement", "priorite", "estimation", "dod"], {
-            // Description = nudge advisory `po-us-format-invest` (gabarit INVEST),
-            // communiquée à l'agent via l'injection de format, sans contrainte dure.
+            // Description = advisory nudge `po-us-format-invest` (INVEST template),
+            // communicated to the agent via format injection, without a hard constraint.
+            // NOTE: string kept in French — injected to the LLM + asserted (R3 cat B).
             statement: {
               type: "string",
               description:
@@ -258,11 +258,12 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       stepId: "STEP-04",
       assetId: "AGENT-QA-AGILE",
       input: objSchema(["backlog"], { backlog: arr }),
-      // Resserré pour aligner la sortie de l'agent sur les critères : chaque
-      // scénario porte given/when/then (clés exactes attendues par la gate).
+      // Tightened to align the agent's output with the criteria: each scenario
+      // carries given/when/then (exact keys expected by the gate).
       output: objSchema(["gherkin", "planTest"], {
-        // Description de tableau = nudge advisory `qa-cas-erreur-et-limite` :
-        // couvrir, au-delà du nominal, au moins un cas erreur et un cas limite.
+        // Array description = advisory nudge `qa-cas-erreur-et-limite`: cover,
+        // beyond the nominal, at least one error case and one boundary case.
+        // NOTE: string kept in French — injected to the LLM + asserted (R3 cat B).
         gherkin: {
           type: "array",
           minItems: 1,
