@@ -7,6 +7,8 @@
 - **Posture**: ISO 19011 — objectivity, **factual** evidence (`file:line` citation, test outputs, real live run), independence. **Unfavorable verdict owned if the evidence demands it.**
 - **Trigger** ([ADR-0006](../adr/0006-referentiels-qualite.md) §review, [NEXT_STEPS](../NEXT_STEPS.md) §3.4): "full-throttle" WF-001 live run completed on 2026-06-09 (the spine executes) → audit condition **reached**, before any industrialization.
 
+> **Frozen finding.** This is a dated snapshot (2026-06-11) and is **not** rewritten after the fact. At the time, the project license was **MIT** (correct then). It was later changed (MIT → BSL 1.1 → **PolyForm Noncommercial 1.0.0**); for the current license-compliance position see [`conformite_licences_iso5230.md` §5](conformite_licences_iso5230.md#5-remediation-action-applied).
+
 ---
 
 ## 0. Executive summary
