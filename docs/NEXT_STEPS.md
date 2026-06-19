@@ -1,133 +1,133 @@
 # Next steps — `claude-agentic-runtime`
 
-> Feuille de route d'exécution du POC + planification de l'audit qualité ISO.
-> Document vivant (mis à jour à chaque étape). Décisions figées dans [`docs/adr/`](adr/) ; cadrage complet dans [`docs/note_cadrage_poc.md`](note_cadrage_poc.md).
-> Modèle en cours : **Claude Opus 4.8**.
+> POC execution roadmap + ISO quality-audit planning.
+> Living document (updated at each step). Decisions frozen in [`docs/adr/`](adr/); full scoping in [`docs/note_cadrage_poc.md`](note_cadrage_poc.md).
+> Model in use: **Claude Opus 4.8**.
 
 ---
 
-## 1. État actuel (mis à jour 2026-06-13)
+## 1. Current state (updated 2026-06-13)
 
-> **Snapshot courant** : POC **backbone complet** — les 3 workflows (WF-001, WF-002, WF-003) **prouvés en live** (`completed`), publié en **`v0.4.0`** (tag annoté + GitHub Release). Audit qualité ISO v1 livré ; remédiations **P1–P4 closes**, **P5 non retenu** (cf. §3.5). Suite **~126 verts** (catalogue présent), `typecheck` strict OK. Backlog **vide** ; prochaine étape **conditionnelle** = industrialisation → activer ISO 23894/25024 (§3.4). Le journal des briques ci-dessous documente la **construction historique** (dates d'origine conservées).
+> **Current snapshot**: **full backbone** POC — the 3 workflows (WF-001, WF-002, WF-003) **proven live** (`completed`), released as **`v0.4.0`** (annotated tag + GitHub Release). ISO quality audit v1 delivered; remediations **P1–P4 closed**, **P5 not retained** (see §3.5). Suite **~126 green** (catalog present), strict `typecheck` OK. Backlog **empty**; next step is **conditional** = industrialization → enable ISO 23894/25024 (§3.4). The block log below documents the **historical build** (original dates kept).
 
-**Brique 0 (Loader) — bouclée.**
+**Block 0 (Loader) — done.**
 
-| Élément | Fichier | Couverture ISO 25012 |
+| Item | File | ISO 25012 coverage |
 |---|---|---|
-| Schéma sidecar (JSON Schema 2020-12) | `schema/sidecar.schema.json` | 5 caractéristiques portées PLEINEMENT : complétude, cohérence, crédibilité, actualité, **conformité** (enum `type`) + amorce *bien-formée* d'exactitude (`id`) et d'accessibilité (`path`/`source.file` anti-traversal) |
-| Contrôles d'intégrité | `src/sidecar/integrity.ts` | COMPLÈTENT exactitude (référentielle + unicité des id) et accessibilité (joignabilité réelle), hors portée d'un JSON Schema → total **7** caractéristiques (cf. audit v1 P1 : la formule « 5+2 » était inexacte) |
-| Loader fail-closed | `src/loader/load-sidecar.ts` | orchestre schéma + intégrité (ADR-0004) |
-| Types | `src/sidecar/types.ts` | miroir TypeScript du sidecar |
+| Sidecar schema (JSON Schema 2020-12) | `schema/sidecar.schema.json` | 5 characteristics FULLY carried: completeness, consistency, credibility, currentness, **compliance** (`type` enum) + a *well-formed* seed of accuracy (`id`) and accessibility (`path`/`source.file` anti-traversal) |
+| Integrity checks | `src/sidecar/integrity.ts` | COMPLETE accuracy (referential + id uniqueness) and accessibility (real reachability), out of a JSON Schema's reach → total **7** characteristics (see audit v1 P1: the "5+2" formula was inexact) |
+| Fail-closed loader | `src/loader/load-sidecar.ts` | orchestrates schema + integrity (ADR-0004) |
+| Types | `src/sidecar/types.ts` | TypeScript mirror of the sidecar |
 
-**Brique 1 (contrats de handoff) — bouclée (2026-06-04, Opus 4.8).**
+**Block 1 (handoff contracts) — done (2026-06-04, Opus 4.8).**
 
-| Élément | Fichier | Rôle |
+| Item | File | Role |
 |---|---|---|
-| Types de contrat | `src/handoff/types.ts` | `StepContract { stepId, input?, output }` + `HandoffIssue` |
-| Validateur | `src/handoff/validate-handoff.ts` | `checkContractCompatibility` (statique, shallow) + `validateHandoff` (runtime, fail-closed) ; ajv2020 réutilisé du loader |
-| Tests | `test/handoff.test.ts` | 7 cas (compat statique + runtime amont/aval + agrégation) |
+| Contract types | `src/handoff/types.ts` | `StepContract { stepId, input?, output }` + `HandoffIssue` |
+| Validator | `src/handoff/validate-handoff.ts` | `checkContractCompatibility` (static, shallow) + `validateHandoff` (runtime, fail-closed); ajv2020 reused from the loader |
+| Tests | `test/handoff.test.ts` | 7 cases (static compat + upstream/downstream runtime + aggregation) |
 
-**Brique 2 (eval gate) — bouclée (2026-06-04, Opus 4.8).**
+**Block 2 (eval gate) — done (2026-06-04, Opus 4.8).**
 
-| Élément | Fichier | Rôle |
+| Item | File | Role |
 |---|---|---|
-| Types | `src/eval/types.ts` | `Criterion` (déterministe, `blocking`/`advisory`) + `GateReport` (preuve d'audit) |
-| Gate | `src/eval/eval-gate.ts` | `runEvalGate` (évalue, ne lève jamais) + `assertGatePassed` (applique, fail-closed) |
-| Tests | `test/eval-gate.test.ts` | 6 cas (DoD cadrage WF-001 : pass · advisory non bloquant · fail bloquant · check défensif · fail-closed) |
+| Types | `src/eval/types.ts` | `Criterion` (deterministic, `blocking`/`advisory`) + `GateReport` (audit evidence) |
+| Gate | `src/eval/eval-gate.ts` | `runEvalGate` (evaluates, never throws) + `assertGatePassed` (enforces, fail-closed) |
+| Tests | `test/eval-gate.test.ts` | 6 cases (WF-001 scoping DoD: pass · non-blocking advisory · blocking fail · defensive check · fail-closed) |
 
-**§2.4-A (adaptateur catalogue → SDK) — bouclé (2026-06-04, Opus 4.8).**
+**§2.4-A (catalog → SDK adapter) — done (2026-06-04, Opus 4.8).**
 
-| Élément | Fichier | Rôle |
+| Item | File | Role |
 |---|---|---|
-| Adaptateur | `src/sdk/to-agent-definition.ts` | `Asset` (+ prose `.md`) → `AgentDefinition` du SDK ; lecture seule (ADR-0001), défauts read-only + overrides (data gap §2.1) |
-| Tests | `test/sdk-adapter.test.ts` | 5 cas (mapping prose→prompt · défauts · overrides · refus non-agent · anti-traversal) |
+| Adapter | `src/sdk/to-agent-definition.ts` | `Asset` (+ `.md` prose) → SDK `AgentDefinition`; read-only (ADR-0001), read-only defaults + overrides (data gap §2.1) |
+| Tests | `test/sdk-adapter.test.ts` | 5 cases (prose→prompt mapping · defaults · overrides · non-agent rejection · anti-traversal) |
 
-Package vérifié : **`@anthropic-ai/claude-agent-sdk`** (^0.3.162 ; type `AgentDefinition`, `query({prompt, options})`).
+Verified package: **`@anthropic-ai/claude-agent-sdk`** (^0.3.162; `AgentDefinition` type, `query({prompt, options})`).
 
-**§2.4-B.1 (orchestrateur de spine, hors-ligne) — bouclé (2026-06-04, Opus 4.8).** `src/orchestrator/{types,run-spine}.ts` : `runSpine` + `StepRunner` injectable, pré-vol statique + eval gate + handoff fail-closed + provenance/`GateReport` tracés (cf. §2.4-B ci-dessous).
+**§2.4-B.1 (spine orchestrator, offline) — done (2026-06-04, Opus 4.8).** `src/orchestrator/{types,run-spine}.ts`: `runSpine` + injectable `StepRunner`, static pre-flight + eval gate + fail-closed handoff + provenance/`GateReport` traced (see §2.4-B below).
 
-**§2.4-B.2 (manifeste de spine + registre de critères, hors-ligne) — bouclé (2026-06-04, Opus 4.8, [ADR-0007](adr/0007-source-contrats-criteres-manifeste-runtime.md)).** `src/manifest/{types,load-manifest}.ts` + `src/eval/criteria-registry.ts` : `loadSpine` assemble un manifeste en `SpineStep[]`, croisements fail-closed sidecar/registre (cf. §2.4-B.2 ci-dessous).
+**§2.4-B.2 (spine manifest + criteria registry, offline) — done (2026-06-04, Opus 4.8, [ADR-0007](adr/0007-source-contrats-criteres-manifeste-runtime.md)).** `src/manifest/{types,load-manifest}.ts` + `src/eval/criteria-registry.ts`: `loadSpine` assembles a manifest into `SpineStep[]`, fail-closed sidecar/registry cross-checks (see §2.4-B.2 below).
 
-**Total à l'achèvement §2.4-B.2 (2026-06-04) : 64 tests verts, `typecheck` strict OK** (état à jour : *Snapshot courant* en tête de §1). Source des contrats/critères/définitions = fixtures pour l'instant (câblage à la vraie source repoussé — YAGNI, brique 0 non touchée). Choix eval gate : critères **déterministes**, pas de LLM-as-judge (reproductible/auditable ; juge-LLM = extension ultérieure si besoin).
+**Total at completion of §2.4-B.2 (2026-06-04): 64 tests green, strict `typecheck` OK** (up-to-date state: *Current snapshot* at the top of §1). Source of contracts/criteria/definitions = fixtures for now (wiring to the real source deferred — YAGNI, block 0 untouched). Eval gate choice: **deterministic** criteria, no LLM-as-judge (reproducible/auditable; LLM judge = later extension if needed).
 
 ---
 
-## 2. Feuille de route (par priorité)
+## 2. Roadmap (by priority)
 
-### 2.1 — Brique 1 : contrats de handoff typés ✅ *(cœur de valeur — FAIT 2026-06-04)*
-- ✅ I/O schématisé (JSON Schema) validé entre étapes, en réutilisant le pattern ajv du loader.
-- ✅ Deux niveaux ADR-0004 : compatibilité **statique** amont↔aval + validation **runtime** fail-closed du payload.
-- ▶️ **Reste à câbler** (à l'intégration SDK §2.4) : la **source réelle** des schémas de contrat (sidecar étendu vs manifeste) — aujourd'hui en fixtures.
+### 2.1 — Block 1: typed handoff contracts ✅ *(core value — DONE 2026-06-04)*
+- ✅ Schematized I/O (JSON Schema) validated between steps, reusing the loader's ajv pattern.
+- ✅ Two ADR-0004 levels: **static** upstream↔downstream compatibility + fail-closed **runtime** payload validation.
+- ▶️ **Still to wire** (at SDK integration §2.4): the **real source** of contract schemas (extended sidecar vs manifest) — currently in fixtures.
 
-### 2.2 — Brique 2 : un eval gate ✅ *(FAIT 2026-06-04)*
-- ✅ Garde-fou qualité déterministe sur la sortie d'une étape (DoD du cadrage WF-001 en fixture).
-- ✅ Fail-closed (`assertGatePassed`), évaluation traçable séparée (`runEvalGate` produit la preuve même en succès) — cohérent ADR-0004 + posture ISO 19011.
-- ▶️ **Reste à câbler** (intégration SDK §2.4) : les critères réels par étape, sourcés depuis le catalogue (cf. §2.1, même décision de source).
+### 2.2 — Block 2: an eval gate ✅ *(DONE 2026-06-04)*
+- ✅ Deterministic quality guardrail on a step's output (WF-001 scoping DoD as a fixture).
+- ✅ Fail-closed (`assertGatePassed`), traceable evaluation kept separate (`runEvalGate` produces evidence even on success), consistent with ADR-0004 + ISO 19011 posture.
+- ▶️ **Still to wire** (SDK integration §2.4): the real per-step criteria, sourced from the catalog (see §2.1, same source decision).
 
-### 2.3 — Générateur de sidecar ✅ *(FAIT 2026-06-09, hors ce repo — `claude-agents` v3.26.0)*
-- **Conformité ADR-0003** : le générateur appartient à **`claude-agents`** (généré + validé en CI côté catalogue). Le runtime ne fait que **lire**.
-- ✅ **Livré (2026-06-09, Opus 4.8, `claude-agents` v3.26.0)** : `tools/generate-sidecar.mjs` parse les `AGENT-*.md` → `sidecar.json` conforme à CE schéma (copie épinglée 1.0.0 vendorée côté catalogue, SSOT = ce repo, garde anti-dérive par pin `$id`). Périmètre = backbone WF-001 (3 agents), `dependsOn: []` (skills non encore indexées). Validation ajv + intégrité + CI côté catalogue (`.github/workflows/sidecar.yml`). Vérifié consommable ici (cf. §2.4-B.3 ci-dessous + `test/run-wf-001-real-sidecar.test.ts`). Extension WF-002/003 = ajout d'ids dans le générateur.
+### 2.3 — Sidecar generator ✅ *(DONE 2026-06-09, outside this repo — `claude-agents` v3.26.0)*
+- **ADR-0003 compliance**: the generator belongs to **`claude-agents`** (generated + validated in CI on the catalog side). The runtime only **reads**.
+- ✅ **Delivered (2026-06-09, Opus 4.8, `claude-agents` v3.26.0)**: `tools/generate-sidecar.mjs` parses the `AGENT-*.md` files → `sidecar.json` conforming to THIS schema (pinned 1.0.0 copy vendored on the catalog side, SSOT = this repo, anti-drift guard via `$id` pin). Scope = WF-001 backbone (3 agents), `dependsOn: []` (skills not yet indexed). ajv validation + integrity + CI on the catalog side (`.github/workflows/sidecar.yml`). Verified consumable here (see §2.4-B.3 below + `test/run-wf-001-real-sidecar.test.ts`). WF-002/003 extension = adding ids to the generator.
 
-### 2.4 — Intégration Claude Agent SDK *(exécution de la spine)*
-- ✅ **§2.4-A FAIT (2026-06-04)** : package vérifié (`@anthropic-ai/claude-agent-sdk`, cf. [[feedback-verification-factuelle]]) + adaptateur `Asset → AgentDefinition` (lecture seule, testé, sans réseau).
-- ✅ **§2.4-B.1 — orchestrateur + runner injectable (HORS-LIGNE, FAIT 2026-06-04, Opus 4.8)** : `src/orchestrator/{types,run-spine}.ts`. `runSpine` déroule WF-001→002→003 en branchant un **runner injectable** (abstraction de `query()`, mocké), l'**eval gate** (brique 2, fail-closed) et les **contrats de handoff** (brique 1, fail-closed) ; **pré-vol statique** des contrats adjacents avant exécution ; orchestrateur **pur** (zéro disque/réseau) ; **provenance** (`assetId`/`catalogTag`) + **`GateReport`** consignés dans une trace conservée même en échec. 6 tests hermétiques → **57 tests verts**, `typecheck` strict OK. Source des contrats/critères encore en fixtures.
-- ✅ **§2.4-B.2 — source des contrats/critères : TRANCHÉE (2026-06-04, [ADR-0007](adr/0007-source-contrats-criteres-manifeste-runtime.md))** : **manifeste de spine propriété du runtime** — contrats en JSON Schema (donnée) + critères **référencés par `id`** depuis un **registre de critères TS** (code déterministe, pas de DSL prématuré), croisement `stepId`/`assetId` avec le sidecar (descriptif, inchangé — ADR-0003). Fait technique décisif : un `Criterion.check` est du **code**, non sérialisable en sidecar sans inventer un DSL. Cohérent ADR-0001/0002/0004. ✅ **Implémenté (2026-06-04, Opus 4.8, hors-ligne)** : `src/manifest/{types,load-manifest}.ts` (`loadSpine` → `SpineStep[]`, croisements fail-closed asset/agent + critère + provenance, `ManifestValidationError` agrégée) + `src/eval/criteria-registry.ts` (registre par `id`, refus doublons, `resolve` fail-closed). `runSpine` inchangé (assembleur en amont). 7 tests hermétiques → **64 tests verts**, `typecheck` strict OK. ✅ **Manifeste réel + vrais critères FAITS (hors-ligne, 2026-06-07, Opus 4.8)** — cf. §2.4-B.3 ci-dessous. Reste à brancher l'adaptateur `query()` (run live).
-- ✅ **§2.4-B.3 — run live de la spine : EXÉCUTÉ (2026-06-09, Opus 4.8, run observé, OAuth abonnement)** — remplacer le runner mock par `query()` et dérouler pour de vrai : FAIT. **Déclencheur d'audit ISO §3.4 atteint** (« la spine s'exécute »). Résultat du 1ᵉʳ run : **`failed` fail-closed à STEP-03** (eval gate) — **STEP-01 (BUSINESS-ANALYST) passé en live** (JSON conforme), arrêt à STEP-03 (PO-SCRUM). Cause = **écart de contrat, pas faiblesse de l'agent** : l'agent a produit 24 US / 9 épics (DoD : 8–15 / 3–5) et nommé `userStory`/`criteresAcceptation` au lieu de `statement`/`dod`, car le schéma de sortie était trop lâche pour le lui communiquer. **Correctif livré le même jour** : schémas de sortie STEP-03/04 **resserrés** (forme exacte des items + bornes `minItems`/`maxItems`) → le format injecté = le contrat vérifié par la gate (`src/spines/wf-001-cadrage.ts`, helper `arrOf`, test `test/wf-001-output-contract.test.ts`). Harness de run live reproductible : `test/wf-001-run-live.test.ts` (gardé `LIVE_RUN=1`, skip par défaut). ✅ **Re-run live APRÈS correctif : `completed` (2026-06-09)** — les 3 agents en live, **toutes les gates *blocking* passées** : STEP-01 ✓ · STEP-03 ✓ (**13 US** ∈ 8–15, champs `statement/priorite/estimation/dod`, **5 épics** ∈ 3–5) · STEP-04 ✓ (**7 scénarios** `given/when/then`, plan de test). Preuve que le resserrement était la bonne cause (24 US/9 épics → 13/5 dans les bornes). ✅ **Cadrage « plein pot » (2026-06-09)** : les 2 *advisory* traités → re-run-3 `completed` avec **0 critère en échec** (blocking + advisory). (a) `qa-cas-erreur-et-limite` : nudge par description de schéma → l'agent produit `nominal/erreur/limite`. (b) `po-us-format-invest` : **bug du critère, pas de l'agent** — le regex `que `/`de ` rejetait l'élision française correcte (« En tant qu'assuré… afin d'éviter… ») ; regex corrigé (`qu['’e]`/`d['’e]`), validé 12/12 sur la sortie live réelle + fixture. **Thèse du POC empiriquement validée** : vrais agents + vrai catalogue + handoffs/gates déterministes → cadrage WF-001 réel qui aboutit en live, **toutes gates blocking ET advisory vertes**, qualité contrôlée, read-only, capé.
-  - ✅ **Prép hors-ligne FAITE (2026-06-07, Opus 4.8)** : première spine RÉELLE livrée en `src/spines/wf-001-cadrage.ts` — **backbone de WF-001** (`STEP-01 BUSINESS-ANALYST → STEP-03 PO-SCRUM → STEP-04 QA-AGILE`) sourcé du vrai workflow `claude-agents/workflows/WF-001-cadrage-produit-ia.md` v1.2, **11 critères déterministes** tracés aux DoD réels (8 *blocking* + 3 *advisory*). 6 tests hermétiques → **70 tests verts**. NB : le « WF-001→002→003 » des sections ci-dessus était le **nommage placeholder** des fixtures ; l'unité réellement exécutable est la colonne vertébrale d'UN workflow (ici WF-001), les étapes conditionnelles (UX/CHANGE/SAFe) restant hors backbone.
-  - ✅ **Adaptateur runner `query()` FAIT (2026-06-08, Opus 4.8, hors-ligne)** : `src/sdk/query-runner.ts` — `createQueryRunner(deps)` enveloppe `query()` du SDK derrière `StepRunner` (`query` injectable → tests hermétiques). 4 gardes fail-closed (refus si `ANTHROPIC_API_KEY` défini · `permissionMode:"plan"` forcé · caps durs `maxBudgetUsd`/`maxTurns` · résultat non-`success` ⇒ levée). 9 tests → **79 tests verts**, typecheck strict OK. Aucun appel facturé.
-  - ✅ **(1) sidecar réel — FAIT (2026-06-09, `claude-agents` v3.26.0)** : générateur §2.3 livré ; `sidecar.json` des 3 agents WF-001 prouvé consommable ici via `loadSidecar` (schéma + intégrité + accessibilité réelle) → `toAgentDefinition` (prose réelle) → `assembleWf001Spine` → `runSpine` (`test/run-wf-001-real-sidecar.test.ts`, hors-ligne, skippé proprement si catalogue absent → CI runtime verte). Le sidecar intérimaire de `test/spine-wf-001.test.ts` reste pour l'hermétisme pur.
-  - ✅ **(2) câblage `createQueryRunner` dans `runSpine` — FAIT** : `src/spines/run-wf-001.ts` (`runWf001`/`assembleWf001Spine`) assemble manifeste réel + registre + résolveur + runner `query()`. Gardes du runner couvertes par `query-runner.test.ts`.
-  - ✅ **RUN LIVE FAIT + « PLEIN POT » (2026-06-09)** : 1ᵉʳ run `failed`@STEP-03 (écart de contrat) → resserrement des contrats → re-run `completed` (blocking OK, 2 advisory KO) → nudges advisory + correctif regex élision → **`completed`, 0 critère en échec** (blocking + advisory). Cf. ligne §2.4-B.3 ci-dessus. Plus de reste sur WF-001.
-  - **Prérequis auth (règle budget)** : **OAuth abonnement Pro/Max uniquement** (`claude` login) — **NE PAS** définir `ANTHROPIC_API_KEY` (clé métrée = facturation au token + priorité sur l'OAuth → risque de dépassement). À la limite de quota : échec *fail-closed*, pas de bascule payante. Vérifié 2026-06-04 : variable absente aux 3 scopes (règle déjà tenue). Voir memory `feedback-budget-quota-abonnement`.
-  - **Garde par run** : `maxBudgetUsd` bas + `maxTurns` faible + `permissionMode: "plan"` (read-only). À lancer **sur accord explicite Guy + run observé**.
-  - C'est ce run de bout en bout qui **atteint le déclencheur d'audit ISO §3.4** (« quand la spine s'exécute »).
-- ✅ **§2.4-B.4 — autres spines réelles FAITES (2026-06-08, Opus 4.8, hors-ligne)** : chaque workflow modélisé comme son **propre backbone** (sous-ensemble séquentiel non conditionnel), agents réels + critères DoD, sur le modèle de `src/spines/wf-001-cadrage.ts`. Helpers de schéma/prédicat factorisés dans `src/spines/spine-helpers.ts` (DRY, partagés par les 3 spines ; WF-001 refactoré sans changement de comportement).
-  - [x] **Spine WF-002 — Delivery Agile SAFe** (`src/spines/wf-002-delivery.ts`) : backbone STEP-01→02→03→04→06 (PRODUCT-MANAGER-SAFE, RELEASE-TRAIN-ENGINEER, PO-SAFE, SCRUM-MASTER, CHEF-PROJET-IA) ; QA (STEP-05, parallèle) et CHANGE (STEP-07, conditionnel) hors backbone. 14 critères DoD (vote confiance > 3.5, 3-5 PI Objectives, 5-10 US, reporting CODIR). 5 tests hermétiques.
-  - [x] **Spine WF-003 — Lancement Application IA** (`src/spines/wf-003-lancement.ts`) : backbone complet des 7 agents core STEP-00→06 (FINANCIAL-ANALYST, PROMPT-ENGINEER, AI-ARCHITECT, DEV-PYTHON-IA, QA-AGILE, DEVOPS-CLOUD, SECURITE-IA) ; fork DEV-TYPESCRIPT-IA (optionnel) hors backbone. 18 critères DoD (Go financier, coverage ≥ 80 %, taux réussite ≥ 90 %, golden dataset 20-50, 0 Critical OWASP LLM, < 2 High). 6 tests hermétiques.
-  - [x] **Générateur §2.3 étendu à WF-002/003 (FAIT 2026-06-12, Opus 4.8, `claude-agents` v3.26.2)** : `WORKFLOW_BACKBONES` couvre les 3 backbones → `sidecar.json` **14 assets** (union dédupliquée — `AGENT-QA-AGILE` partagé WF-001/003), schéma ajv + intégrité + `--check` verts. Consommabilité prouvée ici : `run-wf-001-real-sidecar.test.ts` passe **sans `CATALOG_ROOT`** (défaut réaligné, cf. infra), assertion de périmètre passée en **inclusion** (le runtime ne dépend que de ce qu'il consomme — l'inventaire exact est la propriété du générateur catalogue + son `--check` CI, ADR-0002/0003) ; suite runtime **111 verts**. **Topologie corrigée au passage** : défaut `CATALOG_ROOT` réaligné sur le repo réel `claude-agents` (point de vérité unique `test/catalog-root.ts`, fin de la duplication `claude-catalogue` dans 2 tests + gabarit MCP) ; ancien clone stale `claude-catalogue` (4 commits behind, 0 unique) archivé. Les sidecars intérimaires de `spine-wf-002/003.test.ts` restent pour l'hermétisme pur.
-  - [x] **Câblage live + resserrage + preuve hors-ligne WF-002/003 (FAIT 2026-06-13, Opus 4.8)** : `src/spines/run-wf-002.ts` + `run-wf-003.ts` (`assembleWf00X`/`runWf00X` calqués sur `run-wf-001.ts`). **Schémas de sortie resserrés** (leçon WF-001 : schéma injecté == contrat de la gate ; bornes bloquantes → `minItems/maxItems`, champs bloquants → `required`, advisory → `description`). Preuve hors-ligne : tests hermétiques (`run-wf-00X.test.ts` : mock→`completed`, eval-gate→`failed`, gardes budget/config) + tests **sidecar réel** (`run-wf-00X-real-sidecar.test.ts` : vrai `sidecar.json` → prose réelle → `completed`, 5/7 gates pass) ; fixtures partagées `test/fixtures/wf-00X-outputs.ts` (DRY). **Harnais live gardés** `wf-00X-run-live.test.ts` (`LIVE_RUN=1`, capture P3). Suite **123 verts** (hors-ligne), typecheck strict OK. ✅ **Runs live observés et probants (2026-06-13, sur accord explicite) : WF-002 `completed` (5/5) + WF-003 `completed` (7/7)** — le fix STEP-03 (sortie structurée native du SDK) **validé en live** ; **traces versionnées** (`docs/audit/live-runs/`, `git add -f`, revue P3 OK, aucun secret) → **artefact P3 clos**. Décompte avec catalogue présent : **126 passed / 6 skipped** (3 harnais live facturés + 3 marqueurs `runIf`). Publié en **`v0.4.0`** (tag annoté + GitHub Release).
+### 2.4 — Claude Agent SDK integration *(spine execution)*
+- ✅ **§2.4-A DONE (2026-06-04)**: package verified (`@anthropic-ai/claude-agent-sdk`, see [[feedback-verification-factuelle]]) + `Asset → AgentDefinition` adapter (read-only, tested, no network).
+- ✅ **§2.4-B.1 — orchestrator + injectable runner (OFFLINE, DONE 2026-06-04, Opus 4.8)**: `src/orchestrator/{types,run-spine}.ts`. `runSpine` runs WF-001→002→003 by plugging in an **injectable runner** (abstraction of `query()`, mocked), the **eval gate** (block 2, fail-closed), and the **handoff contracts** (block 1, fail-closed); **static pre-flight** of adjacent contracts before execution; **pure** orchestrator (zero disk/network); **provenance** (`assetId`/`catalogTag`) + **`GateReport`** recorded in a trace kept even on failure. 6 hermetic tests → **57 tests green**, strict `typecheck` OK. Contracts/criteria source still in fixtures.
+- ✅ **§2.4-B.2 — source of contracts/criteria: DECIDED (2026-06-04, [ADR-0007](adr/0007-source-contrats-criteres-manifeste-runtime.md))**: **spine manifest owned by the runtime** — contracts in JSON Schema (data) + criteria **referenced by `id`** from a **TS criteria registry** (deterministic code, no premature DSL), `stepId`/`assetId` cross-check against the sidecar (descriptive, unchanged — ADR-0003). Decisive technical fact: a `Criterion.check` is **code**, not serializable into a sidecar without inventing a DSL. Consistent with ADR-0001/0002/0004. ✅ **Implemented (2026-06-04, Opus 4.8, offline)**: `src/manifest/{types,load-manifest}.ts` (`loadSpine` → `SpineStep[]`, fail-closed asset/agent + criterion + provenance cross-checks, aggregated `ManifestValidationError`) + `src/eval/criteria-registry.ts` (registry by `id`, duplicate rejection, fail-closed `resolve`). `runSpine` unchanged (assembler upstream). 7 hermetic tests → **64 tests green**, strict `typecheck` OK. ✅ **Real manifest + real criteria DONE (offline, 2026-06-07, Opus 4.8)** — see §2.4-B.3 below. Remaining: wire the `query()` adapter (live run).
+- ✅ **§2.4-B.3 — live spine run: EXECUTED (2026-06-09, Opus 4.8, observed run, subscription OAuth)** — replace the mock runner with `query()` and run for real: DONE. **ISO audit trigger §3.4 reached** ("the spine executes"). 1st run result: **`failed` fail-closed at STEP-03** (eval gate) — **STEP-01 (BUSINESS-ANALYST) passed live** (conforming JSON), stop at STEP-03 (PO-SCRUM). Cause = **contract mismatch, not agent weakness**: the agent produced 24 US / 9 epics (DoD: 8–15 / 3–5) and named `userStory`/`criteresAcceptation` instead of `statement`/`dod`, because the output schema was too loose to convey it. **Fix shipped the same day**: STEP-03/04 output schemas **tightened** (exact item shape + `minItems`/`maxItems` bounds) → the injected format = the contract the gate checks (`src/spines/wf-001-cadrage.ts`, `arrOf` helper, test `test/wf-001-output-contract.test.ts`). Reproducible live-run harness: `test/wf-001-run-live.test.ts` (guarded by `LIVE_RUN=1`, skipped by default). ✅ **Live re-run AFTER fix: `completed` (2026-06-09)** — the 3 agents live, **all *blocking* gates passed**: STEP-01 ✓ · STEP-03 ✓ (**13 US** ∈ 8–15, `statement/priorite/estimation/dod` fields, **5 epics** ∈ 3–5) · STEP-04 ✓ (**7 scenarios** `given/when/then`, test plan). Proof the tightening was the right cause (24 US/9 epics → 13/5 within bounds). ✅ **"Full-throttle" scoping (2026-06-09)**: the 2 *advisory* criteria handled → re-run-3 `completed` with **0 failing criterion** (blocking + advisory). (a) `qa-cas-erreur-et-limite`: nudge via schema description → the agent produces `nominal/erreur/limite`. (b) `po-us-format-invest`: **criterion bug, not agent bug** — the `que `/`de ` regex rejected correct French elision (« En tant qu'assuré… afin d'éviter… »); regex fixed (`qu['’e]`/`d['’e]`), validated 12/12 on the real live output + fixture. **POC thesis empirically validated**: real agents + real catalog + deterministic handoffs/gates → a real WF-001 scoping that succeeds live, **all blocking AND advisory gates green**, controlled quality, read-only, capped.
+  - ✅ **Offline prep DONE (2026-06-07, Opus 4.8)**: first REAL spine delivered in `src/spines/wf-001-cadrage.ts` — **WF-001 backbone** (`STEP-01 BUSINESS-ANALYST → STEP-03 PO-SCRUM → STEP-04 QA-AGILE`) sourced from the real workflow `claude-agents/workflows/WF-001-cadrage-produit-ia.md` v1.2, **11 deterministic criteria** traced to the real DoDs (8 *blocking* + 3 *advisory*). 6 hermetic tests → **70 tests green**. NB: the "WF-001→002→003" in the sections above was the fixtures' **placeholder naming**; the actually executable unit is the backbone of ONE workflow (here WF-001), with the conditional steps (UX/CHANGE/SAFe) staying out of the backbone.
+  - ✅ **`query()` runner adapter DONE (2026-06-08, Opus 4.8, offline)**: `src/sdk/query-runner.ts` — `createQueryRunner(deps)` wraps the SDK's `query()` behind `StepRunner` (injectable `query` → hermetic tests). 4 fail-closed guards (refuse if `ANTHROPIC_API_KEY` is set · `permissionMode:"plan"` forced · hard caps `maxBudgetUsd`/`maxTurns` · non-`success` result ⇒ throw). 9 tests → **79 tests green**, strict typecheck OK. No billed call.
+  - ✅ **(1) real sidecar — DONE (2026-06-09, `claude-agents` v3.26.0)**: §2.3 generator delivered; the 3 WF-001 agents' `sidecar.json` proven consumable here via `loadSidecar` (schema + integrity + real accessibility) → `toAgentDefinition` (real prose) → `assembleWf001Spine` → `runSpine` (`test/run-wf-001-real-sidecar.test.ts`, offline, cleanly skipped if the catalog is absent → runtime CI green). The interim sidecar of `test/spine-wf-001.test.ts` stays for pure hermeticity.
+  - ✅ **(2) wiring `createQueryRunner` into `runSpine` — DONE**: `src/spines/run-wf-001.ts` (`runWf001`/`assembleWf001Spine`) assembles the real manifest + registry + resolver + `query()` runner. Runner guards covered by `query-runner.test.ts`.
+  - ✅ **LIVE RUN DONE + "FULL THROTTLE" (2026-06-09)**: 1st run `failed`@STEP-03 (contract mismatch) → contract tightening → re-run `completed` (blocking OK, 2 advisory KO) → advisory nudges + elision regex fix → **`completed`, 0 failing criterion** (blocking + advisory). See the §2.4-B.3 line above. Nothing left on WF-001.
+  - **Auth prerequisite (budget rule)**: **subscription OAuth Pro/Max only** (`claude` login) — **DO NOT** set `ANTHROPIC_API_KEY` (metered key = per-token billing + priority over OAuth → overrun risk). At quota limit: *fail-closed* failure, no paid fallback. Verified 2026-06-04: variable absent at all 3 scopes (rule already held). See memory `feedback-budget-quota-abonnement`.
+  - **Per-run guard**: low `maxBudgetUsd` + low `maxTurns` + `permissionMode: "plan"` (read-only). To launch **on explicit approval from Guy + observed run**.
+  - It is this end-to-end run that **reaches the ISO audit trigger §3.4** ("when the spine executes").
+- ✅ **§2.4-B.4 — other real spines DONE (2026-06-08, Opus 4.8, offline)**: each workflow modeled as its **own backbone** (non-conditional sequential subset), real agents + DoD criteria, on the model of `src/spines/wf-001-cadrage.ts`. Schema/predicate helpers factored into `src/spines/spine-helpers.ts` (DRY, shared by the 3 spines; WF-001 refactored with no behavior change).
+  - [x] **WF-002 spine — SAFe Agile Delivery** (`src/spines/wf-002-delivery.ts`): backbone STEP-01→02→03→04→06 (PRODUCT-MANAGER-SAFE, RELEASE-TRAIN-ENGINEER, PO-SAFE, SCRUM-MASTER, CHEF-PROJET-IA); QA (STEP-05, parallel) and CHANGE (STEP-07, conditional) out of backbone. 14 DoD criteria (confidence vote > 3.5, 3-5 PI Objectives, 5-10 US, executive-committee reporting). 5 hermetic tests.
+  - [x] **WF-003 spine — AI Application Launch** (`src/spines/wf-003-lancement.ts`): full backbone of the 7 core agents STEP-00→06 (FINANCIAL-ANALYST, PROMPT-ENGINEER, AI-ARCHITECT, DEV-PYTHON-IA, QA-AGILE, DEVOPS-CLOUD, SECURITE-IA); DEV-TYPESCRIPT-IA fork (optional) out of backbone. 18 DoD criteria (financial Go, coverage ≥ 80%, success rate ≥ 90%, golden dataset 20-50, 0 Critical OWASP LLM, < 2 High). 6 hermetic tests.
+  - [x] **§2.3 generator extended to WF-002/003 (DONE 2026-06-12, Opus 4.8, `claude-agents` v3.26.2)**: `WORKFLOW_BACKBONES` covers the 3 backbones → `sidecar.json` **14 assets** (deduplicated union — `AGENT-QA-AGILE` shared WF-001/003), ajv schema + integrity + `--check` green. Consumability proven here: `run-wf-001-real-sidecar.test.ts` passes **without `CATALOG_ROOT`** (default realigned, see below), perimeter assertion switched to **inclusion** (the runtime depends only on what it consumes — the exact inventory is the property of the catalog generator + its CI `--check`, ADR-0002/0003); runtime suite **111 green**. **Topology fixed along the way**: `CATALOG_ROOT` default realigned to the real `claude-agents` repo (single point of truth `test/catalog-root.ts`, end of the `claude-catalogue` duplication in 2 tests + MCP template); the old stale `claude-catalogue` clone (4 commits behind, 0 unique) archived. The interim sidecars of `spine-wf-002/003.test.ts` stay for pure hermeticity.
+  - [x] **Live wiring + tightening + offline proof WF-002/003 (DONE 2026-06-13, Opus 4.8)**: `src/spines/run-wf-002.ts` + `run-wf-003.ts` (`assembleWf00X`/`runWf00X` modeled on `run-wf-001.ts`). **Output schemas tightened** (WF-001 lesson: injected schema == gate contract; blocking bounds → `minItems/maxItems`, blocking fields → `required`, advisory → `description`). Offline proof: hermetic tests (`run-wf-00X.test.ts`: mock→`completed`, eval-gate→`failed`, budget/config guards) + **real-sidecar** tests (`run-wf-00X-real-sidecar.test.ts`: real `sidecar.json` → real prose → `completed`, 5/7 gates pass); shared fixtures `test/fixtures/wf-00X-outputs.ts` (DRY). **Live harnesses kept** `wf-00X-run-live.test.ts` (`LIVE_RUN=1`, P3 capture). Suite **123 green** (offline), strict typecheck OK. ✅ **Observed and conclusive live runs (2026-06-13, on explicit approval): WF-002 `completed` (5/5) + WF-003 `completed` (7/7)** — the STEP-03 fix (the SDK's native structured output) **validated live**; **versioned traces** (`docs/audit/live-runs/`, `git add -f`, P3 review OK, no secret) → **P3 artifact closed**. Count with catalog present: **126 passed / 6 skipped** (3 billed live harnesses + 3 `runIf` markers). Released as **`v0.4.0`** (annotated tag + GitHub Release).
 
-### 2.5 — Pipeline CI ✅ *(FAIT 2026-06-08, Opus 4.8)*
-- ✅ **Workflow CI** (`.github/workflows/ci.yml`) : `npm ci` + `typecheck` strict + `npm test` sur matrice Node 20/22, `push`/`PR` vers `main` (la suite couvre validation schémas ajv + eval gates, fail-closed). `concurrency` + `permissions: contents read`.
-- ✅ **Dependabot** (`.github/dependabot.yml`) : bumps npm + github-actions hebdomadaires en **PR tracées** (cohérent ADR-0002). Le catalogue `claude-agents` n'étant pas une dépendance npm (épinglé par `catalogTag`), son bump reste un commit manuel tracé — hors périmètre Dependabot.
+### 2.5 — CI pipeline ✅ *(DONE 2026-06-08, Opus 4.8)*
+- ✅ **CI workflow** (`.github/workflows/ci.yml`): `npm ci` + strict `typecheck` + `npm test` on a Node 20/22 matrix, `push`/`PR` to `main` (the suite covers ajv schema validation + eval gates, fail-closed). `concurrency` + `permissions: contents read`.
+- ✅ **Dependabot** (`.github/dependabot.yml`): weekly npm + github-actions bumps as **tracked PRs** (consistent with ADR-0002). Since the `claude-agents` catalog is not an npm dependency (pinned by `catalogTag`), its bump stays a tracked manual commit — out of Dependabot's scope.
 
-### 2.6 — Dette technique ✅ *(SOLDÉE 2026-06-08, Opus 4.8)*
-- ✅ **Montée `vitest` 2 → 4** (`^4.1.8`) faite : **94 tests verts** sur vitest 4, `typecheck` strict OK, aucune régression ni changement de config.
-- ✅ **`npm audit` : 5 vulnérabilités → 0**. Correction factuelle : elles provenaient de la chaîne **vitest 2 → vite → esbuild** (dev), PAS du SDK ; la montée v4 les purge (`found 0 vulnerabilities`).
-- ✅ **Posture de sécurité du dépôt activée** : alertes de vulnérabilité Dependabot + correctifs de sécurité automatiques **ON** (réglages GitHub côté dépôt). Détection + PR de fix automatiques pour toute future faille (cohérent ADR-0002).
+### 2.6 — Technical debt ✅ *(CLEARED 2026-06-08, Opus 4.8)*
+- ✅ **`vitest` 2 → 4 upgrade** (`^4.1.8`) done: **94 tests green** on vitest 4, strict `typecheck` OK, no regression or config change.
+- ✅ **`npm audit`: 5 vulnerabilities → 0**. Factual correction: they came from the **vitest 2 → vite → esbuild** chain (dev), NOT from the SDK; the v4 upgrade purges them (`found 0 vulnerabilities`).
+- ✅ **Repository security posture enabled**: Dependabot vulnerability alerts + automatic security fixes **ON** (GitHub repo-side settings). Automatic detection + fix PRs for any future flaw (consistent with ADR-0002).
 
 ---
 
-## 3. Planification de l'audit qualité ISO
+## 3. ISO quality-audit planning
 
-> ⚠️ **Pas une certification.** Conformément à [ADR-0006](adr/0006-referentiels-qualite.md), les normes ISO sont un **cadre méthodologique**, pas un objectif de certification (ROI nul en solo). Cet audit est une **auto-évaluation interne (gap analysis)**. La certification reste hors périmètre, **réévaluable si une mission client l'exige**.
+> ⚠️ **Not a certification.** Per [ADR-0006](adr/0006-referentiels-qualite.md), the ISO standards are a **methodological framework**, not a certification goal (zero ROI solo). This audit is an **internal self-assessment (gap analysis)**. Certification stays out of scope, **re-assessable if a client engagement requires it**.
 
-### 3.1 — Objet
-Mesurer, preuve à l'appui, l'écart entre l'état du repo et les **4 référentiels retenus** (ADR-0006) : data, structure, architecture, gouvernance.
+### 3.1 — Object
+Measure, with evidence, the gap between the repo's state and the **4 chosen standards** (ADR-0006): data, structure, architecture, governance.
 
-### 3.2 — Périmètre (les 4 référentiels retenus)
-| Axe | Norme | Ce qui est audité |
+### 3.2 — Scope (the 4 chosen standards)
+| Axis | Standard | What is audited |
 |---|---|---|
-| **Données** | ISO/IEC 25012:2008 | Le sidecar encode-t-il réellement les **7 caractéristiques** retenues ? (5 pleinement au schéma — dont conformité — + exactitude/accessibilité réparties schéma↔intégrité ; cf. audit v1 P1). Recalcul/contrôle, pas de déclaratif. |
-| **Architecture** | ISO/IEC/IEEE 42010:2022 | `ARCHITECTURE.md` + ADR : parties prenantes / préoccupations / points de vue complets et cohérents. |
-| **Logiciel / runtime** | ISO/IEC 25010 | Fiabilité (fail-closed), maintenabilité (tests, types stricts), sécurité (anti-traversal, read-only). |
-| **Gouvernance IA** | ISO/IEC 42001:2023 | Principes, risques, cycle de vie ; cohérence des invariants (read-only, propagation gardée). |
+| **Data** | ISO/IEC 25012:2008 | Does the sidecar really encode the chosen **7 characteristics**? (5 fully at the schema — including compliance — + accuracy/accessibility split schema↔integrity; see audit v1 P1). Recompute/check, not declarative. |
+| **Architecture** | ISO/IEC/IEEE 42010:2022 | `ARCHITECTURE.md` + ADR: stakeholders / concerns / viewpoints complete and consistent. |
+| **Software / runtime** | ISO/IEC 25010 | Reliability (fail-closed), maintainability (tests, strict types), security (anti-traversal, read-only). |
+| **AI governance** | ISO/IEC 42001:2023 | Principles, risks, lifecycle; consistency of invariants (read-only, guarded propagation). |
 
-### 3.3 — Méthode
-- Grille **un critère → une preuve → un verdict** (Conforme / Partiel / Non couvert) → recommandation.
-- Posture d'audit alignée **ISO 19011** (objectivité, preuves factuelles, indépendance) — cohérent avec [[feedback-projet-avant-validation-sociale]] et [[feedback-verification-factuelle]] : **oser le verdict défavorable** si la preuve l'impose.
-- Vérifier les **structures différées** (ISO 25024 métriques, 23894 risque IA, 5230 licences) : toujours hors périmètre, ou déclencheur atteint ?
+### 3.3 — Method
+- A grid of **one criterion → one piece of evidence → one verdict** (Conforming / Partial / Not covered) → recommendation.
+- Audit posture aligned with **ISO 19011** (objectivity, factual evidence, independence) — consistent with [[feedback-projet-avant-validation-sociale]] and [[feedback-verification-factuelle]]: **dare the unfavorable verdict** if the evidence demands it.
+- Check the **deferred structures** (ISO 25024 metrics, 23894 AI risk, 5230 licenses): still out of scope, or trigger reached?
 
-### 3.4 — Déclenchement *(condition, pas date fixe — POC solo)*
-Clause de révision ADR-0006 : audit déclenché à un **jalon majeur**, c'est-à-dire :
-- **Fin de POC** : après la livraison de la **brique 2** (eval gate), quand le backbone d'un workflow (ex. WF-001) s'exécute ;
-- **ET avant toute industrialisation** (passage du statut « asset portfolio » à « produit de mission »).
+### 3.4 — Trigger *(a condition, not a fixed date — solo POC)*
+ADR-0006 review clause: audit triggered at a **major milestone**, namely:
+- **End of POC**: after delivering **block 2** (eval gate), when a workflow backbone (e.g. WF-001) executes;
+- **AND before any industrialization** (moving from "portfolio asset" status to "engagement product").
 
-### 3.5 — Livrable ✅ *(FAIT 2026-06-11, Opus 4.8)*
-- ✅ [`docs/audit/audit_qualite_iso_v1.md`](audit/audit_qualite_iso_v1.md) : rapport daté, modèle Claude indiqué, grille critère→preuve→verdict par axe + plan de remédiation priorisé. **Verdicts** : Données (25012) 🟡 Conforme avec réserve · Architecture (42010) 🟡 Conforme avec réserve · Logiciel/runtime (25010) 🟢 Conforme · Gouvernance IA (42001) 🟢 Conforme. Aucune non-conformité majeure.
-- **Révision des normes différées (§3.3)** : **ISO 5230 — déclencheur ATTEINT** (licence MIT fixée) → ✅ **P4 FAIT** : [`docs/audit/conformite_licences_iso5230.md`](audit/conformite_licences_iso5230.md) (inventaire factuel, verdict 🟢 Conforme, divulgation README du SDK propriétaire). **ISO 23894** (risque IA) et **ISO 25024** (métriques données) : **restent différées** — déclencheurs non atteints (POC *asset portfolio*, pas d'industrialisation) ; les activer maintenant serait de la sur-ingénierie (règle de simplicité). **P5 explicitement NON retenu** à ce stade.
-- **Remédiation FAITE (lot distinct, postérieur au constat figé)** : ✅ **P1** (décomposition ISO 25012 « 5+2 » → 7 caractéristiques avec lieu d'encodage exact, par nouvelle entrée `[Unreleased]`, sans réécrire `[0.2.0]`) + ✅ **P2** (nomenclature « spine WF-001→003 » → « backbone d'un workflow » balayée dans tous les docs vivants) + ✅ **P3** (observabilité : capture du run live persistante dans [`docs/audit/live-runs/`](audit/live-runs/) au lieu de `/tmp` — **mécanisme** corrigé ; **artefact PRODUIT le 2026-06-13** : `wf-002-live-result.json` `completed` 5/5 + `wf-003-live-result.json` `completed` 7/7, versionnés `git add -f`, non reconstitués à la main) + ✅ **P4** (ci-dessus). **P5 (ISO 23894) NON retenu** (pas d'industrialisation). Rapport d'audit non modifié (constat figé).
+### 3.5 — Deliverable ✅ *(DONE 2026-06-11, Opus 4.8)*
+- ✅ [`docs/audit/audit_qualite_iso_v1.md`](audit/audit_qualite_iso_v1.md): dated report, Claude model stated, criterion→evidence→verdict grid per axis + prioritized remediation plan. **Verdicts**: Data (25012) 🟡 Conforming with reservation · Architecture (42010) 🟡 Conforming with reservation · Software/runtime (25010) 🟢 Conforming · AI governance (42001) 🟢 Conforming. No major non-conformance.
+- **Review of deferred standards (§3.3)**: **ISO 5230 — trigger REACHED** (MIT license set) → ✅ **P4 DONE**: [`docs/audit/conformite_licences_iso5230.md`](audit/conformite_licences_iso5230.md) (factual inventory, 🟢 Conforming verdict, README disclosure of the proprietary SDK). **ISO 23894** (AI risk) and **ISO 25024** (data metrics): **stay deferred** — triggers not reached (POC *portfolio asset*, no industrialization); enabling them now would be over-engineering (simplicity rule). **P5 explicitly NOT retained** at this stage.
+- **Remediation DONE (separate lot, after the frozen finding)**: ✅ **P1** (ISO 25012 decomposition "5+2" → 7 characteristics with the exact encoding location, via a new `[Unreleased]` entry, without rewriting `[0.2.0]`) + ✅ **P2** ("spine WF-001→003" naming → "a workflow backbone" swept through all living docs) + ✅ **P3** (observability: persistent capture of the live run in [`docs/audit/live-runs/`](audit/live-runs/) instead of `/tmp` — **mechanism** fixed; **artifact PRODUCED on 2026-06-13**: `wf-002-live-result.json` `completed` 5/5 + `wf-003-live-result.json` `completed` 7/7, versioned `git add -f`, not hand-reconstructed) + ✅ **P4** (above). **P5 (ISO 23894) NOT retained** (no industrialization). Audit report unchanged (frozen finding).
 
 ---
 
-> Document élaboré avec **Claude Opus 4.8** (2026-06-03).
+> Document produced with **Claude Opus 4.8** (2026-06-03).

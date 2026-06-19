@@ -1,76 +1,76 @@
 # Architecture — `claude-agentic-runtime`
 
-> Vue d'architecture du runtime agentique. Décisions détaillées dans [`docs/adr/`](adr/). Cadrage complet : [`docs/note_cadrage_poc.md`](note_cadrage_poc.md).
+> Architecture view of the agentic runtime. Detailed decisions in [`docs/adr/`](adr/). Full scoping: [`docs/note_cadrage_poc.md`](note_cadrage_poc.md).
 
-## Principe directeur
+## Guiding principle
 
-Le runtime **exécute** un catalogue déclaratif qu'il ne possède pas. La **direction de dépendance est unique** et **read-only**.
+The runtime **executes** a declarative catalog it does not own. The **dependency direction is one-way** and **read-only**.
 
 ```mermaid
 flowchart LR
-    subgraph SSOT["claude-agents (SSOT, audité, read-only)"]
+    subgraph SSOT["claude-agents (SSOT, audited, read-only)"]
         A["AGENT-*.md / skills/ / workflows/ (prose)"]
-        S["sidecar manifest (JSON/YAML, généré + validé en CI)"]
-        A -->|génère| S
+        S["sidecar manifest (JSON/YAML, generated + validated in CI)"]
+        A -->|generates| S
     end
-    subgraph RT["claude-agentic-runtime (consommateur)"]
-        L["Loader (lit le sidecar)"]
-        C["Contrats de handoff typés"]
+    subgraph RT["claude-agentic-runtime (consumer)"]
+        L["Loader (reads the sidecar)"]
+        C["Typed handoff contracts"]
         G["Eval gates"]
-        E["Exécution via Claude Agent SDK"]
-        ST["Stores runtime (logs, eval, état)"]
+        E["Execution via Claude Agent SDK"]
+        ST["Runtime stores (logs, eval, state)"]
         L --> C --> E --> G --> ST
     end
-    S -->|import épinglé @tag, read-only| L
-    G -.->|propose une amélioration| PR["PR humaine"]
-    PR -.->|décision Guy| A
+    S -->|pinned import @tag, read-only| L
+    G -.->|proposes an improvement| PR["human PR"]
+    PR -.->|Guy's decision| A
 ```
 
-- **Trait plein** : flux d'exécution et dépendance read-only.
-- **Trait pointillé** : feedback — **uniquement par PR humaine** (ADR-0005), jamais d'écriture automatique.
+- **Solid line**: execution flow and read-only dependency.
+- **Dashed line**: feedback — **only through a human PR** (ADR-0005), never an automatic write.
 
-## Couches
+## Layers
 
-| Couche | Rôle | Construit ? |
+| Layer | Role | Built? |
 |---|---|---|
-| **Catalogue** (`claude-agents`) | SSOT : rôles, skills, workflows + sidecar | Existant (read-only) |
-| **Loader** | Sidecar → définitions Claude Agent SDK | À construire (brique 0) |
-| **Contrats** | I/O typés entre étapes de workflow | À construire (brique 1) |
-| **Eval gates** | Garde-fous qualité sur sorties d'agents | À construire (brique 2) |
-| **Exécution** | Sub-agents, routing d'outils, état, MCP | **Fourni par le Claude Agent SDK** |
+| **Catalog** (`claude-agents`) | SSOT: roles, skills, workflows + sidecar | Existing (read-only) |
+| **Loader** | Sidecar → Claude Agent SDK definitions | To build (block 0) |
+| **Contracts** | Typed I/O between workflow steps | To build (block 1) |
+| **Eval gates** | Quality guardrails on agent outputs | To build (block 2) |
+| **Execution** | Sub-agents, tool routing, state, MCP | **Provided by the Claude Agent SDK** |
 
-## Invariants (voir ADR)
+## Invariants (see ADR)
 
-1. Consommateur **read-only** du catalogue — [ADR-0001](adr/0001-consommateur-read-only.md)
-2. Import **épinglé versionné** (tag exact, bump explicite) — [ADR-0002](adr/0002-import-epingle-versionne.md)
-3. **Sidecar** propriété du catalogue — [ADR-0003](adr/0003-sidecar-propriete-catalogue.md)
-4. **Propagation gardée** par eval gates + validation de contrats — [ADR-0004](adr/0004-propagation-gardee-eval-gates.md)
-5. **Feedback par PR humaine** — [ADR-0005](adr/0005-feedback-par-pr-humaine.md)
+1. **Read-only** consumer of the catalog — [ADR-0001](adr/0001-consommateur-read-only.md)
+2. **Pinned versioned** import (exact tag, explicit bump) — [ADR-0002](adr/0002-import-epingle-versionne.md)
+3. **Sidecar** owned by the catalog — [ADR-0003](adr/0003-sidecar-propriete-catalogue.md)
+4. **Propagation guarded** by eval gates + contract validation — [ADR-0004](adr/0004-propagation-gardee-eval-gates.md)
+5. **Feedback through a human PR** — [ADR-0005](adr/0005-feedback-par-pr-humaine.md)
 
-## Description d'architecture (ISO/IEC/IEEE 42010:2022)
+## Architecture description (ISO/IEC/IEEE 42010:2022)
 
-Conformément au standard de description d'architecture (référentiel retenu, cf. [ADR-0006](adr/0006-referentiels-qualite.md)).
+Per the architecture-description standard (chosen framework, see [ADR-0006](adr/0006-referentiels-qualite.md)).
 
-### Parties prenantes & préoccupations
-| Partie prenante | Préoccupation principale |
+### Stakeholders & concerns
+| Stakeholder | Primary concern |
 |---|---|
-| **Guy (owner / architecte)** | Qualité, maintenabilité, signal portfolio, anti-usine-à-gaz |
-| **Catalogue `claude-agents`** | Ne jamais être muté par le runtime ; rester audité |
-| **Évaluateur technique externe** | Lisibilité des décisions, rigueur, honnêteté des garanties |
-| **Exécution (Agent SDK)** | Contrats d'entrée/sortie clairs entre étapes |
+| **Guy (owner / architect)** | Quality, maintainability, portfolio signal, anti-over-engineering |
+| **`claude-agents` catalog** | Never be mutated by the runtime; stay audited |
+| **External technical reviewer** | Readable decisions, rigor, honest guarantees |
+| **Execution (Agent SDK)** | Clear input/output contracts between steps |
 
-### Points de vue (viewpoints)
-| Point de vue | Préoccupations adressées | Vue (où) |
+### Viewpoints
+| Viewpoint | Concerns addressed | View (where) |
 |---|---|---|
-| **Dépendance** | Sens unique runtime→catalogue, read-only | Diagramme ci-dessus + [ADR-0001](adr/0001-consommateur-read-only.md) |
-| **Données** | Qualité du catalogue/sidecar (ISO 25012) | Sidecar + JSON Schema (brique 0) |
-| **Exécution** | Orchestration du backbone d'un workflow (ex. WF-001) | Couches §ci-dessus |
-| **Gouvernance** | Propagation gardée, feedback par PR humaine | §propagation + [ADR-0004](adr/0004-propagation-gardee-eval-gates.md)/[0005](adr/0005-feedback-par-pr-humaine.md) |
+| **Dependency** | One-way runtime→catalog, read-only | Diagram above + [ADR-0001](adr/0001-consommateur-read-only.md) |
+| **Data** | Catalog/sidecar quality (ISO 25012) | Sidecar + JSON Schema (block 0) |
+| **Execution** | Orchestration of a workflow backbone (e.g. WF-001) | Layers above |
+| **Governance** | Guarded propagation, feedback through a human PR | Propagation § + [ADR-0004](adr/0004-propagation-gardee-eval-gates.md)/[0005](adr/0005-feedback-par-pr-humaine.md) |
 
-## Modèle de propagation (Dependabot/Renovate-like)
+## Propagation model (Dependabot/Renovate-like)
 
-Nouvelle version catalogue → CI valide (contrats + eval gates) → PR de bump si vert (*fail-closed* si rouge) → **merge humain**. L'automatisation vérifie, l'humain décide.
+New catalog version → CI validates (contracts + eval gates) → bump PR if green (*fail-closed* if red) → **human merge**. Automation checks, the human decides.
 
 ---
 
-> Document élaboré avec **Claude Opus 4.8** (modèle en cours d'utilisation, 2026-06-03).
+> Document produced with **Claude Opus 4.8** (model in use, 2026-06-03).
