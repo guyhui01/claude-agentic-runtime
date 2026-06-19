@@ -213,16 +213,16 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       // Tightened (cf. WF-001 lesson): the injected schema COMMUNICATES the contract
       // the gate verifies — 1–10 features, each with a WSJF (number).
       output: objSchema(["visionBoard", "featuresWsjf"], {
-        visionBoard: { type: "string", description: "Vision board PI (synthèse 1 page)." },
+        visionBoard: { type: "string", description: "PI vision board (1-page summary)." },
         featuresWsjf: arrOf(
           objSchema(["wsjf"], {
-            feature: { type: "string", description: "Intitulé de la feature." },
-            wsjf: { type: "number", description: "Score WSJF (Weighted Shortest Job First)." },
+            feature: { type: "string", description: "Feature title." },
+            wsjf: { type: "number", description: "WSJF score (Weighted Shortest Job First)." },
           }),
           { min: 1, max: 10 },
         ),
         // Advisory nudge pm-lean-business-case (no hard constraint).
-        leanBusinessCase: { type: "string", description: "Lean Business Case des features majeures." },
+        leanBusinessCase: { type: "string", description: "Lean Business Case for the major features." },
       }),
       criteriaIds: STEP01_CRITERIA.map((c) => c.id),
     },
@@ -233,19 +233,19 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       output: objSchema(["programBoard", "voteConfiance"], {
         programBoard: arrOf(
           objSchema([], {
-            from: { type: "string", description: "Équipe/feature source de la dépendance." },
-            to: { type: "string", description: "Équipe/feature cible." },
-            dep: { type: "string", description: "Nature de la dépendance." },
+            from: { type: "string", description: "Source team/feature of the dependency." },
+            to: { type: "string", description: "Target team/feature." },
+            dep: { type: "string", description: "Nature of the dependency." },
           }),
           { min: 1 },
         ),
         // Blocking threshold rte-vote-confiance-seuil communicated in the description.
         voteConfiance: {
           type: "number",
-          description: "Vote de confiance ART sur 5 ; doit être > 3.5 pour passer.",
+          description: "ART confidence vote out of 5; must be > 3.5 to pass.",
         },
         // Advisory nudge rte-roam-risks-present.
-        roamRisks: { type: "array", description: "Risques ROAM (Resolved/Owned/Accepted/Mitigated)." },
+        roamRisks: { type: "array", description: "ROAM risks (Resolved/Owned/Accepted/Mitigated)." },
       }),
       criteriaIds: STEP02_CRITERIA.map((c) => c.id),
     },
@@ -255,14 +255,14 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       input: objSchema(["programBoard"], { programBoard: arr }),
       output: objSchema(["piObjectives", "backlogSprint"], {
         piObjectives: arrOf(
-          { type: "string", description: "PI Objective SMART." },
+          { type: "string", description: "SMART PI Objective." },
           { min: 3, max: 5 },
         ),
         backlogSprint: arrOf(
           objSchema([], {
-            statement: { type: "string", description: "User Story du sprint 1." },
+            statement: { type: "string", description: "Sprint 1 User Story." },
             // Advisory nudge posafe-wsjf-par-feature (not required).
-            wsjf: { type: "number", description: "Score WSJF de la US." },
+            wsjf: { type: "number", description: "WSJF score of the US." },
           }),
           { min: 5, max: 10 },
         ),
@@ -274,14 +274,14 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-SCRUM-MASTER",
       input: objSchema(["backlogSprint"], { backlogSprint: arr }),
       output: objSchema(["sprintGoal", "sprintPlan"], {
-        sprintGoal: { type: "string", description: "Sprint Goal unique." },
+        sprintGoal: { type: "string", description: "Single Sprint Goal." },
         // Blocking forecast: usEngagees (non-empty) + storyPoints (number).
         sprintPlan: objSchema(["usEngagees", "storyPoints"], {
-          usEngagees: arrOf({ type: "string", description: "US engagée au sprint 1." }, { min: 1 }),
-          storyPoints: { type: "number", description: "Story points engagés (forecast)." },
+          usEngagees: arrOf({ type: "string", description: "US committed to sprint 1." }, { min: 1 }),
+          storyPoints: { type: "number", description: "Committed story points (forecast)." },
         }),
         // Advisory nudge sm-impediments-listes.
-        impediments: { type: "array", description: "Impediments du sprint 1." },
+        impediments: { type: "array", description: "Sprint 1 impediments." },
       }),
       criteriaIds: STEP04_CRITERIA.map((c) => c.id),
     },
@@ -290,11 +290,11 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
       assetId: "AGENT-CHEF-PROJET-IA",
       input: objSchema(["sprintPlan"], { sprintPlan: obj }),
       output: objSchema(["noteCodir", "dashboard"], {
-        noteCodir: { type: "string", description: "Note CODIR (1 page)." },
+        noteCodir: { type: "string", description: "CODIR note (1 page)." },
         // Blocking cp-dashboard-avancement-risques: avancement AND risques present.
         dashboard: objSchema(["avancement", "risques"], {
-          avancement: { type: "string", description: "Avancement du PI (ex. « 32% »)." },
-          risques: { type: "array", description: "Risques suivis." },
+          avancement: { type: "string", description: "PI progress (e.g. « 32% »)." },
+          risques: { type: "array", description: "Tracked risks." },
         }),
         // Advisory nudge cp-evm-cpi-spi (cpi/spi not required so as not to block).
         evm: objSchema([], {
