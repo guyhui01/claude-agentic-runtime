@@ -50,26 +50,26 @@ const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
 
 // --- Sorties conformes au DoD par étape ---
 const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
-  statement: `En tant que utilisateur je veux la fonctionnalité ${i + 1} afin de gagner du temps`,
+  statement: `As a user I want feature ${i + 1} so that I save time`,
   priorite: "must",
   estimation: 3,
-  dod: "Testé et validé en recette",
+  dod: "Tested and validated in UAT",
 }));
 const stepOutputs: Record<string, unknown> = {
   "STEP-01": {
-    besoins: ["Réduire le temps de traitement"],
-    partiesPrenantes: [{ nom: "Métier", role: "sponsor" }],
-    perimetre: { in: ["authentification"], out: ["facturation"] },
+    besoins: ["Reduce processing time"],
+    partiesPrenantes: [{ nom: "Business", role: "sponsor" }],
+    perimetre: { in: ["authentication"], out: ["billing"] },
     questionsOuvertes: [],
   },
-  "STEP-03": { backlog: happyBacklog, epics: ["Auth", "Recherche", "Reporting"] },
+  "STEP-03": { backlog: happyBacklog, epics: ["Auth", "Search", "Reporting"] },
   "STEP-04": {
     gherkin: [
-      { given: "connecté", when: "recherche", then: "résultats", type: "nominal" },
-      { given: "terme invalide", when: "recherche", then: "erreur", type: "erreur" },
-      { given: "0 résultat", when: "recherche", then: "état vide", type: "limite" },
+      { given: "logged in", when: "search", then: "results", type: "nominal" },
+      { given: "invalid term", when: "search", then: "error", type: "error" },
+      { given: "0 results", when: "search", then: "empty state", type: "boundary" },
     ],
-    planTest: "Sprint 1 : smoke + 3 scénarios",
+    planTest: "Sprint 1: smoke + 3 scenarios",
   },
 };
 

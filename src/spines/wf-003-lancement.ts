@@ -308,7 +308,7 @@ export const WF_003_LANCEMENT_MANIFEST: SpineManifest = {
         baselineTest: arrOf(
           objSchema([], {
             cas: { type: "string", description: "Test case description." },
-            type: { type: "string", description: "nominal | limite" },
+            type: { type: "string", description: "nominal | boundary" },
           }),
           { min: 8 },
         ),
@@ -368,7 +368,7 @@ export const WF_003_LANCEMENT_MANIFEST: SpineManifest = {
             given: { type: "string" },
             when: { type: "string" },
             then: { type: "string" },
-            type: { type: "string", description: "nominal | erreur | limite" },
+            type: { type: "string", description: "nominal | error | boundary" },
           }),
           { min: 1 },
         ),

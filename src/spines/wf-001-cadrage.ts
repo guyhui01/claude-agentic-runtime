@@ -122,14 +122,13 @@ const STEP03_CRITERIA: Criterion[] = [
   {
     id: "po-us-format-invest",
     description:
-      "STEP-03: each US follows the « En tant que … je veux … afin de … » template",
+      "STEP-03: each US follows the « As a … I want … so that … » template",
     severity: "advisory",
     check: (o) => {
       const backlog = asRecord(o)["backlog"];
       if (!Array.isArray(backlog)) return false;
-      // Tolerates correct French elision: « En tant qu'assuré… afin d'éviter… »
-      // (the naive `que `/`de ` regex wrongly rejected grammatically valid French).
-      const gabarit = /en tant qu['’e].+je veux.+afin d['’e]/i;
+      // INVEST template check (English): "As a <role> I want <action> so that <benefit>".
+      const gabarit = /as an? .+i want.+so that/i;
       return backlog.every((us) => gabarit.test(String(asRecord(us)["statement"] ?? "")));
     },
   },
@@ -174,13 +173,13 @@ const STEP04_CRITERIA: Criterion[] = [
   {
     id: "qa-cas-erreur-et-limite",
     description:
-      "STEP-04: coverage beyond the nominal — at least one `erreur` case and one `limite` case",
+      "STEP-04: coverage beyond the nominal — at least one `error` case and one `boundary` case",
     severity: "advisory",
     check: (o) => {
       const scenarios = asRecord(o)["gherkin"];
       if (!Array.isArray(scenarios)) return false;
       const types = new Set(scenarios.map((sc) => asRecord(sc)["type"]));
-      return types.has("erreur") && types.has("limite");
+      return types.has("error") && types.has("boundary");
     },
   },
 ];
@@ -238,11 +237,10 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
           objSchema(["statement", "priorite", "estimation", "dod"], {
             // Description = advisory nudge `po-us-format-invest` (INVEST template),
             // communicated to the agent via format injection, without a hard constraint.
-            // NOTE: string kept in French — injected to the LLM + asserted (R3 cat B).
             statement: {
               type: "string",
               description:
-                "User Story au gabarit INVEST : « En tant que <rôle> je veux <action> afin de <bénéfice> ».",
+                "User Story in the INVEST template: « As a <role> I want <action> so that <benefit> ».",
             },
             priorite: str,
             estimation: num,
@@ -263,19 +261,18 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
       output: objSchema(["gherkin", "planTest"], {
         // Array description = advisory nudge `qa-cas-erreur-et-limite`: cover,
         // beyond the nominal, at least one error case and one boundary case.
-        // NOTE: string kept in French — injected to the LLM + asserted (R3 cat B).
         gherkin: {
           type: "array",
           minItems: 1,
           description:
-            "Au-delà du nominal, couvrir AU MOINS un scénario `type:\"erreur\"` et un `type:\"limite\"`.",
+            "Beyond the nominal, cover AT LEAST one `type:\"error\"` scenario and one `type:\"boundary\"`.",
           items: objSchema(["given", "when", "then"], {
             given: str,
             when: str,
             then: str,
             type: {
               type: "string",
-              description: "nominal | erreur | limite",
+              description: "nominal | error | boundary",
             },
           }),
         },
