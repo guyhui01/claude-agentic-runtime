@@ -1,39 +1,40 @@
 /**
- * Registre de critères d'eval gate (ADR-0007, §2.4-B.2).
+ * Eval gate criteria registry (ADR-0007, §2.4-B.2).
  *
- * Les critères restent du CODE (`Criterion.check` = prédicat déterministe), non
- * sérialisable en sidecar. Le manifeste de spine ne porte donc que des **`id`** ;
- * c'est ce registre qui résout un `id` vers le `Criterion` réel. Fail-closed :
- * un `id` inconnu est une rupture (un critère attendu manque) → on lève.
+ * Criteria stay CODE (`Criterion.check` = deterministic predicate), not
+ * serializable into the sidecar. The spine manifest therefore carries only
+ * **`id`** values; this registry resolves an `id` to the real `Criterion`.
+ * Fail-closed: an unknown `id` is a breakage (an expected criterion is
+ * missing) → we throw.
  */
 
 import type { Criterion } from "./types.js";
 
-/** Levée quand un ou plusieurs `id` de critères ne sont pas enregistrés. */
+/** Thrown when one or more criterion `id` values are not registered. */
 export class UnknownCriterionError extends Error {
   readonly ids: string[];
 
   constructor(ids: string[]) {
-    super(`Critère(s) inconnu(s) du registre : ${ids.join(", ")}`);
+    super(`Criterion(s) unknown to the registry: ${ids.join(", ")}`);
     this.name = "UnknownCriterionError";
     this.ids = ids;
   }
 }
 
-/** Registre id → Criterion. L'enregistrement refuse les doublons (fail-closed). */
+/** id → Criterion registry. Registration rejects duplicates (fail-closed). */
 export class CriterionRegistry {
   private readonly byId = new Map<string, Criterion>();
 
-  /** Enregistre un critère. @throws si l'`id` est déjà pris (collision = ambiguïté). */
+  /** Registers a criterion. @throws if the `id` is already taken (collision = ambiguity). */
   register(criterion: Criterion): this {
     if (this.byId.has(criterion.id)) {
-      throw new Error(`critère déjà enregistré : "${criterion.id}"`);
+      throw new Error(`criterion already registered: "${criterion.id}"`);
     }
     this.byId.set(criterion.id, criterion);
     return this;
   }
 
-  /** Enregistre une liste de critères (court-circuite sur le premier doublon). */
+  /** Registers a list of criteria (short-circuits on the first duplicate). */
   registerAll(criteria: readonly Criterion[]): this {
     for (const c of criteria) this.register(c);
     return this;
@@ -48,8 +49,8 @@ export class CriterionRegistry {
   }
 
   /**
-   * Résout une liste d'`id` vers les `Criterion`, dans l'ordre demandé.
-   * Fail-closed : agrège TOUS les `id` manquants avant de lever.
+   * Resolves a list of `id` values to `Criterion` objects, in the requested order.
+   * Fail-closed: aggregates ALL missing `id` values before throwing.
    * @throws {UnknownCriterionError}
    */
   resolve(ids: readonly string[]): Criterion[] {
