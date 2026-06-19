@@ -1,17 +1,17 @@
-# Traces de runs live — observabilité d'audit
+# Live-run traces — audit observability
 
-Remédiation **P3** de l'[audit qualité ISO v1](../audit_qualite_iso_v1.md) : capture **persistante** des résultats de run live (statut, verdicts par étape, sorties tracées), **au lieu du `/tmp` éphémère** d'origine.
+**P3** remediation of the [ISO quality audit v1](../audit_qualite_iso_v1.md): **persistent** capture of live-run results (status, per-step verdicts, traced outputs), **instead of the original ephemeral `/tmp`**.
 
-## Fonctionnement
+## How it works
 
-- Le harness `test/wf-001-run-live.test.ts` écrit ici son résultat (`wf-001-live-result.json`) par défaut — surchargeable via `LIVE_RESULT_FILE`.
-- Le `.json` **brut** est **gitignoré** (cf. `.gitignore` local) : une sortie d'agent brute ne doit pas être committée sans revue.
-- La trace **anonymisée** d'un run probant est committée **sur décision**, après revue (briefs/sorties exempts de données client réelles — cf. règle d'anonymisation du projet), comme **artefact d'audit** daté.
+- The `test/wf-001-run-live.test.ts` harness writes its result here (`wf-001-live-result.json`) by default — overridable via `LIVE_RESULT_FILE`.
+- The **raw** `.json` is **gitignored** (see the local `.gitignore`): a raw agent output must not be committed without review.
+- The **anonymized** trace of a conclusive run is committed **on decision**, after review (briefs/outputs free of real client data — see the project's anonymization rule), as a dated **audit artifact**.
 
-## État
+## State
 
-> ✅ **Traces versionnées (runs live probants du 2026-06-13, facturés et observés sur accord explicite)**, revue P3 OK (cas synthétiques, aucune donnée client réelle ni secret), commit via `git add -f` :
-> - **`wf-003-live-result.json`** — WF-003 « Lancement Application IA », statut **`completed`**, **7/7 étapes `pass`** (STEP-00 → STEP-06), cap budget respecté. Valide en live le correctif « structured output natif » à STEP-03.
-> - **`wf-002-live-result.json`** — WF-002 « Delivery », statut **`completed`**, **5/5 étapes `pass`**. Run antérieur du même jour (avant les commits de session, dont le fix STEP-03) : artefact historique valide, non re-rejoué post-fix.
+> ✅ **Versioned traces (conclusive live runs of 2026-06-13, billed and observed on explicit approval)**, P3 review OK (synthetic cases, no real client data or secret), committed via `git add -f`:
+> - **`wf-003-live-result.json`** — WF-003 "AI Application Launch", status **`completed`**, **7/7 steps `pass`** (STEP-00 → STEP-06), budget cap respected. Validates live the "native structured output" fix at STEP-03.
+> - **`wf-002-live-result.json`** — WF-002 "Delivery", status **`completed`**, **5/5 steps `pass`**. An earlier run from the same day (before the session commits, including the STEP-03 fix): a valid historical artifact, not re-played post-fix.
 >
-> P3 (mécanisme **et** artefacts) est désormais traité par des exécutions réelles, jamais une reconstruction manuelle. Le run « plein pot » du **2026-06-09** précédait ce mécanisme et sa capture `/tmp` n'avait pas survécu.
+> P3 (mechanism **and** artifacts) is now handled by real executions, never a manual reconstruction. The "full-throttle" run of **2026-06-09** preceded this mechanism and its `/tmp` capture had not survived.

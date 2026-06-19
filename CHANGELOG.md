@@ -1,11 +1,16 @@
 # Changelog — claude-agentic-runtime
 
-> Format [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versionnement [SemVer](https://semver.org/lang/fr/).
-> Convention : chaque entrée indique le **modèle Claude** utilisé.
+> Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning [SemVer](https://semver.org/).
+> Convention: each entry states the **Claude model** used.
+> Note: the released version history below is kept **frozen in French** (audit integrity — published entries are never rewritten); new entries are in US English from now on.
 
 ---
 
 ## [Unreleased]
+> Model: Claude Opus 4.8
+
+### 🔄 Changed
+- **Documentation translated to US English (i18n)** — repository documentation moved from French to professional US English so the repo reads as an international portfolio showcase: `README.md`, `CONTRIBUTING.md`, `COMMERCIAL.md`, the PR template, `docs/ARCHITECTURE.md`, `docs/NEXT_STEPS.md`, `docs/note_cadrage_poc.md`, the 7 ADRs (`docs/adr/0001`→`0007`), and the audit reports (`docs/audit/`). Decorative prose only — **no behavior change**, test suite untouched. Category-C tokens (identifiers, schema keys, paths, `AGENT-*`/`WF-*`/`STEP-*` IDs, model names) kept intact; the released version history below stays frozen in French.
 
 ## [0.5.0] - 2026-06-17
 > Modèle : Claude Opus 4.8
