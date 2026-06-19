@@ -1,14 +1,14 @@
 /**
- * Loader du sidecar (brique 0) — lecture + validation fail-closed (ADR-0004).
+ * Sidecar loader (brick 0) — read + fail-closed validation (ADR-0004).
  *
- * Pipeline ordonné à court-circuit :
- *   1. lire + parser le JSON            -> stage "parse"
- *   2. valider via ajv contre le schéma -> stage "schema"  (5 caractéristiques ISO 25012)
- *   3. checkIntegrity()                 -> stage "integrity" (les 2 autres + unicité)
- *   4. retourne un Sidecar typé, sinon lève SidecarValidationError.
+ * Ordered short-circuit pipeline:
+ *   1. read + parse the JSON            -> stage "parse"
+ *   2. validate with ajv against schema -> stage "schema"  (5 ISO 25012 characteristics)
+ *   3. checkIntegrity()                 -> stage "integrity" (the other 2 + uniqueness)
+ *   4. returns a typed Sidecar, otherwise throws SidecarValidationError.
  *
- * On n'enchaîne pas l'intégrité si le schéma échoue : l'objet n'est pas
- * structurellement fiable, on s'arrête proprement plutôt que de risquer un crash.
+ * We do not run the integrity stage if the schema stage fails: the object is
+ * not structurally reliable, so we stop cleanly rather than risk a crash.
  */
 
 import { readFileSync } from "node:fs";
@@ -25,17 +25,17 @@ export interface LoadIssue {
   stage: LoadStage;
   code: string;
   message: string;
-  /** Chemin JSON (schéma) ou id d'asset (intégrité) en cause, si applicable. */
+  /** Offending JSON path (schema) or asset id (integrity), if applicable. */
   path?: string;
 }
 
-/** Erreur agrégeant TOUS les problèmes détectés (ajv en allErrors + intégrité). */
+/** Error aggregating ALL detected problems (ajv allErrors + integrity). */
 export class SidecarValidationError extends Error {
   readonly issues: LoadIssue[];
 
   constructor(issues: LoadIssue[]) {
     const summary = issues.map((i) => `[${i.stage}] ${i.message}`).join(" ; ");
-    super(`Sidecar invalide (${issues.length} problème(s)) : ${summary}`);
+    super(`Invalid sidecar (${issues.length} problem(s)): ${summary}`);
     this.name = "SidecarValidationError";
     this.issues = issues;
   }
@@ -47,7 +47,7 @@ const schemaPath = fileURLToPath(
 
 let cachedValidate: ValidateFunction | undefined;
 
-/** Compile le schéma une seule fois (ajv mis en cache au niveau module). */
+/** Compiles the schema only once (ajv cached at module level). */
 function getValidator(): ValidateFunction {
   if (cachedValidate !== undefined) return cachedValidate;
   const schema = JSON.parse(readFileSync(schemaPath, "utf-8")) as object;
@@ -58,15 +58,15 @@ function getValidator(): ValidateFunction {
 }
 
 /**
- * Charge et valide un sidecar. `catalogRoot` (où résoudre les chemins relatifs
- * des assets) vaut par défaut le dossier contenant le sidecar.
- * @throws {SidecarValidationError} si parse, schéma ou intégrité échoue.
+ * Loads and validates a sidecar. `catalogRoot` (where the assets' relative
+ * paths are resolved) defaults to the folder containing the sidecar.
+ * @throws {SidecarValidationError} if parse, schema or integrity fails.
  */
 export function loadSidecar(
   sidecarPath: string,
   catalogRoot: string = dirname(sidecarPath),
 ): Sidecar {
-  // 1. Lire + parser.
+  // 1. Read + parse.
   let raw: string;
   try {
     raw = readFileSync(sidecarPath, "utf-8");
@@ -75,7 +75,7 @@ export function loadSidecar(
       {
         stage: "parse",
         code: "READ_ERROR",
-        message: `lecture impossible : ${(err as Error).message}`,
+        message: `cannot read file: ${(err as Error).message}`,
       },
     ]);
   }
@@ -88,19 +88,19 @@ export function loadSidecar(
       {
         stage: "parse",
         code: "INVALID_JSON",
-        message: `JSON malformé : ${(err as Error).message}`,
+        message: `malformed JSON: ${(err as Error).message}`,
       },
     ]);
   }
 
-  // 2. Valider contre le schéma (court-circuit si invalide).
+  // 2. Validate against the schema (short-circuit if invalid).
   const validate = getValidator();
   if (!validate(data)) {
     const issues = (validate.errors ?? []).map((e): LoadIssue => {
       const issue: LoadIssue = {
         stage: "schema",
         code: e.keyword,
-        message: `${e.instancePath || "(racine)"} ${e.message ?? ""}`.trim(),
+        message: `${e.instancePath || "(root)"} ${e.message ?? ""}`.trim(),
       };
       if (e.instancePath) issue.path = e.instancePath;
       return issue;
@@ -109,7 +109,7 @@ export function loadSidecar(
   }
   const sidecar = data as Sidecar;
 
-  // 3. Intégrité (exactitude référentielle, accessibilité, unicité).
+  // 3. Integrity (referential accuracy, accessibility, uniqueness).
   const integrityIssues = checkIntegrity(sidecar, catalogRoot).map(
     (i): LoadIssue => ({
       stage: "integrity",
@@ -122,6 +122,6 @@ export function loadSidecar(
     throw new SidecarValidationError(integrityIssues);
   }
 
-  // 4. Sidecar valide et typé.
+  // 4. Valid, typed sidecar.
   return sidecar;
 }
