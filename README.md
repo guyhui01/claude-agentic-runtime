@@ -2,81 +2,81 @@
 
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-blue.svg)](LICENSE)
 
-> **Compilateur de gouvernance** au-dessus du **Claude Agent SDK** : lit le catalogue déclaratif [`claude-agents`](https://github.com/guyhui01/claude-agents), **valide ses contrats**, puis l'exécute via le SDK — qui porte le moteur.
-> **Statut : POC exécutable / asset de portfolio** — `v0.5.0` : backbone complet, les **3 workflows (WF-001/002/003) prouvés en live de bout en bout** (vrais agents + vrai catalogue, toutes gates *blocking* et *advisory* vertes), CI verte, **126 tests verts** (6 *skipped*) · audit qualité ISO v1 livré (remédiations P1–P4 closes).
+> **Governance compiler** on top of the **Claude Agent SDK**: it reads the declarative [`claude-agents`](https://github.com/guyhui01/claude-agents) catalog, **validates its contracts**, then runs it through the SDK — which provides the engine.
+> **Status: runnable POC / portfolio asset** — `v0.5.0`: full backbone, the **3 workflows (WF-001/002/003) proven live end to end** (real agents + real catalog, all *blocking* and *advisory* gates green), CI green, **126 tests green** (6 *skipped*) · ISO quality audit v1 delivered (P1–P4 remediations closed).
 
-## Pourquoi ce repo
+## Why this repo
 
-[`claude-agents`](https://github.com/guyhui01/claude-agents) est une **bibliothèque agentique organisationnelle** : 38 rôles (agents), leurs skills et des workflows de delivery, en Markdown audité (grille qualité v2.8). C'est la **source de vérité unique (SSOT)**.
+[`claude-agents`](https://github.com/guyhui01/claude-agents) is an **organizational agentic library**: 38 roles (agents), their skills, and delivery workflows, in audited Markdown (quality rubric v2.8). It is the **single source of truth (SSOT)**.
 
-Ce repo en est le **consommateur exécutable** : il lit le catalogue (en lecture seule, version épinglée), le transforme en agents exécutables et orchestre une *spine* de delivery — sans jamais modifier le catalogue.
+This repo is its **runnable consumer**: it reads the catalog (read-only, pinned version), turns it into executable agents, and orchestrates a delivery *spine* — without ever modifying the catalog.
 
-### Positionnement : compilateur de gouvernance, pas un moteur
+### Positioning: a governance compiler, not an engine
 
-Le moteur d'exécution agentique (agent loop, tools, sandbox, sessions) est **commoditisé** — fourni par le Claude Agent SDK (et, en production, par Claude Managed Agents). La valeur non commoditisée de ce repo est **en amont et à la frontière** : transformer une connaissance **gouvernée et versionnée** en agents exécutables, en **validant les contrats** (handoff typés), en **gardant la qualité** (eval gates) et en **traçant la provenance** — le tout *fail-closed*. C'est une **couche de gouvernance**, pas une réécriture du moteur.
+The agentic execution engine (agent loop, tools, sandbox, sessions) is **commoditized** — provided by the Claude Agent SDK (and, in production, by Claude Managed Agents). This repo's non-commoditized value sits **upstream and at the boundary**: turning **governed and versioned** knowledge into executable agents, by **validating contracts** (typed handoffs), **guarding quality** (eval gates), and **tracing provenance** — all *fail-closed*. It is a **governance layer**, not a rewrite of the engine.
 
-## Séparation des responsabilités
+## Separation of responsibilities
 
-| Repo | Rôle | Écriture depuis ce runtime |
+| Repo | Role | Writes from this runtime |
 |---|---|---|
-| `claude-agents` | Catalogue déclaratif, SSOT auditée | ❌ **Lecture seule** |
-| **`claude-agentic-runtime`** | Exécution, eval, état de run | ✅ ses propres stores uniquement |
-| `claude-projects` | Projets clients (séparé) | hors périmètre |
+| `claude-agents` | Declarative catalog, audited SSOT | ❌ **Read-only** |
+| **`claude-agentic-runtime`** | Execution, eval, run state | ✅ its own stores only |
+| `claude-projects` | Client projects (separate) | out of scope |
 
-## Périmètre du POC
+## POC scope
 
-Exécuter la *spine delivery* **WF-001 cadrage → WF-002 delivery SAFe → WF-003 lancement app** en consommant le catalogue.
+Run the *delivery spine* **WF-001 scoping → WF-002 SAFe delivery → WF-003 app launch** by consuming the catalog.
 
-Trois briques (le reste est porté par le Claude Agent SDK) :
-1. ✅ **Loader** — sidecar du catalogue → `Sidecar` typé (fail-closed)
-2. ✅ **Contrats de handoff typés** — I/O schématisé entre étapes
-3. ✅ **Eval gate** — garde-fou qualité sur une sortie d'agent
+Three building blocks (the rest is carried by the Claude Agent SDK):
+1. ✅ **Loader** — catalog sidecar → typed `Sidecar` (fail-closed)
+2. ✅ **Typed handoff contracts** — schematized I/O between steps
+3. ✅ **Eval gate** — quality guardrail on an agent output
 
-Intégration **Claude Agent SDK** : adaptateur `Asset → AgentDefinition` (§2.4-A) **et exécuteur live de la spine** (§2.4-B) **livrés** — `runWf001` déroule le backbone via `query()` (capé, `permissionMode:"plan"`, OAuth abonnement).
+**Claude Agent SDK** integration: the `Asset → AgentDefinition` adapter (§2.4-A) **and the live spine executor** (§2.4-B) are **delivered** — `runWf001` runs the backbone through `query()` (capped, `permissionMode:"plan"`, subscription OAuth).
 
 ## Documentation
 
-- 📋 [Note de cadrage](docs/note_cadrage_poc.md) — objectif, périmètre, invariants, risques
-- 🏛️ [Architecture](docs/ARCHITECTURE.md) — couches, diagramme, modèle de propagation
-- 🧭 [Décisions d'architecture (ADR)](docs/adr/) :
-  - [ADR-0001 — Consommateur read-only du catalogue](docs/adr/0001-consommateur-read-only.md)
-  - [ADR-0002 — Import épinglé versionné](docs/adr/0002-import-epingle-versionne.md)
-  - [ADR-0003 — Sidecar propriété du catalogue](docs/adr/0003-sidecar-propriete-catalogue.md)
-  - [ADR-0004 — Propagation gardée par eval gates](docs/adr/0004-propagation-gardee-eval-gates.md)
-  - [ADR-0005 — Feedback par PR humaine](docs/adr/0005-feedback-par-pr-humaine.md)
-  - [ADR-0006 — Référentiels qualité (ISO 42010 / 25012 / 25010 / 42001)](docs/adr/0006-referentiels-qualite.md)
-  - [ADR-0007 — Contrats & critères : manifeste de spine propriété du runtime](docs/adr/0007-source-contrats-criteres-manifeste-runtime.md)
-- 📏 [Contribuer & conventions](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
+- 📋 [Scoping note](docs/note_cadrage_poc.md) — objective, scope, invariants, risks
+- 🏛️ [Architecture](docs/ARCHITECTURE.md) — layers, diagram, propagation model
+- 🧭 [Architecture Decision Records (ADR)](docs/adr/):
+  - [ADR-0001 — Read-only consumer of the catalog](docs/adr/0001-consommateur-read-only.md)
+  - [ADR-0002 — Pinned versioned import](docs/adr/0002-import-epingle-versionne.md)
+  - [ADR-0003 — Sidecar owned by the catalog](docs/adr/0003-sidecar-propriete-catalogue.md)
+  - [ADR-0004 — Propagation guarded by eval gates](docs/adr/0004-propagation-gardee-eval-gates.md)
+  - [ADR-0005 — Feedback through human PR](docs/adr/0005-feedback-par-pr-humaine.md)
+  - [ADR-0006 — Quality standards (ISO 42010 / 25012 / 25010 / 42001)](docs/adr/0006-referentiels-qualite.md)
+  - [ADR-0007 — Contracts & criteria: a spine manifest owned by the runtime](docs/adr/0007-source-contrats-criteres-manifeste-runtime.md)
+- 📏 [Contributing & conventions](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
-## État d'avancement
+## Progress
 
-- [x] Note de cadrage validée
-- [x] ADR fondateurs (6) + architecture
-- [x] Brique 0 — Loader sidecar (fail-closed)
-- [x] Brique 1 — Contrats de handoff typés
-- [x] Brique 2 — Eval gate
-- [x] §2.4-A — Adaptateur catalogue → `AgentDefinition`
-- [x] §2.4-B — Exécuteur live du backbone d'un workflow (ex. WF-001) (+ provenance)
-- [x] Run live WF-001 de bout en bout (gates *blocking* + *advisory* vertes) + audit qualité ISO v1
-- [x] Spines WF-002 / WF-003 modélisées + testées (hors-ligne)
-- [x] CI (typecheck strict + tests, Node 20/22) + Dependabot
-- [x] Indexer les agents de WF-002/003 au sidecar (repo `claude-agents`) — 14 assets, consommable, défaut `CATALOG_ROOT` réaligné
-- [ ] Run live WF-002/003 de bout en bout (sur accord explicite + run observé)
+- [x] Scoping note validated
+- [x] Founding ADRs (6) + architecture
+- [x] Block 0 — Sidecar loader (fail-closed)
+- [x] Block 1 — Typed handoff contracts
+- [x] Block 2 — Eval gate
+- [x] §2.4-A — Catalog → `AgentDefinition` adapter
+- [x] §2.4-B — Live executor for a workflow backbone (e.g. WF-001) (+ provenance)
+- [x] WF-001 live run end to end (*blocking* + *advisory* gates green) + ISO quality audit v1
+- [x] WF-002 / WF-003 spines modeled + tested (offline)
+- [x] CI (strict typecheck + tests, Node 20/22) + Dependabot
+- [x] Index the WF-002/003 agents in the sidecar (`claude-agents` repo) — 14 assets, consumable, default `CATALOG_ROOT` realigned
+- [ ] WF-002/003 live run end to end (on explicit approval + observed run)
 
 ## Stack
 
-Claude Agent SDK (substrat d'exécution) · JSON Schema (contrats + sidecar) · Opus 4.8 / Sonnet 4.6 selon l'étape.
+Claude Agent SDK (execution substrate) · JSON Schema (contracts + sidecar) · Opus 4.8 / Sonnet 4.6 depending on the step.
 
-## Licence
+## License
 
 [PolyForm Noncommercial License 1.0.0](LICENSE) © 2026 Guy HUI-BON-HOA.
 
-- **Usage non-commercial** (recherche, étude, projets personnels, organisations à but non lucratif) : libre, sous les termes de la licence.
-- **Tout usage commercial** : requiert une licence commerciale → voir [`COMMERCIAL.md`](COMMERCIAL.md).
-- **Protection permanente** : pas de bascule open source (la licence ne prévoit pas de *Change Date*).
+- **Noncommercial use** (research, study, personal projects, nonprofit organizations): free, under the terms of the license.
+- **Any commercial use**: requires a commercial license → see [`COMMERCIAL.md`](COMMERCIAL.md).
+- **Permanent protection**: no open-source switch (the license includes no *Change Date*).
 
-> **Dépendance d'exécution propriétaire** : indépendamment de la licence ci-dessus, le substrat d'exécution `@anthropic-ai/claude-agent-sdk` est **propriétaire** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — son usage requiert l'acceptation des conditions Anthropic et un abonnement. Le reste de l'arbre de dépendances est permissif (MIT/ISC/BSD/Apache-2.0), sans copyleft fort. Détails : [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
+> **Proprietary execution dependency**: regardless of the license above, the execution substrate `@anthropic-ai/claude-agent-sdk` is **proprietary** (© Anthropic PBC, [Anthropic Commercial Terms](https://code.claude.com/docs/en/legal-and-compliance)) — its use requires accepting Anthropic's terms and a subscription. The rest of the dependency tree is permissive (MIT/ISC/BSD/Apache-2.0), with no strong copyleft. Details: [`docs/audit/conformite_licences_iso5230.md`](docs/audit/conformite_licences_iso5230.md).
 
-## Outillage
+## Tooling
 
-Documentation et conception assistées par **Claude Opus 4.8** (modèle en cours d'utilisation).
+Documentation and design assisted by **Claude Opus 4.8** (model currently in use).

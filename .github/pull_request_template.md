@@ -1,16 +1,16 @@
-<!-- Gabarit de PR — claude-agentic-runtime -->
+<!-- PR template — claude-agentic-runtime -->
 
-## Objet
-<!-- Que fait cette PR ? -->
+## Summary
+<!-- What does this PR do? -->
 
-## Checklist gouvernance (cf. docs/adr/)
-- [ ] **Read-only** : aucune écriture vers `claude-agents` (ADR-0001)
-- [ ] Import catalogue **épinglé** sur tag exact si modifié (ADR-0002)
-- [ ] **Contrats I/O** validés (JSON Schema) si touchés
-- [ ] **Eval gates** passés
-- [ ] **ADR** ajouté/mis à jour si décision d'architecture
-- [ ] **CHANGELOG.md** mis à jour (avec mention du modèle Claude)
-- [ ] Qualité : référentiels ADR-0006 respectés · anonymisation OK · 0 chiffre/norme inventé
+## Governance checklist (see docs/adr/)
+- [ ] **Read-only**: no writes to `claude-agents` (ADR-0001)
+- [ ] Catalog import **pinned** to an exact tag if changed (ADR-0002)
+- [ ] **I/O contracts** validated (JSON Schema) if touched
+- [ ] **Eval gates** passed
+- [ ] **ADR** added/updated if an architecture decision
+- [ ] **CHANGELOG.md** updated (with the Claude model used)
+- [ ] Quality: ADR-0006 standards respected · anonymization OK · 0 invented figure/standard
 
-## Modèle Claude utilisé
+## Claude model used
 <!-- Opus 4.8 / Sonnet 4.6 / Haiku 4.5 -->
