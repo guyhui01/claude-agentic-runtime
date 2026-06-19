@@ -1,41 +1,41 @@
-# ADR-0007 — Contrats de handoff & critères d'eval gate : manifeste de spine propriété du runtime
+# ADR-0007 — Handoff contracts & eval-gate criteria: a spine manifest owned by the runtime
 
-- **Statut** : Accepté (2026-06-04)
-- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Contexte projet** : POC `claude-agentic-runtime` — §2.4-B.2
+- **Status**: Accepted (2026-06-04)
+- **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Project context**: POC `claude-agentic-runtime` — §2.4-B.2
 
-## Contexte
-L'exécuteur de spine (§2.4-B.1) branche, sur chaque étape, des **contrats de handoff** (brique 1) et des **critères d'eval gate** (brique 2). Jusqu'ici ces deux artefacts sont en **fixtures de test**. Il faut trancher leur **source de production**.
+## Context
+The spine executor (§2.4-B.1) plugs, onto each step, **handoff contracts** (block 1) and **eval-gate criteria** (block 2). So far these two artifacts live in **test fixtures**. We must decide their **production source**.
 
-Fait technique décisif : les deux artefacts n'ont pas la même nature.
-- Un **contrat** (`StepContract`) est du **JSON Schema** → donnée sérialisable.
-- Un **critère** (`Criterion.check: (output) => boolean`) est un **prédicat exécutable** → **pas** sérialisable en données sans inventer un DSL déclaratif compilé au chargement (perte d'expressivité, langage à maintenir).
+Decisive technical fact: the two artifacts are not of the same nature.
+- A **contract** (`StepContract`) is **JSON Schema** → serializable data.
+- A **criterion** (`Criterion.check: (output) => boolean`) is an **executable predicate** → **not** serializable as data without inventing a declarative DSL compiled at load time (loss of expressiveness, a language to maintain).
 
-Par ailleurs, contrats et gates relèvent de la **politique d'exécution et de jugement** d'un runtime donné — *comment* on évalue une sortie — et non de la **description** du catalogue (*ce qui existe*).
+Besides, contracts and gates belong to the **execution and judgment policy** of a given runtime — *how* an output is evaluated — and not to the catalog's **description** (*what exists*).
 
-## Décision
-La source est un **manifeste de spine, propriété du `claude-agentic-runtime`** :
-- chaque spine y décrit ses **étapes ordonnées** + le **contrat** de chaque étape (JSON Schema, donnée) ;
-- les **critères** sont **référencés par `id`** depuis un **registre de critères en TypeScript** (le code reste expressif, déterministe, testé hermétiquement) ;
-- le manifeste **croise** les `stepId`/`assetId` du **sidecar** ; le loader vérifie la cohérence (toute étape pointe un asset réel du catalogue épinglé).
+## Decision
+The source is a **spine manifest, owned by `claude-agentic-runtime`**:
+- each spine describes its **ordered steps** + each step's **contract** (JSON Schema, data);
+- the **criteria** are **referenced by `id`** from a **TypeScript criteria registry** (the code stays expressive, deterministic, hermetically tested);
+- the manifest **cross-checks** the `stepId`/`assetId` against the **sidecar**; the loader verifies consistency (every step points to a real asset of the pinned catalog).
 
-Le **sidecar reste descriptif et inchangé** (ADR-0003) : il dit *ce qui existe* (assets, dépendances, provenance) ; le manifeste dit *comment exécuter une spine*.
+The **sidecar stays descriptive and unchanged** (ADR-0003): it says *what exists* (assets, dependencies, provenance); the manifest says *how to execute a spine*.
 
-## Conséquences
-### Positives
-- **Séparation des préoccupations** : description (catalogue, ADR-0003) ≠ politique d'exécution (runtime). Le catalogue prose-first n'est pas couplé au jugement d'un runtime particulier.
-- **Critères = vrai code déterministe** (pas de DSL prématuré, YAGNI) : expressifs, typés, testables.
-- **Cohérent ADR-0002/0004** : le bump et sa chaîne de validation (contrats + gates) sont déjà des actes côté runtime ; la source l'est aussi.
-- **SSOT préservée** : le « quoi existe » reste au sidecar ; le croisement par `id` empêche la dérive.
-- **Lecture seule du catalogue maintenue** (ADR-0001).
+## Consequences
+### Positive
+- **Separation of concerns**: description (catalog, ADR-0003) ≠ execution policy (runtime). The prose-first catalog is not coupled to a particular runtime's judgment.
+- **Criteria = real deterministic code** (no premature DSL, YAGNI): expressive, typed, testable.
+- **Consistent with ADR-0002/0004**: the bump and its validation chain (contracts + gates) are already runtime-side acts; the source is too.
+- **SSOT preserved**: the "what exists" stays in the sidecar; the cross-check by `id` prevents drift.
+- **Read-only catalog maintained** (ADR-0001).
 
-### Négatives / coûts
-- Les `stepId`/`assetId` du manifeste doivent rester synchronisés avec le sidecar (mitigation : contrôle de cohérence au chargement, fail-closed).
-- Le manifeste n'est pas validé par la CI du catalogue ; il l'est par celle du runtime.
+### Negative / costs
+- The manifest's `stepId`/`assetId` must stay in sync with the sidecar (mitigation: consistency check at load time, fail-closed).
+- The manifest is not validated by the catalog's CI; it is validated by the runtime's.
 
-## Limite explicite (honnêteté)
-Loger les critères comme code maximise l'expressivité mais les rend **non éditables par un non-développeur** et non portables hors TypeScript. Si un besoin réel d'authoring déclaratif émerge (critères édités par un métier, partagés multi-runtime), un **DSL de critères** sérialisable redeviendra pertinent — il pourra alors être adopté **sans casser** l'interface `Criterion` (le registre compilera le DSL vers des `check`). On ne l'introduit pas au POC (YAGNI).
+## Explicit limit (honesty)
+Logging criteria as code maximizes expressiveness but makes them **non-editable by a non-developer** and non-portable outside TypeScript. If a real need for declarative authoring emerges (criteria edited by a business user, shared across runtimes), a serializable **criteria DSL** will become relevant again — it can then be adopted **without breaking** the `Criterion` interface (the registry will compile the DSL into `check` functions). We do not introduce it at the POC stage (YAGNI).
 
-## Alternatives écartées
-- **Étendre le sidecar** (contrats + critères-en-DSL portés par le catalogue) : rejeté — pousse la politique de jugement dans le catalogue (couplage), impose un DSL de critères dès maintenant, contredit la rationale *descriptive* d'ADR-0003.
-- **Hybride** (contrats → sidecar, critères → registre runtime) : rejeté pour le POC — oblige le catalogue prose-first à générer du JSON Schema par asset (étape lourde) et crée deux sources pour un même handoff. Réévaluable si les contrats d'I/O deviennent un livrable descriptif du catalogue.
+## Rejected alternatives
+- **Extend the sidecar** (contracts + criteria-as-DSL carried by the catalog): rejected — pushes the judgment policy into the catalog (coupling), forces a criteria DSL right now, contradicts the *descriptive* rationale of ADR-0003.
+- **Hybrid** (contracts → sidecar, criteria → runtime registry): rejected for the POC — forces the prose-first catalog to generate JSON Schema per asset (a heavy step) and creates two sources for a single handoff. Re-assessable if I/O contracts become a descriptive deliverable of the catalog.

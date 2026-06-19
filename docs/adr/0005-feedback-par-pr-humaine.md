@@ -1,22 +1,22 @@
-# ADR-0005 — Le feedback runtime → catalogue passe uniquement par PR humaine
+# ADR-0005 — Runtime → catalog feedback flows only through a human PR
 
-- **Statut** : Accepté (2026-06-03)
-- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Contexte projet** : POC `claude-agentic-runtime`
+- **Status**: Accepted (2026-06-03)
+- **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Project context**: POC `claude-agentic-runtime`
 
-## Contexte
-À l'exécution, le runtime produit des signaux (résultats d'eval, métriques de qualité, « trust signals ») qui peuvent suggérer d'améliorer un skill ou un agent du catalogue. Le pattern *registry* fait parfois remonter ces signaux automatiquement.
+## Context
+At execution time, the runtime produces signals (eval results, quality metrics, "trust signals") that may suggest improving a catalog skill or agent. The *registry* pattern sometimes pushes these signals back automatically.
 
-## Décision
-Tout retour du runtime vers `claude-agents` se fait **via une PR humaine normale** (revue, audit grille v2.8, CHANGELOG). Le runtime *propose* (issue, rapport, draft) ; **un humain (Guy) décide et committe**. **Aucun write-back automatique.**
+## Decision
+Any feedback from the runtime to `claude-agents` goes **through a normal human PR** (review, v2.8 rubric audit, CHANGELOG). The runtime *proposes* (issue, report, draft); **a human (Guy) decides and commits**. **No automatic write-back.**
 
-## Conséquences
-### Positives
-- Préserve l'invariant read-only (ADR-0001) et la qualité auditée du catalogue.
-- Cohérent avec la règle d'intégrité d'audit (ISO 19011) : préférer une vérification de preuve à l'approbation automatique.
+## Consequences
+### Positive
+- Preserves the read-only invariant (ADR-0001) and the catalog's audited quality.
+- Consistent with the audit-integrity rule (ISO 19011): prefer evidence verification over automatic approval.
 
-### Négatives / coûts
-- Latence humaine sur l'amélioration continue du catalogue (assumée).
+### Negative / costs
+- Human latency on the catalog's continuous improvement (accepted).
 
-## Alternatives écartées
-- **Write-back automatique des signaux d'eval** : rejeté — muterait silencieusement un catalogue audité et public.
+## Rejected alternatives
+- **Automatic write-back of eval signals**: rejected — would silently mutate an audited, public catalog.

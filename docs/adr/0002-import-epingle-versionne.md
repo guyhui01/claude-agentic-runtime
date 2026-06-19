@@ -1,23 +1,23 @@
-# ADR-0002 — Import du catalogue épinglé et versionné
+# ADR-0002 — Pinned, versioned catalog import
 
-- **Statut** : Accepté (2026-06-03)
-- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Contexte projet** : POC `claude-agentic-runtime`
+- **Status**: Accepted (2026-06-03)
+- **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Project context**: POC `claude-agentic-runtime`
 
-## Contexte
-Le runtime doit décider *comment* il charge le catalogue : import live sur `main`, ou dépendance versionnée. L'enjeu est l'arbitrage **stabilité ↔ fraîcheur**.
+## Context
+The runtime must decide *how* it loads the catalog: a live import on `main`, or a versioned dependency. The trade-off at stake is **stability ↔ freshness**.
 
-## Décision
-Le runtime dépend du catalogue par **tag exact** (ex. `claude-agents@v3.25.0`), **jamais** par une plage `^`/`~`. La propagation d'une nouvelle version est un **bump explicite et tracé** (commit + entrée CHANGELOG côté runtime), pas un effet implicite.
+## Decision
+The runtime depends on the catalog by **exact tag** (e.g. `claude-agents@v3.25.0`), **never** by a `^`/`~` range. Propagating a new version is an **explicit, tracked bump** (commit + CHANGELOG entry on the runtime side), not an implicit effect.
 
-## Conséquences
-### Positives
-- Exécutions reproductibles ; pas de surprise au runtime.
-- Le bump devient un point de contrôle où s'appliquent les garde-fous (cf. ADR-0004).
+## Consequences
+### Positive
+- Reproducible runs; no surprise at runtime.
+- The bump becomes a control point where the guardrails apply (see ADR-0004).
 
-### Négatives / coûts
-- La fraîcheur n'est pas immédiate : il faut bumper pour propager (acceptable, c'est le but).
+### Negative / costs
+- Freshness is not immediate: you must bump to propagate (acceptable, that's the point).
 
-## Alternatives écartées
-- **Import live (`main`)** : rejeté pour la prod — une édition du catalogue casserait le runtime sans filet.
-- **Plages SemVer (`^`/`~`)** : rejeté — réintroduit de la propagation implicite non contrôlée.
+## Rejected alternatives
+- **Live import (`main`)**: rejected for production — a catalog edit would break the runtime with no safety net.
+- **SemVer ranges (`^`/`~`)**: rejected — reintroduces uncontrolled implicit propagation.

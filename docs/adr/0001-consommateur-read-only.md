@@ -1,25 +1,25 @@
-# ADR-0001 — Le runtime est un consommateur *read-only* du catalogue
+# ADR-0001 — The runtime is a *read-only* consumer of the catalog
 
-- **Statut** : Accepté (2026-06-03)
-- **Décideur** : Guy HUI-BON-HOA (assisté Claude Opus 4.8)
-- **Contexte projet** : POC `claude-agentic-runtime`
+- **Status**: Accepted (2026-06-03)
+- **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
+- **Project context**: POC `claude-agentic-runtime`
 
-## Contexte
-Le catalogue `claude-agents` est la source de vérité unique (SSOT) des rôles, skills et workflows. Il est public et **audité** (grille qualité v2.8). Le runtime doit l'exécuter sans compromettre cette intégrité.
+## Context
+The `claude-agents` catalog is the single source of truth (SSOT) for roles, skills, and workflows. It is public and **audited** (quality rubric v2.8). The runtime must execute it without compromising that integrity.
 
-## Décision
-Le runtime **consomme le catalogue en lecture seule**. Il n'écrit jamais dans `claude-agents`. La direction de dépendance est **unique** : `runtime → lit → catalogue`.
+## Decision
+The runtime **consumes the catalog read-only**. It never writes to `claude-agents`. The dependency direction is **one-way**: `runtime → reads → catalog`.
 
-Mise en œuvre : repos séparés ; la CI du runtime n'a qu'un **token read-only** sur `claude-agents` ; le runtime n'écrit que dans ses propres stores (logs de run, résultats d'eval, état).
+Implementation: separate repos; the runtime's CI has only a **read-only token** on `claude-agents`; the runtime writes only to its own stores (run logs, eval results, state).
 
-## Conséquences
-### Positives
-- Intégrité de la SSOT préservée ; pas de mutation silencieuse du catalogue audité.
-- Pas de dépendance circulaire ; provenance claire.
-- Le catalogue reste réutilisable par d'autres consommateurs.
+## Consequences
+### Positive
+- SSOT integrity preserved; no silent mutation of the audited catalog.
+- No circular dependency; clear provenance.
+- The catalog stays reusable by other consumers.
 
-### Négatives / coûts
-- Toute amélioration du catalogue déclenchée par le runtime exige un détour humain (cf. ADR-0005).
+### Negative / costs
+- Any catalog improvement triggered by the runtime requires a human detour (see ADR-0005).
 
-## Alternatives écartées
-- **Runtime read/write** : rejeté — dérive, couplage circulaire, perte des garanties d'audit.
+## Rejected alternatives
+- **Read/write runtime**: rejected — drift, circular coupling, loss of audit guarantees.
