@@ -48,7 +48,7 @@ describe.skipIf(!ENABLED)("WF-003 — LIVE RUN (billed, observed)", () => {
             "answers sourced from the policies/claims knowledge base, " +
             "from business case to secure deployment.",
         },
-        runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
+        runnerDeps: { caps: { maxBudgetUsd: 4.0, maxTurns: 15 } },
         onStep: makeStepProgressHook(PROGRESS_FILE),
       });
 
