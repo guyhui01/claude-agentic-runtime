@@ -5,84 +5,88 @@
     {
       "stepId": "STEP-01",
       "assetId": "AGENT-PRODUCT-MANAGER-SAFE",
-      "catalogTag": "v3.26.2",
+      "catalogTag": "v3.27.0",
       "verdict": "pass",
       "results": [
         {
           "id": "pm-vision-board-present",
-          "description": "STEP-01 : vision board PI non vide",
+          "description": "STEP-01: PI vision board non-empty",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "pm-features-wsjf-1-10",
-          "description": "STEP-01 : 1 à 10 features priorisées, chacune avec score WSJF (number)",
+          "description": "STEP-01: 1 to 10 prioritized features, each with a WSJF score (number)",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "pm-lean-business-case",
-          "description": "STEP-01 : Lean Business Case présent pour les features majeures",
+          "description": "STEP-01: Lean Business Case present for the major features",
           "severity": "advisory",
           "passed": true
         }
       ],
       "output": {
-        "visionBoard": "VISION BOARD PI — ART « Digital Banking » (Refonte Portail Client)\n\nPOUR les clients particuliers de la banque de détail QUI souhaitent gérer leur banque au quotidien en autonomie, 24/7, sans passer par l'agence,\nLE portail client nouvelle génération (web + mobile) EST une plateforme self-care omnicanale sécurisée\nQUI permet de piloter ses comptes, exécuter ses paiements et suivre ses réclamations en moins de 3 clics.\nÀ LA DIFFÉRENCE du portail historique (parcours fragmentés, taux d'abandon élevé, non conforme DSP2/RGAA),\nNOTRE solution offre une expérience unifiée, conforme et temps réel, avec authentification forte native.\n\nOBJECTIFS DU PI :\n- Réduire de 25% les appels au centre de relation client sur les opérations courantes (self-care).\n- Atteindre 99,9% de conformité DSP2 (SCA) et RGAA AA sur les parcours critiques.\n- Faire passer le taux de complétion virement de 72% à 90%.\n- Délivrer un MVP web + mobile activable sur 100% des virements internes/SEPA.\n\nPÉRIMÈTRE (Features candidates) : Authentification forte SCA, Self-care comptes, Paiements/virements, Suivi réclamations, Notifications temps réel, Agrégation multi-comptes, Accessibilité RGAA.\n\nINDICATEURS (leading) : NPS portail, taux de complétion parcours, temps moyen de virement, taux d'adoption mobile.\nINDICATEURS (lagging) : réduction coûts CRC, conformité réglementaire, churn digital.\n\nNON-NÉGOCIABLES : conformité DSP2/SCA, RGAA AA, sécurité (chiffrement, anti-fraude), disponibilité 99,9%.\nHORS PÉRIMÈTRE PI : crédit conso en ligne, agrégation comptes externes (banques tierces), souscription produits.",
+        "visionBoard": "PI VISION BOARD — Digital Banking ART · Customer Portal Redesign (next PI)\n\nTARGET CUSTOMERS / PERSONAS\n- \"Self-reliant Sophie\" (digital-first retail customer): wants to manage everyday banking without calling the branch.\n- \"Cautious Claude\" (low-confidence digital user): needs trust, security and clear guidance.\n- \"On-the-go Omar\" (mobile-only): expects full feature parity on mobile.\n\nPROBLEM / NEED\nLegacy portal drives high call-center volume, low NPS, weak self-service for payments and complaints, and PSD2/SCA compliance gaps. Web and mobile experiences are inconsistent.\n\nVISION STATEMENT\nFor retail customers who want to bank independently, the redesigned customer portal is a unified web + mobile self-care experience that lets them manage accounts, make payments, and resolve complaints securely in minutes — reducing reliance on branches and call centers, unlike the current fragmented portal.\n\nTOP FEATURES THIS PI (priority order by WSJF)\n1. SCA / PSD2 strong customer authentication\n2. Accessibility & WCAG 2.1 AA compliance\n3. Self-care account management (self-service)\n4. Digital complaints management\n5. Payments self-service (transfers + bill pay)\n6. Real-time notifications & alerts\n7. Mobile feature parity\n8. Personalized customer dashboard\n\nBUSINESS GOALS / TARGET OUTCOMES\n- Reduce inbound call-center contacts on covered journeys by 25%.\n- Increase digital self-service rate for payments & complaints to 70%.\n- Raise portal NPS by +10 points; achieve 100% SCA/PSD2 compliance before regulatory deadline.\n- Web/mobile parity ≥ 90% of in-scope journeys.\n\nNON-NEGOTIABLES\n- PSD2/SCA regulatory compliance, WCAG 2.1 AA accessibility, security & data protection (GDPR), audited complaint traceability.\n\nARCHITECTURAL / ENABLER FOCUS\n- Shared design system (web + mobile), API gateway for SCA, event backbone for notifications.\n\nKPIs / LEADING INDICATORS\n- Self-service completion rate, call deflection %, SCA success rate, complaint resolution SLA, accessibility audit pass rate, mobile/web parity coverage.\n\nDEPENDENCIES & RISKS\n- Core banking & payment rails APIs, identity provider for SCA, regulatory deadline (time-critical), web/mobile team coordination.\n\nTIMELINE: Single PI (5 iterations + IP). MVP = SCA + self-care account view + complaints intake by mid-PI; payments & mobile parity by end of PI.",
         "featuresWsjf": [
           {
-            "feature": "Authentification forte (SCA / DSP2) native multi-device",
-            "wsjf": 7.6
+            "feature": "Accessibility & WCAG 2.1 AA compliance (enabler)",
+            "wsjf": 7
           },
           {
-            "feature": "Self-care comptes (consultation soldes, RIB, plafonds, opérations)",
-            "wsjf": 6
+            "feature": "SCA / PSD2 strong customer authentication",
+            "wsjf": 5.8
           },
           {
-            "feature": "Exécution de virements (internes + SEPA) avec gestion des bénéficiaires",
-            "wsjf": 5.4
+            "feature": "Self-care account management (self-service overview & actions)",
+            "wsjf": 3.6
           },
           {
-            "feature": "Suivi et dépôt de réclamations en ligne",
-            "wsjf": 3.4
+            "feature": "Digital complaints management (intake, tracking, SLA)",
+            "wsjf": 3.6
           },
           {
-            "feature": "Notifications temps réel (push mobile + e-mail) sur opérations",
-            "wsjf": 3
+            "feature": "Real-time notifications & alerts",
+            "wsjf": 3.67
           },
           {
-            "feature": "Accessibilité RGAA AA des parcours critiques",
-            "wsjf": 2.6
+            "feature": "Payments self-service (transfers + bill pay)",
+            "wsjf": 2.88
           },
           {
-            "feature": "Agrégation multi-comptes internes (vue patrimoniale unifiée)",
-            "wsjf": 1.8
+            "feature": "Mobile feature parity with web",
+            "wsjf": 2
+          },
+          {
+            "feature": "Personalized customer dashboard",
+            "wsjf": 2
           }
         ],
-        "leanBusinessCase": "LEAN BUSINESS CASE — Features majeures\n\n1) AUTHENTIFICATION FORTE (SCA / DSP2) — WSJF 7,6\nHypothèse : sans SCA conforme, l'ensemble des parcours de paiement est bloquant réglementairement (sanctions ACPR, risque de retrait d'agrément des paiements en ligne). Feature habilitante (enabler) prioritaire.\nCoût de retard : MAXIMAL — chaque PI sans conformité expose à sanction et bloque l'activation des virements.\nCoûts (ordre de grandeur) : 2 équipes x 1 PI (intégration fournisseur SCA, refonte parcours login, anti-fraude).\nBénéfices : déblocage de 100% des features de paiement, conformité DSP2, réduction fraude ~15%.\nMVP : SCA sur virements + connexion ; MMF : SCA généralisé tous parcours sensibles.\nGo/No-Go : GO — prérequis non-négociable.\n\n2) SELF-CARE COMPTES — WSJF 6,0\nHypothèse : déporter les opérations courantes (consultation, RIB, plafonds) du CRC vers le digital réduit de 25% les appels et améliore le NPS.\nCoût de retard : élevé (coûts CRC récurrents, insatisfaction client).\nCoûts : ~1,5 équipe x 1 PI.\nBénéfices : -25% appels CRC (économie estimée significative sur coût de traitement), disponibilité 24/7, base d'engagement digital.\nMVP : consultation soldes + téléchargement RIB ; itérations : gestion plafonds, historique enrichi.\n\n3) PAIEMENTS / VIREMENTS — WSJF 5,4\nHypothèse : un parcours de virement fluide et conforme fait passer le taux de complétion de 72% à 90% et constitue le cœur de valeur d'usage du portail.\nCoût de retard : élevé (valeur d'usage centrale, dépend de la feature SCA).\nCoûts : ~2 équipes x 1 PI (web + mobile, gestion bénéficiaires, contrôles anti-fraude).\nBénéfices : +18 pts de complétion virement, hausse de l'engagement et de la rétention digitale.\nMVP : virements internes + SEPA vers bénéficiaires existants ; MMF : ajout/validation bénéficiaire, virements programmés.\nDépendance : conditionnée par la livraison de l'Authentification forte (SCA)."
+        "leanBusinessCase": "LEAN BUSINESS CASE — Customer Portal Redesign (Digital Banking ART)\n\n1. PROBLEM / OPPORTUNITY\nThe current portal generates high call-center cost, low NPS, fragmented web/mobile journeys, and exposes the bank to PSD2/SCA non-compliance penalties. Customers cannot self-serve key journeys (payments, complaints), driving expensive assisted channels.\n\n2. SOLUTION HYPOTHESIS (MVP)\nWe believe that delivering a unified, secure self-care portal (SCA-compliant authentication + self-service account management + digital complaints + payments) will reduce call-center contacts and increase digital self-service. We will know we are right when call deflection reaches 25% and self-service rate on covered journeys reaches 70% within two PIs of release.\n\n3. MAJOR FEATURES & RATIONALE\n- SCA/PSD2 (WSJF 5.8): regulatory must-have, high time-criticality (deadline-driven), unlocks all payment journeys.\n- Accessibility/WCAG (WSJF 7.0): low job size, high compliance + opportunity-enablement; legal exposure reduction.\n- Self-care account management (3.6) & Complaints (3.6): core call-deflection drivers.\n- Payments self-service (2.88): highest business value, larger job size.\n- Notifications (3.67), Mobile parity (2.0), Dashboard (2.0): engagement and retention.\n\n4. COST OF DELAY DRIVERS\nRegulatory deadline (SCA), continued call-center cost (~per-contact savings), customer attrition to neobanks, brand/NPS erosion.\n\n5. INVESTMENT (T-shirt)\n~1 PI of Web + Mobile teams (8–10 person ART capacity) plus shared design-system and SCA enabler work. Largely opex; reuse of existing core-banking/payment APIs limits build cost.\n\n6. EXPECTED BENEFITS\n- Cost: 25% reduction in covered call-center volume.\n- Revenue/retention: improved NPS (+10), reduced churn.\n- Compliance: avoided PSD2 penalties, WCAG legal risk mitigated.\n\n7. KEY ASSUMPTIONS & RISKS\nCore/payment API readiness, identity provider availability for SCA, regulatory deadline holds, web/mobile coordination, change-adoption by customers.\n\n8. GO / NO-GO RECOMMENDATION\nGO — proceed with SCA + accessibility + self-care MVP first (highest WSJF, regulatory), validate deflection metrics, then incrementally fund payments, mobile parity and dashboard based on measured outcomes (pivot-or-persevere at PI boundary)."
       }
     },
     {
       "stepId": "STEP-02",
       "assetId": "AGENT-RELEASE-TRAIN-ENGINEER",
-      "catalogTag": "v3.26.2",
+      "catalogTag": "v3.27.0",
       "verdict": "pass",
       "results": [
         {
           "id": "rte-program-board-non-vide",
-          "description": "STEP-02 : Program Board avec dépendances non vide",
+          "description": "STEP-02: Program Board with dependencies non-empty",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "rte-vote-confiance-seuil",
-          "description": "STEP-02 : condition de passage — vote de confiance > 3.5/5",
+          "description": "STEP-02: passing condition — confidence vote > 3.5/5",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "rte-roam-risks-present",
-          "description": "STEP-02 : ROAM risks documentés (tableau présent)",
+          "description": "STEP-02: ROAM risks documented (array present)",
           "severity": "advisory",
           "passed": true
         }
@@ -90,72 +94,94 @@
       "output": {
         "programBoard": [
           {
-            "from": "Équipe Sécurité/IAM (Authentification forte SCA)",
-            "to": "Équipe Paiements (Virements internes + SEPA)",
-            "dep": "Enabler bloquant : aucun parcours de virement n'est activable tant que la SCA conforme DSP2 n'est pas livrée. Dépendance dure à séquencer en début de PI."
+            "from": "SCA / PSD2 authentication (Platform/Security)",
+            "to": "Identity Provider (external)",
+            "dep": "SCA enabler requires IdP integration for strong customer authentication; IdP availability gates start of MVP."
           },
           {
-            "from": "Équipe Sécurité/IAM (Authentification forte SCA)",
-            "to": "Équipe Self-care (Consultation soldes, RIB, plafonds)",
-            "dep": "Les opérations sensibles (modification de plafonds, affichage RIB) requièrent l'authentification forte et le contexte de session sécurisé fourni par l'IAM."
+            "from": "SCA / PSD2 authentication",
+            "to": "API Gateway enabler (Platform)",
+            "dep": "SCA flows routed through the API gateway; enabler must be ready before SCA feature work."
           },
           {
-            "from": "Équipe Sécurité/IAM (Authentification forte SCA)",
-            "to": "Fournisseur SCA externe",
-            "dep": "Dépendance externe : intégration et contractualisation du fournisseur SCA / anti-fraude — risque de délai d'onboarding et de disponibilité d'environnement de test."
+            "from": "Payments self-service (Web/Mobile)",
+            "to": "Core Banking & Payment rails APIs (external)",
+            "dep": "Transfers + bill pay depend on payment rails API readiness and reused core-banking APIs."
           },
           {
-            "from": "Équipe Self-care (Consultation comptes)",
-            "to": "Équipe Agrégation multi-comptes (Vue patrimoniale unifiée)",
-            "dep": "L'agrégation réutilise les API de consultation de soldes et le modèle de données comptes exposés par l'équipe Self-care."
+            "from": "Payments self-service",
+            "to": "SCA / PSD2 authentication",
+            "dep": "All payment journeys are gated by SCA; payments cannot ship before SCA is live."
           },
           {
-            "from": "Équipe Paiements (Virements)",
-            "to": "Équipe Notifications temps réel (Push + e-mail)",
-            "dep": "Les notifications d'opérations s'appuient sur les événements émis par le moteur de virement (exécution, validation bénéficiaire)."
+            "from": "Self-care account management (Web/Mobile)",
+            "to": "Core Banking APIs (external)",
+            "dep": "Account overview & actions consume core-banking account/transaction APIs."
           },
           {
-            "from": "Équipe Réclamations (Suivi/dépôt en ligne)",
-            "to": "Équipe Notifications temps réel",
-            "dep": "Le suivi de réclamation déclenche des notifications de changement de statut — dépend du socle de notification."
+            "from": "Accessibility & WCAG 2.1 AA (enabler)",
+            "to": "Shared Design System (Platform)",
+            "dep": "WCAG-compliant components must be delivered in the shared design system first."
           },
           {
-            "from": "Équipe Accessibilité RGAA",
-            "to": "Toutes les équipes feature (Login, Self-care, Virements, Réclamations)",
-            "dep": "Dépendance transverse : la mise en conformité RGAA AA s'applique aux parcours critiques de chaque équipe ; nécessite synchronisation des Definition of Done et audits croisés."
+            "from": "Web team features",
+            "to": "Shared Design System (Platform)",
+            "dep": "Web journeys consume shared design-system components (cross-team)."
           },
           {
-            "from": "Équipe Plateforme/Infra",
-            "to": "Équipe Notifications temps réel",
-            "dep": "Le canal push temps réel requiert le bus d'événements et le service de messaging fournis par la plateforme — dépendance d'infrastructure à provisionner tôt."
+            "from": "Mobile feature parity (Mobile team)",
+            "to": "Web team features",
+            "dep": "Parity requires corresponding web journeys delivered first; web/mobile coordination via Scrum of Scrums."
+          },
+          {
+            "from": "Mobile feature parity (Mobile team)",
+            "to": "Shared Design System (Platform)",
+            "dep": "Mobile consumes shared design-system tokens/components for parity."
+          },
+          {
+            "from": "Real-time notifications & alerts",
+            "to": "Event backbone enabler (Platform)",
+            "dep": "Notifications depend on the event backbone being operational."
+          },
+          {
+            "from": "Digital complaints management",
+            "to": "Audited complaint traceability / GDPR data store",
+            "dep": "Complaint intake/tracking requires compliant, audited storage for SLA traceability."
+          },
+          {
+            "from": "Personalized customer dashboard",
+            "to": "Self-care account management + Real-time notifications",
+            "dep": "Dashboard aggregates account data and notification feeds; depends on both features."
           }
         ],
-        "voteConfiance": 3.9,
+        "voteConfiance": 4,
         "roamRisks": [
           {
-            "risque": "Délai d'intégration et de disponibilité de l'environnement de test du fournisseur SCA externe, bloquant le démarrage des virements.",
-            "categorie": "Mitigated",
-            "action": "Sécuriser un environnement bac-à-sable dès la 1re itération, prévoir des stubs/mocks SCA pour découpler le développement des virements, et désigner un point de contact fournisseur dédié."
+            "risk": "Regulatory SCA/PSD2 deadline (time-critical) may not be met",
+            "category": "Mitigated",
+            "action": "Sequence SCA + accessibility as highest-WSJF MVP by mid-PI; track via ART Sync and System Demo."
           },
           {
-            "risque": "Non-atteinte de la conformité RGAA AA sur 100% des parcours critiques faute de capacité experte accessibilité partagée entre équipes.",
-            "categorie": "Owned",
-            "action": "Owner : Scrum Master Équipe Accessibilité + RTE. Constituer une CoP Accessibilité, intégrer les critères RGAA dans la DoD de chaque équipe et planifier des audits intermédiaires en milieu de PI."
+            "risk": "Core banking & payment rails API readiness",
+            "category": "Owned",
+            "owner": "RTE / Platform & Core Banking liaison",
+            "action": "Confirm API contracts and readiness dates in IP iteration; weekly Scrum of Scrums follow-up."
           },
           {
-            "risque": "Risque réglementaire/ACPR si la SCA n'est pas conforme DSP2 à la fin du PI (non-négociable).",
-            "categorie": "Owned",
-            "action": "Owner : Product Management + RTE. Suivi hebdomadaire au Scrum of Scrums, jalon de conformité posé au PI mid-point, validation conformité par l'équipe Risk/Compliance avant la System Demo."
+            "risk": "Identity Provider availability for SCA",
+            "category": "Owned",
+            "owner": "RTE / Security enabler team",
+            "action": "Lock IdP integration window early; stub/mock for parallel development."
           },
           {
-            "risque": "Dépendance dure SCA → Virements créant un goulot : tout retard de l'IAM décale le cœur de valeur du PI.",
-            "categorie": "Mitigated",
-            "action": "Séquencer la SCA en priorité absolue (front-loading), suivre l'avancement via le Program Board et prévoir un buffer de capacité sur l'équipe Paiements pour absorber un glissement."
+            "risk": "Web/Mobile team coordination causing parity slippage",
+            "category": "Mitigated",
+            "action": "Shared design system + cross-team Scrum of Scrums; mobile follows web journey cadence."
           },
           {
-            "risque": "Objectif de disponibilité 99,9% non tenu sous la charge push temps réel / agrégation multi-comptes.",
-            "categorie": "Accepted",
-            "action": "Risque accepté pour le MVP : l'agrégation multi-comptes (WSJF 1,8) est traitée comme objectif stretch et peut être descopée sans compromettre les objectifs engagés du PI."
+            "risk": "Customer change-adoption lower than expected",
+            "category": "Accepted",
+            "action": "Validate deflection & self-service KPIs post-release; pivot-or-persevere at PI boundary."
           }
         ]
       }
@@ -163,68 +189,72 @@
     {
       "stepId": "STEP-03",
       "assetId": "AGENT-PO-SAFE",
-      "catalogTag": "v3.26.2",
+      "catalogTag": "v3.27.0",
       "verdict": "pass",
       "results": [
         {
           "id": "posafe-pi-objectives-3-5",
-          "description": "STEP-03 : 3 à 5 PI Objectives (SMART)",
+          "description": "STEP-03: 3 to 5 PI Objectives (SMART)",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "posafe-backlog-sprint-5-10",
-          "description": "STEP-03 : backlog sprint 1 de 5 à 10 User Stories",
+          "description": "STEP-03: sprint 1 backlog of 5 to 10 User Stories",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "posafe-wsjf-par-feature",
-          "description": "STEP-03 : chaque US du backlog porte un score WSJF (number)",
+          "description": "STEP-03: each backlog US carries a WSJF score (number)",
           "severity": "advisory",
           "passed": true
         }
       ],
       "output": {
         "piObjectives": [
-          "Livrer l'authentification forte SCA conforme DSP2, validée par l'équipe Risk/Compliance avant la System Demo de fin de PI (jalon de conformité posé au PI mid-point) — objectif non négociable (ACPR).",
-          "Activer les parcours de virements internes et SEPA sécurisés par SCA pour 100 % des clients éligibles, avec notification temps réel d'exécution, d'ici la fin du PI.",
-          "Mettre à disposition le self-care sécurisé (consultation soldes, affichage RIB, modification de plafonds) sous authentification forte pour 100 % des comptes particuliers avant la dernière itération du PI.",
-          "Atteindre la conformité RGAA niveau AA sur 100 % des parcours critiques (Login, Self-care, Virements, Réclamations), validée par audits croisés intégrés à la DoD de chaque équipe.",
-          "[Stretch] Exposer une vue patrimoniale unifiée d'agrégation multi-comptes en réutilisant les API de consultation Self-care, descopable sans impact sur les objectifs engagés (WSJF 1,8)."
+          "Deliver the SCA/PSD2 strong customer authentication MVP — integrated with the external Identity Provider and routed through the API Gateway enabler — live in production for 100% of regulated payment journeys by mid-PI (Iteration 3, end of July 2026), meeting the PSD2 regulatory deadline (Business Value: 10).",
+          "Launch payments self-service (transfers + bill pay) on Web and Mobile, gated by live SCA and built on Core Banking & payment-rails APIs, reaching ≥ 60% self-service transaction adoption and ≥ 25% call-center deflection by end of PI (Business Value: 9).",
+          "Achieve WCAG 2.1 AA accessibility compliance for 100% of shared Design System components consumed by Web and Mobile journeys, validated by automated + manual audit before the final System Demo (Business Value: 8).",
+          "Deliver Web/Mobile feature parity for self-care account management (account overview, transactions, profile actions) on Core Banking APIs, with ≤ 1 iteration lag between Web and Mobile releases, coordinated via Scrum of Scrums (Business Value: 7).",
+          "Stand up the event-backbone enabler to power real-time notifications and the personalized customer dashboard, delivering ≥ 95% in-app alert delivery within 5 seconds for account and payment events by end of PI (Stretch — Business Value: 6)."
         ],
         "backlogSprint": [
           {
-            "statement": "En tant qu'architecte sécurité, je veux contractualiser et provisionner l'environnement bac-à-sable du fournisseur SCA externe afin de découpler le démarrage des développements de virements (dépendance externe + risque ROAM Mitigated).",
-            "wsjf": 9.5
+            "statement": "As the Platform/Security team, I want to integrate the external Identity Provider (IdP) for strong customer authentication, so that the SCA enabler can authenticate users and unblock the MVP. [Enabler — gates SCA, owned ROAM risk: IdP availability]",
+            "wsjf": 8.6
           },
           {
-            "statement": "En tant qu'équipe Paiements, je veux disposer de stubs/mocks SCA conformes au contrat d'interface afin de développer les virements sans attendre la disponibilité finale du fournisseur (mitigation goulot SCA→Virements).",
-            "wsjf": 8.7
+            "statement": "As the Platform team, I want the API Gateway enabler to route and secure SCA authentication flows, so that SCA feature work can begin against a ready gateway. [Enabler — dependency for SCA]",
+            "wsjf": 8
           },
           {
-            "statement": "En tant que client, je veux m'authentifier via SCA forte conforme DSP2 lors de la connexion afin de sécuriser l'accès à mes opérations sensibles.",
-            "wsjf": 8.5
+            "statement": "As the Platform/Design team, I want to deliver the first set of WCAG 2.1 AA-compliant components in the shared Design System, so that Web and Mobile teams can build accessible journeys. [Enabler — gates accessibility & all UI journeys]",
+            "wsjf": 6.7
           },
           {
-            "statement": "En tant que client authentifié, je veux consulter le solde de mes comptes en self-care afin de suivre ma situation financière en temps réel.",
-            "wsjf": 6.8
-          },
-          {
-            "statement": "En tant que plateforme/infra, je veux provisionner le bus d'événements et le service de messaging afin de fournir tôt le socle des notifications temps réel (dépendance d'infrastructure).",
+            "statement": "As a customer, I want to complete an SCA strong-authentication challenge (MVP flow) when logging in, so that my access meets PSD2 requirements. [Time-critical regulatory]",
             "wsjf": 6.2
           },
           {
-            "statement": "En tant que client, je veux exécuter un virement interne sécurisé par SCA afin de transférer des fonds entre mes comptes en toute conformité.",
-            "wsjf": 5.9
+            "statement": "As the RTE/Platform liaison, I want to confirm and stub Core Banking & payment-rails API contracts during the IP iteration, so that payments and self-care development can proceed in parallel. [Spike/Enabler — owned ROAM risk]",
+            "wsjf": 5
           },
           {
-            "statement": "En tant que client, je veux recevoir une notification push/e-mail à l'exécution d'un virement afin d'être informé en temps réel de mes opérations.",
-            "wsjf": 4.6
-          },
-          {
-            "statement": "En tant qu'utilisateur en situation de handicap, je veux que le parcours de Login respecte les critères RGAA AA afin d'accéder au service de manière équitable (critères intégrés à la DoD).",
+            "statement": "As the Platform team, I want to stand up the event-backbone enabler, so that real-time notifications and the dashboard can subscribe to account/payment events. [Enabler — dependency for notifications]",
             "wsjf": 4.3
+          },
+          {
+            "statement": "As a customer, I want a read-only self-care account overview (balance + recent transactions) on Web consuming Core Banking APIs, so that I can self-serve my account information. [Web feature on shared Design System]",
+            "wsjf": 3.8
+          },
+          {
+            "statement": "As the Mobile team, I want to consume the shared Design System tokens/components for the account overview, so that Web/Mobile parity is maintained from the start. [Parity — coordinated via Scrum of Scrums]",
+            "wsjf": 3.2
+          },
+          {
+            "statement": "As the Compliance/Platform team, I want to provision the audited, GDPR-compliant data store for complaint traceability, so that digital complaints intake can meet SLA and audit requirements. [Enabler — dependency for complaints]",
+            "wsjf": 2.6
           }
         ]
       }
@@ -232,132 +262,140 @@
     {
       "stepId": "STEP-04",
       "assetId": "AGENT-SCRUM-MASTER",
-      "catalogTag": "v3.26.2",
+      "catalogTag": "v3.27.0",
       "verdict": "pass",
       "results": [
         {
           "id": "sm-sprint-goal-unique",
-          "description": "STEP-04 : Sprint Goal unique non vide",
+          "description": "STEP-04: single Sprint Goal non-empty",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "sm-sprint-plan-forecast",
-          "description": "STEP-04 : sprint plan avec forecast — `usEngagees` non vide ET `storyPoints` (number)",
+          "description": "STEP-04: sprint plan with forecast — `usEngagees` non-empty AND `storyPoints` (number)",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "sm-impediments-listes",
-          "description": "STEP-04 : impediments sprint 1 listés (tableau présent)",
+          "description": "STEP-04: sprint 1 impediments listed (array present)",
           "severity": "advisory",
           "passed": true
         }
       ],
       "output": {
-        "sprintGoal": "Sécuriser l'accès client par l'authentification forte SCA conforme DSP2 (Login accessible RGAA AA) et poser les fondations techniques (sandbox SCA, stubs/mocks d'interface, bus d'événements) afin de dérisquer le développement des virements et le jalon de conformité du PI.",
+        "sprintGoal": "Establish the secure authentication foundation for the PSD2/SCA MVP by integrating the external Identity Provider and standing up the API Gateway enabler, while unblocking parallel UI and payments work through the first WCAG 2.1 AA Design System components and confirmed Core Banking & payment-rails API contracts.",
         "sprintPlan": {
           "usEngagees": [
-            "En tant qu'architecte sécurité, je veux contractualiser et provisionner l'environnement bac-à-sable du fournisseur SCA externe afin de découpler le démarrage des développements de virements (dépendance externe + risque ROAM Mitigated). [WSJF 9.5]",
-            "En tant qu'équipe Paiements, je veux disposer de stubs/mocks SCA conformes au contrat d'interface afin de développer les virements sans attendre la disponibilité finale du fournisseur (mitigation goulot SCA→Virements). [WSJF 8.7]",
-            "En tant que client, je veux m'authentifier via SCA forte conforme DSP2 lors de la connexion afin de sécuriser l'accès à mes opérations sensibles. [WSJF 8.5]",
-            "En tant qu'utilisateur en situation de handicap, je veux que le parcours de Login respecte les critères RGAA AA afin d'accéder au service de manière équitable (critères intégrés à la DoD). [WSJF 4.3]",
-            "En tant que plateforme/infra, je veux provisionner le bus d'événements et le service de messaging afin de fournir tôt le socle des notifications temps réel (dépendance d'infrastructure). [WSJF 6.2]"
+            "[Enabler] Integrate the external Identity Provider (IdP) for strong customer authentication so the SCA enabler can authenticate users (WSJF 8.6) — ROAM risk: IdP availability owned",
+            "[Enabler] Stand up the API Gateway enabler to route and secure SCA authentication flows so SCA feature work can begin (WSJF 8.0)",
+            "[Enabler] Deliver the first set of WCAG 2.1 AA-compliant shared Design System components so Web and Mobile can build accessible journeys (WSJF 6.7)",
+            "[Spike/Enabler] Confirm and stub Core Banking & payment-rails API contracts during the IP iteration so payments and self-care can proceed in parallel (WSJF 5.0) — ROAM risk owned"
           ],
-          "storyPoints": 39
+          "storyPoints": 34
         },
         "impediments": [
-          "Dépendance externe critique : contractualisation et provisioning du sandbox SCA non finalisés (risque ROAM Mitigated) — un retard fournisseur bloquerait le Login et les virements ; à escalader au RTE/ART si non levé en début de sprint.",
-          "Disponibilité finale incertaine du fournisseur SCA — mitigée par les stubs/mocks conformes au contrat d'interface ; nécessite la validation rapide du contrat d'interface.",
-          "Disponibilité de l'équipe Risk/Compliance (ACPR) pour valider le SCA DSP2 avant la System Demo / le jalon de conformité du PI mid-point — réserver les créneaux dès le sprint 1.",
-          "Capacité d'audit croisé RGAA AA à intégrer dans la DoD : compétence accessibilité et binôme d'audit à sécuriser pour ne pas créer de goulot en fin de sprint."
+          "IdP availability/readiness (ROAM-owned risk): external vendor dependency — sandbox/credentials and SLA must be secured early or IdP integration slips, cascading to the Iteration 3 regulatory SCA deadline.",
+          "API Gateway non-prod environment provisioning and security configuration may not be ready, blocking the routing of SCA flows.",
+          "Core Banking & payment-rails API contracts not yet finalized: payments and self-care teams remain blocked until stubs/contracts are confirmed during the IP iteration.",
+          "Accessibility tooling gap: automated + manual WCAG 2.1 AA audit pipeline not yet stood up for the Design System, risking late defects.",
+          "Dependency sequencing across teams: SCA feature teams stay idle until IdP + Gateway enablers complete — requires Scrum of Scrums coordination to smooth the handoff and avoid downstream idle time.",
+          "Concentration of value in enablers handled by the Platform/Security team creates a capacity bottleneck; cross-team load balancing should be reviewed at Scrum of Scrums."
         ]
       }
     },
     {
       "stepId": "STEP-06",
       "assetId": "AGENT-CHEF-PROJET-IA",
-      "catalogTag": "v3.26.2",
+      "catalogTag": "v3.27.0",
       "verdict": "pass",
       "results": [
         {
           "id": "cp-note-codir-presente",
-          "description": "STEP-06 : note CODIR (1 page) non vide",
+          "description": "STEP-06: CODIR note (1 page) non-empty",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "cp-dashboard-avancement-risques",
-          "description": "STEP-06 : dashboard PI portant au moins `avancement` ET `risques`",
+          "description": "STEP-06: PI dashboard carrying at least `avancement` AND `risques`",
           "severity": "blocking",
           "passed": true
         },
         {
           "id": "cp-evm-cpi-spi",
-          "description": "STEP-06 : EVM sprint avec CPI et SPI (numbers)",
+          "description": "STEP-06: sprint EVM with CPI and SPI (numbers)",
           "severity": "advisory",
           "passed": true
         }
       ],
       "output": {
-        "noteCodir": "NOTE CODIR — PI « Sécurisation & Paiements » · Sprint 1 · 13/06/2026\n\n1) OBJECTIF DE SPRINT\nSécuriser l'accès client via l'authentification forte SCA conforme DSP2 (Login accessible RGAA AA) et poser les fondations techniques (sandbox SCA, stubs/mocks d'interface, bus d'événements) pour dérisquer les développements de virements et le jalon de conformité du PI mid-point.\n\n2) STATUT GLOBAL : AMBER\nLe sprint est engagé sur 39 story points (5 US priorisées WSJF). La trajectoire reste tenable mais conditionnée à une dépendance externe critique (fournisseur SCA) non encore levée. La stratégie de découplage (stubs/mocks conformes au contrat d'interface) protège la delivery des virements même en cas de retard fournisseur.\n\n3) FAITS MARQUANTS\n- Priorisation WSJF validée : sandbox SCA (9,5), stubs/mocks (8,7), Login SCA DSP2 (8,5), bus d'événements (6,2), RGAA AA (4,3).\n- RGAA AA intégré à la Definition of Done du parcours Login (équité d'accès).\n- Socle notifications temps réel amorcé tôt (bus d'événements) pour lisser les dépendances d'infra.\n\n4) POINTS D'ATTENTION / DÉCISIONS ATTENDUES DU CODIR\n- Sécuriser la contractualisation + provisioning du sandbox SCA en début de sprint (escalade RTE/ART si non levé) — arbitrage fournisseur attendu.\n- Réserver dès S1 les créneaux Risk/Compliance (ACPR) pour valider le SCA DSP2 avant la System Demo / jalon de conformité.\n- Sécuriser la compétence accessibilité (binôme d'audit RGAA) pour éviter un goulot de fin de sprint.\n\n5) PROCHAINES ÉTAPES\nValider le contrat d'interface SCA (débloque stubs/mocks), figer les créneaux ACPR, et confirmer le binôme audit RGAA. Revue d'avancement au daily/weekly, point de dérisquage en milieu de sprint.",
         "dashboard": {
-          "avancement": "20%",
+          "avancement": "≈ 20% du PI (Itération 1 / foundation — jalon SCA réglementaire fixé à l'Itération 3)",
           "risques": [
             {
-              "id": "R1",
-              "libelle": "Contractualisation/provisioning du sandbox SCA non finalisés — un retard fournisseur bloquerait Login et virements",
-              "categorie": "Externe / Dépendance",
-              "probabilite": "Élevée",
-              "impact": "Critique",
-              "severite": "Élevée",
-              "roam": "Mitigated",
-              "mitigation": "Découplage par stubs/mocks conformes au contrat d'interface ; escalade RTE/ART en début de sprint si non levé",
-              "responsable": "Architecte Sécurité / RTE",
-              "statut": "Ouvert"
-            },
-            {
-              "id": "R2",
-              "libelle": "Disponibilité finale incertaine du fournisseur SCA",
-              "categorie": "Externe / Technique",
-              "probabilite": "Moyenne",
+              "id": "RAID-01",
+              "type": "Dépendance externe (ROAM: Owned)",
+              "libelle": "Disponibilité/readiness de l'IdP — sandbox, credentials et SLA fournisseur à sécuriser tôt.",
               "impact": "Élevé",
-              "severite": "Élevée",
-              "roam": "Mitigated",
-              "mitigation": "Stubs/mocks SCA + validation rapide du contrat d'interface",
-              "responsable": "Équipe Paiements",
-              "statut": "Ouvert"
+              "probabilite": "Moyenne",
+              "criticite": "Critique",
+              "consequence": "Glissement de l'intégration SCA → menace le jalon réglementaire Itération 3.",
+              "owner": "Équipe Platform/Security",
+              "mitigation": "Escalade achat/vendor, contractualisation SLA, plan B fournisseur, suivi quotidien."
             },
             {
-              "id": "R3",
-              "libelle": "Indisponibilité Risk/Compliance (ACPR) pour valider le SCA DSP2 avant System Demo / jalon de conformité",
-              "categorie": "Conformité / Réglementaire",
-              "probabilite": "Moyenne",
+              "id": "RAID-02",
+              "type": "Environnement / Infra",
+              "libelle": "Provisioning et configuration sécurité de l'API Gateway hors-prod non prêts.",
               "impact": "Élevé",
-              "severite": "Moyenne",
-              "roam": "Owned",
-              "mitigation": "Réserver les créneaux ACPR dès le sprint 1",
-              "responsable": "PMO / Compliance",
-              "statut": "Ouvert"
+              "probabilite": "Moyenne",
+              "criticite": "Élevée",
+              "consequence": "Blocage du routage des flux d'authentification SCA.",
+              "owner": "Équipe Platform/Security",
+              "mitigation": "Prioriser le ticket infra, revue sécurité anticipée, environnement de repli."
             },
             {
-              "id": "R4",
-              "libelle": "Capacité d'audit croisé RGAA AA insuffisante — goulot en fin de sprint sur la DoD accessibilité",
-              "categorie": "Qualité / Accessibilité",
-              "probabilite": "Moyenne",
+              "id": "RAID-03",
+              "type": "Dépendance inter-équipes (Contrats API)",
+              "libelle": "Contrats Core Banking & payment-rails non finalisés.",
               "impact": "Moyen",
-              "severite": "Moyenne",
-              "roam": "Owned",
-              "mitigation": "Sécuriser compétence accessibilité + binôme d'audit RGAA",
-              "responsable": "Lead Qualité / Accessibilité",
-              "statut": "Ouvert"
+              "probabilite": "Élevée",
+              "criticite": "Élevée",
+              "consequence": "Équipes paiements & self-care bloquées jusqu'aux stubs/contrats (IP iteration).",
+              "owner": "Architecte d'intégration",
+              "mitigation": "Confirmer & stubber les contrats pendant l'IP iteration, mocks contractuels."
+            },
+            {
+              "id": "RAID-04",
+              "type": "Qualité / Conformité",
+              "libelle": "Pipeline d'audit WCAG 2.1 AA (auto + manuel) non encore opérationnel.",
+              "impact": "Moyen",
+              "probabilite": "Moyenne",
+              "criticite": "Moyenne",
+              "consequence": "Risque de défauts d'accessibilité tardifs sur le Design System.",
+              "owner": "Lead Design System / QA",
+              "mitigation": "Stand-up outillage axe-core + audit manuel dès les premiers composants."
+            },
+            {
+              "id": "RAID-05",
+              "type": "Séquencement / Capacité",
+              "libelle": "Équipes SCA en attente des enablers IdP+Gateway; valeur concentrée sur Platform/Security (goulot).",
+              "impact": "Moyen",
+              "probabilite": "Élevée",
+              "criticite": "Moyenne",
+              "consequence": "Temps mort aval, surcharge équipe socle.",
+              "owner": "RTE / Scrum of Scrums",
+              "mitigation": "Coordination Scrum of Scrums, lissage de charge inter-équipes, travail anticipé non bloquant."
             }
           ]
         },
         "evm": {
-          "cpi": 0.98,
+          "cpi": 1,
           "spi": 0.95
-        }
+        },
+        "noteCodir": "NOTE CODIR — MVP PSD2/SCA — Itération 1 (Foundation) — 20/06/2026\n\n1) MESSAGE CLÉ (RAG: AMBRE)\nLe sprint pose le socle d'authentification sécurisée du MVP PSD2/SCA. Engagement de 34 points (4 items à forte valeur WSJF). Avancement PI ≈ 20%. Le statut est AMBRE en raison d'une dépendance externe critique (IdP) sur le chemin du jalon réglementaire de l'Itération 3.\n\n2) OBJECTIF DE SPRINT\nÉtablir le socle d'authentification forte (SCA) en intégrant l'Identity Provider externe et en montant l'enabler API Gateway, tout en débloquant en parallèle les travaux UI et Paiements via les premiers composants Design System WCAG 2.1 AA et la confirmation des contrats API Core Banking & payment-rails.\n\n3) ENGAGEMENTS (34 SP)\n- [Enabler] Intégration de l'IdP externe pour la SCA — WSJF 8.6 (risque IdP ROAM: Owned).\n- [Enabler] Montée de l'API Gateway pour router/sécuriser les flux d'authentification SCA — WSJF 8.0.\n- [Enabler] Premiers composants partagés Design System WCAG 2.1 AA pour Web & Mobile — WSJF 6.7.\n- [Spike/Enabler] Confirmation et stubbing des contrats API Core Banking & payment-rails (IP iteration) — WSJF 5.0 (risque ROAM: Owned).\n\n4) AVANCEMENT & EVM\nAvancement PI ≈ 20% (Itération 1/foundation). CPI = 1,0 (coûts maîtrisés, conforme au budget). SPI = 0,95 (léger retard de calendrier piloté par la dépendance IdP). Hypothèse: baseline de début d'IP, valeurs à réactualiser dès les premiers actuals d'itération. Pas de dérive coût; surveillance rapprochée du délai.\n\n5) RISQUES & POINTS DE BLOCAGE (RAID/ROAM)\n- CRITIQUE: Disponibilité IdP (vendor) — peut faire glisser la SCA et menacer le jalon réglementaire Itération 3. Action: sécuriser sandbox/credentials/SLA en urgence.\n- ÉLEVÉ: Provisioning & sécurité API Gateway hors-prod non prêts — bloque le routage SCA.\n- ÉLEVÉ: Contrats Core Banking & payment-rails non finalisés — paiements/self-care bloqués jusqu'aux stubs.\n- MOYEN: Pipeline d'audit accessibilité WCAG 2.1 AA non opérationnel — risque de défauts tardifs.\n- MOYEN: Séquencement inter-équipes & goulot de capacité Platform/Security — temps mort aval des équipes SCA.\n\n6) DÉCISIONS / ARBITRAGES DEMANDÉS AU CODIR\n- Valider l'escalade fournisseur IdP (achats + contractualisation SLA) comme priorité n°1.\n- Sécuriser la capacité infra pour le provisioning Gateway hors-prod.\n- Arbitrer un éventuel renfort/lissage de charge sur l'équipe Platform/Security.\n\n7) PROCHAINES ÉTAPES\n- Scrum of Scrums dédié au séquencement IdP → Gateway → équipes SCA.\n- Stand-up de l'outillage d'audit WCAG 2.1 AA dès les premiers composants.\n- Confirmation des stubs de contrats API durant l'IP iteration pour débloquer les flux parallèles.\n- Réactualisation EVM (CPI/SPI) au prochain point d'itération."
       }
     }
   ]
