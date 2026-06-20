@@ -8,7 +8,7 @@
       "type": "skill",
       "path": "skills/user-stories/SKILL.md",
       "title": "User Stories",
-      "description": "Rédaction de User Stories INVEST.",
+      "description": "INVEST User Stories writing.",
       "catalogVersion": "v3.25.0",
       "source": { "file": "skills/user-stories/SKILL.md", "catalogTag": "v3.25.0" }
     },
@@ -16,8 +16,8 @@
       "id": "AGENT-CADRAGE",
       "type": "agent",
       "path": "AGENT-CADRAGE.md",
-      "title": "Agent Cadrage",
-      "description": "Agent de cadrage produit.",
+      "title": "Scoping Agent",
+      "description": "Product scoping agent.",
       "catalogVersion": "v3.25.0",
       "source": { "file": "AGENT-CADRAGE.md", "catalogTag": "v3.25.0" },
       "dependsOn": ["skill-user-stories"]
@@ -26,8 +26,8 @@
       "id": "WF-001",
       "type": "workflow",
       "path": "workflows/WF-001.md",
-      "title": "Cadrage",
-      "description": "Workflow de cadrage WF-001.",
+      "title": "Scoping",
+      "description": "WF-001 scoping workflow.",
       "catalogVersion": "v3.25.0",
       "source": { "file": "workflows/WF-001.md", "catalogTag": "v3.25.0" },
       "dependsOn": ["AGENT-CADRAGE"]

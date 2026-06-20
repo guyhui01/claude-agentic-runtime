@@ -1,3 +1,3 @@
-# Agent Cadrage
+# Scoping Agent
 
-Fixture de test — agent de cadrage produit (mini-catalogue factice).
+Test fixture — product scoping agent (fake mini-catalog).

@@ -52,28 +52,28 @@ const STEP_BY_ASSET: Record<string, string> = {
   "AGENT-QA-AGILE": "STEP-04",
 };
 
-// --- Sorties conformes au DoD (mêmes formes que spine-wf-001.test.ts) -------
+// --- DoD-compliant outputs (same shapes as spine-wf-001.test.ts) ------------
 const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
-  statement: `En tant que utilisateur je veux la fonctionnalité ${i + 1} afin de gagner du temps`,
+  statement: `As a user I want feature ${i + 1} so that I save time`,
   priorite: "must",
   estimation: 3,
-  dod: "Testé et validé en recette",
+  dod: "Tested and validated in UAT",
 }));
 const happyOutputs: Record<string, unknown> = {
   "STEP-01": {
-    besoins: ["Réduire le temps de traitement"],
-    partiesPrenantes: [{ nom: "Métier", role: "sponsor" }],
-    perimetre: { in: ["authentification"], out: ["facturation"] },
+    besoins: ["Reduce processing time"],
+    partiesPrenantes: [{ nom: "Business", role: "sponsor" }],
+    perimetre: { in: ["authentication"], out: ["billing"] },
     questionsOuvertes: [],
   },
-  "STEP-03": { backlog: happyBacklog, epics: ["Auth", "Recherche", "Reporting"] },
+  "STEP-03": { backlog: happyBacklog, epics: ["Auth", "Search", "Reporting"] },
   "STEP-04": {
     gherkin: [
-      { given: "un utilisateur connecté", when: "il recherche", then: "il voit les résultats", type: "nominal" },
-      { given: "un terme invalide", when: "il recherche", then: "une erreur s'affiche", type: "erreur" },
-      { given: "0 résultat", when: "il recherche", then: "un état vide s'affiche", type: "limite" },
+      { given: "a logged-in user", when: "they search", then: "they see the results", type: "nominal" },
+      { given: "an invalid term", when: "they search", then: "an error is shown", type: "error" },
+      { given: "0 results", when: "they search", then: "an empty state is shown", type: "boundary" },
     ],
-    planTest: "Sprint 1 : smoke tests + 3 scénarios prioritaires",
+    planTest: "Sprint 1: smoke tests + 3 priority scenarios",
   },
 };
 

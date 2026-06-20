@@ -1,7 +1,8 @@
 /**
- * Sorties d'étape WF-003 conformes au DoD ET au schéma RESSERRÉ (donc au handoff
- * producer-output). Fixture PARTAGÉE entre le test hermétique (`run-wf-003.test.ts`)
- * et le test « sidecar réel » (`run-wf-003-real-sidecar.test.ts`) — DRY, source unique.
+ * WF-003 step outputs compliant with the DoD AND the TIGHTENED schema (hence with
+ * the producer-output handoff). Fixture SHARED between the hermetic test
+ * (`run-wf-003.test.ts`) and the "real sidecar" test
+ * (`run-wf-003-real-sidecar.test.ts`) — DRY, single source.
  */
 
 const goldenDataset = Array.from({ length: 25 }, (_, i) => ({ id: i, expected: "ok" }));
@@ -10,28 +11,28 @@ const owasp = Array.from({ length: 10 }, (_, i) => ({
   status: "pass",
 }));
 const baselineTest = Array.from({ length: 8 }, (_, i) => ({
-  cas: `cas-${i}`,
-  type: i < 5 ? "nominal" : "limite",
+  cas: `case-${i}`,
+  type: i < 5 ? "nominal" : "boundary",
 }));
 
-/** Sorties « plein pot » : satisfont tous les critères (blocking ET advisory). */
+/** "Full" outputs: satisfy all criteria (blocking AND advisory). */
 export const wf003HappyOutputs: Record<string, unknown> = {
   "STEP-00": {
-    businessCase: "ROI 2.3x, payback 14 mois.",
+    businessCase: "2.3x ROI, 14-month payback.",
     decision: "Go",
     tco3ans: 180000,
-    analyseSensibilite: ["optimiste", "réaliste", "pessimiste"],
+    analyseSensibilite: ["optimistic", "realistic", "pessimistic"],
   },
   "STEP-01": {
-    systemPrompt: "Tu es l'assistant RAG du portail client.",
+    systemPrompt: "You are the customer portal's RAG assistant.",
     baselineTest,
-    strategieTokens: "Cache prompt + few-shot 3 exemples.",
+    strategieTokens: "Prompt cache + 3-example few-shot.",
   },
   "STEP-02": {
-    diagrammeC4: "C4 L2 : API ↔ VectorDB ↔ LLM.",
-    adrs: [{ id: "ADR-001", titre: "Choix Qdrant" }],
+    diagrammeC4: "C4 L2: API ↔ VectorDB ↔ LLM.",
+    adrs: [{ id: "ADR-001", titre: "Qdrant choice" }],
     choixStack: { llm: "claude-opus-4-8", vectorDb: "Qdrant", api: "FastAPI" },
-    checklistRisques: ["latence", "coût tokens"],
+    checklistRisques: ["latency", "token cost"],
   },
   "STEP-03": {
     code: "from fastapi import FastAPI\napp = FastAPI()",
@@ -42,13 +43,13 @@ export const wf003HappyOutputs: Record<string, unknown> = {
     gherkin: [{ given: "g", when: "w", then: "t", type: "nominal" }],
     tauxReussite: 94,
     evalsLLM: { goldenDataset, faithfulness: 0.91 },
-    planTest: "Plan de tests fonctionnels manuel + automatisé.",
+    planTest: "Manual + automated functional test plan.",
   },
   "STEP-05": {
     pipeline: "name: CI\non: [push]\njobs: ...",
     dockerfile: "FROM python:3.12-slim",
     iac: 'resource "aws_ecs_service" ...',
-    runbook: "Déploiement bleu-vert + rollback automatique.",
+    runbook: "Blue-green deployment + automatic rollback.",
   },
   "STEP-06": {
     rapportOwasp: owasp,

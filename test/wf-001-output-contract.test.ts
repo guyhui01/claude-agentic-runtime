@@ -20,8 +20,8 @@ function stepOutput(stepId: string): any {
   return step.output as any;
 }
 
-describe("WF-001 — schémas de sortie alignés sur les critères de gate", () => {
-  it("STEP-03 : backlog épingle les champs US (statement/priorite/estimation/dod) + bornes 8–15", () => {
+describe("WF-001 — output schemas aligned with the gate criteria", () => {
+  it("STEP-03: backlog pins the US fields (statement/priorite/estimation/dod) + bounds 8–15", () => {
     const out = stepOutput("STEP-03");
     expect(out.properties.backlog.minItems).toBe(8);
     expect(out.properties.backlog.maxItems).toBe(15);
@@ -31,46 +31,46 @@ describe("WF-001 — schémas de sortie alignés sur les critères de gate", () 
     expect(out.properties.backlog.items.properties.estimation.type).toBe("number");
   });
 
-  it("STEP-03 : epics borné 3–5 (DoD)", () => {
+  it("STEP-03: epics bounded 3–5 (DoD)", () => {
     const out = stepOutput("STEP-03");
     expect(out.properties.epics.minItems).toBe(3);
     expect(out.properties.epics.maxItems).toBe(5);
   });
 
-  it("STEP-04 : gherkin épingle given/when/then", () => {
+  it("STEP-04: gherkin pins given/when/then", () => {
     const out = stepOutput("STEP-04");
     expect(out.properties.gherkin.items.required).toEqual(
       expect.arrayContaining(["given", "when", "then"]),
     );
   });
 
-  // --- Nudges advisory communiqués via descriptions (cadrage « plein pot ») ---
-  it("STEP-03 : `statement` décrit le gabarit INVEST (advisory po-us-format-invest)", () => {
+  // --- Advisory nudges communicated via descriptions (full scoping run) ---
+  it("STEP-03: `statement` describes the INVEST template (advisory po-us-format-invest)", () => {
     const out = stepOutput("STEP-03");
     expect(out.properties.backlog.items.properties.statement.description).toMatch(
-      /en tant que/i,
+      /as a/i,
     );
   });
 
-  it("STEP-04 : gherkin décrit la couverture erreur/limite + porte `type` (advisory qa-cas-erreur-et-limite)", () => {
+  it("STEP-04: gherkin describes the error/boundary coverage + carries `type` (advisory qa-cas-erreur-et-limite)", () => {
     const out = stepOutput("STEP-04");
-    expect(out.properties.gherkin.description).toMatch(/erreur/i);
-    expect(out.properties.gherkin.description).toMatch(/limite/i);
+    expect(out.properties.gherkin.description).toMatch(/error/i);
+    expect(out.properties.gherkin.description).toMatch(/boundary/i);
     expect(out.properties.gherkin.items.properties.type).toBeDefined();
   });
 
-  it("po-us-format-invest accepte l'élision française correcte (qu'/d')", () => {
+  it("po-us-format-invest accepts the INVEST template (a/an article)", () => {
     const invest = WF_001_CADRAGE_CRITERIA.find((c) => c.id === "po-us-format-invest");
     expect(invest).toBeDefined();
-    // Élision : « En tant qu'assuré … afin d'éviter … » (français grammatical).
+    // "an" article: « As an insured … so that … ».
     expect(
-      invest!.check({ backlog: [{ statement: "En tant qu'assuré, je veux X afin d'éviter Y" }] }),
+      invest!.check({ backlog: [{ statement: "As an insured I want X so that I avoid Y" }] }),
     ).toBe(true);
-    // Forme non élidée également acceptée.
+    // "a" article also accepted.
     expect(
-      invest!.check({ backlog: [{ statement: "En tant que utilisateur je veux X afin de Y" }] }),
+      invest!.check({ backlog: [{ statement: "As a user I want X so that Y" }] }),
     ).toBe(true);
-    // Hors gabarit : rejeté.
-    expect(invest!.check({ backlog: [{ statement: "Je veux un truc" }] })).toBe(false);
+    // Off-template: rejected.
+    expect(invest!.check({ backlog: [{ statement: "I want a thing" }] })).toBe(false);
   });
 });

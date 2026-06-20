@@ -47,31 +47,31 @@ const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
   tools: [],
 });
 
-// --- Sorties d'étape conformes au DoD ---------------------------------------
+// --- DoD-compliant step outputs ---------------------------------------------
 const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
-  statement: `En tant que utilisateur je veux la fonctionnalité ${i + 1} afin de gagner du temps`,
+  statement: `As a user I want feature ${i + 1} so that I save time`,
   priorite: "must",
   estimation: 3,
-  dod: "Testé et validé en recette",
+  dod: "Tested and validated in UAT",
 }));
 const happyOutputs: Record<string, unknown> = {
   "STEP-01": {
-    besoins: ["Réduire le temps de traitement"],
-    partiesPrenantes: [{ nom: "Métier", role: "sponsor" }],
-    perimetre: { in: ["authentification"], out: ["facturation"] },
+    besoins: ["Reduce processing time"],
+    partiesPrenantes: [{ nom: "Business", role: "sponsor" }],
+    perimetre: { in: ["authentication"], out: ["billing"] },
     questionsOuvertes: [],
   },
   "STEP-03": {
     backlog: happyBacklog,
-    epics: ["Auth", "Recherche", "Reporting"],
+    epics: ["Auth", "Search", "Reporting"],
   },
   "STEP-04": {
     gherkin: [
-      { given: "un utilisateur connecté", when: "il recherche", then: "il voit les résultats", type: "nominal" },
-      { given: "un terme invalide", when: "il recherche", then: "un message d'erreur s'affiche", type: "erreur" },
-      { given: "0 résultat", when: "il recherche", then: "un état vide s'affiche", type: "limite" },
+      { given: "a logged-in user", when: "they search", then: "they see the results", type: "nominal" },
+      { given: "an invalid term", when: "they search", then: "an error message is shown", type: "error" },
+      { given: "0 results", when: "they search", then: "an empty state is shown", type: "boundary" },
     ],
-    planTest: "Sprint 1 : smoke tests + 3 scénarios prioritaires",
+    planTest: "Sprint 1: smoke tests + 3 priority scenarios",
   },
 };
 const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
