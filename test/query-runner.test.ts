@@ -12,10 +12,10 @@ import {
 } from "../src/sdk/query-runner.js";
 import type { StepRunCall } from "../src/orchestrator/types.js";
 
-/** Agent minimal (issu de l'adaptateur §2.4-A) pour les appels de test. */
+/** Minimal agent (from the §2.4-A adapter) for the test calls. */
 const AGENT: AgentDefinition = {
-  description: "Agent de cadrage",
-  prompt: "Tu es l'agent BUSINESS-ANALYST.",
+  description: "Scoping agent",
+  prompt: "You are the BUSINESS-ANALYST agent.",
   tools: ["Read", "Grep", "Glob"],
 };
 

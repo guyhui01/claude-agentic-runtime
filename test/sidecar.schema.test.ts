@@ -29,7 +29,7 @@ function validManifest() {
         type: "skill",
         path: "skills/user-stories/SKILL.md",
         title: "User Stories",
-        description: "Rédaction de User Stories INVEST.",
+        description: "INVEST User Stories writing.",
         catalogVersion: "v3.25.0",
         source: {
           file: "skills/user-stories/SKILL.md",

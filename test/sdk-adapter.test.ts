@@ -23,7 +23,7 @@ describe("toAgentDefinition — adaptateur catalogue → SDK (§2.4-A)", () => {
     expect(def.description).toBe(agentAsset.description);
     const prose = readFileSync(join(catalogRoot, agentAsset.path), "utf-8");
     expect(def.prompt).toBe(prose);
-    expect(def.prompt).toContain("Agent Cadrage");
+    expect(def.prompt).toContain("Scoping Agent");
   });
 
   it("applique des défauts read-only (ADR-0001) sans déclaration catalogue", () => {
