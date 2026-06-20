@@ -1,11 +1,11 @@
 /**
- * Garde de régression du run live 2026-06-09 (§2.4-B.3) : les schémas de sortie
- * du manifeste WF-001 DOIVENT communiquer le contrat exact attendu par les eval
- * gates (champs + bornes), pour qu'un agent live ne diverge plus (cf. run live :
- * 24 US / 9 épics, champ `userStory` au lieu de `statement` → fail-closed STEP-03).
+ * Regression guard from the 2026-06-09 live run (§2.4-B.3): the WF-001 manifest's
+ * output schemas MUST communicate the exact contract the eval gates expect (fields
+ * + bounds), so a live agent no longer diverges (cf. live run: 24 US / 9 epics,
+ * field `userStory` instead of `statement` → fail-closed STEP-03).
  *
- * Ces schémas étant injectés au prompt par `createQueryRunner` (format imposé),
- * les y épingler aligne la sortie de l'agent sur ce que la gate vérifie.
+ * Since these schemas are injected into the prompt by `createQueryRunner` (enforced
+ * format), pinning them there aligns the agent's output with what the gate checks.
  */
 import { describe, it, expect } from "vitest";
 import {
@@ -16,7 +16,7 @@ import {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function stepOutput(stepId: string): any {
   const step = WF_001_CADRAGE_MANIFEST.steps.find((s) => s.stepId === stepId);
-  if (!step) throw new Error(`étape ${stepId} introuvable`);
+  if (!step) throw new Error(`step ${stepId} not found`);
   return step.output as any;
 }
 
@@ -62,7 +62,7 @@ describe("WF-001 — output schemas aligned with the gate criteria", () => {
   it("po-us-format-invest accepts the INVEST template (a/an article)", () => {
     const invest = WF_001_CADRAGE_CRITERIA.find((c) => c.id === "po-us-format-invest");
     expect(invest).toBeDefined();
-    // "an" article: « As an insured … so that … ».
+    // "an" article: "As an insured … so that …".
     expect(
       invest!.check({ backlog: [{ statement: "As an insured I want X so that I avoid Y" }] }),
     ).toBe(true);

@@ -1,13 +1,13 @@
 /**
- * Preuve hors-ligne du CHEMIN LIVE complet de WF-001 (§2.4-B.3) : `runWf001`
- * branché sur le VRAI `createQueryRunner`, avec `query()` simulé. Démontre que
- * l'injection de format de sortie rend la spine ABOUTISSABLE :
- *   - un `query()` qui renvoie le JSON conforme par étape → spine `completed` ;
- *   - un `query()` qui renvoie de la prose → fail-closed (parse JSON impossible).
+ * Offline proof of the full WF-001 LIVE PATH (§2.4-B.3): `runWf001` wired to the
+ * REAL `createQueryRunner`, with a mocked `query()`. Shows that output-format
+ * injection makes the spine COMPLETABLE:
+ *   - a `query()` returning conformant JSON per step → spine `completed`;
+ *   - a `query()` returning prose → fail-closed (JSON parse impossible).
  *
- * Hermétique : sidecar intérimaire + résolveur d'agent stub + `query` injecté.
- * Zéro réseau, zéro appel facturé. Le câblage réel `createQueryRunner` (gardes
- * OAuth/caps/plan) est traversé tel quel — seul `query()` est mocké.
+ * Hermetic: interim sidecar + stub agent resolver + injected `query`. Zero network,
+ * zero billed call. The real `createQueryRunner` wiring (OAuth/caps/plan guards) is
+ * traversed as-is — only `query()` is mocked.
  */
 import { describe, it, expect } from "vitest";
 import type {
@@ -20,7 +20,7 @@ import { QueryRunnerError, type QueryFn } from "../src/sdk/query-runner.js";
 import type { AgentResolver } from "../src/manifest/load-manifest.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 
-// --- Sidecar intérimaire + résolveur stub (hermétique, indépendant du catalogue) ---
+// --- Interim sidecar + stub resolver (hermetic, catalog-independent) ---
 function agentAsset(id: string, title: string) {
   return {
     id,
@@ -48,7 +48,7 @@ const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
   tools: [],
 });
 
-// --- Sorties conformes au DoD par étape ---
+// --- DoD-conformant outputs per step ---
 const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
   statement: `As a user I want feature ${i + 1} so that I save time`,
   priorite: "must",
@@ -74,9 +74,9 @@ const stepOutputs: Record<string, unknown> = {
 };
 
 /**
- * Faux `query()` : route par le schéma de sortie injecté dans le prompt
- * (`gherkin` → STEP-04, `backlog` → STEP-03, sinon STEP-01) et renvoie soit le
- * JSON conforme, soit de la prose selon `mode`.
+ * Fake `query()`: routes by the output schema injected in the prompt
+ * (`gherkin` → STEP-04, `backlog` → STEP-03, otherwise STEP-01) and returns either
+ * the conformant JSON or prose depending on `mode`.
  */
 function routedQuery(mode: "json" | "prose"): QueryFn {
   return async function* (params: { prompt: string; options?: Options }) {
@@ -88,7 +88,7 @@ function routedQuery(mode: "json" | "prose"): QueryFn {
         : "STEP-01";
     const result =
       mode === "prose"
-        ? "Voici une analyse rédigée en prose, sans aucun JSON."
+        ? "Here is an analysis written as prose, without any JSON."
         : JSON.stringify(stepOutputs[stepId]);
     yield {
       type: "result",
@@ -101,22 +101,22 @@ function routedQuery(mode: "json" | "prose"): QueryFn {
   };
 }
 
-describe("WF-001 — chemin live (query mocké, createQueryRunner réel)", () => {
-  it("query renvoie le JSON conforme par étape → spine completed, 3 verdicts pass", async () => {
+describe("WF-001 — live path (mocked query, real createQueryRunner)", () => {
+  it("query returns conformant JSON per step → spine completed, 3 pass verdicts", async () => {
     const res = await runWf001({
       sidecar,
       resolveAgent,
       runnerDeps: { query: routedQuery("json"), env: {} },
-      initialInput: { brief: "Refondre le portail B2B" },
+      initialInput: { brief: "Rebuild the B2B portal" },
     });
     expect(res.status).toBe("completed");
     expect(res.traces).toHaveLength(3);
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
-    // La sortie a bien été PARSÉE en objet par le runner (pas une string).
+    // The output was indeed PARSED into an object by the runner (not a string).
     expect(typeof res.traces[0]!.output).toBe("object");
   });
 
-  it("query renvoie de la prose → fail-closed (QueryRunnerError, parse JSON impossible)", async () => {
+  it("query returns prose → fail-closed (QueryRunnerError, JSON parse impossible)", async () => {
     await expect(
       runWf001({
         sidecar,

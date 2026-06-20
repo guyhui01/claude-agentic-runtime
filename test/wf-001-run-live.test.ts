@@ -1,17 +1,17 @@
 /**
- * RUN LIVE de la spine WF-001 (§2.4-B.3) — FACTURÉ, OBSERVÉ, sur accord explicite.
+ * LIVE RUN of the WF-001 spine (§2.4-B.3) — BILLED, OBSERVED, on explicit approval.
  *
- * Gardé : ne s'exécute QUE si `LIVE_RUN=1` ET le catalogue est joignable. La suite
- * normale (`npm test`) le SKIP toujours → aucun appel facturé par défaut.
+ * Guarded: runs ONLY if `LIVE_RUN=1` AND the catalog is reachable. The normal suite
+ * (`npm test`) always SKIPS it → no billed call by default.
  *
- * Déroule la spine réelle avec le VRAI `query()` du SDK (via `createQueryRunner`,
- * caps durs + `permissionMode:"plan"` read-only), sidecar réel (`claude-agents`
- * v3.26.0) + prose réelle (`toAgentDefinition`). Issue attendue : `completed` si
- * les 3 agents produisent un JSON conforme aux DoD, sinon `failed` fail-closed à
- * la 1ʳᵉ gate non satisfaite (résultat valide, tracé). Auth : OAuth abonnement
- * uniquement (jamais ANTHROPIC_API_KEY — garde du runner).
+ * Runs the real spine with the SDK's REAL `query()` (via `createQueryRunner`,
+ * hard caps + `permissionMode:"plan"` read-only), real sidecar (`claude-agents`
+ * v3.26.0) + real prose (`toAgentDefinition`). Expected outcome: `completed` if the
+ * 3 agents produce DoD-conformant JSON, otherwise `failed` fail-closed at the first
+ * unsatisfied gate (valid, traced result). Auth: subscription OAuth only (never
+ * ANTHROPIC_API_KEY — runner guard).
  *
- * Lancement : `LIVE_RUN=1 npx vitest run test/wf-001-run-live.test.ts`
+ * Launch: `LIVE_RUN=1 npx vitest run test/wf-001-run-live.test.ts`
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
@@ -23,10 +23,10 @@ import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 /**
- * Fichier de capture du résultat (observabilité, indépendant du reporter vitest).
- * Remédiation audit ISO v1 (P3) : trace PERSISTANTE dans le repo (`docs/audit/live-runs/`),
- * plus de `/tmp` éphémère. Le `.json` brut est gitignoré ; la trace anonymisée est
- * committée sur décision après revue (cf. `docs/audit/live-runs/README.md`).
+ * Result capture file (observability, independent of the vitest reporter).
+ * ISO v1 audit remediation (P3): PERSISTENT trace in the repo (`docs/audit/live-runs/`),
+ * no more ephemeral `/tmp`. The raw `.json` is gitignored; the anonymized trace is
+ * committed by decision after review (see `docs/audit/live-runs/README.md`).
  */
 const RESULT_FILE =
   process.env.LIVE_RESULT_FILE ??
@@ -34,9 +34,9 @@ const RESULT_FILE =
 
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
-describe.skipIf(!ENABLED)("WF-001 — RUN LIVE (facturé, observé)", () => {
+describe.skipIf(!ENABLED)("WF-001 — LIVE RUN (billed, observed)", () => {
   it(
-    "déroule la spine WF-001 en live (capé, read-only)",
+    "runs the WF-001 spine live (capped, read-only)",
     async () => {
       const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
       const res = await runWf001({
@@ -44,13 +44,13 @@ describe.skipIf(!ENABLED)("WF-001 — RUN LIVE (facturé, observé)", () => {
         catalogRoot: CATALOG_ROOT,
         initialInput: {
           brief:
-            "Refondre le portail client B2B d'un assureur : espace self-care, " +
-            "suivi des contrats et déclaration de sinistres, web et mobile.",
+            "Rebuild an insurer's B2B customer portal: self-care area, " +
+            "policy tracking and claims filing, web and mobile.",
         },
         runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
       });
 
-      console.log("\n===== RÉSULTAT RUN LIVE WF-001 =====");
+      console.log("\n===== WF-001 LIVE RUN RESULT =====");
       console.log("status :", res.status);
       if (res.failure) console.log("failure:", JSON.stringify(res.failure));
       for (const t of res.traces) {
@@ -60,13 +60,13 @@ describe.skipIf(!ENABLED)("WF-001 — RUN LIVE (facturé, observé)", () => {
         console.log(
           "    " +
             t.gate.results
-              .map((r) => `${r.id}:${r.passed ? "ok" : "KO"}`)
+              .map((r) => `${r.id}:${r.passed ? "ok" : "FAIL"}`)
               .join("  "),
         );
       }
       console.log("====================================\n");
 
-      // Capture garantie sur disque (statut + verdicts + sorties tracées).
+      // Guaranteed on-disk capture (status + verdicts + traced outputs).
       mkdirSync(dirname(RESULT_FILE), { recursive: true });
       writeFileSync(
         RESULT_FILE,

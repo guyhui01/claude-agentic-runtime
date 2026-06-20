@@ -11,12 +11,12 @@ import { QueryRunnerError } from "../src/sdk/query-runner.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 
 /**
- * Test bout-en-bout HERMÉTIQUE du câblage du run WF-001 (§2.4-B.3, étape 2) :
- * assemblage (loadSpine) → VRAI createQueryRunner (donc ses 4 gardes) → runSpine.
- * `query` est injecté (faux) ⇒ zéro réseau, zéro appel facturé.
+ * HERMETIC end-to-end test of the WF-001 run wiring (§2.4-B.3, step 2):
+ * assembly (loadSpine) → REAL createQueryRunner (hence its 4 guards) → runSpine.
+ * `query` is injected (fake) ⇒ zero network, zero billed call.
  */
 
-// --- Sidecar intérimaire (les 3 agents du backbone) -------------------------
+// --- Interim sidecar (the 3 backbone agents) --------------------------------
 function agentAsset(id: string, title: string) {
   return {
     id,
@@ -39,7 +39,7 @@ const sidecar: Sidecar = {
   ],
 };
 
-// Resolver stub : prompt = marqueur d'asset, exploité par le faux query pour router.
+// Stub resolver: prompt = asset marker, used by the fake query to route.
 const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
   description: asset.description,
   prompt: `stub-prompt:${asset.id}`,
@@ -77,7 +77,7 @@ const happyOutputs: Record<string, unknown> = {
   },
 };
 
-/** Faux query : route par le systemPrompt (marqueur d'asset) → structured_output. */
+/** Fake query: routes by the systemPrompt (asset marker) → structured_output. */
 function fakeQuery(outputs: Record<string, unknown>): QueryFn {
   return async function* (params: { prompt: string; options?: Options }) {
     const sp = String(params.options?.systemPrompt ?? "");
@@ -99,12 +99,12 @@ const emptyEnv: Record<string, string | undefined> = {};
 
 // --- Tests ------------------------------------------------------------------
 
-describe("runWf001 — câblage run de la spine WF-001 (§2.4-B.3)", () => {
-  it("sorties conformes au DoD → spine completed via le vrai runner query()", async () => {
+describe("runWf001 — WF-001 spine run wiring (§2.4-B.3)", () => {
+  it("DoD-conformant outputs → spine completed via the real runner query()", async () => {
     const res = await runWf001({
       sidecar,
       resolveAgent,
-      initialInput: { brief: "Refondre le portail B2B" },
+      initialInput: { brief: "Rebuild the B2B portal" },
       runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv },
     });
     expect(res.status).toBe("completed");
@@ -112,7 +112,7 @@ describe("runWf001 — câblage run de la spine WF-001 (§2.4-B.3)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
-  it("STEP-03 sous le seuil DoD (5 US) → failed à l'eval gate de STEP-03", async () => {
+  it("STEP-03 below the DoD threshold (5 US) → failed at STEP-03's eval gate", async () => {
     const broken = {
       ...happyOutputs,
       "STEP-03": { backlog: happyBacklog.slice(0, 5), epics: ["A", "B", "C"] },
@@ -128,7 +128,7 @@ describe("runWf001 — câblage run de la spine WF-001 (§2.4-B.3)", () => {
     expect(res.traces).toHaveLength(2);
   });
 
-  it("garde budget propagée : ANTHROPIC_API_KEY défini ⇒ le run lève (fail-closed)", async () => {
+  it("budget guard propagated: ANTHROPIC_API_KEY set ⇒ the run throws (fail-closed)", async () => {
     await expect(
       runWf001({
         sidecar,
@@ -141,7 +141,7 @@ describe("runWf001 — câblage run de la spine WF-001 (§2.4-B.3)", () => {
     ).rejects.toBeInstanceOf(QueryRunnerError);
   });
 
-  it("config insuffisante : ni catalogRoot ni resolveAgent ⇒ Wf001ConfigError", async () => {
+  it("insufficient config: neither catalogRoot nor resolveAgent ⇒ Wf001ConfigError", async () => {
     await expect(
       runWf001({ sidecar, runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv } }),
     ).rejects.toBeInstanceOf(Wf001ConfigError);

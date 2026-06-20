@@ -1,12 +1,12 @@
 /**
- * Preuve bout-en-bout (hors-ligne) : la spine WF-003 est PRÊTE pour le run live
- * avec le SIDECAR RÉEL produit par `claude-agents` (générateur §2.3, ≥ v3.26.2).
+ * End-to-end proof (offline): the WF-003 spine is READY for the live run with the
+ * REAL SIDECAR produced by `claude-agents` (generator §2.3, ≥ v3.26.2).
  *
- * `loadSidecar` du VRAI `sidecar.json` → `toAgentDefinition` (prose réelle) →
- * `assembleWf003Spine` → `runSpine` (runner mocké, zéro réseau). Le câblage
- * `createQueryRunner` est couvert par `run-wf-003.test.ts`.
+ * `loadSidecar` of the REAL `sidecar.json` → `toAgentDefinition` (real prose) →
+ * `assembleWf003Spine` → `runSpine` (mocked runner, zero network). The
+ * `createQueryRunner` wiring is covered by `run-wf-003.test.ts`.
  *
- * CI-safe : skip propre si le catalogue est absent (cf. `catalog-root.ts`).
+ * CI-safe: clean skip if the catalog is absent (see `catalog-root.ts`).
  */
 import { describe, it, expect } from "vitest";
 import { existsSync } from "node:fs";
@@ -33,8 +33,8 @@ const WF_003_BACKBONE = [
 const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
   async ({ stepId }) => ({ output: outputs[stepId] });
 
-describe.skipIf(!HAVE_CATALOG)("spine WF-003 — sidecar RÉEL (prêt pour run live)", () => {
-  it("le backbone WF-003 est résoluble depuis le sidecar réel (inclusion)", () => {
+describe.skipIf(!HAVE_CATALOG)("WF-003 spine — REAL sidecar (ready for live run)", () => {
+  it("the WF-003 backbone is resolvable from the real sidecar (inclusion)", () => {
     const sc = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
     expect(sc.catalog.name).toBe("claude-agents");
     const ids = new Set(sc.assets.map((a) => a.id));
@@ -43,7 +43,7 @@ describe.skipIf(!HAVE_CATALOG)("spine WF-003 — sidecar RÉEL (prêt pour run l
     }
   });
 
-  it("assemble + déroule la spine avec prose réelle → completed, 7 verdicts pass", async () => {
+  it("assembles + runs the spine with real prose → completed, 7 pass verdicts", async () => {
     const sc = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
     const steps = assembleWf003Spine(sc, (asset) => toAgentDefinition(asset, CATALOG_ROOT));
 
@@ -51,15 +51,15 @@ describe.skipIf(!HAVE_CATALOG)("spine WF-003 — sidecar RÉEL (prêt pour run l
     expect(steps.every((s) => s.agent.prompt.length > 100)).toBe(true);
     expect(steps[0]!.provenance.catalogTag).toBe(sc.catalog.version);
 
-    const res = await runSpine(steps, mockRunner(wf003HappyOutputs), { app: "Chatbot RAG support" });
+    const res = await runSpine(steps, mockRunner(wf003HappyOutputs), { app: "RAG support chatbot" });
     expect(res.status).toBe("completed");
     expect(res.traces).toHaveLength(7);
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 });
 
-describe.runIf(!HAVE_CATALOG)("spine WF-003 — sidecar réel (skip)", () => {
-  it("skippé : catalogue introuvable (définir CATALOG_ROOT ou checkout sibling)", () => {
+describe.runIf(!HAVE_CATALOG)("WF-003 spine — real sidecar (skip)", () => {
+  it("skipped: catalog not found (set CATALOG_ROOT or checkout sibling)", () => {
     expect(HAVE_CATALOG).toBe(false);
   });
 });

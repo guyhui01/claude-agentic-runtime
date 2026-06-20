@@ -1,15 +1,16 @@
 /**
- * Racine du catalogue `claude-agents` consommé par les tests « sidecar réel »
- * (`run-wf-001-real-sidecar`) et le run live (`wf-001-run-live`).
+ * Root of the `claude-agents` catalog consumed by the "real sidecar" tests
+ * (`run-wf-001-real-sidecar`) and the live run (`wf-001-run-live`).
  *
- * POINT DE VÉRITÉ UNIQUE du défaut : factorisé ici pour éviter la dérive entre
- * tests (deux défauts dupliqués = un clone stale qui se fait consommer en
- * silence — exactement le piège évité).
+ * SINGLE SOURCE OF TRUTH for the default: factored here to avoid drift between
+ * tests (two duplicated defaults = a stale clone silently consumed — exactly the
+ * trap being avoided).
  *
- * Défaut : sibling `claude-agents` — le NOM RÉEL du repo catalogue. Surchargeable
- * par la variable d'env `CATALOG_ROOT` (checkout ailleurs). `SIDECAR_PATH` en découle.
- * Le runtime ne DÉPEND pas du catalogue (repos séparés, ADR-0002) : si le sibling
- * est absent, les blocs qui en dépendent se SKIPPENT (cf. `HAVE_CATALOG` côté tests).
+ * Default: sibling `claude-agents` — the REAL name of the catalog repo. Overridable
+ * via the `CATALOG_ROOT` env var (checkout elsewhere). `SIDECAR_PATH` derives from it.
+ * The runtime does NOT DEPEND on the catalog (separate repos, ADR-0002): if the
+ * sibling is absent, the blocks that depend on it are SKIPPED (see `HAVE_CATALOG`
+ * in the tests).
  */
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";

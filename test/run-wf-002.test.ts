@@ -9,10 +9,10 @@ import type { Sidecar } from "../src/sidecar/types.js";
 import { wf002HappyOutputs as happyOutputs } from "./fixtures/wf-002-outputs.js";
 
 /**
- * Test bout-en-bout HERMÉTIQUE du câblage du run WF-002 (§2.4-B.4) :
- * assemblage (loadSpine) → VRAI createQueryRunner (4 gardes) → runSpine.
- * `query` est injecté (faux) ⇒ zéro réseau, zéro appel facturé. Les sorties
- * respectent le schéma RESSERRÉ (donc le handoff producer-output) ET les critères.
+ * HERMETIC end-to-end test of the WF-002 run wiring (§2.4-B.4):
+ * assembly (loadSpine) → REAL createQueryRunner (4 guards) → runSpine.
+ * `query` is injected (fake) ⇒ zero network, zero billed call. Outputs respect
+ * the TIGHTENED schema (hence the producer-output handoff) AND the criteria.
  */
 
 function agentAsset(id: string, title: string) {
@@ -35,7 +35,7 @@ const sidecar: Sidecar = {
     agentAsset("AGENT-RELEASE-TRAIN-ENGINEER", "Release Train Engineer"),
     agentAsset("AGENT-PO-SAFE", "Product Owner SAFe"),
     agentAsset("AGENT-SCRUM-MASTER", "Scrum Master"),
-    agentAsset("AGENT-CHEF-PROJET-IA", "Chef de Projet IA"),
+    agentAsset("AGENT-CHEF-PROJET-IA", "AI Project Manager"),
   ],
 };
 
@@ -72,8 +72,8 @@ function fakeQuery(outputs: Record<string, unknown>): QueryFn {
 
 const emptyEnv: Record<string, string | undefined> = {};
 
-describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
-  it("sorties conformes au DoD → spine completed via le vrai runner query()", async () => {
+describe("runWf002 — WF-002 spine run wiring (§2.4-B.4)", () => {
+  it("DoD-conformant outputs → spine completed via the real runner query()", async () => {
     const res = await runWf002({
       sidecar,
       resolveAgent,
@@ -85,7 +85,7 @@ describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
-  it("vote de confiance < 3.5 (STEP-02) → failed à l'eval gate de STEP-02", async () => {
+  it("confidence vote < 3.5 (STEP-02) → failed at STEP-02's eval gate", async () => {
     const broken = {
       ...happyOutputs,
       "STEP-02": { ...(happyOutputs["STEP-02"] as object), voteConfiance: 3.0 },
@@ -101,7 +101,7 @@ describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
     expect(res.traces).toHaveLength(2);
   });
 
-  it("garde budget propagée : ANTHROPIC_API_KEY défini ⇒ le run lève (fail-closed)", async () => {
+  it("budget guard propagated: ANTHROPIC_API_KEY set ⇒ the run throws (fail-closed)", async () => {
     await expect(
       runWf002({
         sidecar,
@@ -111,13 +111,13 @@ describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
     ).rejects.toBeInstanceOf(QueryRunnerError);
   });
 
-  it("config insuffisante : ni catalogRoot ni resolveAgent ⇒ Wf002ConfigError", async () => {
+  it("insufficient config: neither catalogRoot nor resolveAgent ⇒ Wf002ConfigError", async () => {
     await expect(
       runWf002({ sidecar, runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv } }),
     ).rejects.toBeInstanceOf(Wf002ConfigError);
   });
 
-  it("onStep (observabilité) : émet start+done par étape, dans l'ordre, avec verdict", async () => {
+  it("onStep (observability): emits start+done per step, in order, with verdict", async () => {
     const events: StepProgressEvent[] = [];
     const res = await runWf002({
       sidecar,
@@ -126,7 +126,7 @@ describe("runWf002 — câblage run de la spine WF-002 (§2.4-B.4)", () => {
       onStep: (e) => events.push(e),
     });
     expect(res.status).toBe("completed");
-    // 5 étapes × (start, done) = 10 événements.
+    // 5 steps × (start, done) = 10 events.
     expect(events).toHaveLength(10);
     expect(events.filter((e) => e.phase === "start").map((e) => e.stepId)).toEqual([
       "STEP-01", "STEP-02", "STEP-03", "STEP-04", "STEP-06",
