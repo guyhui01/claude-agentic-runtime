@@ -4,7 +4,7 @@ import type { ValidateFunction } from "ajv";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-// On charge le schéma via fs (robuste cross-tooling) plutôt qu'un import JSON.
+// Load the schema via fs (robust cross-tooling) rather than a JSON import.
 const schemaPath = fileURLToPath(
   new URL("../schema/sidecar.schema.json", import.meta.url),
 );
@@ -17,7 +17,7 @@ beforeAll(() => {
   validate = ajv.compile(schema);
 });
 
-/** Fabrique un manifeste minimal VALIDE ; chaque test le dégrade ponctuellement. */
+/** Builds a minimal VALID manifest; each test degrades it locally. */
 function validManifest() {
   return {
     schemaVersion: "1.0.0",
@@ -41,33 +41,33 @@ function validManifest() {
 }
 
 describe("sidecar — base", () => {
-  it("accepte un manifeste minimal valide", () => {
+  it("accepts a minimal valid manifest", () => {
     expect(validate(validManifest())).toBe(true);
   });
 });
 
-describe("ISO 25012 — complétude (champs requis)", () => {
-  it("rejette un asset sans description", () => {
+describe("ISO 25012 — completeness (required fields)", () => {
+  it("rejects an asset without a description", () => {
     const m = validManifest();
     delete (m.assets[0] as Record<string, unknown>).description;
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette un titre vide (minLength)", () => {
+  it("rejects an empty title (minLength)", () => {
     const m = validManifest();
     m.assets[0].title = "";
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette une liste d'assets vide (minItems)", () => {
+  it("rejects an empty assets list (minItems)", () => {
     const m = validManifest();
     m.assets = [];
     expect(validate(m)).toBe(false);
   });
 });
 
-describe("ISO 25012 — cohérence (if/then par type)", () => {
-  it("rejette un workflow sans dependsOn", () => {
+describe("ISO 25012 — consistency (if/then by type)", () => {
+  it("rejects a workflow without dependsOn", () => {
     const m = validManifest();
     m.assets[0] = {
       ...m.assets[0],
@@ -79,7 +79,7 @@ describe("ISO 25012 — cohérence (if/then par type)", () => {
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette un workflow avec dependsOn vide (minItems 1)", () => {
+  it("rejects a workflow with an empty dependsOn (minItems 1)", () => {
     const m = validManifest();
     m.assets[0] = {
       ...m.assets[0],
@@ -92,7 +92,7 @@ describe("ISO 25012 — cohérence (if/then par type)", () => {
     expect(validate(m)).toBe(false);
   });
 
-  it("accepte un workflow avec au moins une dépendance", () => {
+  it("accepts a workflow with at least one dependency", () => {
     const m = validManifest();
     m.assets[0] = {
       ...m.assets[0],
@@ -105,7 +105,7 @@ describe("ISO 25012 — cohérence (if/then par type)", () => {
     expect(validate(m)).toBe(true);
   });
 
-  it("rejette un agent sans dependsOn", () => {
+  it("rejects an agent without dependsOn", () => {
     const m = validManifest();
     m.assets[0] = {
       ...m.assets[0],
@@ -117,73 +117,73 @@ describe("ISO 25012 — cohérence (if/then par type)", () => {
     expect(validate(m)).toBe(false);
   });
 
-  it("accepte un skill sans dependsOn (feuille)", () => {
+  it("accepts a skill without dependsOn (leaf)", () => {
     expect(validate(validManifest())).toBe(true);
   });
 });
 
-describe("ISO 25012 — crédibilité (source/provenance)", () => {
-  it("rejette un asset sans source", () => {
+describe("ISO 25012 — credibility (source/provenance)", () => {
+  it("rejects an asset without a source", () => {
     const m = validManifest();
     delete (m.assets[0] as Record<string, unknown>).source;
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette une source sans catalogTag", () => {
+  it("rejects a source without catalogTag", () => {
     const m = validManifest();
     delete (m.assets[0].source as Record<string, unknown>).catalogTag;
     expect(validate(m)).toBe(false);
   });
 });
 
-describe("ISO 25012 — actualité (tag + horodatage)", () => {
-  it("rejette une version catalogue non épinglée (plage ^)", () => {
+describe("ISO 25012 — currency (tag + timestamp)", () => {
+  it("rejects an unpinned catalog version (^ range)", () => {
     const m = validManifest();
     m.catalog.version = "^3.25.0";
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette un generatedAt mal formé", () => {
+  it("rejects a malformed generatedAt", () => {
     const m = validManifest();
     m.generatedAt = "03/06/2026";
     expect(validate(m)).toBe(false);
   });
 });
 
-describe("ISO 25012 — conformité (formats + anti-dérive)", () => {
-  it("rejette un type inconnu (hors enum)", () => {
+describe("ISO 25012 — compliance (formats + drift guard)", () => {
+  it("rejects an unknown type (out of enum)", () => {
     const m = validManifest();
     m.assets[0].type = "plugin" as never;
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette une propriété additionnelle (additionalProperties:false)", () => {
+  it("rejects an additional property (additionalProperties:false)", () => {
     const m = validManifest();
     (m.assets[0] as Record<string, unknown>).owner = "Guy";
     expect(validate(m)).toBe(false);
   });
 });
 
-describe("ISO 25012 — exactitude (identifiants/chemins bien-formés)", () => {
-  it("rejette un id contenant une espace", () => {
+describe("ISO 25012 — accuracy (well-formed identifiers/paths)", () => {
+  it("rejects an id containing a space", () => {
     const m = validManifest();
     m.assets[0].id = "skill user stories";
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette un path à '/' initial (absolu)", () => {
+  it("rejects a path with a leading '/' (absolute)", () => {
     const m = validManifest();
     m.assets[0].path = "/etc/passwd";
     expect(validate(m)).toBe(false);
   });
 
-  it("rejette un path contenant '..' (traversal)", () => {
+  it("rejects a path containing '..' (traversal)", () => {
     const m = validManifest();
     m.assets[0].path = "../secret.md";
     expect(validate(m)).toBe(false);
   });
 });
 
-// Les 2 caractéristiques ISO 25012 hors portée d'un JSON Schema (exactitude
-// référentielle, accessibilité) + l'unicité des id sont couvertes par
-// test/sidecar.integrity.test.ts (fonctions src/sidecar/integrity.ts).
+// The 2 ISO 25012 characteristics out of a JSON Schema's reach (referential
+// accuracy, accessibility) + id uniqueness are covered by
+// test/sidecar.integrity.test.ts (src/sidecar/integrity.ts functions).
