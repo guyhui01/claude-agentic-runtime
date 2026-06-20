@@ -8,10 +8,10 @@ import type { Sidecar } from "../src/sidecar/types.js";
 import { wf003HappyOutputs as happyOutputs } from "./fixtures/wf-003-outputs.js";
 
 /**
- * Test bout-en-bout HERMÉTIQUE du câblage du run WF-003 (§2.4-B.4) :
- * assemblage (loadSpine) → VRAI createQueryRunner (4 gardes) → runSpine.
- * `query` injecté (faux) ⇒ zéro réseau, zéro appel facturé. Sorties conformes au
- * schéma RESSERRÉ (handoff producer-output) ET aux critères.
+ * HERMETIC end-to-end test of the WF-003 run wiring (§2.4-B.4):
+ * assembly (loadSpine) → REAL createQueryRunner (4 guards) → runSpine.
+ * `query` injected (fake) ⇒ zero network, zero billed call. Outputs conform to the
+ * TIGHTENED schema (producer-output handoff) AND the criteria.
  */
 
 function agentAsset(id: string, title: string) {
@@ -33,10 +33,10 @@ const sidecar: Sidecar = {
     agentAsset("AGENT-FINANCIAL-ANALYST", "Financial Analyst"),
     agentAsset("AGENT-PROMPT-ENGINEER", "Prompt Engineer"),
     agentAsset("AGENT-AI-ARCHITECT", "AI Architect"),
-    agentAsset("AGENT-DEV-PYTHON-IA", "Dev Python IA"),
+    agentAsset("AGENT-DEV-PYTHON-IA", "AI Python Developer"),
     agentAsset("AGENT-QA-AGILE", "QA Agile"),
     agentAsset("AGENT-DEVOPS-CLOUD", "DevOps Cloud"),
-    agentAsset("AGENT-SECURITE-IA", "Sécurité IA"),
+    agentAsset("AGENT-SECURITE-IA", "AI Security"),
   ],
 };
 
@@ -75,12 +75,12 @@ function fakeQuery(outputs: Record<string, unknown>): QueryFn {
 
 const emptyEnv: Record<string, string | undefined> = {};
 
-describe("runWf003 — câblage run de la spine WF-003 (§2.4-B.4)", () => {
-  it("sorties conformes au DoD → spine completed via le vrai runner query()", async () => {
+describe("runWf003 — WF-003 spine run wiring (§2.4-B.4)", () => {
+  it("DoD-conformant outputs → spine completed via the real runner query()", async () => {
     const res = await runWf003({
       sidecar,
       resolveAgent,
-      initialInput: { app: "Chatbot RAG support" },
+      initialInput: { app: "RAG support chatbot" },
       runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv },
     });
     expect(res.status).toBe("completed");
@@ -88,7 +88,7 @@ describe("runWf003 — câblage run de la spine WF-003 (§2.4-B.4)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
-  it("Go financier non validé (STEP-00 No-Go) → failed dès STEP-00", async () => {
+  it("financial Go not granted (STEP-00 No-Go) → failed at STEP-00", async () => {
     const broken = {
       ...happyOutputs,
       "STEP-00": { ...(happyOutputs["STEP-00"] as object), decision: "No-Go" },
@@ -104,7 +104,7 @@ describe("runWf003 — câblage run de la spine WF-003 (§2.4-B.4)", () => {
     expect(res.traces).toHaveLength(1);
   });
 
-  it("garde budget propagée : ANTHROPIC_API_KEY défini ⇒ le run lève (fail-closed)", async () => {
+  it("budget guard propagated: ANTHROPIC_API_KEY set ⇒ the run throws (fail-closed)", async () => {
     await expect(
       runWf003({
         sidecar,
@@ -114,7 +114,7 @@ describe("runWf003 — câblage run de la spine WF-003 (§2.4-B.4)", () => {
     ).rejects.toBeInstanceOf(QueryRunnerError);
   });
 
-  it("config insuffisante : ni catalogRoot ni resolveAgent ⇒ Wf003ConfigError", async () => {
+  it("insufficient config: neither catalogRoot nor resolveAgent ⇒ Wf003ConfigError", async () => {
     await expect(
       runWf003({ sidecar, runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv } }),
     ).rejects.toBeInstanceOf(Wf003ConfigError);

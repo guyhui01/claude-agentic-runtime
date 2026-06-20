@@ -1,15 +1,15 @@
 /**
- * Preuve bout-en-bout (hors-ligne) : la spine WF-002 est PRÊTE pour le run live
- * avec le SIDECAR RÉEL produit par `claude-agents` (générateur §2.3, ≥ v3.26.2).
+ * End-to-end proof (offline): the WF-002 spine is READY for the live run with the
+ * REAL SIDECAR produced by `claude-agents` (generator §2.3, ≥ v3.26.2).
  *
- * Couvre la chaîne que le sidecar intérimaire de `spine-wf-002.test.ts` ne couvre
- * pas : `loadSidecar` du VRAI `sidecar.json` (schéma + intégrité + accessibilité
- * réelle des AGENT-*.md) → `toAgentDefinition` (prose réelle) → `assembleWf002Spine`
- * → `runSpine`. Le seul élément absent est l'appel `query()` facturé : ici un runner
- * mocké (zéro réseau). Le câblage `createQueryRunner` est couvert par `run-wf-002.test.ts`.
+ * Covers the chain that the interim sidecar of `spine-wf-002.test.ts` does not:
+ * `loadSidecar` of the REAL `sidecar.json` (schema + integrity + real accessibility
+ * of the AGENT-*.md) → `toAgentDefinition` (real prose) → `assembleWf002Spine`
+ * → `runSpine`. The only missing piece is the billed `query()` call: here a mocked
+ * runner (zero network). The `createQueryRunner` wiring is covered by `run-wf-002.test.ts`.
  *
- * CI-safe : si le catalogue n'est pas en sibling (ni `CATALOG_ROOT` défini), le bloc
- * est SKIPPÉ proprement (cf. `catalog-root.ts`). En local (catalogue présent), il fait foi.
+ * CI-safe: if the catalog is not a sibling (nor `CATALOG_ROOT` set), the block is
+ * cleanly SKIPPED (see `catalog-root.ts`). Locally (catalog present), it is authoritative.
  */
 import { describe, it, expect } from "vitest";
 import { existsSync } from "node:fs";
@@ -34,8 +34,8 @@ const WF_002_BACKBONE = [
 const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
   async ({ stepId }) => ({ output: outputs[stepId] });
 
-describe.skipIf(!HAVE_CATALOG)("spine WF-002 — sidecar RÉEL (prêt pour run live)", () => {
-  it("le backbone WF-002 est résoluble depuis le sidecar réel (inclusion)", () => {
+describe.skipIf(!HAVE_CATALOG)("WF-002 spine — REAL sidecar (ready for live run)", () => {
+  it("the WF-002 backbone is resolvable from the real sidecar (inclusion)", () => {
     const sc = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
     expect(sc.catalog.name).toBe("claude-agents");
     const ids = new Set(sc.assets.map((a) => a.id));
@@ -44,7 +44,7 @@ describe.skipIf(!HAVE_CATALOG)("spine WF-002 — sidecar RÉEL (prêt pour run l
     }
   });
 
-  it("assemble + déroule la spine avec prose réelle → completed, 5 verdicts pass", async () => {
+  it("assembles + runs the spine with real prose → completed, 5 pass verdicts", async () => {
     const sc = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
     const steps = assembleWf002Spine(sc, (asset) => toAgentDefinition(asset, CATALOG_ROOT));
 
@@ -59,8 +59,8 @@ describe.skipIf(!HAVE_CATALOG)("spine WF-002 — sidecar RÉEL (prêt pour run l
   });
 });
 
-describe.runIf(!HAVE_CATALOG)("spine WF-002 — sidecar réel (skip)", () => {
-  it("skippé : catalogue introuvable (définir CATALOG_ROOT ou checkout sibling)", () => {
+describe.runIf(!HAVE_CATALOG)("WF-002 spine — real sidecar (skip)", () => {
+  it("skipped: catalog not found (set CATALOG_ROOT or checkout sibling)", () => {
     expect(HAVE_CATALOG).toBe(false);
   });
 });
