@@ -23,7 +23,7 @@ function call(overrides: Partial<StepRunCall> = {}): StepRunCall {
   return { stepId: "STEP-01", agent: AGENT, input: { brief: "x" }, ...overrides };
 }
 
-/** Message de résultat `success` minimal, complété puis casté en SDKMessage. */
+/** Minimal `success` result message, completed then cast to SDKMessage. */
 function successResult(fields: Record<string, unknown>): SDKMessage {
   return {
     type: "result",
@@ -36,7 +36,7 @@ function successResult(fields: Record<string, unknown>): SDKMessage {
   } as unknown as SDKMessage;
 }
 
-/** Message de résultat d'erreur minimal. */
+/** Minimal error result message. */
 function errorResult(subtype: string, errors: string[] = []): SDKMessage {
   return {
     type: "result",
@@ -47,7 +47,7 @@ function errorResult(subtype: string, errors: string[] = []): SDKMessage {
   } as unknown as SDKMessage;
 }
 
-/** Faux `query` qui émet la liste de messages fournie, et capture les params reçus. */
+/** Fake `query` that emits the provided message list, and captures the received params. */
 function fakeQuery(
   messages: SDKMessage[],
 ): QueryFn & { lastParams?: { prompt: string; options?: Options } } {
@@ -60,8 +60,8 @@ function fakeQuery(
 
 const emptyEnv: Record<string, string | undefined> = {};
 
-describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", () => {
-  it("mappe l'agent vers les options query() (systemPrompt, tools, model) + plan forcé", async () => {
+describe("createQueryRunner — query() → StepRunner adapter (§2.4-B.3)", () => {
+  it("maps the agent to query() options (systemPrompt, tools, model) + forced plan", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(
@@ -75,21 +75,21 @@ describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", 
     expect(opts.maxBudgetUsd).toBe(DEFAULT_CAPS.maxBudgetUsd);
   });
 
-  it("sérialise une entrée non-string en JSON pour le prompt", async () => {
+  it("serializes a non-string input to JSON for the prompt", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call({ input: { brief: "x" } }));
     expect(q.lastParams!.prompt).toBe(JSON.stringify({ brief: "x" }));
   });
 
-  it("passe une entrée string telle quelle", async () => {
+  it("passes a string input through as-is", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
-    await runner(call({ input: "déroule le cadrage" }));
-    expect(q.lastParams!.prompt).toBe("déroule le cadrage");
+    await runner(call({ input: "run the scoping" }));
+    expect(q.lastParams!.prompt).toBe("run the scoping");
   });
 
-  it("plafonne maxTurns au cap dur même si l'agent en demande plus", async () => {
+  it("caps maxTurns at the hard cap even if the agent asks for more", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({
       query: q,
@@ -100,24 +100,24 @@ describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", 
     expect(q.lastParams!.options!.maxTurns).toBe(3);
   });
 
-  it("REFUSE l'exécution si ANTHROPIC_API_KEY est défini (garde budget)", async () => {
+  it("REFUSES execution if ANTHROPIC_API_KEY is set (budget guard)", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({
       query: q,
       env: { ANTHROPIC_API_KEY: "sk-xxx" },
     });
     await expect(runner(call())).rejects.toBeInstanceOf(QueryRunnerError);
-    expect(q.lastParams).toBeUndefined(); // jamais appelé
+    expect(q.lastParams).toBeUndefined(); // never called
   });
 
-  it("renvoie le texte de résultat en sortie sur succès", async () => {
-    const q = fakeQuery([successResult({ result: "livrable cadrage" })]);
+  it("returns the result text as output on success", async () => {
+    const q = fakeQuery([successResult({ result: "scoping deliverable" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     const res = await runner(call());
-    expect(res.output).toBe("livrable cadrage");
+    expect(res.output).toBe("scoping deliverable");
   });
 
-  it("privilégie structured_output quand présent", async () => {
+  it("prefers structured_output when present", async () => {
     const q = fakeQuery([
       successResult({ result: "txt", structured_output: { ok: true } }),
     ]);
@@ -126,27 +126,27 @@ describe("createQueryRunner — adaptateur query() → StepRunner (§2.4-B.3)", 
     expect(res.output).toEqual({ ok: true });
   });
 
-  it("lève fail-closed sur un résultat d'erreur (budget dépassé)", async () => {
+  it("throws fail-closed on an error result (budget exceeded)", async () => {
     const q = fakeQuery([errorResult("error_max_budget_usd", ["budget"])]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await expect(runner(call())).rejects.toThrow(/error_max_budget_usd/);
   });
 
-  it("lève fail-closed si le flux se termine sans message de résultat", async () => {
+  it("throws fail-closed if the stream ends with no result message", async () => {
     const q = fakeQuery([]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await expect(runner(call())).rejects.toThrow(/stream ended with no result message/);
   });
 });
 
-describe("createQueryRunner — format de sortie imposé (outputSchema)", () => {
+describe("createQueryRunner — enforced output format (outputSchema)", () => {
   const schema = {
     type: "object",
     required: ["besoins"],
     properties: { besoins: { type: "array" } },
   };
 
-  it("injecte l'instruction de format + le schéma dans le prompt", async () => {
+  it("injects the format instruction + the schema into the prompt", async () => {
     const q = fakeQuery([successResult({ result: '{"besoins":["x"]}' })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call({ outputSchema: schema }));
@@ -154,58 +154,58 @@ describe("createQueryRunner — format de sortie imposé (outputSchema)", () => 
     expect(q.lastParams!.prompt).toContain(JSON.stringify(schema));
   });
 
-  it("impose le schéma NATIVEMENT au SDK via outputFormat json_schema", async () => {
+  it("enforces the schema NATIVELY at the SDK via outputFormat json_schema", async () => {
     const q = fakeQuery([successResult({ result: '{"besoins":["x"]}' })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call({ outputSchema: schema }));
     expect(q.lastParams!.options!.outputFormat).toEqual({ type: "json_schema", schema });
   });
 
-  it("ne définit pas outputFormat en l'absence d'outputSchema", async () => {
+  it("does not set outputFormat when no outputSchema is provided", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call());
     expect(q.lastParams!.options!.outputFormat).toBeUndefined();
   });
 
-  it("n'altère PAS le prompt quand aucun outputSchema n'est fourni", async () => {
+  it("does NOT alter the prompt when no outputSchema is provided", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(call({ input: { brief: "x" } }));
     expect(q.lastParams!.prompt).toBe(JSON.stringify({ brief: "x" }));
   });
 
-  it("parse la réponse texte en OBJET quand outputSchema fourni", async () => {
-    const q = fakeQuery([successResult({ result: '{"besoins":["réduire le délai"]}' })]);
+  it("parses the text response into an OBJECT when outputSchema is provided", async () => {
+    const q = fakeQuery([successResult({ result: '{"besoins":["reduce the lead time"]}' })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     const res = await runner(call({ outputSchema: schema }));
-    expect(res.output).toEqual({ besoins: ["réduire le délai"] });
+    expect(res.output).toEqual({ besoins: ["reduce the lead time"] });
   });
 
-  it("tolère une clôture markdown ```json autour du JSON", async () => {
+  it("tolerates a markdown ```json fence around the JSON", async () => {
     const q = fakeQuery([
-      successResult({ result: 'Voici le livrable :\n```json\n{"besoins":["a"]}\n```' }),
+      successResult({ result: 'Here is the deliverable:\n```json\n{"besoins":["a"]}\n```' }),
     ]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     const res = await runner(call({ outputSchema: schema }));
     expect(res.output).toEqual({ besoins: ["a"] });
   });
 
-  it("FAIL-CLOSED : réponse en prose non parsable malgré outputSchema → lève", async () => {
-    const q = fakeQuery([successResult({ result: "Le cadrage consiste à analyser les besoins." })]);
+  it("FAIL-CLOSED: unparsable prose response despite outputSchema → throws", async () => {
+    const q = fakeQuery([successResult({ result: "Scoping means analyzing the needs." })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await expect(runner(call({ outputSchema: schema }))).rejects.toBeInstanceOf(QueryRunnerError);
   });
 
-  it("FAIL-CLOSED : un tableau JSON n'est pas un objet → lève", async () => {
+  it("FAIL-CLOSED: a JSON array is not an object → throws", async () => {
     const q = fakeQuery([successResult({ result: "[1,2,3]" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await expect(runner(call({ outputSchema: schema }))).rejects.toBeInstanceOf(QueryRunnerError);
   });
 
-  it("structured_output natif reste prioritaire (pas de parsing de texte)", async () => {
+  it("native structured_output stays prioritized (no text parsing)", async () => {
     const q = fakeQuery([
-      successResult({ result: "texte ignoré", structured_output: { besoins: ["s"] } }),
+      successResult({ result: "ignored text", structured_output: { besoins: ["s"] } }),
     ]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     const res = await runner(call({ outputSchema: schema }));

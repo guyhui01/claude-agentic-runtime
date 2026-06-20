@@ -17,8 +17,8 @@ const sidecar = loadSidecar(fixtureSidecar);
 const agentAsset = sidecar.assets.find((a) => a.type === "agent")!;
 const skillAsset = sidecar.assets.find((a) => a.type === "skill")!;
 
-describe("toAgentDefinition — adaptateur catalogue → SDK (§2.4-A)", () => {
-  it("mappe un asset agent vers AgentDefinition (prompt = prose du .md)", () => {
+describe("toAgentDefinition — catalog → SDK adapter (§2.4-A)", () => {
+  it("maps an agent asset to AgentDefinition (prompt = .md prose)", () => {
     const def = toAgentDefinition(agentAsset, catalogRoot);
     expect(def.description).toBe(agentAsset.description);
     const prose = readFileSync(join(catalogRoot, agentAsset.path), "utf-8");
@@ -26,12 +26,12 @@ describe("toAgentDefinition — adaptateur catalogue → SDK (§2.4-A)", () => {
     expect(def.prompt).toContain("Scoping Agent");
   });
 
-  it("applique des défauts read-only (ADR-0001) sans déclaration catalogue", () => {
+  it("applies read-only defaults (ADR-0001) without a catalog declaration", () => {
     const def = toAgentDefinition(agentAsset, catalogRoot);
     expect(def.tools).toEqual(["Read", "Grep", "Glob"]);
   });
 
-  it("respecte les overrides (model, tools, maxTurns)", () => {
+  it("respects overrides (model, tools, maxTurns)", () => {
     const def = toAgentDefinition(agentAsset, catalogRoot, {
       model: "claude-opus-4-8",
       tools: ["Read"],
@@ -42,11 +42,11 @@ describe("toAgentDefinition — adaptateur catalogue → SDK (§2.4-A)", () => {
     expect(def.maxTurns).toBe(5);
   });
 
-  it("refuse un asset non-agent (skill)", () => {
+  it("rejects a non-agent asset (skill)", () => {
     expect(() => toAgentDefinition(skillAsset, catalogRoot)).toThrow();
   });
 
-  it("refuse un chemin remontant hors catalogue (anti-traversal)", () => {
+  it("rejects a path escaping the catalog (anti-traversal)", () => {
     const piege: Asset = { ...agentAsset, path: "../secret.md" };
     expect(() => toAgentDefinition(piege, catalogRoot)).toThrow();
   });

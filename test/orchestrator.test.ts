@@ -8,11 +8,11 @@ import type { StepContract } from "../src/handoff/types.js";
 import type { Criterion } from "../src/eval/types.js";
 
 /**
- * Tests hermétiques de l'exécuteur de spine (§2.4-B.1).
- * Le seul effet de bord — l'exécution d'une étape — passe par un `StepRunner`
- * MOCKÉ (canned outputs par stepId). Aucun réseau, aucun appel `query()` réel.
- * Le câblage §2.4-A est démontré : les agents sont construits depuis le
- * catalogue fixture via `toAgentDefinition` (lecture disque locale = hermétique).
+ * Hermetic tests for the spine executor (§2.4-B.1).
+ * The only side effect — running a step — goes through a MOCKED `StepRunner`
+ * (canned outputs by stepId). No network, no real `query()` call.
+ * The §2.4-A wiring is demonstrated: agents are built from the fixture catalog
+ * via `toAgentDefinition` (local disk read = hermetic).
  */
 
 const catalogRoot = fileURLToPath(
@@ -27,7 +27,7 @@ const agentAsset = sidecar.assets.find((a) => a.type === "agent")!;
 const agentDef = toAgentDefinition(agentAsset, catalogRoot);
 const TAG = agentAsset.source.catalogTag; // "v3.25.0"
 
-// --- Helpers de fixture -----------------------------------------------------
+// --- Fixture helpers --------------------------------------------------------
 
 function asRecord(o: unknown): Record<string, unknown> {
   return (o ?? {}) as Record<string, unknown>;
@@ -37,25 +37,25 @@ function nonEmptyArray(v: unknown): boolean {
 }
 const objectifPresent: Criterion = {
   id: "objectif-present",
-  description: "Un objectif non vide est défini",
+  description: "A non-empty objective is defined",
   severity: "blocking",
   check: (o) => typeof asRecord(o)["objectif"] === "string",
 };
 const perimetreNonVide: Criterion = {
   id: "perimetre-non-vide",
-  description: "Le périmètre liste au moins un élément",
+  description: "The scope lists at least one item",
   severity: "blocking",
   check: (o) => nonEmptyArray(asRecord(o)["perimetre"]),
 };
 const backlogNonVide: Criterion = {
   id: "backlog-non-vide",
-  description: "Le backlog liste au moins une story",
+  description: "The backlog lists at least one story",
   severity: "blocking",
   check: (o) => nonEmptyArray(asRecord(o)["backlog"]),
 };
 const planPresent: Criterion = {
   id: "plan-present",
-  description: "Un plan non vide est défini",
+  description: "A non-empty plan is defined",
   severity: "blocking",
   check: (o) => typeof asRecord(o)["plan"] === "string",
 };
@@ -73,15 +73,15 @@ function buildStep(
   };
 }
 
-/** Runner mock : sorties canoniques par stepId (lève si stepId inconnu). */
+/** Mock runner: canonical outputs by stepId (throws on unknown stepId). */
 function mockRunner(outputs: Record<string, unknown>): StepRunner {
   return async ({ stepId }) => {
-    if (!(stepId in outputs)) throw new Error(`stepId inattendu : ${stepId}`);
+    if (!(stepId in outputs)) throw new Error(`unexpected stepId: ${stepId}`);
     return { output: outputs[stepId] };
   };
 }
 
-// Contrats de la spine WF-001→002→003.
+// Contracts of the WF-001→002→003 spine.
 const c1 = { output: { type: "object", required: ["objectif", "perimetre"], properties: { objectif: { type: "string" }, perimetre: { type: "array" } } } } as const;
 const c2 = { input: { type: "object", required: ["perimetre"], properties: { perimetre: { type: "array" } } }, output: { type: "object", required: ["backlog"], properties: { backlog: { type: "array" } } } } as const;
 const c3 = { input: { type: "object", required: ["backlog"], properties: { backlog: { type: "array" } } }, output: { type: "object", required: ["plan"], properties: { plan: { type: "string" } } } } as const;
@@ -94,15 +94,15 @@ function happySpine(): SpineStep[] {
   ];
 }
 const happyOutputs = {
-  "WF-001": { objectif: "Refondre le portail B2B", perimetre: ["auth", "catalogue"] },
+  "WF-001": { objectif: "Rebuild the B2B portal", perimetre: ["auth", "catalogue"] },
   "WF-002": { backlog: ["US-1", "US-2"] },
-  "WF-003": { plan: "Sprint 1 : auth ; Sprint 2 : catalogue" },
+  "WF-003": { plan: "Sprint 1: auth; Sprint 2: catalogue" },
 };
 
 // --- Tests ------------------------------------------------------------------
 
 describe("runSpine — happy path WF-001→002→003", () => {
-  it("déroule les 3 étapes, gates pass, handoffs valides", async () => {
+  it("runs the 3 steps, gates pass, valid handoffs", async () => {
     const res = await runSpine(happySpine(), mockRunner(happyOutputs));
     expect(res.status).toBe("completed");
     expect(res.traces).toHaveLength(3);
@@ -110,7 +110,7 @@ describe("runSpine — happy path WF-001→002→003", () => {
     expect(res.finalOutput).toEqual(happyOutputs["WF-003"]);
   });
 
-  it("propage la provenance (assetId + catalogTag) sur chaque trace", async () => {
+  it("propagates provenance (assetId + catalogTag) onto each trace", async () => {
     const res = await runSpine(happySpine(), mockRunner(happyOutputs));
     expect(res.traces.map((t) => t.provenance.stepId)).toEqual([
       "WF-001",
@@ -124,13 +124,13 @@ describe("runSpine — happy path WF-001→002→003", () => {
   });
 });
 
-describe("runSpine — fail-closed eval gate (brique 2)", () => {
-  it("stoppe sur une gate échouée, en conservant la trace-preuve jusqu'à l'étape fautive", async () => {
-    const outputs = { ...happyOutputs, "WF-002": { backlog: [] } }; // viole backlog-non-vide
+describe("runSpine — fail-closed eval gate (brick 2)", () => {
+  it("stops on a failed gate, keeping the evidence trace up to the faulty step", async () => {
+    const outputs = { ...happyOutputs, "WF-002": { backlog: [] } }; // violates backlog-non-vide
     const res = await runSpine(happySpine(), mockRunner(outputs));
     expect(res.status).toBe("failed");
     expect(res.failure).toMatchObject({ stepId: "WF-002", kind: "eval-gate" });
-    expect(res.traces).toHaveLength(2); // WF-001 ok + WF-002 fautive tracée
+    expect(res.traces).toHaveLength(2); // WF-001 ok + WF-002 faulty, traced
     const failedGate = res.traces[1]!.gate;
     expect(failedGate.verdict).toBe("fail");
     expect(failedGate.results.find((r) => r.id === "backlog-non-vide")!.passed).toBe(
@@ -139,10 +139,10 @@ describe("runSpine — fail-closed eval gate (brique 2)", () => {
   });
 });
 
-describe("runSpine — fail-closed handoff (brique 1)", () => {
-  it("stoppe quand la sortie viole le contrat, gate franchie auparavant", async () => {
-    // WF-001 ne vérifie QUE l'objectif (gate pass), mais omet `perimetre`
-    // promis par sa sortie → producer-output du handoff échoue.
+describe("runSpine — fail-closed handoff (brick 1)", () => {
+  it("stops when the output violates the contract, gate passed beforehand", async () => {
+    // WF-001 only checks the objective (gate pass), but omits `perimetre`
+    // promised by its output → the handoff's producer-output fails.
     const steps = [
       buildStep("WF-001", c1, [objectifPresent]),
       buildStep("WF-002", c2, [backlogNonVide]),
@@ -153,13 +153,13 @@ describe("runSpine — fail-closed handoff (brique 1)", () => {
     expect(res.status).toBe("failed");
     expect(res.failure).toMatchObject({ stepId: "WF-001", kind: "handoff" });
     expect(res.traces).toHaveLength(1);
-    expect(res.traces[0]!.gate.verdict).toBe("pass"); // la gate avait bien laissé passer
+    expect(res.traces[0]!.gate.verdict).toBe("pass"); // the gate had indeed let it through
   });
 });
 
-describe("runSpine — pré-vol statique (design-time)", () => {
-  it("rejette des contrats incompatibles AVANT tout appel runner", async () => {
-    // WF-001 ne promet pas `perimetre` que WF-002 exige en entrée.
+describe("runSpine — static preflight (design-time)", () => {
+  it("rejects incompatible contracts BEFORE any runner call", async () => {
+    // WF-001 does not promise `perimetre` that WF-002 requires as input.
     const badC1 = { output: { type: "object", required: ["objectif"], properties: { objectif: { type: "string" } } } } as const;
     const steps = [
       buildStep("WF-001", badC1, [objectifPresent]),
@@ -170,7 +170,7 @@ describe("runSpine — pré-vol statique (design-time)", () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("rejette une incohérence provenance.stepId ≠ contract.stepId", async () => {
+  it("rejects a provenance.stepId ≠ contract.stepId mismatch", async () => {
     const step = buildStep("WF-001", c1, [objectifPresent]);
     step.provenance.stepId = "WF-999";
     await expect(runSpine([step], mockRunner(happyOutputs))).rejects.toThrow(
