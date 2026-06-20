@@ -1,11 +1,11 @@
 /**
- * Helper d'observabilité pour les harnais de RUN LIVE (`wf-00X-run-live.test.ts`).
+ * Observability helper for the LIVE RUN harnesses (`wf-00X-run-live.test.ts`).
  *
- * Fabrique un hook de progression par étape (cf. `StepProgressHook` de `runSpine`)
- * qui : (1) logge en console `[+Ns] phase STEP-XX (assetId) [→ verdict]` ; (2) écrit
- * une trace INCRÉMENTALE sur disque à chaque étape — donc exploitable même si le run
- * est interrompu (timeout / limite de session), et sondable EN DIRECT pendant un run
- * d'arrière-plan. Factorisé pour ne pas dupliquer ce code entre harnais (DRY).
+ * Builds a per-step progress hook (see `runSpine`'s `StepProgressHook`) that:
+ * (1) logs to the console `[+Ns] phase STEP-XX (assetId) [→ verdict]`; (2) writes
+ * an INCREMENTAL trace to disk at each step — so it stays usable even if the run is
+ * interrupted (timeout / session limit), and can be probed LIVE during a background
+ * run. Factored to avoid duplicating this code across harnesses (DRY).
  */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";

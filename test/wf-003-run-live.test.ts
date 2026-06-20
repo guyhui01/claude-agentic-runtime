@@ -1,16 +1,16 @@
 /**
- * RUN LIVE de la spine WF-003 « Lancement Application IA » (§2.4-B.4) — FACTURÉ,
- * OBSERVÉ, sur accord explicite. Calqué sur `wf-001-run-live.test.ts`.
+ * LIVE RUN of the WF-003 "AI Application Launch" spine (§2.4-B.4) — BILLED,
+ * OBSERVED, on explicit approval. Modeled on `wf-001-run-live.test.ts`.
  *
- * Gardé : ne s'exécute QUE si `LIVE_RUN=1` ET le catalogue est joignable. La suite
- * normale (`npm test`) le SKIP toujours → aucun appel facturé par défaut.
+ * Guarded: runs ONLY if `LIVE_RUN=1` AND the catalog is reachable. The normal suite
+ * (`npm test`) always SKIPS it → no billed call by default.
  *
- * Déroule la spine réelle avec le VRAI `query()` du SDK (caps durs +
- * `permissionMode:"plan"` read-only), sidecar réel + prose réelle. Issue attendue :
- * `completed` si les 7 agents produisent un JSON conforme aux DoD, sinon `failed`
- * fail-closed à la 1ʳᵉ gate non satisfaite. Auth : OAuth abonnement uniquement.
+ * Runs the real spine with the SDK's REAL `query()` (hard caps +
+ * `permissionMode:"plan"` read-only), real sidecar + real prose. Expected outcome:
+ * `completed` if the 7 agents produce DoD-conformant JSON, otherwise `failed`
+ * fail-closed at the first unsatisfied gate. Auth: subscription OAuth only.
  *
- * Lancement : `LIVE_RUN=1 npx vitest run test/wf-003-run-live.test.ts`
+ * Launch: `LIVE_RUN=1 npx vitest run test/wf-003-run-live.test.ts`
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
@@ -25,18 +25,18 @@ const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_FILE =
   process.env.LIVE_RESULT_FILE ??
   join(HERE, "..", "docs", "audit", "live-runs", "wf-003-live-result.json");
-// Trace de PROGRESSION incrémentale (gitignorée) : écrite à chaque étape, donc
-// exploitable même si le run est interrompu (timeout / limite de session). Permet
-// de SONDER l'avancement EN DIRECT pendant un run d'arrière-plan.
+// Incremental PROGRESS trace (gitignored): written at each step, so usable even if
+// the run is interrupted (timeout / session limit). Lets you PROBE progress LIVE
+// during a background run.
 const PROGRESS_FILE =
   process.env.LIVE_PROGRESS_FILE ??
   join(HERE, "..", "docs", "audit", "live-runs", "wf-003-live-progress.json");
 
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
-describe.skipIf(!ENABLED)("WF-003 — RUN LIVE (facturé, observé)", () => {
+describe.skipIf(!ENABLED)("WF-003 — LIVE RUN (billed, observed)", () => {
   it(
-    "déroule la spine WF-003 en live (capé, read-only)",
+    "runs the WF-003 spine live (capped, read-only)",
     async () => {
       const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
 
@@ -44,20 +44,20 @@ describe.skipIf(!ENABLED)("WF-003 — RUN LIVE (facturé, observé)", () => {
         sidecar,
         catalogRoot: CATALOG_ROOT,
         initialInput: {
-          app: "Lancement d'un chatbot RAG de support client pour un assureur : " +
-            "réponses sourcées sur la base de connaissances contrats/sinistres, " +
-            "du business case au déploiement sécurisé.",
+          app: "Launch of a RAG customer-support chatbot for an insurer: " +
+            "answers sourced from the policies/claims knowledge base, " +
+            "from business case to secure deployment.",
         },
         runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
         onStep: makeStepProgressHook(PROGRESS_FILE),
       });
 
-      console.log("\n===== RÉSULTAT RUN LIVE WF-003 =====");
+      console.log("\n===== WF-003 LIVE RUN RESULT =====");
       console.log("status :", res.status);
       if (res.failure) console.log("failure:", JSON.stringify(res.failure));
       for (const t of res.traces) {
         console.log(`- ${t.provenance.stepId} (${t.provenance.assetId}) → verdict=${t.gate.verdict}`);
-        console.log("    " + t.gate.results.map((r) => `${r.id}:${r.passed ? "ok" : "KO"}`).join("  "));
+        console.log("    " + t.gate.results.map((r) => `${r.id}:${r.passed ? "ok" : "FAIL"}`).join("  "));
       }
       console.log("====================================\n");
 
