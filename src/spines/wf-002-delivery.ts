@@ -77,7 +77,7 @@ const STEP02_CRITERIA: Criterion[] = [
   },
   {
     id: "rte-vote-confiance-seuil",
-    description: "STEP-02: passing condition — confidence vote > 3.5/5",
+    description: "STEP-02: passing condition — confidence vote ≥ 3.5/5",
     severity: "blocking",
     check: (o) => numberAtLeast(asRecord(o)["voteConfiance"], 3.5),
   },
@@ -242,7 +242,7 @@ export const WF_002_DELIVERY_MANIFEST: SpineManifest = {
         // Blocking threshold rte-vote-confiance-seuil communicated in the description.
         voteConfiance: {
           type: "number",
-          description: "ART confidence vote out of 5; must be > 3.5 to pass.",
+          description: "ART confidence vote out of 5; must be ≥ 3.5 to pass.",
         },
         // Advisory nudge rte-roam-risks-present.
         roamRisks: { type: "array", description: "ROAM risks (Resolved/Owned/Accepted/Mitigated)." },

@@ -7,7 +7,10 @@
 ---
 
 ## [Unreleased]
-> Nothing yet.
+> Model: Claude Opus 4.8
+
+### 🔄 Changed
+- **Ultrareview follow-ups (no behavior change).** Two cosmetic/wording cleanups surfaced by a cloud code review of PR #22: (1) renamed the leftover French local `gabarit` → `template` in the WF-001 INVEST check (`src/spines/wf-001-cadrage.ts`); (2) aligned the WF-002 `voteConfiance` criterion/schema descriptions to the actual gate semantics — they advertised a strict `> 3.5` while the check uses `numberAtLeast` (`≥ 3.5`), so both descriptions now read `≥ 3.5` (`src/spines/wf-002-delivery.ts`). The gate behavior is unchanged; `npm test` 126/6 + `typecheck` green.
 
 ## [0.6.0] - 2026-06-21 — Full FR → US English transition, live-proven in English 🌐
 > Model: Claude Opus 4.8

@@ -128,8 +128,8 @@ const STEP03_CRITERIA: Criterion[] = [
       const backlog = asRecord(o)["backlog"];
       if (!Array.isArray(backlog)) return false;
       // INVEST template check (English): "As a <role> I want <action> so that <benefit>".
-      const gabarit = /as an? .+i want.+so that/i;
-      return backlog.every((us) => gabarit.test(String(asRecord(us)["statement"] ?? "")));
+      const template = /as an? .+i want.+so that/i;
+      return backlog.every((us) => template.test(String(asRecord(us)["statement"] ?? "")));
     },
   },
 ];
