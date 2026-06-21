@@ -7,10 +7,44 @@
 ---
 
 ## [Unreleased]
+> Nothing yet.
+
+## [0.6.0] - 2026-06-21 — Full FR → US English transition, live-proven in English 🌐
 > Model: Claude Opus 4.8
 
-### 🔄 Changed
-- **Documentation translated to US English (i18n)** — repository documentation moved from French to professional US English so the repo reads as an international portfolio showcase: `README.md`, `CONTRIBUTING.md`, `COMMERCIAL.md`, the PR template, `docs/ARCHITECTURE.md`, `docs/NEXT_STEPS.md`, `docs/note_cadrage_poc.md`, the 7 ADRs (`docs/adr/0001`→`0007`), and the audit reports (`docs/audit/`). Decorative prose only — **no behavior change**, test suite untouched. Category-C tokens (identifiers, schema keys, paths, `AGENT-*`/`WF-*`/`STEP-*` IDs, model names) kept intact; the released version history below stays frozen in French.
+### 🎯 Context
+Milestone: the runtime is now **100% US English** (source, tests, schema, docs) **and proven to work live in English** — the FR → US English internationalization of the runtime is complete. Unlike a pure documentation pass, this release **changes runtime behavior** (R3): the runtime now expects English deliverables and judges them with English criteria, coherent with the now-English `claude-agents` catalog. The three workflows were re-run live in English to refute the "green offline ≠ works live" risk.
+
+### 🔄 Changed — behavior (R3, `34a847c` · `fdafe5f`)
+- **The runtime now expects English deliverables.** The deliberate decision (taken with Guy) is to align the runtime with the English catalog agents. Concretely:
+  - WF-001 INVEST criterion regex `/en tant que .+ je veux .+ afin (de|d')/` → **`/as an? .+i want.+so that/`**; the statement schema hint becomes « As a … I want … so that … ».
+  - Data enum `erreur`/`limite` → **`error`/`boundary`** (predicate + schema hints across WF-001/WF-003).
+  - `query-runner` `formatInstruction()` → "ENFORCED OUTPUT FORMAT…", and the no-result message → "stream ended with no result message".
+  - All coupled test fixtures and assertions (`wf-001-output-contract`, `wf-00x-outputs`, `test/fixtures/catalog/*`, query-runner/sidecar.schema tests, sdk-adapter) were synced in the same commits. Category-C tokens (criterion/agent/`WF-*`/`STEP-*` IDs, schema keys, enums kept as data, model IDs, paths, env vars) left intact.
+
+### 📝 Changed — internationalization, no behavior change
+- **R1 (`d57f058`, PR #20) — documentation** to US English: `README.md`, `CONTRIBUTING.md`, `COMMERCIAL.md`, the PR template, `docs/ARCHITECTURE.md`, `docs/NEXT_STEPS.md`, `docs/note_cadrage_poc.md`, the 7 ADRs (`docs/adr/0001`→`0007`), and the audit reports (`docs/audit/`).
+- **R2 (`b4fcc4a`, PR #21) — source** comments, docstrings and non-asserted `Criterion.description` audit labels across `src/**/*.ts`. Executed code untouched.
+- **R3b (`c5f99d2`, PR #23) — decorative test prose**: `it()`/`describe()` names, comments, docstrings and non-asserted fixture prose across all `test/` files. Asserted strings left as-is (already English).
+- **R4a (`7ca48c7`, PR #24) — schema descriptions**: the 11 `description` fields of the SSOT `schema/sidecar.schema.json` (ajv ignores descriptions → no validation impact). The vendored copy in `claude-agents` was resynced canonically identical (catalog PR #12); `check:schema-drift` green both sides.
+
+### 🐛 Fixed (`97d1a9e`, PR #25)
+- **WF-003 live-run caps raised** so the 7-agent chain completes: `maxTurns` 6 → 15 and `maxBudgetUsd` 1.0 → 4.0 in `wf-003-run-live.test.ts`. The earlier live failure was a genuine `error_max_turns` at STEP-03 (code-gen agent), **not** a translation defect.
+
+### ✨ Added (`97d1a9e`, PR #25)
+- **Archived English live-run traces** under `docs/audit/live-runs/` from the English re-proof (anonymized; fictional client, public author name only).
+
+### ⬆️ Dependencies
+- **`hono`** 4.12.23 → 4.12.25 (Dependabot #19).
+- **`@anthropic-ai/claude-agent-sdk`** 0.3.176 → 0.3.177 (Dependabot #18).
+
+### 🔒 License
+- Aligned the ISO 5230 license audit (`docs/audit/conformite_licences_iso5230.md`) with the PolyForm Noncommercial relicensing (`c936070`).
+
+### Notes
+- Offline suite green throughout: **126 passed / 6 skipped** + strict `typecheck` (live tests skipped by default → no token cost in CI).
+- **Live re-proof in English (billed runs, observed, OAuth subscription only):** **WF-001 12/12 criteria** (incl. the 2 translation-coupled advisories — INVEST regex matched a real English PO output, `error`/`boundary` covered), **WF-002 15/15**, **WF-003 26/26** (`completed`, 7/7 steps, 762s). Verdicts judged per-criterion (`gate.results[].passed`), not on final status. → the "it works in English" claim is now **certain**, not inferred.
+- The released version history below stays frozen in French (audit integrity).
 
 ## [0.5.0] - 2026-06-17
 > Modèle : Claude Opus 4.8
