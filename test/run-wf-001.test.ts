@@ -9,6 +9,10 @@ import type { AgentResolver } from "../src/manifest/load-manifest.js";
 import type { QueryFn } from "../src/sdk/query-runner.js";
 import { QueryRunnerError } from "../src/sdk/query-runner.js";
 import type { Sidecar } from "../src/sidecar/types.js";
+import {
+  wf001HappyOutputs as happyOutputs,
+  wf001HappyBacklog as happyBacklog,
+} from "./fixtures/wf-001-outputs.js";
 
 /**
  * HERMETIC end-to-end test of the WF-001 run wiring (§2.4-B.3, step 2):
@@ -52,30 +56,7 @@ const STEP_BY_ASSET: Record<string, string> = {
   "AGENT-QA-AGILE": "STEP-04",
 };
 
-// --- DoD-compliant outputs (same shapes as spine-wf-001.test.ts) ------------
-const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
-  statement: `As a user I want feature ${i + 1} so that I save time`,
-  priorite: "must",
-  estimation: 3,
-  dod: "Tested and validated in UAT",
-}));
-const happyOutputs: Record<string, unknown> = {
-  "STEP-01": {
-    besoins: ["Reduce processing time"],
-    partiesPrenantes: [{ nom: "Business", role: "sponsor" }],
-    perimetre: { in: ["authentication"], out: ["billing"] },
-    questionsOuvertes: [],
-  },
-  "STEP-03": { backlog: happyBacklog, epics: ["Auth", "Search", "Reporting"] },
-  "STEP-04": {
-    gherkin: [
-      { given: "a logged-in user", when: "they search", then: "they see the results", type: "nominal" },
-      { given: "an invalid term", when: "they search", then: "an error is shown", type: "error" },
-      { given: "0 results", when: "they search", then: "an empty state is shown", type: "boundary" },
-    ],
-    planTest: "Sprint 1: smoke tests + 3 priority scenarios",
-  },
-};
+// DoD-compliant outputs: shared fixture `fixtures/wf-001-outputs.ts` (imported above).
 
 /** Fake query: routes by the systemPrompt (asset marker) → structured_output. */
 function fakeQuery(outputs: Record<string, unknown>): QueryFn {

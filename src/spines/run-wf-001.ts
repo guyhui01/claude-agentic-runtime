@@ -54,6 +54,13 @@ export interface RunWf001Options {
   runnerDeps?: QueryRunnerDeps;
   /** Per-step observability hook (progress of a long live run). */
   onStep?: StepProgressHook;
+  /**
+   * Model override applied to EVERY step agent (SDK alias like "fable"/"opus",
+   * or a full model id). Only used when the resolver is derived from
+   * `catalogRoot`; an injected `resolveAgent` owns its definitions entirely.
+   * Rationale: route live runs to a model with a separate usage quota.
+   */
+  model?: string;
 }
 
 /**
@@ -88,7 +95,8 @@ export async function runWf001(opts: RunWf001Options): Promise<SpineResult> {
         "runWf001: provide `catalogRoot` (resolution via toAgentDefinition) or `resolveAgent`.",
       );
     }
-    resolveAgent = (asset) => toAgentDefinition(asset, root);
+    const overrides = opts.model === undefined ? {} : { model: opts.model };
+    resolveAgent = (asset) => toAgentDefinition(asset, root, overrides);
   }
 
   const steps = assembleWf001Spine(opts.sidecar, resolveAgent);

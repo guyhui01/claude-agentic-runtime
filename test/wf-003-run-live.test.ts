@@ -11,6 +11,8 @@
  * fail-closed at the first unsatisfied gate. Auth: subscription OAuth only.
  *
  * Launch: `LIVE_RUN=1 npx vitest run test/wf-003-run-live.test.ts`
+ * Optional model routing: `LIVE_MODEL=fable` (SDK alias or full model id) routes
+ * every step agent to that model — e.g. a separate-quota model for cheap re-runs.
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
@@ -43,6 +45,7 @@ describe.skipIf(!ENABLED)("WF-003 — LIVE RUN (billed, observed)", () => {
       const res = await runWf003({
         sidecar,
         catalogRoot: CATALOG_ROOT,
+        ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
         initialInput: {
           app: "Launch of a RAG customer-support chatbot for an insurer: " +
             "answers sourced from the policies/claims knowledge base, " +

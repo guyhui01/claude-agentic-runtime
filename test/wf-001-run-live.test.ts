@@ -12,6 +12,8 @@
  * ANTHROPIC_API_KEY — runner guard).
  *
  * Launch: `LIVE_RUN=1 npx vitest run test/wf-001-run-live.test.ts`
+ * Optional model routing: `LIVE_MODEL=fable` (SDK alias or full model id) routes
+ * every step agent to that model — e.g. a separate-quota model for cheap re-runs.
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
@@ -42,6 +44,7 @@ describe.skipIf(!ENABLED)("WF-001 — LIVE RUN (billed, observed)", () => {
       const res = await runWf001({
         sidecar,
         catalogRoot: CATALOG_ROOT,
+        ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
         initialInput: {
           brief:
             "Rebuild an insurer's B2B customer portal: self-care area, " +
