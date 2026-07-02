@@ -12,6 +12,9 @@
 ### 🔄 Changed
 - **Ultrareview follow-ups (no behavior change).** Two cosmetic/wording cleanups surfaced by a cloud code review of PR #22: (1) renamed the leftover French local `gabarit` → `template` in the WF-001 INVEST check (`src/spines/wf-001-cadrage.ts`); (2) aligned the WF-002 `voteConfiance` criterion/schema descriptions to the actual gate semantics — they advertised a strict `> 3.5` while the check uses `numberAtLeast` (`≥ 3.5`), so both descriptions now read `≥ 3.5` (`src/spines/wf-002-delivery.ts`). The gate behavior is unchanged; `npm test` 126/6 + `typecheck` green.
 
+### 🐛 Fixed
+- **WF-001 INVEST criterion — determiner-agnostic (gate-semantics fix).** The advisory `po-us-format-invest` regex only accepted `As a`/`As an`, so valid stories opening with `As the …` (or a role with no determiner) were wrongly flagged off-template. Reproduced on the **WF-001 Fable live run** (`docs/audit/live-runs/wf-001-live-result.json`): 2 of 13 real stories failed, e.g. *"As the Head of B2B (sponsor), I want … so that …"*. Broadened `/as an? .+i want.+so that/i` → `/\bas\b .+\bi want\b.+\bso that\b/i` (`src/spines/wf-001-cadrage.ts`): only the three narrative anchors (`as …` / `i want …` / `so that …`) are enforced — determiner-agnostic — and a word boundary stops `was a` from being misread as the `as a` opener. Regression cases added (`test/wf-001-output-contract.test.ts`: `As the …`, no-determiner, `was a`). The fixed criterion passes all 13 real stories of the live trace; `npm test` **130/6** + `typecheck` green.
+
 ## [0.6.0] - 2026-06-21 — Full FR → US English transition, live-proven in English 🌐
 > Model: Claude Opus 4.8
 

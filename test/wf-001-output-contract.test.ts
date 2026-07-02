@@ -59,7 +59,7 @@ describe("WF-001 — output schemas aligned with the gate criteria", () => {
     expect(out.properties.gherkin.items.properties.type).toBeDefined();
   });
 
-  it("po-us-format-invest accepts the INVEST template (a/an article)", () => {
+  it("po-us-format-invest accepts the INVEST template, determiner-agnostic", () => {
     const invest = WF_001_CADRAGE_CRITERIA.find((c) => c.id === "po-us-format-invest");
     expect(invest).toBeDefined();
     // "an" article: "As an insured … so that …".
@@ -70,7 +70,30 @@ describe("WF-001 — output schemas aligned with the gate criteria", () => {
     expect(
       invest!.check({ backlog: [{ statement: "As a user I want X so that Y" }] }),
     ).toBe(true);
+    // "the" determiner — regression: real WF-001 Fable live run flagged a valid
+    // "As the Head of B2B (sponsor), I want … so that …" story as off-template.
+    expect(
+      invest!.check({
+        backlog: [
+          {
+            statement:
+              "As the Head of B2B (sponsor), I want the legacy portal decommissioned so that we cut double-run costs",
+          },
+        ],
+      }),
+    ).toBe(true);
+    // No determiner at all is still on-template.
+    expect(
+      invest!.check({ backlog: [{ statement: "As Head of B2B I want X so that Y" }] }),
+    ).toBe(true);
     // Off-template: rejected.
     expect(invest!.check({ backlog: [{ statement: "I want a thing" }] })).toBe(false);
+    // Word boundary: "was a" inside a sentence must NOT be read as the "as a"
+    // opener (the old /as an?/ pattern matched the "as a" substring of "was a").
+    expect(
+      invest!.check({
+        backlog: [{ statement: "It was a request, I want X so that Y" }],
+      }),
+    ).toBe(false);
   });
 });

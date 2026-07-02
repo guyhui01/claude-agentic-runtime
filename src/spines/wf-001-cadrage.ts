@@ -127,8 +127,11 @@ const STEP03_CRITERIA: Criterion[] = [
     check: (o) => {
       const backlog = asRecord(o)["backlog"];
       if (!Array.isArray(backlog)) return false;
-      // INVEST template check (English): "As a <role> I want <action> so that <benefit>".
-      const template = /as an? .+i want.+so that/i;
+      // INVEST template check (English): "As <role> I want <action> so that <benefit>".
+      // Determiner-agnostic: the role may read "a"/"an"/"the" or none at all
+      // (e.g. "As the Head of B2B, I want …") — only the three narrative anchors
+      // (as … / i want … / so that …) are enforced, not the article.
+      const template = /\bas\b .+\bi want\b.+\bso that\b/i;
       return backlog.every((us) => template.test(String(asRecord(us)["statement"] ?? "")));
     },
   },
