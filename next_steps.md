@@ -22,6 +22,7 @@ STATE AS OF 2026-07-02 (re-verify):
 
 REMAINING (nothing urgent — lead with a recommendation):
 1. Scoped option, only if re-runs become frequent: SEMI-automated improvement loop (GateReport traces -> tightening proposals as PRs by Fable -> human gate by Guy). NEVER autonomous (Goodhart risk, would contradict deterministic gates ADR-0007 + fail-closed budget rule).
+   MODEL ROUTING (best practice): design/scoping = Opus 4.8 (architecture, Goodhart/fail-closed stakes); in-loop proposer = Fable (generative + human-gated + separate quota); any pre-human verifier STAYS deterministic (regex/tests/schema) — never an LLM judging another LLM.
 
 GUARDRAILS: push/merge/live-run = gates on explicit approval; live run = subscription OAuth only (never ANTHROPIC_API_KEY); artifacts/commits/PRs in US English, chat in French. Detail: memory project-runtime-wf003-live-proof-pending.
 
@@ -41,6 +42,7 @@ ADJACENT (other repo, if wanted): catalog claude-agents v4.0.0 — issue #16 (Q3
 ## Remaining (none urgent)
 
 1. **Scoped option** — SEMI-automated improvement loop (traces → PR proposals by Fable → human gate). Never autonomous. Only if re-runs justify it.
+   - **Model routing (best practice):** design/scoping on **Opus 4.8** (architecture, Goodhart / fail-closed stakes); the in-loop **proposer** runs on **Fable** (generative, human-gated, separate quota); any pre-human **verifier stays deterministic** (regex / tests / schema) — never an LLM judging another LLM (would reintroduce the non-determinism we refuse).
 
 ## Guardrails
 
