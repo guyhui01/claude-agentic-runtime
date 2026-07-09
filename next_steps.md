@@ -26,7 +26,7 @@ REMAINING (nothing urgent — lead with a recommendation):
 
 GUARDRAILS: push/merge/live-run = gates on explicit approval; live run = subscription OAuth only (never ANTHROPIC_API_KEY); artifacts/commits/PRs in US English, chat in French. Detail: memory project-runtime-wf003-live-proof-pending.
 
-ADJACENT (other repo, if wanted): catalog claude-agents v4.0.0 — issue #16 (Q3 quarterly maintenance to do) + CI without Dependabot + actions checkout@v4.
+ADJACENT (other repo — do NOT open it in the same session): catalog claude-agents is at v4.0.1; issue #16 (Q3 maintenance) is CLOSED and actions/checkout is already @v7 — do not redo them. Still true: no dependabot.yml. Its one open workstream is Task B (widen sidecar.json to 38 agents + 37 skills; diagnosed 2026-07-09) — see claude-agents/next_steps.md.
 ```
 
 ---
