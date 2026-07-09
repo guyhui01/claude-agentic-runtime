@@ -48,17 +48,18 @@ ADJACENT (other repo — do NOT open it in the same session): catalog claude-age
    - **Why this one.** It opens a **third domain**: the three proven runs cover Agile & Product (WF-001, WF-002) and Dev & Engineering (WF-003) only, while Management & Consulting carries 5 of the 10 workflows and has no live trace at all. It also exercises the **optional counter-review gate** (AI Methodology Auditor), carried only by WF-008 and WF-010 and never traversed by any run — the showcase describes this mechanism while no execution trace of it exists. So: a new capability, not a repetition.
    - **⛔ Do not run the other seven.** Each trace is a freshness liability pinned to a catalog version (today: `v3.27.0`); ten traces triple a surface that expires on its own and proves nothing new. "Three proven live, seven defined and available" is a stronger credibility signal than an all-green 10/10, which reads as theater.
    - **Gate.** A live run is a billed, outward-facing action: **explicit approval from Guy**, never inferred.
-   - **Mandatory last step — update the showcase** (`guyhui01/guyhui-showcase`), 5 points across 3 files, measured 2026-07-10:
-     - `docs/workflows.md` l.36 — "**Three** backbones are proven live" → four.
-     - `docs/workflows.md` l.32 — WF-008 status `Available` → `✅ Live — n/n`.
-     - `docs/workflows.md` — WF-008 gallery entry, **Proof** line.
-     - `docs/projects/agentic_runtime/live_proofs.md` — runs table + a detailed WF-008 section.
-     - `docs/index.md` — proof card: "three workflows proven live" + the ✓ list.
+   - **Mandatory last step — update the downstream showcase site.** Five points, measured 2026-07-10, stated functionally (exact files and lines live in that repo's own tracker, which owns its paths):
+     - workflows page — the live-run **count sentence** ("three backbones are proven live" → four).
+     - workflows page — WF-008 **status cell** in the overview table (`Available` → live, n/n).
+     - workflows page — WF-008 **gallery entry**, its `Proof` line.
+     - live-proofs page — the **runs table**, plus a detailed WF-008 section.
+     - home page — the **proof card**: its live-run count and its ✓ list.
 
 ## Guardrails
 
 - push / merge / live-run = gates on **explicit approval**.
 - Live run = **subscription OAuth only** (never `ANTHROPIC_API_KEY` — runner guard).
-- **Cross-cutting — every live workflow run, and more generally any task whose result the showcase displays, carries "update the showcase" as its explicit last step**, naming the files and lines to touch. Not specific to WF-008: it applies to WF-001…WF-010 alike, and to any future proof surfaced downstream. This repo is the source of truth for runs and traces; `guyhui-showcase` only consumes them. Tracking the same task on both sides would create two sources of truth that diverge on the first update — so the downstream update lives inside the upstream task, or it is forgotten.
+- **Cross-cutting — every live workflow run, and more generally any task whose result the downstream showcase site displays, carries "update the showcase" as its explicit last step**, naming the surfaces to touch. Not specific to WF-008: it applies to WF-001…WF-010 alike, and to any future proof surfaced downstream. This repo is the source of truth for runs and traces; the showcase only consumes them. Tracking the same task on both sides would create two sources of truth that diverge on the first update — so the downstream update lives inside the upstream task, or it is forgotten.
+- **This repo is PUBLIC.** Before writing a cross-reference to another repository, read its **visibility**, not just its name (`gh repo view --json nameWithOwner,visibility`). Never name a private repo, its paths, or its file structure here: once pushed, it cannot be taken back without rewriting history.
 - Files / commits / PRs in **US English**; chat in French.
 - Detailed POC roadmap: [`docs/NEXT_STEPS.md`](docs/NEXT_STEPS.md). Session memory: `project-runtime-wf003-live-proof-pending`.
