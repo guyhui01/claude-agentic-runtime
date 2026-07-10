@@ -14,7 +14,7 @@ Resume session — runtime /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guy
 Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, docs/NEXT_STEPS.md — never from memory.
 
 STATE AS OF 2026-07-10 (re-verify):
-- main pushed (HEAD f1f260e), clean tree, v0.6.0. The three commits above 0d42392 are docs-only (this tracker). Last code change is still 0d42392. Suite 130 passed / 6 skipped, strict typecheck OK — as recorded on 2026-07-02, not re-run since.
+- main pushed, clean tree, v0.6.0. Last code change: 0d42392 — everything above it is docs-only on this tracker (never pin HEAD here: the commit that updates this line becomes the new HEAD, so the hash is stale on arrival). Suite 130 passed / 6 skipped, strict typecheck OK — as recorded on 2026-07-02, not re-run since.
 - Fable model routing SHIPPED + PROVEN LIVE: RunWf00X.model + LIVE_MODEL env; WF-001 `LIVE_MODEL=fable` = completed in 145 s (separate Fable quota). Hermetic proof test/run-wf-model-override.test.ts.
 - P3 loop CLOSED (c1fea9f): anonymized WF-001 Fable trace versioned (docs/audit/live-runs/wf-001-live-result.json, git add -f, secret-scan OK — no model field in payload, Fable attribution contextual); README + docs/NEXT_STEPS.md record "proven live on Fable".
 - INVEST criterion FIXED (0d42392): po-us-format-invest was a false negative on "As the ..." roles (2/13 real live stories); regex now determiner-agnostic + word-boundary anti "was a"; regression tests added; CHANGELOG [Unreleased] updated.
@@ -40,7 +40,7 @@ Task B is now the HARD PREREQUISITE for the WF-008 run (item 1): today's sidecar
 ## Verified state — 2026-07-10
 
 - **Repo/branch:** `guyhui01/claude-agentic-runtime` / `main`, in sync with `origin/main`, clean tree.
-- **Release:** `v0.6.0` (last tag). Head = `f1f260e` — docs-only since `0d42392` (three tracker commits). **Last code change: `0d42392`** (INVEST criterion fix).
+- **Release:** `v0.6.0` (last tag). **Last code change: `0d42392`** (INVEST criterion fix); every commit above it is docs-only, touching this tracker alone. HEAD is deliberately not pinned here — see the note in the resume block.
 - **Tests:** 130 passed / 6 skipped (3 billed live harnesses + 3 `runIf` markers), strict `typecheck` OK — recorded 2026-07-02, not re-run since.
 - **Last delivery:** `po-us-format-invest` INVEST criterion made **determiner-agnostic** (`0d42392`) — the regex accepted only `As a`/`As an`, wrongly flagging valid `As the …` roles (2/13 real stories on the WF-001 Fable live run); now `/\bas\b .+\bi want\b.+\bso that\b/i` (three anchors only, word boundary anti `was a`), regression tests added, CHANGELOG `[Unreleased]` updated.
 - **Earlier (`c1fea9f`) — P3 closed:** anonymized WF-001 Fable trace versioned (`git add -f`, secret-scan OK — payload carries no model field, Fable attribution contextual); README + `docs/NEXT_STEPS.md` record "proven live on Fable". Per-run model routing (`7413e11`) proven live: WF-001 `LIVE_MODEL=fable` → `completed` in 145 s.
