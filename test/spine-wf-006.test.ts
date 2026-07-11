@@ -78,8 +78,8 @@ describe("WF-006 spine — loading and execution (mocked runner)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
-  it("GO/NO-GO gateway: NO-GO verdict (STEP-01) → failed at STEP-01, documented no-bid", async () => {
-    const noBid = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdict: "NO-GO" } };
+  it("GO/NO-GO gateway: NO-GO verdictCode (STEP-01) → failed at STEP-01, documented no-bid", async () => {
+    const noBid = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdictCode: "NO-GO" } };
     const steps = loadSpine(WF_006_AVANT_VENTE_MANIFEST, sidecar, buildWf006AvantVenteRegistry(), resolveAgent);
     const res = await runSpine(steps, mockRunner(noBid), {});
     expect(res.status).toBe("failed");
@@ -88,13 +88,26 @@ describe("WF-006 spine — loading and execution (mocked runner)", () => {
     expect(res.traces).toHaveLength(1); // the whole workflow halts at the qualification gate
   });
 
-  it("GO/NO-GO gateway: « conditional GO » does not auto-clear either → failed at STEP-01", async () => {
-    const conditional = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdict: "conditional GO" } };
+  it("GO/NO-GO gateway: CONDITIONAL verdictCode does not auto-clear either → failed at STEP-01", async () => {
+    const conditional = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdictCode: "CONDITIONAL" } };
     const steps = loadSpine(WF_006_AVANT_VENTE_MANIFEST, sidecar, buildWf006AvantVenteRegistry(), resolveAgent);
     const res = await runSpine(steps, mockRunner(conditional), {});
     expect(res.status).toBe("failed");
     expect(res.failure?.stepId).toBe("STEP-01");
     expect(res.traces).toHaveLength(1);
+  });
+
+  it("GO/NO-GO gateway robustness (WF-001 lesson): case/whitespace « go » still passes, a verbose paragraph halts", async () => {
+    const steps = loadSpine(WF_006_AVANT_VENTE_MANIFEST, sidecar, buildWf006AvantVenteRegistry(), resolveAgent);
+    // lower-case + surrounding whitespace normalizes to GO → completed
+    const lax = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdictCode: "  go " } };
+    const ok = await runSpine(steps, mockRunner(lax), {});
+    expect(ok.status).toBe("completed");
+    // a rationale accidentally placed in the code field does NOT read as GO → halt
+    const verbose = { ...happyOutputs, "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdictCode: "« GO » because BANT is strong and…" } };
+    const halted = await runSpine(steps, mockRunner(verbose), {});
+    expect(halted.status).toBe("failed");
+    expect(halted.failure?.stepId).toBe("STEP-01");
   });
 
   it("selling price missing (STEP-05) → failed at STEP-05", async () => {

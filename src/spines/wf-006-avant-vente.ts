@@ -55,6 +55,17 @@ function allKeysAreArrays(o: unknown, keys: string[]): boolean {
   return keys.every((k) => Array.isArray(r[k]));
 }
 
+/**
+ * Normalizes a decision token for a value-equality gate: trims and upper-cases a
+ * string, returns "" for anything non-string. Makes the GO/NO-GO gate robust to
+ * case/whitespace ("go", " GO ") without accepting a verbose paragraph — the live
+ * WF-006 run showed an agent writing a whole rationale into the verdict field, so
+ * the gate now reads a schema-constrained `verdictCode` enum and normalizes it.
+ */
+function normalizeToken(v: unknown): string {
+  return typeof v === "string" ? v.trim().toUpperCase() : "";
+}
+
 // =============================================================================
 // CRITERIA — traced to WF-006 (v1.0)
 // =============================================================================
@@ -86,9 +97,18 @@ const STEP01_CRITERIA: Criterion[] = [
   {
     id: "presales-go",
     description:
-      "STEP-01: GO/NO-GO gateway — reasoned verdict must be « GO » to proceed (NO-GO / conditional GO = documented no-bid, halt)",
+      "STEP-01: GO/NO-GO gateway — `verdictCode` must normalize to « GO » to proceed (NO-GO / CONDITIONAL = documented no-bid, halt)",
     severity: "blocking",
-    check: (o) => asRecord(o)["verdict"] === "GO",
+    // Robust check (WF-001 lesson): read the constrained `verdictCode` enum, not the
+    // free-text rationale, and normalize case/whitespace so « go » / « GO » / " GO "
+    // all pass while any non-GO token (NO-GO / CONDITIONAL / prose) halts fail-closed.
+    check: (o) => normalizeToken(asRecord(o)["verdictCode"]) === "GO",
+  },
+  {
+    id: "presales-rationale",
+    description: "STEP-01: the verdict is reasoned — non-empty rationale accompanies the code",
+    severity: "advisory",
+    check: (o) => nonEmptyString(asRecord(o)["rationale"]),
   },
   {
     id: "presales-risks",
@@ -321,7 +341,7 @@ export const WF_006_AVANT_VENTE_MANIFEST: SpineManifest = {
       stepId: "STEP-01",
       assetId: "AGENT-CONSULTANT-IA",
       // seed: pre-sales context = runSpine's initial input.
-      output: objSchema(["bant", "winProbability", "verdict", "qualificationSheet"], {
+      output: objSchema(["bant", "winProbability", "verdictCode", "rationale", "qualificationSheet"], {
         // Blocking presales-bant: the four axes must be non-empty strings.
         bant: objSchema(["budget", "authority", "need", "timeline"], {
           budget: str,
@@ -333,11 +353,20 @@ export const WF_006_AVANT_VENTE_MANIFEST: SpineManifest = {
           type: "number",
           description: "Win probability (0-100). 0 ≤ p ≤ 100 required.",
         },
-        // Blocking presales-go: the GO/NO-GO gateway. Exact value « GO » required.
-        verdict: {
+        // Blocking presales-go reads THIS short token, not the free-text rationale. Kept
+        // a plain string (not a schema `enum`) on purpose: the gate NORMALIZES it (WF-001
+        // lesson), so a case/whitespace variant still passes and a stray verbose value
+        // halts cleanly AT THE EVAL GATE (a documented no-bid) rather than failing earlier
+        // at ajv handoff validation. The description carries the constraint to the agent.
+        verdictCode: {
           type: "string",
           description:
-            "Reasoned verdict: « GO » | « NO-GO » | « conditional GO ». « GO » required to proceed; a NO-GO or conditional GO is a documented no-bid and halts the workflow.",
+            "Short decision token — exactly one of: GO | NO-GO | CONDITIONAL. « GO » required to proceed; NO-GO or CONDITIONAL (conditional GO) is a documented no-bid and halts the workflow. Put all reasoning in `rationale`, NOT here.",
+        },
+        // Advisory presales-rationale: the reasoning behind the code (prose).
+        rationale: {
+          type: "string",
+          description: "Reasoned justification of the verdict (GO/NO-GO/conditional-GO rationale).",
         },
         // Carried field for STEP-02.
         qualificationSheet: {

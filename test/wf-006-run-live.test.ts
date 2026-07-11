@@ -51,22 +51,29 @@ describe.skipIf(!ENABLED)("WF-006 — LIVE RUN (billed, observed)", () => {
         sidecar,
         catalogRoot: CATALOG_ROOT,
         ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
-        // Option A: a strong, qualified opportunity so the GO/NO-GO gateway returns GO
-        // and the whole backbone produces the commercial proposal.
+        // Option A, freelance-fit seed: a scope a solo consultant (portage) can credibly
+        // prime, so STEP-01's GO/NO-GO gateway returns GO and the whole backbone produces
+        // the commercial proposal. The first live seed (a €250k full build vs two incumbent
+        // SSII) drew a reasoned CONDITIONAL/no-bid — the agent itself named the converting
+        // conditions: reposition on scoping + architecture + AI-Act governance, sole-source,
+        // no prime-on-build. This seed encodes exactly that.
         initialInput: {
           prospect:
-            "CAC40 insurer (EU, ~15,000 employees), advanced AI maturity, board-sponsored AI program.",
-          requestType: "Formal RFP",
+            "Mid-cap European insurer (EU, ~1,200 employees), experimenter AI maturity, CDO-sponsored.",
+          requestType: "Direct solicitation / referral (sole source — no competing firms)",
           scope:
-            "Build of a claims-triage AI system (LLM classifier + RAG over the policy/claims base + " +
-            "human-in-the-loop review), from scoping through architecture, schedule, person-day costing, " +
-            "pricing and a complete commercial proposal.",
-          budget: "€250k envelope confirmed by the CFO (disclosed)",
-          deadline: "2026-09-15 (award in 8 weeks)",
-          decisionMakers: "CDO (economic buyer), CIO (technical validator), procurement",
-          selectionCriteria: "Expertise + AI-Act readiness + references + price",
-          constraints: "EU data residency, GDPR, AI Act high-risk tier",
-          competition: "Two incumbent SSII competing",
+            "Advisory engagement a freelance can prime: AI-use-case scoping, TARGET architecture " +
+            "for a claims-triage assistant (design only, not the build), AI-Act/GDPR governance " +
+            "framework, and a phased roadmap — deliverables = scoping note, architecture blueprint, " +
+            "governance plan and a commercial proposal. Build/run is explicitly OUT of scope (a later, " +
+            "separately staffed phase).",
+          budget: "€45k envelope, disclosed (≈ 30-40 consultant person-days)",
+          deadline: "2026-09-30 (award in ~5 weeks)",
+          decisionMakers: "CDO (economic buyer) + Head of Claims (business sponsor)",
+          selectionCriteria: "AI + AI-Act expertise and prior insurance-sector references (not lowest price)",
+          constraints: "EU data residency, GDPR, AI Act high-risk tier — governance emphasis",
+          competition: "Sole source (referral) — no incumbent SSII competing",
+          capacity: "Solo freelance via portage; advisory/design scope matched to a single-expert delivery.",
         },
         runnerDeps: { caps: { maxBudgetUsd: 4.0, maxTurns: 15 } },
         onStep: makeStepProgressHook(PROGRESS_FILE),

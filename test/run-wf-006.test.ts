@@ -86,10 +86,10 @@ describe("runWf006 — WF-006 spine run wiring (§2.4-B.4)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
-  it("GO/NO-GO gateway: NO-GO verdict (STEP-01) → failed at STEP-01 (no-bid)", async () => {
+  it("GO/NO-GO gateway: NO-GO verdictCode (STEP-01) → failed at STEP-01 (no-bid)", async () => {
     const noBid = {
       ...happyOutputs,
-      "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdict: "NO-GO" },
+      "STEP-01": { ...(happyOutputs["STEP-01"] as object), verdictCode: "NO-GO" },
     };
     const res = await runWf006({
       sidecar,
