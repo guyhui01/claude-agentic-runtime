@@ -1,0 +1,910 @@
+{
+  "status": "completed",
+  "failure": null,
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-CONSULTANT-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "consultant-maturity-score",
+          "description": "STEP-01: overall AI maturity score present and in range 1-10",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "consultant-swot",
+          "description": "STEP-01: AI SWOT with the four axes (strengths/weaknesses/opportunities/risks)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "consultant-usecases-floor",
+          "description": "STEP-01: prioritized AI use cases — ≥ 3 (floor)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "consultant-usecases-top5",
+          "description": "STEP-01: the full « Top 5 » AI use cases (ideal ≥ 5)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "consultant-recommendations",
+          "description": "STEP-01: 3-5 key priority recommendations",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "maturityScore": 3.5,
+        "swot": {
+          "strengths": [
+            "Existing AI pilots demonstrate genuine curiosity and appetite for experimentation across teams",
+            "Engaged C-suite sponsorship (CEO, CIO, CDO) providing top-down mandate for the engagement",
+            "Sizable industrial data footprint (production, maintenance, supply chain, quality) as raw material for high-value use cases",
+            "~4,000-employee scale creates meaningful productivity leverage on any horizontal AI rollout",
+            "EU footprint forces early GDPR/EU AI Act discipline that becomes a governance asset"
+          ],
+          "weaknesses": [
+            "No enterprise AI strategy: pilots are isolated, unfunded beyond PoC, and not tied to business KPIs",
+            "Absence of AI governance, ISO 42001 / NIST AI RMF framing, and value-tracking mechanisms",
+            "Likely fragmented and siloed data with limited MLOps / platform foundations to scale pilots",
+            "Scarce in-house AI/data-engineering talent and no structured upskilling per profile",
+            "Change-resistance and budget constraints threaten adoption beyond early enthusiasts"
+          ],
+          "opportunities": [
+            "Convert scattered pilots into a governed portfolio with a 12-24 month value-driven roadmap",
+            "Rapid quick wins via generative-AI copilots for knowledge and engineering work (low effort, weeks to value)",
+            "Predictive maintenance and computer-vision quality control to capture measurable OEE and scrap-reduction gains",
+            "EU AI Act compliance as a competitive differentiator vs. slower peers",
+            "Reusable data/MLOps platform amortized across multiple industrial use cases"
+          ],
+          "risks": [
+            "EU AI Act / GDPR non-compliance and shadow-AI exposure without governance guardrails",
+            "Pilot fatigue and lost sponsorship if early initiatives fail to show ROI",
+            "Change resistance and skills gap stalling adoption despite technical success",
+            "Vendor lock-in and uncontrolled TCO from premature make-vs-buy decisions",
+            "Underfunding: budget constraints starving the platform and change-management investments needed to scale"
+          ]
+        },
+        "useCases": [
+          {
+            "name": "Generative-AI copilots for knowledge & engineering work (docs, specs, code, RFP/contract drafting)",
+            "value": "High",
+            "effort": "Low"
+          },
+          {
+            "name": "Predictive maintenance on critical production assets (sensor + failure prediction)",
+            "value": "High",
+            "effort": "Medium"
+          },
+          {
+            "name": "Computer-vision quality inspection & defect detection on production lines",
+            "value": "High",
+            "effort": "High"
+          },
+          {
+            "name": "Supply-chain demand forecasting & inventory optimization",
+            "value": "High",
+            "effort": "Medium"
+          },
+          {
+            "name": "LLM-based procurement & contract analysis / knowledge retrieval (RAG over technical documentation)",
+            "value": "Medium",
+            "effort": "Low"
+          },
+          {
+            "name": "After-sales / customer-service AI assistant for field and support teams",
+            "value": "Medium",
+            "effort": "Medium"
+          },
+          {
+            "name": "Energy and process-parameter optimization across plants",
+            "value": "Medium",
+            "effort": "High"
+          }
+        ],
+        "recommendations": [
+          "Establish an enterprise AI strategy and lightweight governance (AI steering committee, ISO 42001 / NIST AI RMF alignment, EU AI Act readiness) before scaling any pilot.",
+          "Launch 2-3 quick wins in the first 90 days — starting with generative-AI copilots and one predictive-maintenance PoC — each with a signed business case and tracked KPIs.",
+          "Build a shared data & MLOps foundation so use cases reuse platform, data pipelines and security controls rather than being rebuilt per pilot.",
+          "Deploy an ADKAR-based change-management and role-based training plan (executives, managers, operators, data/IT) to overcome resistance and secure adoption.",
+          "Prioritize the roadmap on a value-vs-effort basis over 12-24 months, with stage-gate funding and a quarterly ComEx value-review cadence."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-02",
+      "assetId": "AGENT-FINANCIAL-ANALYST",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "fa-business-cases",
+          "description": "STEP-02: business case per use case (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fa-roi-summary",
+          "description": "STEP-02: overall transformation ROI summary present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fa-prioritization",
+          "description": "STEP-02: financial prioritization of the recommendations (carried field)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fa-scenarios",
+          "description": "STEP-02: ≥ 3 financial scenarios (optimistic/realistic/conservative)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "businessCases": [
+          {
+            "useCase": "Generative-AI copilots for knowledge & engineering work (docs, specs, code, RFP/contract drafting)",
+            "investment": 1200000,
+            "gain": 6500000,
+            "roi": "5.4x",
+            "payback": "4 months"
+          },
+          {
+            "useCase": "Predictive maintenance on critical production assets (sensor + failure prediction)",
+            "investment": 1800000,
+            "gain": 8100000,
+            "roi": "4.5x",
+            "payback": "6 months"
+          },
+          {
+            "useCase": "Supply-chain demand forecasting & inventory optimization",
+            "investment": 1400000,
+            "gain": 6300000,
+            "roi": "4.5x",
+            "payback": "5 months"
+          },
+          {
+            "useCase": "Computer-vision quality inspection & defect detection on production lines",
+            "investment": 2400000,
+            "gain": 7200000,
+            "roi": "3.0x",
+            "payback": "9 months"
+          },
+          {
+            "useCase": "LLM-based procurement & contract analysis / RAG over technical documentation",
+            "investment": 500000,
+            "gain": 1500000,
+            "roi": "3.0x",
+            "payback": "6 months"
+          },
+          {
+            "useCase": "After-sales / customer-service AI assistant for field & support teams",
+            "investment": 900000,
+            "gain": 2300000,
+            "roi": "2.6x",
+            "payback": "8 months"
+          },
+          {
+            "useCase": "Energy & process-parameter optimization across plants",
+            "investment": 2000000,
+            "gain": 4400000,
+            "roi": "2.2x",
+            "payback": "11 months"
+          },
+          {
+            "useCase": "Shared data & MLOps platform + AI governance (ISO 42001 / EU AI Act, ADKAR change mgmt) — enabling investment amortized across the portfolio",
+            "investment": 1600000,
+            "gain": 3900000,
+            "roi": "2.4x",
+            "payback": "Enabler (value realized via use cases)"
+          }
+        ],
+        "roiSummary": "TRANSFORMATION PORTFOLIO — 3-YEAR ROI SUMMARY (realistic scenario)\\nAssumptions: ~4,000 employees, EU industrial group, maturity 3.5/5; figures are 3-year TCO (build + 24-month run) vs. 3-year cumulative benefit with adoption ramp (Y1 40% / Y2 80% / Y3 100%); discount rate 8%; blended fully-loaded labor €65k/yr; benefits validated per signed business case with tracked KPIs.\\n\\n| # | Initiative | Value | Effort | Investment (€) | 3-yr Gain (€) | ROI | Payback |\\n|---|-----------|-------|--------|----------------|---------------|-----|---------|\\n| 1 | GenAI copilots | High | Low | 1.20M | 6.50M | 5.4x | 4 mo |\\n| 2 | Predictive maintenance | High | Med | 1.80M | 8.10M | 4.5x | 6 mo |\\n| 3 | Demand forecasting | High | Med | 1.40M | 6.30M | 4.5x | 5 mo |\\n| 4 | CV quality inspection | High | High | 2.40M | 7.20M | 3.0x | 9 mo |\\n| 5 | Procurement/contract RAG | Med | Low | 0.50M | 1.50M | 3.0x | 6 mo |\\n| 6 | After-sales AI assistant | Med | Med | 0.90M | 2.30M | 2.6x | 8 mo |\\n| 7 | Energy/process optimization | Med | High | 2.00M | 4.40M | 2.2x | 11 mo |\\n| P | Platform + governance (enabler) | — | — | 1.60M | 3.90M | 2.4x | — |\\n| — | TOTAL PORTFOLIO | — | — | 11.80M | 40.20M | 3.4x | ~7 mo blended |\\n\\nNet 3-yr value ≈ €28.4M; portfolio NPV(8%) ≈ €22M; IRR > 90%. Governance/platform de-risks the four highest-value use cases and is mandatory before scaling any pilot. Stage-gate funding released quarterly against KPI attainment at the ComEx value review.",
+        "prioritization": [
+          {
+            "rank": 1,
+            "useCase": "GenAI copilots for knowledge & engineering work",
+            "wsjf": 9.8,
+            "tier": "Wave 1 — Quick win (0-90 days)",
+            "costOfDelay": "High (broad productivity, cross-functional appetite already present)",
+            "jobSize": "Low",
+            "rationale": "Highest WSJF: high business/time value, low effort, weeks-to-value. Lands sponsorship credibility fast and funds later waves."
+          },
+          {
+            "rank": 2,
+            "useCase": "Predictive maintenance on critical assets (PoC → scale)",
+            "wsjf": 8.4,
+            "tier": "Wave 1 — Quick win (0-90 days)",
+            "costOfDelay": "High (direct OEE/downtime, strong industrial data footprint)",
+            "jobSize": "Medium",
+            "rationale": "Measurable OEE gain, leverages existing maintenance data; anchor industrial proof point for the ComEx."
+          },
+          {
+            "rank": 3,
+            "useCase": "Supply-chain demand forecasting & inventory optimization",
+            "wsjf": 7.9,
+            "tier": "Wave 2 (3-9 months)",
+            "costOfDelay": "High (working-capital release, service-level risk)",
+            "jobSize": "Medium",
+            "rationale": "Strong cash-release ROI; reuses platform data pipelines from Wave 1."
+          },
+          {
+            "rank": 4,
+            "useCase": "Procurement & contract RAG",
+            "wsjf": 7.2,
+            "tier": "Wave 2 (3-9 months)",
+            "costOfDelay": "Medium",
+            "jobSize": "Low",
+            "rationale": "Low-effort medium-value; reuses GenAI copilot stack, minimal marginal cost."
+          },
+          {
+            "rank": 5,
+            "useCase": "Computer-vision quality inspection",
+            "wsjf": 5.6,
+            "tier": "Wave 3 (9-18 months)",
+            "costOfDelay": "High but effort-heavy (line integration, MLOps maturity)",
+            "jobSize": "High",
+            "rationale": "High scrap-reduction value but needs platform maturity and edge deployment; sequence after platform hardening."
+          },
+          {
+            "rank": 6,
+            "useCase": "After-sales AI assistant",
+            "wsjf": 4.8,
+            "tier": "Wave 3 (9-18 months)",
+            "costOfDelay": "Medium",
+            "jobSize": "Medium",
+            "rationale": "Reuses RAG + copilot assets; deploy once field-support data governance is in place."
+          },
+          {
+            "rank": 7,
+            "useCase": "Energy & process-parameter optimization",
+            "wsjf": 3.9,
+            "tier": "Wave 4 (18-24 months)",
+            "costOfDelay": "Medium",
+            "jobSize": "High",
+            "rationale": "Lowest WSJF: high effort, longest payback; pursue after platform and CV maturity de-risk it."
+          },
+          {
+            "rank": 0,
+            "useCase": "Data/MLOps platform + AI governance (ISO 42001 / EU AI Act, ADKAR)",
+            "wsjf": "Enabler",
+            "tier": "Wave 0 — Foundation (0-6 months, parallel)",
+            "costOfDelay": "Critical (compliance & shadow-AI exposure, prevents pilot rebuild)",
+            "jobSize": "Medium",
+            "rationale": "Not ranked by WSJF — mandatory enabler funded before scaling; amortized across all use cases and required for EU AI Act readiness."
+          }
+        ],
+        "scenarios": [
+          {
+            "name": "Pessimistic",
+            "adoption": "40% target adoption, slow change management, 2 of 7 use cases stall at PoC",
+            "investment": 13000000,
+            "threeYearGain": 21000000,
+            "roi": "1.6x",
+            "npv8pct": 8500000,
+            "payback": "16 months",
+            "keyDrivers": "Change resistance and skills gap materialize; governance under-funded; benefits realized only on copilots + one industrial use case. Still net-positive but sponsorship at risk without early wins."
+          },
+          {
+            "name": "Realistic (base case)",
+            "adoption": "70-80% adoption with ADKAR plan, 6 of 7 use cases scaled, platform reused",
+            "investment": 11800000,
+            "threeYearGain": 40200000,
+            "roi": "3.4x",
+            "npv8pct": 22000000,
+            "payback": "7 months blended",
+            "keyDrivers": "Quick wins fund later waves; platform amortized across use cases; quarterly stage-gate keeps only value-positive initiatives funded. Recommended planning basis."
+          },
+          {
+            "name": "Optimistic",
+            "adoption": "95%+ adoption, all 7 use cases scaled, EU AI Act compliance monetized as commercial differentiator",
+            "investment": 11000000,
+            "threeYearGain": 54000000,
+            "roi": "4.9x",
+            "npv8pct": 33000000,
+            "payback": "5 months blended",
+            "keyDrivers": "Full platform reuse drives marginal-cost decline; compliance-as-differentiator wins/retains contracts; OEE and working-capital gains exceed baseline. Upside contingent on talent acquisition and sustained C-suite mandate."
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-CDO-DIRECTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cdo-roadmap-horizons",
+          "description": "STEP-03: 12-24 month roadmap with the three horizons (now/next/later)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cdo-okrs",
+          "description": "STEP-03: AI OKRs per period (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cdo-governance",
+          "description": "STEP-03: AI governance framework (roles, bodies, processes)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cdo-talent",
+          "description": "STEP-03: talent recruitment / upskilling plan",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "roadmap": {
+          "now": [
+            {
+              "wave": "Wave 0 — Foundation (0-6 months, parallel)",
+              "initiative": "Shared data & MLOps platform + AI governance",
+              "objective": "Stand up the reusable data/MLOps platform and the ISO 42001 / EU AI Act governance layer BEFORE scaling any pilot; kill shadow-AI and prevent per-pilot rebuild.",
+              "investment_eur": 1600000,
+              "owner": "CDO / Chief AI Officer + CoE Platform Lead",
+              "exit_gate": "Model registry, data contracts, lineage, and AI risk register live; first use case deployed on shared pipelines.",
+              "note": "Enabler — not WSJF-ranked; mandatory precondition and amortized across the portfolio."
+            },
+            {
+              "wave": "Wave 1 — Quick win (0-90 days)",
+              "initiative": "GenAI copilots for knowledge & engineering work",
+              "objective": "Land credibility fast with a high-value / low-effort deployment that funds later waves.",
+              "wsjf": 9.8,
+              "investment_eur": 1200000,
+              "roi": "5.4x",
+              "payback": "4 months",
+              "owner": "CoE Product Lead + business sponsors (Engineering, Legal/Procurement)",
+              "exit_gate": "≥60% weekly active adoption in pilot BUs; measured productivity uplift signed off at ComEx value review."
+            },
+            {
+              "wave": "Wave 1 — Quick win (0-90 days)",
+              "initiative": "Predictive maintenance on critical production assets",
+              "objective": "Deliver the anchor industrial proof point (OEE / downtime) on existing maintenance data.",
+              "wsjf": 8.4,
+              "investment_eur": 1800000,
+              "roi": "4.5x",
+              "payback": "6 months",
+              "owner": "CoE ML Lead + Operations / Maintenance",
+              "exit_gate": "PoC → scale on ≥1 plant; measurable OEE gain vs. baseline validated by Finance."
+            }
+          ],
+          "next": [
+            {
+              "wave": "Wave 2 (3-9 months)",
+              "initiative": "Supply-chain demand forecasting & inventory optimization",
+              "objective": "Release working capital and lift service levels, reusing Wave-0/1 platform pipelines.",
+              "wsjf": 7.9,
+              "investment_eur": 1400000,
+              "roi": "4.5x",
+              "payback": "5 months",
+              "owner": "CoE ML Lead + Supply Chain",
+              "exit_gate": "Forecast accuracy (MAPE) improvement and inventory/working-capital release tracked per signed business case."
+            },
+            {
+              "wave": "Wave 2 (3-9 months)",
+              "initiative": "Procurement & contract RAG over technical documentation",
+              "objective": "Low-effort / medium-value extension of the GenAI copilot stack at minimal marginal cost.",
+              "wsjf": 7.2,
+              "investment_eur": 500000,
+              "roi": "3.0x",
+              "payback": "6 months",
+              "owner": "CoE Product Lead + Procurement / Legal",
+              "exit_gate": "Cycle-time reduction on contract analysis; reuse of copilot stack confirmed (no net-new infra)."
+            }
+          ],
+          "later": [
+            {
+              "wave": "Wave 3 (9-18 months)",
+              "initiative": "Computer-vision quality inspection & defect detection",
+              "objective": "High scrap-reduction value; sequenced after platform hardening and edge/MLOps maturity.",
+              "wsjf": 5.6,
+              "investment_eur": 2400000,
+              "roi": "3.0x",
+              "payback": "9 months",
+              "owner": "CoE ML Lead + Quality / Manufacturing",
+              "exit_gate": "Edge deployment on ≥1 line; defect-detection precision/recall and scrap reduction validated."
+            },
+            {
+              "wave": "Wave 3 (9-18 months)",
+              "initiative": "After-sales / customer-service AI assistant",
+              "objective": "Reuse RAG + copilot assets once field-support data governance is in place.",
+              "wsjf": 4.8,
+              "investment_eur": 900000,
+              "roi": "2.6x",
+              "payback": "8 months",
+              "owner": "CoE Product Lead + After-Sales / Customer Service",
+              "exit_gate": "Field-support data governed; deflection / resolution-time KPIs met."
+            },
+            {
+              "wave": "Wave 4 (18-24 months)",
+              "initiative": "Energy & process-parameter optimization across plants",
+              "objective": "Highest-effort / longest-payback initiative; pursue after platform + CV maturity de-risk it.",
+              "wsjf": 3.9,
+              "investment_eur": 2000000,
+              "roi": "2.2x",
+              "payback": "11 months",
+              "owner": "CoE ML Lead + Operations / Energy",
+              "exit_gate": "Energy/process savings per plant validated; scale decision at ComEx stage-gate."
+            }
+          ]
+        },
+        "okrs": [
+          {
+            "horizon": "Year 1",
+            "objective": "O1 — Prove and scale the highest-value AI use cases to establish credibility and self-funding momentum.",
+            "keyResults": [
+              "KR1: Scale ≥4 of 7 use cases from PoC to production (GenAI copilots, predictive maintenance, demand forecasting, procurement RAG).",
+              "KR2: Realize ≥€10M cumulative 3-yr-tracked benefit in Year 1 against signed business cases (Finance-validated).",
+              "KR3: Achieve blended portfolio payback ≤7 months and portfolio ROI trajectory ≥3.0x.",
+              "KR4: Reach ≥70% target adoption on Wave-1 use cases per ADKAR change plan."
+            ]
+          },
+          {
+            "horizon": "Year 1",
+            "objective": "O2 — Build a compliant, reusable data & AI platform foundation that de-risks scaling.",
+            "keyResults": [
+              "KR1: Shared data/MLOps platform live with ≥80% of new use cases deployed on it (no per-pilot rebuild).",
+              "KR2: 100% of production AI systems registered in the AI risk register and classified per EU AI Act risk tiers.",
+              "KR3: ISO/IEC 42001 AIMS operational; internal audit passed with zero critical non-conformities.",
+              "KR4: Data-contract coverage ≥90% on the domains feeding Wave-1/2 use cases; end-to-end lineage available."
+            ]
+          },
+          {
+            "horizon": "Year 1",
+            "objective": "O3 — Embed data-AI governance and a value-driven operating cadence.",
+            "keyResults": [
+              "KR1: Quarterly ComEx stage-gate reviews held; ≥95% of funding released against KPI attainment.",
+              "KR2: Zero material shadow-AI incidents; 100% of GenAI usage routed through governed tooling.",
+              "KR3: Trusted-data score ≥85% on critical data products consumed by AI use cases.",
+              "KR4: Kill/continue decision documented for every initiative failing its stage-gate."
+            ]
+          },
+          {
+            "horizon": "Years 2-3",
+            "objective": "O4 — Convert the portfolio into durable enterprise value and a compliance-as-differentiator advantage.",
+            "keyResults": [
+              "KR1: Scale to 6/7 use cases in production; cumulative 3-yr benefit ≥€40M (base case).",
+              "KR2: Portfolio NPV(8%) ≥€22M and net 3-yr value ≥€28M realized and Finance-attested.",
+              "KR3: Monetize EU AI Act / ISO 42001 compliance in ≥2 commercial contracts (win or retention).",
+              "KR4: Marginal cost per new use case reduced ≥40% via platform reuse."
+            ]
+          },
+          {
+            "horizon": "Year 1",
+            "objective": "O5 — Build the data-AI talent engine to sustain the mandate.",
+            "keyResults": [
+              "KR1: Fill ≥90% of critical CoE roles (ML/data engineers, ML lead, AI product, governance/risk).",
+              "KR2: Upskill ≥500 employees via role-based AI literacy tracks; ≥40% of workforce touched by Year 1.",
+              "KR3: Certify ≥30 internal 'AI champions' embedded in business domains.",
+              "KR4: Voluntary regretted attrition in data-AI roles ≤10%."
+            ]
+          }
+        ],
+        "governance": "AI GOVERNANCE FRAMEWORK (ISO/IEC 42001 AIMS + EU AI Act aligned, DAMA DMBOK v2 for data).\n\n1) BODIES & CADENCE\n- AI & Data Board (ComEx-level, quarterly): chaired by the CDO/Chief AI Officer with CFO, COO, CIO, CISO, General Counsel. Owns strategy, portfolio funding, and the quarterly value/stage-gate review — releases capital wave-by-wave against KPI attainment; empowered to kill under-performing initiatives.\n- AI Center of Excellence (CoE, standing): Platform Lead, ML Lead, AI Product Lead, MLOps, and AI Governance/Risk Officer. Owns delivery, the reusable platform, standards, and use-case incubation.\n- AI Risk & Ethics Committee (monthly): AI Governance Officer + Legal/DPO + CISO + Quality. Classifies each system per EU AI Act risk tier, approves high-risk deployments, maintains the AI risk register and conformity documentation.\n- Data Governance Council (DAMA): Data Owners/Stewards per domain, owning data quality, data contracts, lineage, and the trusted-data score feeding AI use cases.\n\n2) ROLES (RACI)\n- CDO/Chief AI Officer: Accountable for strategy, portfolio ROI, and board reporting.\n- CoE Leads: Responsible for delivery, platform reuse, and stage-gate evidence.\n- AI Governance/Risk Officer: Responsible for AIMS operation, EU AI Act classification, audit readiness.\n- Business Sponsors (per use case): Accountable for adoption and benefit realization; co-sign the business case and its KPIs.\n- Data Owners/Stewards: Responsible for data-product quality and contracts; Consulted on model inputs.\n- CISO/DPO: Consulted on security, privacy, and data-protection impact assessments.\n\n3) PROCESSES\n- Stage-gate lifecycle: Ideation → signed business case (ROI/TCO/NPV + KPIs) → PoC → gated scale → run. Funding released quarterly; every gate has explicit continue/kill criteria.\n- Model lifecycle: intake → risk classification → data-contract & bias/DPIA checks → validation → registry entry → monitored production → periodic review/retire. No production model without registry entry and human-oversight design.\n- Shadow-AI control: all GenAI usage routed through governed tooling; policy + monitoring enforce zero material shadow-AI.\n- Compliance operating rhythm: ISO 42001 AIMS internal audits; EU AI Act conformity file per high-risk system; benefits tracked and Finance-attested per business case at the ComEx value review.\n- Escalation: risk/ethics breaches escalate from CoE → Risk & Ethics Committee → AI & Data Board within defined SLAs.",
+        "talentPlan": "TALENT PLAN — BUILD, BUY, BORROW, BROADEN (PROSCI/ADKAR-anchored).\n\n1) BUILD THE CORE (BUY — critical hires, 0-6 months, funded within the €1.6M platform/governance enabler): staff the CoE with an ML Lead, ML/Data Engineers, an MLOps engineer, an AI Product Lead, and an AI Governance/Risk Officer. Target ≥90% of critical roles filled in Year 1. Compete for scarce talent with a compelling AI mandate, real production problems, modern platform, and retention levers (career track, publication/patent time, market-competitive comp bands); keep regretted attrition ≤10%.\n\n2) BORROW TO ACCELERATE (BORROW — Waves 0-1): use vetted partners/SI for edge/CV and platform hardening where internal maturity is thin (notably Computer-Vision inspection and energy optimization), with explicit knowledge-transfer and exit clauses so capability lands in-house rather than creating dependency.\n\n3) UPSKILL AT SCALE (BROADEN — continuous): role-based AI-literacy tracks — executive AI fluency for leaders, GenAI-copilot enablement for knowledge/engineering staff, applied ML for analysts, and prompt/RAG craft for domain teams. Target ≥500 employees trained in Year 1 (~40% of the ~4,000 workforce touched), scaling toward full coverage by Year 3.\n\n4) AI CHAMPIONS NETWORK (BROADEN): certify ≥30 embedded champions across business domains to drive local adoption, surface use cases, and act as the change agents of the ADKAR plan (Awareness → Desire → Knowledge → Ability → Reinforcement). Champions own last-mile adoption on their use case and feed the CoE demand pipeline.\n\n5) CHANGE MANAGEMENT (PROSCI/ADKAR): pair every use-case rollout with a change plan — visible C-suite sponsorship, clear 'what's in it for me', hands-on enablement, and reinforcement via adoption KPIs tied to the OKRs. Governance/ethics literacy embedded so responsible-AI behavior scales with capability. This directly mitigates the pessimistic-scenario risk (change resistance + skills gap stalling use cases) that threatens sponsorship without early wins."
+      }
+    },
+    {
+      "stepId": "STEP-04",
+      "assetId": "AGENT-CHANGE-MANAGER",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cm-adkar",
+          "description": "STEP-04: ADKAR assessment per population (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-adkar-populations",
+          "description": "STEP-04: the three ADKAR populations covered (executive committee/managers/operational)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cm-comms-plan",
+          "description": "STEP-04: 12-month communication plan present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-resistance",
+          "description": "STEP-04: resistance management strategy present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cm-adoption-kpis",
+          "description": "STEP-04: adoption KPIs with measurable milestones present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "adkarPlan": [
+          {
+            "population": "executive committee",
+            "awareness": "CDO/Chief AI Officer opens each quarterly AI & Data Board with the strategic 'why now': competitive pressure, the €10M Year-1 / €40M 3-yr benefit case, and the risk of stalled sponsorship without early wins. Frame EU AI Act / ISO 42001 compliance as a differentiator, not a cost. Awareness measured by ComEx members able to articulate the mandate.",
+            "desire": "Tie personal and business-unit incentives to portfolio ROI and stage-gate KPI attainment; make Wave-1 quick wins (GenAI copilots 5.4x ROI, predictive maintenance 4.5x) visible at ComEx value reviews so sponsors see credibility and self-funding momentum. Desire reinforced by the ≥95% funding-released-against-KPI cadence.",
+            "knowledge": "Executive AI-fluency track: risk tiers, human-oversight design, kill/continue stage-gate discipline, and how to read adoption/benefit dashboards. Delivered via short board briefings + a curated exec cohort, not generic training.",
+            "ability": "Coach each sponsor to run their use-case value review, co-sign business cases and KPIs, and make documented kill/continue decisions. Provide a one-page sponsor playbook and CoE support so ability is demonstrated, not assumed.",
+            "reinforcement": "Quarterly stage-gate reviews publicly celebrate scaled use cases and enforce accountability; sponsor visibility and comp levers tied to adoption ≥70% on Wave-1. Reinforcement anchored in the O1/O3 OKRs."
+          },
+          {
+            "population": "managers",
+            "awareness": "Cascade the mandate through manager town halls and domain briefings: what changes in their teams' workflows (copilots, forecasting, RAG), the timeline by wave, and 'what's in it for my team'. Awareness measured by pulse-survey comprehension ≥80%.",
+            "desire": "Address the WIIFM directly — reduced firefighting, capacity release, career-relevant AI skills — and surface the AI Champions network as a growth path. Counter fear of headcount impact with transparent redeployment/upskilling messaging. Desire tracked via sentiment pulse.",
+            "knowledge": "Manager enablement: how to lead an AI-augmented team, interpret adoption KPIs, coach resisters, and route all GenAI through governed tooling (zero shadow-AI). Role-based track within the ≥500-employee Year-1 program.",
+            "ability": "Managers run local adoption stand-ups, remove blockers, and support their embedded AI champion; hands-on labs with real use-case data build confidence. Ability evidenced by managers leading their own team rollout with CoE on standby.",
+            "reinforcement": "Adoption KPIs embedded in team objectives; recognition for high-adoption teams; monthly champion syncs feed wins and blockers back to the CoE. Reinforced through the ADKAR-tied OKR cadence."
+          },
+          {
+            "population": "operational",
+            "awareness": "Just-in-time, use-case-specific comms at the point of rollout (copilots for knowledge/engineering staff, predictive maintenance for operations): what's changing, why it helps them, and where to get help. Champions deliver peer-to-peer awareness on the shop floor / in the office.",
+            "desire": "Make the personal benefit tangible — less repetitive work, faster answers, better tooling — via peer demos and champion testimonials rather than top-down mandates. Address job-security and 'AI replaces me' fears honestly. Desire tracked via adoption sentiment and voluntary-use signals.",
+            "knowledge": "Hands-on, role-based enablement: GenAI-copilot craft, prompt/RAG basics, applied ML for analysts, plus responsible-AI/governance literacy so safe behavior scales with skill. Blended e-learning + labs + champion coaching.",
+            "ability": "Last-mile support owned by the ≥30 certified AI champions embedded in domains: floorwalking, office hours, and quick-reference guides during the adoption ramp so users reach proficiency on live tasks.",
+            "reinforcement": "Weekly-active-usage targets (≥60% pilot, ≥70% Wave-1), in-tool nudges, recognition of power users, and continuous feedback loops to the CoE demand pipeline. Reinforcement sustains proficiency and prevents relapse to shadow tools."
+          }
+        ],
+        "commsPlan": "12-MONTH CHANGE COMMUNICATION PLAN (PROSCI-aligned, synchronized to the wave roadmap).\\n\\nMONTHS 0-2 (Wave 0 / Foundation launch): CDO 'why now' kickoff — ComEx video + all-hands. Key message: AI mandate, compliance-as-differentiator, and platform-first (no shadow-AI). Channels: ComEx video, intranet hub, manager cascade decks, Confluence landing space. Objective: Awareness across leadership + managers; announce the AI Champions call-for-nominations.\\n\\nMONTHS 2-4 (Wave 1 quick wins launch): Use-case-specific rollout comms for GenAI copilots and predictive maintenance — WIIFM one-pagers, peer demos, champion testimonials, in-tool onboarding nudges. Channels: targeted BU emails, Teams/Slack channels, floor/office demos, e-learning invites. Objective: Desire + Knowledge in pilot BUs; drive ≥60% weekly-active adoption.\\n\\nMONTHS 4-6 (First value review): Publish first quick-win results at the ComEx value review — productivity uplift, early OEE gains — as a company-wide success story. Channels: newsletter, town hall, leaderboard of high-adoption teams. Objective: Reinforcement + build momentum/credibility that funds later waves.\\n\\nMONTHS 6-9 (Wave 2 — demand forecasting + procurement RAG): Extend messaging to Supply Chain, Procurement/Legal; reuse-of-platform narrative ('no net-new build'). Champion network scales to ≥30. Channels: domain webinars, champion syncs, RAG quick-start guides. Objective: Awareness/Desire in Wave-2 populations; sustain Wave-1 reinforcement.\\n\\nMONTHS 9-12 (Consolidation + Wave 3 teaser): Publish cumulative Year-1 benefit vs. the €10M case, adoption ≥70% on Wave-1, ISO 42001 audit outcome, and zero-shadow-AI status. Preview computer-vision quality inspection. Channels: annual AI review town hall, exec dashboard, intranet story series, recognition of certified champions. Objective: Reinforcement, celebrate wins, set expectations for Wave 3.\\n\\nCADENCE & GOVERNANCE: Monthly adoption/sentiment pulse published to managers; quarterly ComEx stage-gate comms; always-on Confluence hub + governed-tooling reminders. Two-way channels (feedback forms, champion listening posts) feed resistance signals to the CoE within-cycle.",
+        "resistanceStrategy": "RESISTANCE MANAGEMENT STRATEGY (PROSCI/ADKAR + SAFe, directly mitigating the pessimistic-scenario risk of change resistance + skills gap stalling use cases).\\n\\n1) ANTICIPATE & DIAGNOSE: Run an anticipated-resistance assessment per use case before rollout, mapped to affected populations. Diagnose root cause against ADKAR — most resistance is a missing Awareness (why) or Desire (WIIFM), not Ability. Named risks here: (a) job-security fear ('AI replaces me') in operational/knowledge staff; (b) executive sponsorship fatigue without early wins; (c) shadow-AI relapse to ungoverned tools; (d) skills gap creating anxiety-driven avoidance.\\n\\n2) SPONSORSHIP AS PRIMARY LEVER: Visible, active C-suite sponsorship is the #1 predictor of success — CDO and business sponsors co-sign KPIs and appear at value reviews. Escalate stalled adoption through CoE → Risk & Ethics Committee → AI & Data Board within defined SLAs.\\n\\n3) CHAMPIONS AS FRONT-LINE ABSORBERS: The ≥30 embedded AI champions surface local resistance early, provide peer reassurance, and feed blockers to the CoE — resistance is managed where it lives, not top-down.\\n\\n4) TARGETED MITIGATIONS: Job-security fear → transparent redeployment/upskilling narrative + '≥500 trained, capacity released not cut' framing. Sponsor fatigue → front-load Wave-1 quick wins (5.4x / 4.5x ROI) to prove momentum. Shadow-AI → make governed tooling the easiest path (frictionless access) plus policy + monitoring. Skills anxiety → role-based, hands-on enablement with champion office hours so competence builds confidence.\\n\\n5) MANAGERS AS COACHES: Equip managers to hold resistance conversations, listen actively, and reinforce locally — resistance managed by the employee's own manager is resolved fastest.\\n\\n6) FEEDBACK-DRIVEN: Monthly adoption/sentiment pulse + champion listening posts detect resistance hotspots; corrective comms/enablement deployed within-cycle. Persistent low adoption at a stage-gate triggers a documented continue/kill decision rather than silent failure.",
+        "adoptionKpis": [
+          {
+            "kpi": "Weekly Active Adoption (Wave-1 use cases)",
+            "target": "≥60% in pilot BUs by Month 4; ≥70% enterprise Wave-1 by Month 12",
+            "source": "In-tool usage analytics / model-serving telemetry",
+            "adkarLink": "Ability + Reinforcement",
+            "milestone": "Gate for Wave-1 exit-gate sign-off at ComEx value review"
+          },
+          {
+            "kpi": "Change-sentiment / Desire pulse score",
+            "target": "≥80% favorable comprehension of 'why' and WIIFM by Month 3, sustained ≥75%",
+            "source": "Monthly pulse survey by population",
+            "adkarLink": "Awareness + Desire",
+            "milestone": "Baseline Month 1; trend reviewed monthly to flag resistance hotspots"
+          },
+          {
+            "kpi": "AI-literacy training completion",
+            "target": "≥500 employees trained (~40% of ~4,000 workforce) in Year 1; ≥90% completion in targeted cohorts",
+            "source": "LMS completion + skills assessment",
+            "adkarLink": "Knowledge",
+            "milestone": "≥250 by Month 6; ≥500 by Month 12"
+          },
+          {
+            "kpi": "Certified AI Champions embedded",
+            "target": "≥30 certified champions across business domains",
+            "source": "CoE champion register",
+            "adkarLink": "Ability + Reinforcement",
+            "milestone": "≥15 by Month 6; ≥30 by Month 9"
+          },
+          {
+            "kpi": "Governed-tooling routing / zero shadow-AI",
+            "target": "100% of GenAI usage through governed tooling; zero material shadow-AI incidents",
+            "source": "Security/monitoring + policy compliance logs",
+            "adkarLink": "Reinforcement",
+            "milestone": "Continuous; reviewed at monthly Risk & Ethics Committee"
+          },
+          {
+            "kpi": "Proficiency / competency uplift",
+            "target": "≥75% of trained users reach 'proficient' on live-task assessment within 60 days of rollout",
+            "source": "Post-training competency assessment + champion sign-off",
+            "adkarLink": "Ability",
+            "milestone": "Measured per use-case rollout cohort"
+          },
+          {
+            "kpi": "Benefit realization vs. business case",
+            "target": "≥€10M cumulative 3-yr-tracked benefit in Year 1, Finance-validated",
+            "source": "Finance benefit tracking per signed business case",
+            "adkarLink": "Reinforcement",
+            "milestone": "Attested at each quarterly ComEx value review"
+          },
+          {
+            "kpi": "Regretted attrition in data-AI roles",
+            "target": "≤10% voluntary regretted attrition",
+            "source": "HR analytics",
+            "adkarLink": "Reinforcement",
+            "milestone": "Reviewed quarterly"
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-05",
+      "assetId": "AGENT-FORMATEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "form-catalog",
+          "description": "STEP-05: training catalog — tracks per profile (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "form-4-levels",
+          "description": "STEP-05: the four training levels covered (ideal ≥ 4)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "form-quick-wins",
+          "description": "STEP-05: training quick wins (2-4 weeks) present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "form-eval-plan",
+          "description": "STEP-05: acquired-skills evaluation plan present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "trainingCatalog": [
+          {
+            "profile": "executive committee",
+            "level": "Level 1 – AI Awareness & Governance Literacy",
+            "format": "in-person",
+            "title": "AI & Data Board Briefing – Why Now, Risk & Value",
+            "objectives": "Articulate the AI mandate, the €10M Year-1 / €40M 3-yr case, EU AI Act / ISO 42001 as differentiator; recognize risk tiers and human-oversight duty.",
+            "duration": "Half-day board briefing, quarterly refresh",
+            "adkarLink": "Awareness + Reinforcement",
+            "kpiLink": "Change-sentiment/Desire pulse; sponsor comprehension of mandate"
+          },
+          {
+            "profile": "executive committee",
+            "level": "Level 2 – Executive AI-Fluency (Sponsor Track)",
+            "format": "workshop",
+            "title": "Stage-Gate Discipline & Reading Adoption/Benefit Dashboards",
+            "objectives": "Run a use-case value review, co-sign business cases and KPIs, make documented kill/continue decisions using a one-page sponsor playbook.",
+            "duration": "2 x 3h curated exec cohort + CoE coaching",
+            "adkarLink": "Knowledge + Ability",
+            "kpiLink": "Benefit realization vs. business case; Wave-1 exit-gate sign-off"
+          },
+          {
+            "profile": "managers",
+            "level": "Level 1 – AI Awareness & WIIFM Cascade",
+            "format": "in-person",
+            "title": "What Changes in My Team – Wave Roadmap & Team Benefits",
+            "objectives": "Explain workflow changes (copilots, forecasting, RAG) by wave; deliver the WIIFM and counter headcount fears with the upskilling/redeployment narrative.",
+            "duration": "90-min manager town-hall + domain briefing",
+            "adkarLink": "Awareness + Desire",
+            "kpiLink": "Pulse-survey comprehension ≥80%"
+          },
+          {
+            "profile": "managers",
+            "level": "Level 2 – Leading an AI-Augmented Team",
+            "format": "workshop",
+            "title": "Interpreting Adoption KPIs & Routing via Governed Tooling",
+            "objectives": "Read adoption dashboards, run local adoption stand-ups, remove blockers, enforce zero shadow-AI.",
+            "duration": "1-day hands-on lab with real use-case data",
+            "adkarLink": "Knowledge + Ability",
+            "kpiLink": "Weekly active adoption; governed-tooling routing 100%"
+          },
+          {
+            "profile": "managers",
+            "level": "Level 3 – Coaching Resistance & Local Adoption (ADKAR for Managers)",
+            "format": "workshop",
+            "title": "Resistance Conversations & Champion Support",
+            "objectives": "Diagnose resistance against ADKAR, hold active-listening conversations, support the embedded AI champion, escalate stalled adoption via CoE SLA.",
+            "duration": "2 x half-day + monthly champion sync",
+            "adkarLink": "Ability + Reinforcement",
+            "kpiLink": "Adoption embedded in team objectives; resistance-hotspot resolution"
+          },
+          {
+            "profile": "users",
+            "level": "Level 1 – AI Awareness & Responsible-AI Literacy",
+            "format": "e-learning",
+            "title": "AI For Everyone – Safe & Confident Use",
+            "objectives": "Understand what GenAI does for their role, responsible-AI basics, governance/policy, and where to get help; address 'AI replaces me' fear.",
+            "duration": "Self-paced micro-learning, ~2h",
+            "adkarLink": "Awareness + Knowledge",
+            "kpiLink": "AI-literacy completion ≥90% in cohort; ≥500 trained Year-1"
+          },
+          {
+            "profile": "users",
+            "level": "Level 2 – GenAI Copilot Craft & Prompt/RAG Basics",
+            "format": "e-learning",
+            "title": "Prompt Engineering & Retrieval for Daily Tasks",
+            "objectives": "Build copilot craft on governed tooling, apply prompt patterns and RAG basics to real tasks (Claude/ChatGPT/Gemini), verify outputs.",
+            "duration": "Blended e-learning + live lab, ~1 day equivalent",
+            "adkarLink": "Knowledge + Ability",
+            "kpiLink": "Proficiency ≥75% on live-task within 60 days"
+          },
+          {
+            "profile": "users",
+            "level": "Level 3 – Applied AI & Data Literacy for Analysts",
+            "format": "workshop",
+            "title": "From Data to Decision – Applied ML & Forecasting Basics",
+            "objectives": "Interpret model outputs (demand forecasting, predictive maintenance), data-literacy fundamentals, and responsible interpretation of AI-assisted analysis.",
+            "duration": "1-day workshop + follow-up office hours",
+            "adkarLink": "Ability",
+            "kpiLink": "Proficiency uplift; Wave-2 forecasting/procurement RAG adoption"
+          },
+          {
+            "profile": "users",
+            "level": "Level 4 – Certified AI Champion Track",
+            "format": "in-person",
+            "title": "Embedded AI Champion Certification",
+            "objectives": "Lead peer floorwalking/office hours, deliver quick-reference guides, surface and feed resistance/blockers to the CoE, run peer demos.",
+            "duration": "3-day certifying bootcamp + ongoing syncs",
+            "adkarLink": "Ability + Reinforcement",
+            "kpiLink": "≥30 certified champions (≥15 by M6, ≥30 by M9)"
+          },
+          {
+            "profile": "tech",
+            "level": "Level 2 – Governed GenAI Platform & RAG Engineering",
+            "format": "workshop",
+            "title": "Building on the Governed Platform (No Net-New Build)",
+            "objectives": "Implement RAG/copilot solutions on governed tooling, enforce human-oversight and audit hooks aligned to ISO 42001.",
+            "duration": "2-day hands-on",
+            "adkarLink": "Knowledge + Ability",
+            "kpiLink": "Platform reuse; zero material shadow-AI incidents"
+          },
+          {
+            "profile": "tech",
+            "level": "Level 3 – Applied ML & Predictive Maintenance Modeling",
+            "format": "in-person",
+            "title": "From Pilot to Production – Modeling for OEE Gains",
+            "objectives": "Develop, validate and monitor predictive-maintenance and forecasting models against Finance-validated benefit targets.",
+            "duration": "3-day applied track",
+            "adkarLink": "Ability",
+            "kpiLink": "Benefit realization (predictive maintenance 4.5x ROI)"
+          },
+          {
+            "profile": "tech",
+            "level": "Level 4 – Agentic Architectures & MLOps Expert",
+            "format": "workshop",
+            "title": "Agentic Workflows, Evaluation & Responsible-AI Guardrails",
+            "objectives": "Design multi-agent/agentic workflows, build eval harnesses, embed governance/monitoring for stage-gate readiness.",
+            "duration": "4-day expert lab + capstone",
+            "adkarLink": "Ability + Reinforcement",
+            "kpiLink": "Stage-gate technical readiness; governed-tooling routing"
+          }
+        ],
+        "quickWins": [
+          {
+            "title": "CDO 'Why Now' exec briefing pack",
+            "format": "in-person",
+            "audience": "executive committee",
+            "window": "Weeks 1-2",
+            "description": "Ready-to-deliver half-day board briefing + ComEx video script framing mandate, €10M case and compliance-as-differentiator to unblock sponsorship early.",
+            "adkar": "Awareness"
+          },
+          {
+            "title": "Manager WIIFM cascade kit + lunch-and-learn demos",
+            "format": "workshop",
+            "audience": "managers",
+            "window": "Weeks 2-3",
+            "description": "One-pager WIIFM decks and 60-min peer-demo sessions on Wave-1 copilots to convert desire before rollout; counters headcount fear.",
+            "adkar": "Awareness + Desire"
+          },
+          {
+            "title": "Prompt Engineering starter (micro e-learning)",
+            "format": "e-learning",
+            "audience": "users",
+            "window": "Weeks 2-4",
+            "description": "2-hour self-paced module on governed-tool prompt/RAG basics with live-task exercises; seeds ≥60% pilot weekly-active adoption.",
+            "adkar": "Knowledge + Ability"
+          },
+          {
+            "title": "AI Champions cohort-1 bootcamp",
+            "format": "in-person",
+            "audience": "users",
+            "window": "Weeks 3-4",
+            "description": "Certifying bootcamp for the first ≥15 champions so last-mile peer support is live at Wave-1 rollout (floorwalking, office hours, quick guides).",
+            "adkar": "Ability + Reinforcement"
+          },
+          {
+            "title": "Responsible-AI & zero-shadow-AI micro-nudge",
+            "format": "e-learning",
+            "audience": "managers",
+            "window": "Weeks 1-3",
+            "description": "15-min in-tool onboarding + policy reminder making governed tooling the easiest path; reinforced by manager stand-ups.",
+            "adkar": "Reinforcement"
+          }
+        ],
+        "evalPlan": "Kirkpatrick L1–L4 evaluation, synchronized to the wave roadmap and ADKAR-tied OKRs.\\n\\nL1 – REACTION: Post-session satisfaction + perceived relevance/WIIFM pulse per cohort (target ≥80% favorable, sustained ≥75%); captured immediately after each module via LMS and monthly sentiment pulse by population to flag resistance hotspots.\\n\\nL2 – LEARNING: Knowledge checks and skills assessment at course exit; LMS completion (≥90% in targeted cohorts; ≥250 trained by M6, ≥500 by M12) and pre/post competency delta. Champion certification exam gates the ≥30 embedded-champion target (≥15 by M6).\\n\\nL3 – BEHAVIOR / TRANSFER: Live-task proficiency assessment + champion sign-off within 60 days of rollout (≥75% reach 'proficient'); in-tool usage telemetry for weekly-active adoption (≥60% pilot by M4, ≥70% enterprise Wave-1 by M12); 100% governed-tooling routing / zero material shadow-AI as behavioral guardrail. Managers evidence transfer by leading local adoption stand-ups.\\n\\nL4 – RESULTS: Finance-validated benefit realization vs. business case (≥€10M cumulative Year-1), Wave-1 quick-win ROI (copilots 5.4x, predictive maintenance 4.5x), OEE/productivity uplift, and ≤10% regretted attrition in data-AI roles. Results attested at each quarterly ComEx value review and feed continue/kill stage-gate decisions.\\n\\nGOVERNANCE: CoE owns the evaluation dashboard; monthly adoption/sentiment publish to managers; quarterly stage-gate roll-up to the ComEx / AI & Data Board. Persistent low adoption at a gate triggers a documented corrective enablement cycle or kill decision rather than silent failure."
+      }
+    },
+    {
+      "stepId": "STEP-07",
+      "assetId": "AGENT-REDACTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "red-exec-summary",
+          "description": "STEP-07: executive summary (1 page) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-full-report",
+          "description": "STEP-07: full consulting report (15-30 pages) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-comex-deck",
+          "description": "STEP-07: executive-committee presentation deck (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-deck-10-15",
+          "description": "STEP-07: the deck holds 10 to 15 slides",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "execSummary": "ved# Executive Summary — Enterprise AI Enablement & Change Program\n\n**Context.** The organization has committed to an enterprise-wide Generative-AI and Data transformation with a Finance-validated business case of **€10M cumulative benefit in Year-1 and €40M over three years**. Value is concentrated in industrial and knowledge-work use cases — GenAI copilots (5.4x ROI), predictive maintenance (4.5x ROI), demand forecasting and procurement RAG. Technology is not the binding constraint: **adoption is**. Without disciplined enablement and change management, the platform is built but under-used, benefits slip, and shadow-AI proliferates outside governance.\n\n**Stakes.** Three risks threaten the case. (1) **Adoption risk** — tools deployed but not embedded in daily work; benefit realization decouples from spend. (2) **Governance & compliance risk** — ungoverned \"shadow-AI\" tooling creates EU AI Act / ISO 42001 exposure precisely when compliance can instead be a market differentiator. (3) **People risk** — \"AI replaces me\" fear driving disengagement and regretted attrition in scarce data-AI roles. Each is addressed head-on by the program.\n\n**Recommendation.** Deploy a single, integrated enablement architecture built on three proven frameworks working in lockstip: **ADKAR** (individual change — Awareness → Desire → Knowledge → Ability → Reinforcement), a **role-tiered training catalog** across four populations (Executive Committee, Managers, Users, Tech), and **Kirkpatrick L1–L4** evaluation synchronized to a wave-based rollout and to ADKAR-tied OKRs. A **Center of Excellence (CoE)** owns the evaluation dashboard and stage-gate roll-up; the **ComEx / AI & Data Board** makes documented continue/kill decisions quarterly.\n\n**What we do first (Weeks 1–4).** Five quick wins convert sponsorship and desire before rollout: a CDO \"Why Now\" board briefing pack; a manager WIIFM cascade kit with peer-demo lunch-and-learns; a 2-hour prompt/RAG micro-learning; the first AI Champions bootcamp (≥15 certified for last-mile support at Wave-1); and a responsible-AI / zero-shadow-AI in-tool nudge that makes governed tooling the easiest path.\n\n**Targets.** ≥500 people trained in Year-1 (≥250 by M6); AI-literacy completion ≥90% in targeted cohorts; ≥70% weekly-active adoption at enterprise Wave-1 by M12 (≥60% pilot by M4); ≥30 certified champions (≥15 by M6); 100% governed-tooling routing / zero material shadow-AI incidents; ≤10% regretted attrition in data-AI roles; and satisfaction sustained ≥75%.\n\n**ROI.** Enablement is the multiplier on the €10M/€40M case, not an add-on. The governance model turns compliance from a cost into a differentiator, and the stage-gate discipline ensures money follows evidence: persistent low adoption at a gate triggers a documented corrective cycle or a kill decision — never silent failure. **Recommendation: approve the program and release the Weeks 1–4 quick-win budget now**, so last-mile support is live the day Wave-1 goes to the floor.",
+        "fullReport": "# Enterprise AI Enablement & Change Management Program\n## A Consulting Report on Turning an €40M AI Business Case into Realized Value\n\n---\n\n## Table of Contents\n\n1. Context & Strategic Rationale\n2. The Central Problem: Adoption, Not Technology\n3. Program Vision & Guiding Principles\n4. Governance & Operating Model\n5. Audience Segmentation & the Enablement Architecture\n6. The Training Catalog in Detail\n7. The Change Framework: ADKAR in Practice\n8. Quick Wins — the First Four Weeks\n9. The Wave Roadmap\n10. The AI Champions Network\n11. Measurement & Evaluation: Kirkpatrick L1–L4\n12. KPI Framework & Targets\n13. Risk, Compliance & Responsible AI\n14. The Financial Case & ROI Logic\n15. Recommendations & Next Steps\n16. Appendices\n\n---\n\n## 1. Context & Strategic Rationale\n\nThe organization has moved from AI experimentation to an enterprise mandate. A Finance-validated business case underwrites the effort: **€10M of cumulative benefit in Year-1, rising to €40M over three years**. The value is not speculative — it is anchored in a small number of high-conviction use cases with quantified returns:\n\n- **GenAI copilots** for knowledge work — targeted **5.4x ROI**.\n- **Predictive maintenance** on industrial assets — targeted **4.5x ROI**, driving Overall Equipment Effectiveness (OEE) gains.\n- **Demand forecasting** and **procurement RAG** — Wave-2 value pools improving planning accuracy and sourcing cycle times.\n\nTwo contextual forces shape the mandate. First, **regulatory timing**: the EU AI Act and ISO 42001 are arriving as durable obligations. Rather than treat them as a compliance tax, the program's thesis is that **demonstrable, audited human-oversight and governance become a competitive differentiator** — a trust signal to customers, regulators and partners. Second, **workforce anxiety**: across every population there is a live \"AI replaces me\" fear. Left unmanaged it converts into disengagement, quiet resistance, and regretted attrition in exactly the data-AI roles the strategy depends on.\n\nThe strategic conclusion is blunt: **the platform is necessary but not sufficient**. The return on the €40M case is gated by whether people actually change how they work — daily, at scale, inside governance. That is a change-management problem, and this report sets out the program to solve it.\n\n---\n\n## 2. The Central Problem: Adoption, Not Technology\n\nMost AI programs fail not at the model layer but at the **last mile** — the gap between a capability being available and it being used, trusted, and embedded in a workflow. Three failure modes recur, and the program is designed to pre-empt each:\n\n**2.1 The adoption gap.** Tools are deployed, licenses consumed, dashboards lit up green on \"provisioned users\" — yet weekly-active usage stalls and benefit realization decouples from spend. The antidote is behavioral, not technical: measure **weekly-active adoption** and **live-task proficiency**, not seat counts; make managers accountable for local adoption; and put peer support (champions) on the floor at the moment of rollout.\n\n**2.2 The governance gap (shadow-AI).** When the governed platform is slower or harder than a consumer tool, employees route around it. This creates uncontrolled data exposure and regulatory risk. The program's guardrail is **zero material shadow-AI**: 100% routing through governed tooling, reinforced by making the compliant path the *easiest* path and by manager-led stand-ups that normalize it.\n\n**2.3 The people gap.** Fear and skill-anxiety suppress desire to adopt. The program answers with an explicit **WIIFM** (\"what's in it for me\") narrative per population, an upskilling/redeployment story that counters headcount fear, and a champions network that provides psychologically safe, peer-to-peer help.\n\nThe through-line: **adoption is engineered, not hoped for** — through segmentation, sequencing, measurement, and reinforcement.\n\n---\n\n## 3. Program Vision & Guiding Principles\n\n**Vision.** Every employee is confident, capable and responsible in using governed AI to do their best work — and the organization can prove it, use case by use case, in front of the Board.\n\n**Guiding principles:**\n\n1. **Value-led, evidence-gated.** Every enablement wave maps to a use case with a Finance-validated benefit target. Money follows evidence via stage-gates.\n2. **Role-tiered, not one-size-fits-all.** Four populations, distinct journeys, distinct KPIs.\n3. **Change is individual (ADKAR), results are collective (Kirkpatrick).** We manage the person and measure the business.\n4. **Compliance as differentiator.** Responsible-AI and human-oversight are designed in, aligned to EU AI Act risk tiers and ISO 42001.\n5. **No net-new build without reuse.** Solutions are implemented on the governed platform; reuse is a KPI.\n6. **Fail loud, not silent.** Persistent low adoption at a gate triggers a documented corrective cycle or a kill decision — never a quietly abandoned tool.\n7. **Last-mile first.** Peer support (champions) is live *before* rollout, not after complaints arrive.\n\n---\n\n## 4. Governance & Operating Model\n\nGovernance provides the spine that connects enablement activity to business decisions.\n\n**4.1 The three governing bodies.**\n- **AI & Data Board / ComEx** — sets mandate, owns the business case, and makes quarterly documented **continue/kill** stage-gate decisions at the value review.\n- **Center of Excellence (CoE)** — owns the evaluation dashboard, the champion certification standard, the enablement backlog, and the escalation SLA. Publishes adoption/sentiment monthly to managers and a quarterly stage-gate roll-up to the Board.\n- **Sponsors (executive owners)** — co-sign business cases and KPIs, run use-case value reviews, and apply a one-page sponsor playbook to make kill/continue calls.\n\n**4.2 Stage-gate discipline.** Each wave passes through documented gates: readiness → pilot exit → enterprise scale. A gate requires evidence on both **adoption** (weekly-active, proficiency, governed-routing) and **benefit** (Finance-validated realization vs. case). This is the mechanism that keeps enablement honest and the €40M case defensible.\n\n**4.3 Escalation.** Stalled adoption is routed through a CoE SLA: manager → champion support → CoE corrective enablement → Board decision. Nothing lingers unresolved.\n\n---\n\n## 5. Audience Segmentation & the Enablement Architecture\n\nThe program serves **four populations**, each with a tailored ladder of learning tied to ADKAR stages and to specific KPIs.\n\n**5.1 Executive Committee.** The sponsorship engine. They do not need to build models; they need to articulate the mandate, read adoption/benefit dashboards, and exercise stage-gate discipline. Two levels: *Board Briefing* (awareness/reinforcement) and *Executive AI-Fluency / Sponsor Track* (knowledge/ability).\n\n**5.2 Managers.** The adoption multiplier — the single most decisive population. Managers translate the mandate into their team's WIIFM, run local adoption stand-ups, remove blockers, enforce zero shadow-AI, and coach resistance. Three levels: *Awareness & WIIFM Cascade*, *Leading an AI-Augmented Team*, and *Coaching Resistance & Local Adoption (ADKAR for Managers)*.\n\n**5.3 Users.** The volume population — the ≥500 trained target lives here. Journey from responsible-AI literacy → copilot craft (prompt/RAG) → applied AI/data literacy for analysts → the certified champion track for the most engaged. Four levels, mostly e-learning and blended, with a live-lab spine.\n\n**5.4 Tech.** The builders. They implement RAG/copilot solutions on the governed platform, develop and monitor predictive-maintenance and forecasting models, and design agentic workflows with eval harnesses and responsible-AI guardrails for stage-gate readiness. Levels 2–4: *Governed Platform & RAG Engineering*, *Applied ML & Predictive Maintenance Modeling*, and *Agentic Architectures & MLOps Expert*.\n\nThis segmentation ensures each person receives the *minimum sufficient* enablement for their role — no executive drowned in prompt syntax, no analyst left without data-literacy, no engineer building outside governance.\n\n---\n\n## 6. The Training Catalog in Detail\n\nThe catalog is the operational heart of the program. Each offering names its **format**, **objective**, **duration**, its **ADKAR linkage**, and the **KPI** it moves.\n\n### 6.1 Executive Committee\n\n| Level | Title | Format | Core objective | Duration | ADKAR | KPI moved |\n|---|---|---|---|---|---|---|\n| L1 | **AI & Data Board Briefing — Why Now, Risk & Value** | In-person | Articulate the mandate, the €10M/€40M case, EU AI Act / ISO 42001 as differentiator; recognize risk tiers and the human-oversight duty | Half-day, quarterly refresh | Awareness + Reinforcement | Change-sentiment / desire pulse; sponsor comprehension of mandate |\n| L2 | **Stage-Gate Discipline & Reading Adoption/Benefit Dashboards** | Workshop | Run a use-case value review, co-sign business cases and KPIs, make documented kill/continue decisions via a one-page sponsor playbook | 2 × 3h exec cohort + CoE coaching | Knowledge + Ability | Benefit realization vs. case; Wave-1 exit-gate sign-off |\n\n### 6.2 Managers\n\n| Level | Title | Format | Core objective | Duration | ADKAR | KPI moved |\n|---|---|---|---|---|---|---|\n| L1 | **What Changes in My Team — Wave Roadmap & Team Benefits** | In-person | Explain workflow changes (copilots, forecasting, RAG) by wave; deliver WIIFM; counter headcount fear with the upskilling/redeployment narrative | 90-min town-hall + domain briefing | Awareness + Desire | Pulse comprehension ≥80% |\n| L2 | **Interpreting Adoption KPIs & Routing via Governed Tooling** | Workshop | Read adoption dashboards, run local adoption stand-ups, remove blockers, enforce zero shadow-AI | 1-day lab with real use-case data | Knowledge + Ability | Weekly-active adoption; governed routing 100% |\n| L3 | **Resistance Conversations & Champion Support (ADKAR for Managers)** | Workshop | Diagnose resistance against ADKAR, hold active-listening conversations, support the embedded champion, escalate stalled adoption via CoE SLA | 2 × half-day + monthly champion sync | Ability + Reinforcement | Adoption embedded in team objectives; hotspot resolution |\n\n### 6.3 Users\n\n| Level | Title | Format | Core objective | Duration | ADKAR | KPI moved |\n|---|---|---|---|---|---|---|\n| L1 | **AI For Everyone — Safe & Confident Use** | E-learning | Understand GenAI for their role, responsible-AI basics, governance/policy, where to get help; address \"AI replaces me\" fear | Self-paced, ~2h | Awareness + Knowledge | Literacy completion ≥90%; ≥500 trained Year-1 |\n| L2 | **Prompt Engineering & Retrieval for Daily Tasks** | Blended e-learning + live lab | Build copilot craft on governed tooling; apply prompt patterns and RAG basics to real tasks; verify outputs | ~1 day equivalent | Knowledge + Ability | Proficiency ≥75% on live-task within 60 days |\n| L3 | **From Data to Decision — Applied ML & Forecasting Basics** | Workshop | Interpret model outputs (forecasting, predictive maintenance), data-literacy fundamentals, responsible interpretation | 1-day + office hours | Ability | Proficiency uplift; Wave-2 forecasting/procurement RAG adoption |\n| L4 | **Embedded AI Champion Certification** | In-person | Lead peer floorwalking/office hours, deliver quick-reference guides, surface resistance/blockers to the CoE, run peer demos | 3-day bootcamp + syncs | Ability + Reinforcement | ≥30 certified champions (≥15 by M6, ≥30 by M9) |\n\n### 6.4 Tech\n\n| Level | Title | Format | Core objective | Duration | ADKAR | KPI moved |\n|---|---|---|---|---|---|---|\n| L2 | **Building on the Governed Platform (No Net-New Build)** | Workshop | Implement RAG/copilot solutions on governed tooling; enforce human-oversight and audit hooks aligned to ISO 42001 | 2-day hands-on | Knowledge + Ability | Platform reuse; zero material shadow-AI incidents |\n| L3 | **From Pilot to Production — Modeling for OEE Gains** | In-person | Develop, validate and monitor predictive-maintenance and forecasting models against Finance-validated targets | 3-day applied track | Ability | Benefit realization (predictive maintenance 4.5x ROI) |\n| L4 | **Agentic Workflows, Evaluation & Responsible-AI Guardrails** | Workshop | Design multi-agent/agentic workflows, build eval harnesses, embed governance/monitoring for stage-gate readiness | 4-day expert lab + capstone | Ability + Reinforcement | Stage-gate technical readiness; governed routing |\n\n**Design note.** Formats are deliberately matched to purpose: **e-learning** scales literacy and prompt basics to the ≥500 population; **workshops and labs** build ability where hands-on practice is non-negotiable; **in-person** anchors sponsorship, certification, and high-stakes modeling. Every module carries a KPI — there is no \"nice-to-have\" training in the catalog.\n\n---\n\n## 7. The Change Framework: ADKAR in Practice\n\nThe program uses **ADKAR** as the individual change model because benefits accrue one person's behavior at a time.\n\n- **Awareness** — *Why now?* Board briefings, manager town-halls, and the \"AI For Everyone\" module establish the mandate and the stakes.\n- **Desire** — *What's in it for me?* WIIFM cascades, peer demos, and the upskilling/redeployment narrative convert awareness into willingness and defuse the \"AI replaces me\" fear.\n- **Knowledge** — *How do I do it?* Prompt/RAG training, dashboard-reading for managers, platform engineering for tech.\n- **Ability** — *Can I do it in real work?* Live-task labs, champion sign-off, applied modeling — proficiency proven on real tasks, not quizzes.\n- **Reinforcement** — *Will it stick?* Quarterly board refresh, monthly champion syncs, in-tool nudges, adoption embedded in team objectives, and stage-gate reinforcement.\n\nCrucially, **the catalog is mapped to ADKAR stages** (see Section 6), so the CoE can diagnose *where* a population is stuck — a comprehension gap (Awareness/Knowledge) is remedied differently from a resistance hotspot (Desire/Ability). Managers are trained explicitly to run this diagnosis (Manager L3).\n\n---\n\n## 8. Quick Wins — the First Four Weeks\n\nMomentum in the first month sets the trajectory. Five quick wins are sequenced to secure sponsorship and desire *before* Wave-1 hits the floor:\n\n1. **CDO \"Why Now\" exec briefing pack** *(Weeks 1–2, ComEx, Awareness).* A ready-to-deliver half-day board briefing plus a ComEx video script framing the mandate, the €10M case, and compliance-as-differentiator — to unblock sponsorship early.\n2. **Manager WIIFM cascade kit + lunch-and-learn demos** *(Weeks 2–3, Managers, Awareness + Desire).* One-pager WIIFM decks and 60-minute peer-demo sessions on Wave-1 copilots to convert desire before rollout and counter headcount fear.\n3. **Prompt Engineering starter (micro e-learning)** *(Weeks 2–4, Users, Knowledge + Ability).* A 2-hour self-paced module on governed-tool prompt/RAG basics with live-task exercises; seeds ≥60% pilot weekly-active adoption.\n4. **AI Champions cohort-1 bootcamp** *(Weeks 3–4, Users, Ability + Reinforcement).* A certifying bootcamp for the first ≥15 champions so last-mile peer support — floorwalking, office hours, quick guides — is live *at* Wave-1 rollout.\n5. **Responsible-AI & zero-shadow-AI micro-nudge** *(Weeks 1–3, Managers, Reinforcement).* A 15-minute in-tool onboarding plus policy reminder that makes governed tooling the easiest path, reinforced by manager stand-ups.\n\nTogether these convert the abstract mandate into felt sponsorship, willing users, and live support — the conditions under which Wave-1 adoption actually takes.\n\n---\n\n## 9. The Wave Roadmap\n\nEnablement is sequenced to the technology rollout waves:\n\n- **Wave-1 (pilot → enterprise):** GenAI copilots for knowledge work. Enablement priority: user prompt/RAG craft, manager adoption leadership, champion floor support. Adoption target: **≥60% weekly-active in pilot by M4**, **≥70% enterprise by M12**.\n- **Wave-2:** Demand forecasting and procurement RAG; predictive maintenance to production. Enablement priority: applied AI/data literacy for analysts (User L3), pilot-to-production modeling for tech (Tech L3). Benefit priority: predictive-maintenance 4.5x ROI, OEE uplift.\n- **Ongoing:** Agentic architectures and MLOps maturity (Tech L4), quarterly board refresh, and champion network growth to ≥30.\n\nEach wave carries its own exit gate; enablement readiness is a gate criterion, not an afterthought.\n\n---\n\n## 10. The AI Champions Network\n\nChampions are the program's last-mile force multiplier and its early-warning system.\n\n- **Scale:** ≥30 certified champions (≥15 by M6, ≥30 by M9), embedded in teams.\n- **Role:** peer floorwalking and office hours, quick-reference guides, peer demos — and, critically, **surfacing resistance and blockers up to the CoE**, closing the loop between the floor and governance.\n- **Support:** managers are trained (L3) to support their embedded champion; the CoE runs ongoing syncs and gates certification via an exam.\n\nThe network converts adoption from a top-down push into a peer-to-peer pull — the single most cost-effective lever for sustained weekly-active usage.\n\n---\n\n## 11. Measurement & Evaluation: Kirkpatrick L1–L4\n\nEvaluation follows the **Kirkpatrick model**, synchronized to the wave roadmap and to ADKAR-tied OKRs. This is what makes benefits *provable* at the Board.\n\n**L1 — Reaction.** Post-session satisfaction and perceived relevance/WIIFM pulse per cohort. Target **≥80% favorable, sustained ≥75%**. Captured immediately after each module via the LMS, plus a monthly sentiment pulse by population to flag resistance hotspots early.\n\n**L2 — Learning.** Knowledge checks and skills assessment at course exit; LMS completion **≥90% in targeted cohorts** (**≥250 trained by M6, ≥500 by M12**) and pre/post competency delta. The champion certification exam gates the ≥30-champion target (≥15 by M6).\n\n**L3 — Behavior / Transfer.** Live-task proficiency assessment plus champion sign-off within 60 days of rollout (**≥75% reach \"proficient\"**); in-tool usage telemetry for weekly-active adoption (**≥60% pilot by M4, ≥70% enterprise Wave-1 by M12**); **100% governed-tooling routing / zero material shadow-AI** as the behavioral guardrail. Managers evidence transfer by leading local adoption stand-ups.\n\n**L4 — Results.** Finance-validated benefit realization vs. business case (**≥€10M cumulative Year-1**), Wave-1 quick-win ROI (**copilots 5.4x, predictive maintenance 4.5x**), OEE/productivity uplift, and **≤10% regretted attrition** in data-AI roles. Results are attested at each **quarterly ComEx value review** and feed continue/kill stage-gate decisions.\n\n**Governance of measurement.** The CoE owns the evaluation dashboard; adoption/sentiment publish monthly to managers; a quarterly stage-gate roll-up goes to the ComEx / AI & Data Board. **Persistent low adoption at a gate triggers a documented corrective enablement cycle or a kill decision — rather than silent failure.**\n\n---\n\n## 12. KPI Framework & Targets\n\n| Dimension | Metric | Target | Kirkpatrick |\n|---|---|---|---|\n| Reaction | Satisfaction / WIIFM pulse | ≥80% favorable, sustained ≥75% | L1 |\n| Reach | People trained | ≥250 by M6, ≥500 by M12 | L2 |\n| Learning | Cohort completion | ≥90% in targeted cohorts | L2 |\n| Champions | Certified champions | ≥15 by M6, ≥30 by M9 | L2/L3 |\n| Proficiency | Live-task \"proficient\" within 60 days | ≥75% | L3 |\n| Adoption | Weekly-active | ≥60% pilot M4, ≥70% enterprise M12 | L3 |\n| Governance | Governed-tooling routing | 100% / zero material shadow-AI | L3 |\n| Results | Cumulative benefit | ≥€10M Year-1 (€40M / 3-yr) | L4 |\n| Results | Use-case ROI | Copilots 5.4x, pred. maint. 4.5x | L4 |\n| Retention | Regretted attrition, data-AI roles | ≤10% | L4 |\n\nThese KPIs cascade: L1 sentiment predicts L2 completion, which enables L3 behavior, which produces L4 results. A stall at any layer is a leading indicator caught before it costs benefit.\n\n---\n\n## 13. Risk, Compliance & Responsible AI\n\n**13.1 Compliance as differentiator.** The program aligns to **EU AI Act** risk tiers and **ISO 42001**, embedding human-oversight duties and audit hooks into both the tech curriculum (L2–L4) and the executive briefings. The posture is deliberate: demonstrable, audited governance is positioned as a **market and trust differentiator**, not merely a cost of doing business.\n\n**13.2 Shadow-AI.** The dominant operational risk. Mitigation is behavioral and design-led: make governed tooling the easiest path (in-tool nudge), reinforce via manager stand-ups, and monitor routing telemetry with a **zero material shadow-AI** guardrail.\n\n**13.3 People risk.** \"AI replaces me\" fear is addressed explicitly with a WIIFM and upskilling/redeployment narrative, and tracked via the ≤10% regretted-attrition KPI and monthly sentiment pulse.\n\n**13.4 Adoption/benefit decoupling.** Mitigated by stage-gate discipline: gates require *both* adoption and Finance-validated benefit evidence; persistent shortfalls trigger corrective cycles or documented kills.\n\n**13.5 Program-level risk register (summary).**\n\n| Risk | Likelihood | Impact | Mitigation | Owner |\n|---|---|---|---|---|\n| Adoption stall | Medium | High | Champions live at rollout; manager stand-ups; telemetry | CoE / Managers |\n| Shadow-AI | Medium | High | Easiest-path design; nudge; routing monitoring | CoE |\n| Regretted attrition | Medium | High | WIIFM; redeployment; sentiment pulse | Sponsors / HR |\n| Benefit slippage | Medium | High | Stage-gates; Finance validation; quarterly value review | Sponsors / Finance |\n| Sponsor disengagement | Low | High | Board briefing; sponsor playbook; quarterly refresh | CDO / ComEx |\n\n---\n\n## 14. The Financial Case & ROI Logic\n\nThe enablement program is best understood as **the multiplier on the €10M/€40M business case**, not a standalone cost line. The logic:\n\n1. **Benefits are use-case bound.** €10M Year-1 comes from copilots (5.4x), predictive maintenance (4.5x), and Wave-2 forecasting/procurement RAG.\n2. **Benefits are adoption-elastic.** A copilot delivering 5.4x at full adoption delivers a fraction at 30% weekly-active. Every point of adoption is money; enablement buys adoption.\n3. **Enablement is comparatively cheap.** E-learning scales the ≥500 population at low marginal cost; the champion network provides high-leverage peer support; only a minority of high-stakes modules require in-person delivery.\n4. **Governance protects the case.** A single material shadow-AI or compliance incident can eclipse a year of benefit; the guardrails are insurance with a positive expected value.\n5. **Stage-gates prevent waste.** Money follows evidence; failing use cases are killed with documentation, not carried silently.\n\n**Conclusion:** funding enablement is the highest-leverage way to protect and realize the €40M. The quick-win budget (Weeks 1–4) is the highest-priority release because it lifts pilot adoption from the outset, when the adoption curve is most sensitive.\n\n---\n\n## 15. Recommendations & Next Steps\n\n1. **Approve the program and release the Weeks 1–4 quick-win budget now** — so champion support and manager WIIFM cascades are live *before* Wave-1 hits the floor.\n2. **Stand up the CoE evaluation dashboard immediately** — L1–L4 metrics wired to the LMS and in-tool telemetry from day one; you cannot gate on evidence you don't collect.\n3. **Book the executive Board Briefing (L1) and Sponsor Track (L2) in Month 1** — sponsorship comprehension is the upstream constraint on everything else.\n4. **Certify champion cohort-1 (≥15) by M6, on track to ≥30 by M9** — the last-mile force that sustains adoption.\n5. **Institute the quarterly ComEx value review as a hard stage-gate** — with a documented corrective-or-kill mechanism, so low adoption fails loud.\n6. **Track the ≤10% regretted-attrition KPI from the start** — the human cost is a leading indicator of program health, not a lagging footnote.\n\n**Immediate 30-day actions:** deliver quick wins 1, 2 and 5; launch the prompt/RAG micro-learning; begin champion recruitment; publish the first monthly adoption/sentiment pulse.\n\n---\n\n## 16. Appendices\n\n**Appendix A — Catalog index by population and ADKAR stage.** See Section 6 tables (ExecCom L1–L2; Managers L1–L3; Users L1–L4; Tech L2–L4).\n\n**Appendix B — Quick-win calendar.** Weeks 1–2: exec briefing pack, responsible-AI nudge (start). Weeks 2–3: manager WIIFM kit. Weeks 2–4: prompt-engineering micro-learning. Weeks 3–4: champions cohort-1 bootcamp.\n\n**Appendix C — Evaluation cadence.** L1 after every module + monthly pulse; L2 at course exit; L3 within 60 days of rollout + continuous telemetry; L4 at quarterly value review.\n\n**Appendix D — Glossary.** ADKAR (Awareness, Desire, Knowledge, Ability, Reinforcement); CoE (Center of Excellence); WIIFM (What's In It For Me); RAG (Retrieval-Augmented Generation); OEE (Overall Equipment Effectiveness); Kirkpatrick L1–L4 (Reaction, Learning, Behavior, Results); MLOps (Machine-Learning Operations).\n\n*Prepared as a decision-support document for the ComEx / AI & Data Board.*",
+        "comexDeck": [
+          {
+            "title": "Why Now — The €40M AI Mandate & the Adoption Challenge"
+          },
+          {
+            "title": "The Real Risk Is Adoption, Not Technology — Three Gaps We Must Close"
+          },
+          {
+            "title": "Program Vision & Seven Guiding Principles"
+          },
+          {
+            "title": "Governance & Operating Model — CoE, Sponsors, Stage-Gates"
+          },
+          {
+            "title": "One Program, Four Audiences — The Role-Tiered Enablement Architecture"
+          },
+          {
+            "title": "The Training Catalog at a Glance — Levels, Formats, KPIs"
+          },
+          {
+            "title": "ADKAR in Practice — Managing Change One Person at a Time"
+          },
+          {
+            "title": "Quick Wins — What We Deliver in the First Four Weeks"
+          },
+          {
+            "title": "The Wave Roadmap — Sequencing Enablement to Rollout"
+          },
+          {
+            "title": "The AI Champions Network — Our Last-Mile Force Multiplier"
+          },
+          {
+            "title": "How We Prove It — Kirkpatrick L1–L4 & the KPI Dashboard"
+          },
+          {
+            "title": "Compliance as Differentiator — EU AI Act, ISO 42001 & Zero Shadow-AI"
+          },
+          {
+            "title": "The ROI Logic — Enablement as the Multiplier on the Business Case"
+          },
+          {
+            "title": "Risk Register & Mitigations"
+          },
+          {
+            "title": "Recommendations & the 30-Day Ask"
+          }
+        ]
+      }
+    }
+  ]
+}
