@@ -34,6 +34,9 @@ REMAINING (nothing urgent — lead with a recommendation):
    section), home (proof card count + ✓ list). Frame it HONESTLY as a "returned for rework" live proof (the gate can say
    no), NOT as a failed run. ⛔ Do NOT run the other seven workflows (each is a freshness liability pinned to a catalog
    version; "backbones proven live + the counter-review gate proven to block" beats an all-green 10/10 that reads as theater).
+   DECIDED (do NOT re-propose) — the "full-cycle" narrative (returned -> cleared -> report in one run) is OUT OF SCOPE: it
+   would require a bounded resume loop + context accumulation in the ORCHESTRATOR, i.e. reopening a live-proven spine for an
+   OPTIONAL pedagogical gain — barred by feedback-ne-pas-modifier-workflow-prouve-live. The `returned` fail-closed halt IS the proof.
 2. Scoped option, only if re-runs become frequent: SEMI-automated improvement loop (GateReport traces -> tightening proposals as PRs by Fable -> human gate by Guy). NEVER autonomous (Goodhart risk, would contradict deterministic gates ADR-0007 + fail-closed budget rule).
    MODEL ROUTING (best practice): design/scoping = Opus 4.8 (architecture, Goodhart/fail-closed stakes); in-loop proposer = Fable (generative + human-gated + separate quota); any pre-human verifier STAYS deterministic (regex/tests/schema) — never an LLM judging another LLM.
 
