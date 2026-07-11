@@ -13,53 +13,54 @@
 Resume session — runtime /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
 Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, docs/NEXT_STEPS.md — never from memory.
 
-STATE AS OF 2026-07-10 (re-verify):
-- main pushed, clean tree, v0.6.0. Last code change: 0d42392 — everything above it is docs-only on this tracker (never pin HEAD here: the commit that updates this line becomes the new HEAD, so the hash is stale on arrival). Suite 130 passed / 6 skipped, strict typecheck OK — as recorded on 2026-07-02, not re-run since.
-- Fable model routing SHIPPED + PROVEN LIVE: RunWf00X.model + LIVE_MODEL env; WF-001 `LIVE_MODEL=fable` = completed in 145 s (separate Fable quota). Hermetic proof test/run-wf-model-override.test.ts.
-- P3 loop CLOSED (c1fea9f): anonymized WF-001 Fable trace versioned (docs/audit/live-runs/wf-001-live-result.json, git add -f, secret-scan OK — no model field in payload, Fable attribution contextual); README + docs/NEXT_STEPS.md record "proven live on Fable".
-- INVEST criterion FIXED (0d42392): po-us-format-invest was a false negative on "As the ..." roles (2/13 real live stories); regex now determiner-agnostic + word-boundary anti "was a"; regression tests added; CHANGELOG [Unreleased] updated.
-- Functional backlog empty (POC backbone proven live, ISO audit v1 closed P1-P4).
+STATE AS OF 2026-07-11 (re-verify):
+- main pushed, clean tree, v0.6.0. SDK bumped 0.3.195 → 0.3.201 (dependabot #30, merged 2026-07-11). Suite 139 passed / 8 skipped, strict typecheck OK (2026-07-11). Never pin HEAD here (the commit that updates this line becomes the new HEAD, stale on arrival); anchor on the last real code change instead.
+- WF-008 SPINE SHIPPED — local, this session (surface (b) DONE). New deterministic backbone "AI Act / GDPR Compliance Audit": the 7 core agents + the counter-review gate (AUDIT-METHODO-IA), sourced from the catalog workflow. Two new fail-closed constructs on the EXISTING linear orchestrator (UNCHANGED): counter-review CLEARANCE gate on STEP-06C (verdict must be "cleared" — a "returned" verdict halts the spine before the report STEP-07, the first mid-spine return-for-rework gate) and the "Unacceptable" AI Act tier GATEWAY on STEP-01 (fail-closed). Files: src/spines/wf-008-audit.ts + run-wf-008.ts; test/spine-wf-008.test.ts + run-wf-008-real-sidecar.test.ts + wf-008-run-live.test.ts + fixtures/wf-008-outputs.ts; CHANGELOG [Unreleased]. Real-sidecar test green against catalog v4.1.0 (8 agents resolve with real prose, 8 pass verdicts).
+- Task B (catalog sidecar widening) is DONE — the old WF-008 "sidecar blocker" is LIFTED. Verified live 2026-07-11: claude-agents v4.1.0 pushed (tag on origin b1a1551), sidecar = 75 assets / 38 agents / 37 skills, all 8 WF-008 agents present incl. AGENT-AUDIT-METHODO-IA.
+- Fable model routing SHIPPED + PROVEN LIVE (unchanged): RunWf00X.model + LIVE_MODEL env; WF-001 LIVE_MODEL=fable completed in 145 s (separate quota). INVEST criterion fix (determiner-agnostic) + P3 Fable trace closed (unchanged).
 
 REMAINING (nothing urgent — lead with a recommendation):
-1. WF-008 live run — BLOCKED, and it is NOT one command away. Diagnosed 2026-07-10, see the backlog entry below.
-   No WF-008 spine exists (src/spines/ stops at 003); the sidecar carries 14 of the catalog's 38 agents and is
-   missing 5 of WF-008's 7 mandatory ones. Widening it is Task B, in the claude-agents repo. Three sessions, in order:
-   (a) Task B in claude-agents, (b) the WF-008 spine + criteria + counter-review gate + live harness here,
-   (c) the billed run + the five downstream showcase surfaces. Do NOT start (b) before (a) lands.
+1. WF-008 LIVE RUN — surface (c), the ONLY WF-008 work left. Prerequisite (a, Task B) and the spine (b) are both done.
+   What remains: the BILLED live run (gate: explicit approval from Guy; subscription OAuth only, never ANTHROPIC_API_KEY)
+   via `LIVE_RUN=1 npx vitest run test/wf-008-run-live.test.ts` (optionally LIVE_MODEL=fable for a separate quota),
+   then the FIVE downstream showcase surfaces (workflows: live-count sentence + WF-008 status cell + WF-008 gallery
+   Proof line; live-proofs: runs table + a WF-008 section; home: proof card count + ✓ list) — stated functionally,
+   that repo owns its paths. The seeded context targets a HIGH-RISK (not unacceptable) system so the run traverses the
+   counter-review clearance gate — the capability WF-008 was picked to exercise. ⛔ Do NOT run the other seven
+   workflows (each is a freshness liability pinned to a catalog version; "three/four proven, the rest defined and
+   available" beats an all-green 10/10 that reads as theater).
 2. Scoped option, only if re-runs become frequent: SEMI-automated improvement loop (GateReport traces -> tightening proposals as PRs by Fable -> human gate by Guy). NEVER autonomous (Goodhart risk, would contradict deterministic gates ADR-0007 + fail-closed budget rule).
    MODEL ROUTING (best practice): design/scoping = Opus 4.8 (architecture, Goodhart/fail-closed stakes); in-loop proposer = Fable (generative + human-gated + separate quota); any pre-human verifier STAYS deterministic (regex/tests/schema) — never an LLM judging another LLM.
 
 GUARDRAILS: push/merge/live-run = gates on explicit approval; live run = subscription OAuth only (never ANTHROPIC_API_KEY); artifacts/commits/PRs in US English, chat in French. Detail: memory project-runtime-wf003-live-proof-pending.
 
-ADJACENT (other repo — do NOT open it in the same session): catalog claude-agents is at v4.0.1; issue #16 (Q3 maintenance) is CLOSED and actions/checkout is already @v7 — do not redo them. Still true: no dependabot.yml. Its one open workstream is Task B (widen sidecar.json to 38 agents + 37 skills; diagnosed 2026-07-09) — see claude-agents/next_steps.md.
-Task B is now the HARD PREREQUISITE for the WF-008 run (item 1): today's sidecar carries 14 of 38 agents and lacks 5 of WF-008's 7 mandatory ones.
+ADJACENT (other repo — do NOT open it in the same session): catalog claude-agents is at v4.1.0; Task B is CLOSED (sidecar widened to 38 agents + 37 skills, dependsOn populated, released v4.1.0 and pushed). Issue #16 (Q3 maintenance) CLOSED, actions/checkout already @v7 — do not redo. Still true: no dependabot.yml. See claude-agents/next_steps.md for its own state.
 ```
 
 ---
 
-## Verified state — 2026-07-10
+## Verified state — 2026-07-11
 
 - **Repo/branch:** `guyhui01/claude-agentic-runtime` / `main`, in sync with `origin/main`, clean tree.
-- **Release:** `v0.6.0` (last tag). **Last code change: `0d42392`** (INVEST criterion fix); every commit above it is docs-only, touching this tracker alone. HEAD is deliberately not pinned here — see the note in the resume block.
-- **Tests:** 130 passed / 6 skipped (3 billed live harnesses + 3 `runIf` markers), strict `typecheck` OK — recorded 2026-07-02, not re-run since.
-- **Last delivery:** `po-us-format-invest` INVEST criterion made **determiner-agnostic** (`0d42392`) — the regex accepted only `As a`/`As an`, wrongly flagging valid `As the …` roles (2/13 real stories on the WF-001 Fable live run); now `/\bas\b .+\bi want\b.+\bso that\b/i` (three anchors only, word boundary anti `was a`), regression tests added, CHANGELOG `[Unreleased]` updated.
-- **Earlier (`c1fea9f`) — P3 closed:** anonymized WF-001 Fable trace versioned (`git add -f`, secret-scan OK — payload carries no model field, Fable attribution contextual); README + `docs/NEXT_STEPS.md` record "proven live on Fable". Per-run model routing (`7413e11`) proven live: WF-001 `LIVE_MODEL=fable` → `completed` in 145 s.
+- **Release:** `v0.6.0` (last tag). HEAD is deliberately not pinned here — anchor on the last real code change, see the note in the resume block.
+- **Tests:** 139 passed / 8 skipped (billed live harnesses + `runIf` markers), strict `typecheck` OK — re-run 2026-07-11.
+- **Last delivery — WF-008 spine (local, surface (b) done).** New deterministic backbone "AI Act / GDPR Compliance Audit" = the 7 core agents + the counter-review gate (`AGENT-AUDIT-METHODO-IA`), sourced from `claude-agents/workflows/WF-008-audit-conformite-ia-act-rgpd.md` (v1.0). Two constructs new to the runtime, both on the **unchanged** linear fail-closed orchestrator: (1) a **counter-review clearance gate** on STEP-06C (`audit-verdict-cleared` requires `verdict === "cleared"` — a `"returned"` verdict halts the spine before the report, the first mid-spine return-for-rework gate); (2) an **"Unacceptable" AI Act tier gateway** on STEP-01 (`jur-tier-not-unacceptable`, fail-closed). Optional STEP-04B/06B stay outside the backbone; the 02/03/04 parallel fork is linearized (WF-003 precedent). Files: `src/spines/wf-008-audit.ts` + `run-wf-008.ts`; `test/spine-wf-008.test.ts` + `run-wf-008-real-sidecar.test.ts` + `wf-008-run-live.test.ts` + `fixtures/wf-008-outputs.ts`; CHANGELOG `[Unreleased]`. Real-sidecar test green against catalog **v4.1.0** (8 agents resolve with real prose, 8 pass verdicts).
+- **Prerequisite lifted — Task B done.** `claude-agents` `v4.1.0` pushed; sidecar widened to 75 assets (38 agents + 37 skills), all 8 WF-008 agents present (verified live 2026-07-11).
+- **Earlier — SDK bump (dependabot #30, 2026-07-11):** `@anthropic-ai/claude-agent-sdk` 0.3.195 → 0.3.201, merged; suite green.
+- **Earlier — INVEST fix + P3 closed (unchanged):** `po-us-format-invest` made determiner-agnostic; anonymized WF-001 Fable trace versioned; per-run model routing proven live (`LIVE_MODEL=fable` → `completed` in 145 s).
 
 ## Remaining (none urgent)
 
 1. **Scoped option** — SEMI-automated improvement loop (traces → PR proposals by Fable → human gate). Never autonomous. Only if re-runs justify it.
    - **Model routing (best practice):** design/scoping on **Opus 4.8** (architecture, Goodhart / fail-closed stakes); the in-loop **proposer** runs on **Fable** (generative, human-gated, separate quota); any pre-human **verifier stays deterministic** (regex / tests / schema) — never an LLM judging another LLM (would reintroduce the non-determinism we refuse).
 
-2. **Backlog — live run of WF-008 (AI Act / GDPR Compliance Audit). One run, not the remaining seven.**
-   - **Why this one.** It opens a **third domain**: the three proven runs cover Agile & Product (WF-001, WF-002) and Dev & Engineering (WF-003) only, while Management & Consulting carries 5 of the 10 workflows and has no live trace at all. It also exercises the **optional counter-review gate** (AI Methodology Auditor), carried only by WF-008 and WF-010 and never traversed by any run — the showcase describes this mechanism while no execution trace of it exists. So: a new capability, not a repetition.
-   - **⛔ BLOCKED — this is a three-session workstream, not a command.** Diagnosed 2026-07-10. Earlier revisions of this entry read as if the run were one approval away; it is not. Two hard blockers:
-     - **No WF-008 spine exists.** `src/spines/` stops at `run-wf-003.ts`; live harnesses stop at `wf-003-run-live.test.ts`. A live run here executes a TypeScript spine, not a catalog markdown file. Scale: `wf-003-lancement.ts` is 426 lines for 7 agents, plus a ~105-line runner, eval criteria, and a harness. WF-008 additionally needs the **conditional counter-review gate**, which no existing spine implements.
-     - **The sidecar does not carry WF-008's agents.** It exposes **14 assets of the catalog's 38 agents** (declares catalog `v4.0.0`). Of WF-008's 7 mandatory agents, **5 are missing** — `JURIDIQUE-IA` (STEP-01), `DATA-ENGINEER`, `CDO-DIRECTEUR-IA`, `CHANGE-MANAGER`, `REDACTEUR-IA`; only `AI-ARCHITECT` and `SECURITE-IA` are present. `AUDIT-METHODO-IA` — the counter-review agent that is the whole point of picking WF-008 — is missing too.
-   - **Dependency, in another repo.** The sidecar is generated by `tools/generate-sidecar.mjs` (constant `CATALOG_AGENT_IDS`) in the public `guyhui01/claude-agents` repo. Widening it is that repo's **Task B**, tracked in its own `next_steps.md`. It is a standalone workstream: one repo in write per session.
-   - **Order — do not skip (a).** (a) Task B in `claude-agents`. (b) Here: WF-008 spine + eval criteria + counter-review gate + live harness. (c) The billed run, then the five downstream showcase surfaces below. Start (b) only once (a) has landed and the sidecar exposes the seven agents.
-   - **⛔ Do not run the other seven.** Each trace is a freshness liability pinned to a catalog version (today: `v3.27.0`); ten traces triple a surface that expires on its own and proves nothing new. "Three proven live, seven defined and available" is a stronger credibility signal than an all-green 10/10, which reads as theater.
+2. **Backlog — LIVE RUN of WF-008 (AI Act / GDPR Compliance Audit). Surface (c) — the only WF-008 work left. One run, not the remaining seven.**
+   - **Why this one.** It opens a **third domain**: the three proven runs cover Agile & Product (WF-001, WF-002) and Dev & Engineering (WF-003) only, while Compliance & Governance / Management & Consulting had no live trace at all. It also exercises the **counter-review gate** (AI Methodology Auditor), never traversed by any run — the showcase describes this mechanism while no execution trace of it exists. So: a new capability, not a repetition.
+   - **(a) and (b) are DONE.** (a) Task B — the sidecar now carries WF-008's 8 agents (catalog `v4.1.0`, verified live). (b) The WF-008 spine + eval criteria + **counter-review clearance gate** + live harness are shipped locally this session (see the "Last delivery" bullet above), on the **unchanged** linear orchestrator. Real-sidecar offline proof is green.
+   - **(c) — what remains.** The BILLED live run: `LIVE_RUN=1 npx vitest run test/wf-008-run-live.test.ts` (optionally `LIVE_MODEL=fable` for a separate quota). The seeded context targets a **high-risk (not unacceptable)** system so the run traverses the counter-review clearance gate. Then the five downstream showcase surfaces below.
+   - **⛔ Do not run the other seven.** Each trace is a freshness liability pinned to a catalog version; ten traces triple a surface that expires on its own and proves nothing new. "Three/four proven live, the rest defined and available" is a stronger credibility signal than an all-green 10/10, which reads as theater.
    - **Gate.** A live run is a billed, outward-facing action: **explicit approval from Guy**, never inferred.
-   - **Mandatory last step — update the downstream showcase site.** Five points, measured 2026-07-10, stated functionally (exact files and lines live in that repo's own tracker, which owns its paths):
+   - **Mandatory last step — update the downstream showcase site.** Five points, stated functionally (exact files and lines live in that repo's own tracker, which owns its paths):
      - workflows page — the live-run **count sentence** ("three backbones are proven live" → four).
      - workflows page — WF-008 **status cell** in the overview table (`Available` → live, n/n).
      - workflows page — WF-008 **gallery entry**, its `Proof` line.
