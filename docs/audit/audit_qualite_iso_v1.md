@@ -162,6 +162,8 @@
 
 > **No action touches production code** (consistent with the audit constraint: read/analysis only). P1/P2 are documentary fixes; P3/P4/P5 are traceability/governance additions.
 
+> **Remediation status — forward reference (annotation added later, this snapshot is not rewritten).** The two "Conforming with reservation" verdicts (Data / ISO 25012 and Architecture / ISO 42010) above are **kept as found**; their closure is tracked in the living docs, not here. **P1** (ISO 25012 "5 schema + 2 integrity" decomposition) and **P2** ("spine WF-001→003" naming) were both **closed** in a separate lot posterior to the frozen finding — commit `2e47093` *"docs(audit): remédiation P1+P2 suite à l'audit ISO v1"*, released under `CHANGELOG.md` [`0.3.0`]. **P3** (live-run trace versioned under `docs/audit/live-runs/`) and **P4** (ISO 5230 license check, see the top "Frozen finding") are also closed; **P5** (ISO 23894) is **not retained** (no industrialization). Running record: [`../NEXT_STEPS.md`](../NEXT_STEPS.md) §3.5 "Remediation DONE".
+
 ---
 
 ## 8. Conclusion
