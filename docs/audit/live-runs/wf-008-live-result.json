@@ -1,0 +1,727 @@
+{
+  "status": "failed",
+  "failure": {
+    "stepId": "STEP-06C",
+    "kind": "eval-gate",
+    "message": "Eval gate \"STEP-06C\" failed (1 blocking criterion(s): audit-verdict-cleared)"
+  },
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-JURIDIQUE-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "jur-tier-qualified",
+          "description": "STEP-01: AI Act tier qualified (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "jur-tier-not-unacceptable",
+          "description": "STEP-01: gateway — AI Act tier ≠ « Unacceptable » (else stop, recommend cessation)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "jur-obligations-matrix",
+          "description": "STEP-01: AI Act / NIS2 / sectoral obligations matrix (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "jur-gdpr-articles",
+          "description": "STEP-01: impacted GDPR articles listed (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "jur-penalties",
+          "description": "STEP-01: summary of penalties incurred present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "tier": "High-risk",
+        "obligationsMatrix": [
+          {
+            "id": "AIA-01",
+            "framework": "AI Act",
+            "reference": "Art. 6(2) + Annex III pt. 5(c)",
+            "role": "Provider / Deployer",
+            "obligation": "Confirm high-risk classification: AI system used for risk assessment and pricing in relation to natural persons in life/health insurance; claims triage affecting natural persons' access to essential private services falls within Annex III. Document the classification rationale (incl. why the Art. 6(3) filter does NOT apply, since the system materially influences claim prioritization decisions).",
+            "auditEvidence": "Classification memo, system purpose statement, Art. 6(3) non-applicability analysis"
+          },
+          {
+            "id": "AIA-02",
+            "framework": "AI Act",
+            "reference": "Art. 9",
+            "role": "Provider",
+            "obligation": "Risk management system: continuous, iterative lifecycle process identifying foreseeable risks to health, safety and fundamental rights (discriminatory triage, wrongful claim deprioritization), with mitigation, testing and residual-risk acceptance.",
+            "auditEvidence": "Risk register, mitigation log, testing protocols — mappable to ISO/IEC 42001 clause 6 + ISO/IEC 23894"
+          },
+          {
+            "id": "AIA-03",
+            "framework": "AI Act",
+            "reference": "Art. 10",
+            "role": "Provider",
+            "obligation": "Data and data governance: training/validation/testing data (policies & claims knowledge base) must be relevant, representative, examined for biases (age, health status, proxies for special-category data), with documented data provenance and preparation choices.",
+            "auditEvidence": "Data governance policy, bias assessment report, dataset datasheets"
+          },
+          {
+            "id": "AIA-04",
+            "framework": "AI Act",
+            "reference": "Art. 11 + Annex IV",
+            "role": "Provider",
+            "obligation": "Technical documentation kept up to date before placing on market and throughout production life: architecture of the LLM classifier, fine-tuning/prompting approach, performance metrics per claim category, limitations.",
+            "auditEvidence": "Annex IV technical file — versioned"
+          },
+          {
+            "id": "AIA-05",
+            "framework": "AI Act",
+            "reference": "Art. 12",
+            "role": "Provider",
+            "obligation": "Record-keeping: automatic logging of triage events (input claim reference, model version, routing decision, confidence, human override) enabling traceability appropriate to the high-risk purpose; logs retained ≥ 6 months by the deployer (Art. 26(6)).",
+            "auditEvidence": "Log schema, retention configuration, sample log extraction"
+          },
+          {
+            "id": "AIA-06",
+            "framework": "AI Act",
+            "reference": "Art. 13",
+            "role": "Provider → Deployer",
+            "obligation": "Transparency and instructions for use: claims handlers must receive clear instructions on capabilities, limitations, accuracy levels, and circumstances of foreseeable misuse of the triage output.",
+            "auditEvidence": "Instructions-for-use document delivered to claims operations"
+          },
+          {
+            "id": "AIA-07",
+            "framework": "AI Act",
+            "reference": "Art. 14 + Art. 26(2)",
+            "role": "Provider + Deployer",
+            "obligation": "Human oversight: competent, trained claims staff able to interpret, override or disregard the triage/prioritization output; no automatic claim denial without meaningful human review; oversight measures assigned to identified persons.",
+            "auditEvidence": "Oversight procedure, override statistics, training records"
+          },
+          {
+            "id": "AIA-08",
+            "framework": "AI Act",
+            "reference": "Art. 15",
+            "role": "Provider",
+            "obligation": "Accuracy, robustness and cybersecurity: declared accuracy metrics for the LLM classifier, resilience to input drift and adversarial claims content (prompt injection via free-text claim narratives), model/data poisoning safeguards.",
+            "auditEvidence": "Evaluation reports, adversarial testing results — joint scope with NIS2 measures"
+          },
+          {
+            "id": "AIA-09",
+            "framework": "AI Act",
+            "reference": "Art. 17",
+            "role": "Provider",
+            "obligation": "Quality management system covering design control, data management, post-market monitoring and incident handling — ISO/IEC 42001 AIMS is the recommended implementation backbone.",
+            "auditEvidence": "QMS/AIMS manual, ISO 42001 Statement of Applicability"
+          },
+          {
+            "id": "AIA-10",
+            "framework": "AI Act",
+            "reference": "Art. 43 + Art. 47-49",
+            "role": "Provider",
+            "obligation": "Conformity assessment (internal control, Annex VI), EU declaration of conformity, CE marking, and registration in the EU database (Art. 49/71) before/while the system is in production.",
+            "auditEvidence": "Declaration of conformity, EU database registration entry"
+          },
+          {
+            "id": "AIA-11",
+            "framework": "AI Act",
+            "reference": "Art. 26 + Art. 27",
+            "role": "Deployer",
+            "obligation": "Deployer duties: use per instructions, input-data relevance control, monitoring, log retention, worker information — and Fundamental Rights Impact Assessment (FRIA): insurer is a private entity providing essential private services (insurance), so Art. 27 FRIA applies; may be integrated with the GDPR DPIA (Art. 27(4)).",
+            "auditEvidence": "FRIA report articulated with the DPIA"
+          },
+          {
+            "id": "AIA-12",
+            "framework": "AI Act",
+            "reference": "Art. 72 + Art. 73",
+            "role": "Provider",
+            "obligation": "Post-market monitoring plan and serious-incident reporting to the market surveillance authority (≤ 15 days; ≤ 2 days for widespread infringement).",
+            "auditEvidence": "PMM plan, incident-reporting procedure with authority contact chain"
+          },
+          {
+            "id": "AIA-13",
+            "framework": "AI Act",
+            "reference": "Art. 4",
+            "role": "Provider + Deployer",
+            "obligation": "AI literacy: staff operating or supervising the triage system must have a sufficient level of AI literacy (applicable since 2 Feb 2025).",
+            "auditEvidence": "Training curriculum and completion records"
+          },
+          {
+            "id": "GDPR-01",
+            "framework": "GDPR",
+            "reference": "Art. 5 + 6",
+            "role": "Controller (insurer)",
+            "obligation": "Lawfulness, fairness, minimization and purpose limitation of claims data processed by the LLM; documented legal basis (Art. 6(1)(b) contract performance for triage; legitimate interest analysis for prioritization analytics); no repurposing of claims data for model training without a compatible basis.",
+            "auditEvidence": "Legal basis mapping, LIA, data-flow diagram"
+          },
+          {
+            "id": "GDPR-02",
+            "framework": "GDPR",
+            "reference": "Art. 9",
+            "role": "Controller",
+            "obligation": "Special-category data: health data is pervasive in insurance claims — identify the Art. 9(2) exception relied on (national insurance derogations / explicit consent) and prohibit inferential leakage of health data into embeddings/prompts beyond necessity.",
+            "auditEvidence": "Art. 9 gap analysis, prompt/context redaction controls"
+          },
+          {
+            "id": "GDPR-03",
+            "framework": "GDPR",
+            "reference": "Art. 22 + 13-15",
+            "role": "Controller",
+            "obligation": "Automated decision-making: if triage produces legal or similarly significant effects (delay/denial pathway), Art. 22 safeguards apply — meaningful human intervention, right to contest, and meaningful information about the logic involved (transparency notices per Art. 13/14, access per Art. 15(1)(h)).",
+            "auditEvidence": "Claimant-facing notices, contestation workflow, human-review SLA"
+          },
+          {
+            "id": "GDPR-04",
+            "framework": "GDPR",
+            "reference": "Art. 35 + 36",
+            "role": "Controller",
+            "obligation": "DPIA mandatory (systematic evaluation/scoring of natural persons + sensitive data + innovative technology — CNIL blacklist criteria met); prior consultation of the CNIL if high residual risk; align/merge with the Art. 27 AI Act FRIA.",
+            "auditEvidence": "DPIA validated by the DPO, dated before production go-live"
+          },
+          {
+            "id": "GDPR-05",
+            "framework": "GDPR",
+            "reference": "Art. 25 + 32",
+            "role": "Controller + Processor",
+            "obligation": "Privacy by design and security of processing: pseudonymization of claims in the RAG/knowledge base, access control on the LLM pipeline, encryption, retention limits on logs containing personal data (tension with AI Act Art. 12 logging — resolve via pseudonymized logs).",
+            "auditEvidence": "Security measures inventory (ISO 27001/27701 mapping)"
+          },
+          {
+            "id": "GDPR-06",
+            "framework": "GDPR",
+            "reference": "Art. 28 + 30",
+            "role": "Controller",
+            "obligation": "Processor contracts with the LLM/hosting vendor (no training on client data, EU data residency for the EU-only footprint, sub-processor chain) and records of processing activities updated to reflect the AI triage processing.",
+            "auditEvidence": "DPA with LLM provider, RoPA entry"
+          },
+          {
+            "id": "NIS2-01",
+            "framework": "NIS2",
+            "reference": "Art. 21 + 23 (Directive 2022/2555)",
+            "role": "Entity (insurer, if in scope via national transposition)",
+            "obligation": "Cyber risk-management measures covering the AI pipeline (supply-chain security of the LLM vendor, incident handling, business continuity of the triage service) and incident notification (early warning ≤ 24h, notification ≤ 72h).",
+            "auditEvidence": "NIS2 scoping memo, incident-response runbook including AI components"
+          },
+          {
+            "id": "ISO42001-01",
+            "framework": "ISO/IEC 42001",
+            "reference": "Clauses 4-10 + Annex A",
+            "role": "Organization",
+            "obligation": "AI Management System as the audit backbone: AI policy, roles, impact assessment process (Annex A.5), data management (A.7), third-party/LLM supplier controls (A.10) — provides the internal-control evidence structure for AI Act Art. 17.",
+            "auditEvidence": "AIMS documentation, internal audit report, management review"
+          },
+          {
+            "id": "AUDIT-01",
+            "framework": "Audit methodology",
+            "reference": "ISO 19011 / independent counter-review",
+            "role": "Auditor",
+            "obligation": "Independent methodology counter-review before the final report: second reviewer (blind to initial conclusions) re-tests classification rationale, DPIA/FRIA articulation, and sampling of triage logs; findings rated (critical / major / minor) with remediation plan and CNIL-readiness checklist.",
+            "auditEvidence": "Counter-review memo, final audit report with corrective action plan"
+          }
+        ],
+        "gdprArticles": [
+          "Art. 5 — Principles (lawfulness, fairness, minimization, accuracy of claims data)",
+          "Art. 6 — Legal basis (6(1)(b) contract for triage; 6(1)(f) LIA for prioritization)",
+          "Art. 9 — Special categories (health data in claims; applicable 9(2) exception)",
+          "Art. 12-14 — Transparency and information of claimants",
+          "Art. 15 — Right of access incl. 15(1)(h) logic of automated processing",
+          "Art. 16-18, 21 — Rectification, erasure, restriction, objection in the AI pipeline",
+          "Art. 22 — Automated individual decision-making safeguards (human intervention, contestation)",
+          "Art. 24-25 — Controller accountability and data protection by design/default",
+          "Art. 28 — Processor contract with the LLM/cloud vendor",
+          "Art. 30 — Records of processing activities",
+          "Art. 32 — Security of processing",
+          "Art. 33-34 — Breach notification (72h to CNIL)",
+          "Art. 35 — DPIA (mandatory; merge with AI Act Art. 27 FRIA)",
+          "Art. 36 — Prior consultation of the CNIL if high residual risk",
+          "Art. 37-39 — DPO involvement in the audit and DPIA sign-off"
+        ],
+        "penalties": "AI Act: prohibited practices (Art. 99(3)) up to €35M or 7% of worldwide annual turnover — not applicable here (High-risk tier, audit proceeds); non-compliance with high-risk obligations (Art. 9-15, 26-27) up to €15M or 3% of worldwide turnover (Art. 99(4)); supplying incorrect/misleading information to authorities up to €7.5M or 1% (Art. 99(5)). GDPR: violations of Art. 5, 6, 9, 22 up to €20M or 4% of worldwide turnover (Art. 83(5)); violations of Art. 25, 28, 30, 32, 35 up to €10M or 2% (Art. 83(4)) — plus CNIL corrective powers (processing limitation or suspension order, decisive in a claims-triage context). NIS2: essential entities up to €10M or 2% of worldwide turnover; important entities up to €7M or 1.4% (Art. 34), plus management-body liability. Cumulation is possible (AI Act + GDPR sanctions for the same system); worst-case aggregate exposure is therefore driven by the 7%/4%/3% ceilings, with the practical maximum for this High-risk system at 3% (AI Act) + 4% (GDPR) cumulated, and reputational/CNIL-injunction risk exceeding the monetary exposure for a mid-cap insurer."
+      }
+    },
+    {
+      "stepId": "STEP-02",
+      "assetId": "AGENT-AI-ARCHITECT",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "arch-report-present",
+          "description": "STEP-02: architecture compliance report (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "arch-human-oversight",
+          "description": "STEP-02: human-oversight audit (Art. 14: human-in-the-loop / kill switch)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "arch-gaps-list",
+          "description": "STEP-02: architecture gaps vs. AI Act requirements present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "architectureReport": "ARCHITECTURE COMPLIANCE REPORT — LLM Claims-Triage System (High-Risk, AI Act Annex III pt. 5(c))\n\n1. TRANSPARENCY (Art. 13 / AIA-06)\nCurrent target architecture must expose the system as a decision-SUPPORT component, never a decision-making endpoint. Required architectural artifacts: (a) a machine-readable Model Card per deployed model version (base model, fine-tuning/prompting approach, evaluation datasets, per-claim-category accuracy, known failure modes, foreseeable misuse); (b) an Instructions-for-Use bundle versioned with each release and delivered to claims operations; (c) UI-level disclosure to claims handlers on every triage output: model version, confidence score, and an explicit \"advisory only\" banner. Claimant-facing transparency (GDPR Art. 13/14 + 15(1)(h)) must be served from the same source of truth to avoid drift between internal and external descriptions of the logic involved.\n\n2. EXPLAINABILITY\nLLM classifiers do not yield native feature attributions, so the architecture must engineer explainability: (a) structured output contract (JSON schema) forcing the model to return {routing_decision, confidence, cited_evidence[], policy_clauses_referenced[], abstain_flag}; (b) RAG groundedness — every rationale must cite retrievable chunks from the policies/claims knowledge base with chunk IDs, enabling verification that the justification is grounded, not hallucinated; (c) confidence calibration measured via ECE/reliability diagrams per claim category (Art. 15 accuracy declaration depends on it); (d) counterfactual capability at the review UI (\"which elements drove prioritization down\") to support meaningful human intervention (GDPR Art. 22) and contestation workflows (GDPR-03).\n\n3. MONITORING (Art. 15 + Art. 72 / AIA-08, AIA-12)\nFour monitoring planes required: (a) Quality — per-category precision/recall/F1, groundedness rate, hallucination rate, abstention rate, tracked against the declared Art. 15 metrics with alert thresholds; (b) Drift — input distribution drift on claim narratives (embedding-space drift detectors) and retrieval-corpus drift after knowledge-base updates; (c) Security — prompt-injection detection on free-text claim narratives (input classifier + instruction-hierarchy enforcement + output guardrail), model/data poisoning checks on knowledge-base ingestion, joint scope with NIS2 Art. 21 measures (supply-chain controls on the LLM vendor, incident handling ≤24h early warning); (d) Post-market — PMM plan wiring production metrics to the serious-incident reporting chain (≤15 days), with an on-call escalation path to the market surveillance authority contact.\n\n4. TRACEABILITY (Art. 12 / AIA-05 + Art. 11/Annex IV / AIA-04)\nAppend-only, tamper-evident event log per triage decision: {claim_reference (pseudonymized), timestamp, model_id+version, prompt_template_version, retrieval_set (chunk IDs + KB snapshot hash), input hash, routing_decision, confidence, abstain_flag, human_action (accept/override/disregard), overrider identity, latency}. Retention ≥ 6 months (Art. 26(6)); the GDPR Art. 5/32 tension is resolved by pseudonymizing personal data in logs with a separate key vault and crypto-shredding for erasure requests (GDPR-05). Full lineage chain: model registry (weights/endpoint version) + prompt registry + KB snapshot versioning + evaluation-report versioning, all referenced by the Annex IV technical file so any historical decision is reconstructible (\"replay\" capability). This lineage store is also the primary evidence source for the ISO/IEC 42001 AIMS internal audit (ISO42001-01) and the ISO 19011 counter-review sampling of triage logs (AUDIT-01).\n\nVERDICT: architecture is auditable IF AND ONLY IF the structured-output contract, calibrated confidence, pseudonymized append-only logging, and versioned lineage chain are implemented as first-class components — not as afterthoughts bolted onto a raw LLM call. Certifications applied: AWS MLA-C01 (lineage/monitoring), Azure AI-102 (responsible AI tooling), TOGAF 10 (compliance-driven architecture governance), Anthropic Claude certifications (structured outputs, guardrails, prompt-injection defenses).",
+        "humanOversight": "HUMAN-OVERSIGHT AUDIT — Art. 14 + Art. 26(2) (AIA-07)\n\nA. HUMAN-IN-THE-LOOP DESIGN\n(1) Decision authority: the LLM output is a prioritization recommendation only; no claim denial, delay-to-denial pathway, or deprioritization may take legal/similarly significant effect without meaningful human review (joint requirement AI Act Art. 14 + GDPR Art. 22). Architecturally enforced: the triage service writes to a \"recommended queue position\" field; only an authenticated claims-handler action commits a state transition on the claim. (2) Confidence-gated routing: low-confidence and abstain outputs are architecturally forced into a mandatory-human-review lane; thresholds are set from calibrated ECE data, not arbitrary cutoffs, and are auditable configuration (versioned). (3) Override capability: one-click override/disregard in the handler UI, with reason codes; overrides are logged (Art. 12) and feed the post-market monitoring loop as ground-truth signal. (4) Automation-bias countermeasures — the weak point in most triage deployments: (a) blind re-review sampling — a random % of high-confidence auto-prioritized claims is routed to a second reviewer without showing the model output; (b) override-rate telemetry per handler — a near-zero override rate is an automation-bias alarm, not a success metric; (c) no dark patterns: the \"accept recommendation\" action must not be faster/defaulted versus \"review in detail\". (5) Named accountability: oversight measures assigned to identified persons (Art. 26(2)) — an Oversight Owner in claims operations with documented delegation, plus Art. 4 AI-literacy training records for every handler and supervisor (AIA-13); competence verified, not just attendance.\n\nB. KILL SWITCH & GRACEFUL DEGRADATION\n(1) Circuit breaker: a runtime flag, operable by the Oversight Owner and the on-call SRE without a deployment, that instantly routes 100% of incoming claims to the manual triage queue (fail-safe = fail-to-human, never fail-to-auto-deny). (2) Model rollback: blue/green endpoint strategy in the model registry allowing rollback to the previous validated model+prompt version in minutes. (3) Partial kill: per-claim-category disablement (e.g., disable triage on health-heavy categories only) when drift/quality alerts fire on a subset. (4) Business continuity: the manual queue must be dimensioned to absorb full volume (NIS2 Art. 21 continuity of the triage service) — a kill switch that operationally cannot be used is non-compliant in substance. (5) Drills: kill-switch activation tested at least quarterly with timed runbook execution; drill records are audit evidence for Art. 14 effectiveness and for the ISO 19011 counter-review.\n\nC. CONTESTATION LOOP (GDPR-03 articulation)\nClaimant contestation triggers full human re-assessment with access to the decision's replay trace (model version, evidence cited, confidence, human actions); human-review SLA documented and monitored.\n\nFINDINGS RATING: absence of blind re-review sampling and of a tested (drilled) kill-switch runbook should each be rated MAJOR; absence of confidence-gated mandatory-human lanes or of enforced human commit on state transitions rated CRITICAL (direct Art. 14/Art. 22 breach exposure, Art. 99(4): up to €15M or 3% + GDPR Art. 83(5): up to €20M or 4%).",
+        "gaps": [
+          "GAP-01 [CRITICAL — Art. 14 + GDPR Art. 22] Raw LLM routing output can commit claim state transitions. RECOMMENDATION: enforce a hard architectural boundary — triage service has write access only to a 'recommendation' field; state transitions require an authenticated human action; verify by permission model, not by convention.",
+          "GAP-02 [CRITICAL — Art. 15 / AIA-08] Prompt-injection surface via free-text claim narratives is unmitigated. RECOMMENDATION: layered defense — input sanitization + injection classifier on claim narratives, instruction-hierarchy prompting (untrusted text delimited and never interpreted as instructions), output guardrail validating the structured schema, and adversarial test suite (injection corpus) run per release with results archived as Art. 15 evidence.",
+          "GAP-03 [MAJOR — Art. 12 vs GDPR Art. 5/32] Logging design conflicts with data minimization (claim narratives contain health data, GDPR Art. 9). RECOMMENDATION: pseudonymized append-only log store — personal identifiers tokenized via a separate key vault, crypto-shredding for erasure, ≥6-month retention config documented; redaction controls on prompts/embeddings to block inferential health-data leakage (GDPR-02).",
+          "GAP-04 [MAJOR — Art. 13/14 explainability] LLM classifier returns a label without grounded rationale. RECOMMENDATION: structured-output contract {decision, confidence, cited_evidence chunk IDs, abstain_flag}; groundedness check rejecting rationales that cite non-retrieved content; counterfactual view in the reviewer UI.",
+          "GAP-05 [MAJOR — Art. 15 accuracy declaration] No confidence calibration — declared accuracy is meaningless without it. RECOMMENDATION: per-category calibration (ECE, reliability diagrams) on a held-out claims set; calibrated thresholds drive the mandatory-human-review lane; recalibrate after every model/prompt/KB change.",
+          "GAP-06 [MAJOR — Art. 14 effectiveness] Kill switch exists on paper but is untested. RECOMMENDATION: runtime circuit breaker (fail-to-human), per-category partial kill, blue/green model rollback, quarterly timed drills with archived runbook executions; manual queue capacity-tested at 100% volume (NIS2 continuity).",
+          "GAP-07 [MAJOR — Art. 14 automation bias] No countermeasure against rubber-stamping of model recommendations. RECOMMENDATION: blind re-review sampling of high-confidence outputs, per-handler override-rate telemetry with low-rate alarms, symmetric UI affordances for accept vs. review.",
+          "GAP-08 [MAJOR — Art. 11/12 lineage] Decisions not reconstructible: model, prompt template, and KB snapshot are not jointly versioned. RECOMMENDATION: model registry + prompt registry + KB snapshot hashing referenced in every log event; 'replay' capability as acceptance criterion; lineage referenced in the Annex IV technical file (AIA-04).",
+          "GAP-09 [MAJOR — Art. 72 / Art. 9] No production drift monitoring feeding the risk management system. RECOMMENDATION: embedding-space drift detection on claim narratives, per-category quality dashboards vs. declared Art. 15 metrics, alert thresholds wired to the PMM plan and serious-incident procedure (≤15 days, AIA-12); override outcomes fed back as ground truth.",
+          "GAP-10 [MAJOR — Art. 10 / AIA-03] Bias controls absent on triage outcomes. RECOMMENDATION: fairness evaluation by age, health-status proxies and claim category (equalized deprioritization rates); dataset datasheets for the KB; bias re-assessment on each KB refresh; results feed the FRIA/DPIA (AIA-11, GDPR-04).",
+          "GAP-11 [MINOR — GDPR-06 / NIS2-01] LLM vendor contract lacks AI-specific clauses. RECOMMENDATION: DPA with no-training-on-client-data, EU data residency, sub-processor chain disclosure, model-deprecation notice period, and vendor incident-notification SLA aligned with NIS2 24h/72h; capture in ISO 42001 Annex A.10 supplier controls.",
+          "GAP-12 [MINOR — Art. 17 / ISO 42001] Compliance evidence is scattered, not audit-ready. RECOMMENDATION: single AIMS evidence repository (versioned) mapping each artifact — logs, eval reports, drills, training records, FRIA/DPIA — to its obligation ID (AIA-01…AUDIT-01), enabling the ISO 19011 blind counter-review and the CNIL-readiness checklist."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-SECURITE-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "sec-report-present",
+          "description": "STEP-03: AI security report (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "sec-owasp-llm-10",
+          "description": "STEP-03: audit covering the 10 OWASP LLM categories (LLM01-LLM10)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "sec-stride-present",
+          "description": "STEP-03: STRIDE threat model adapted to AI (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "sec-controls-plan",
+          "description": "STEP-03: technical controls plan present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "securityReport": "AI SECURITY REPORT — LLM Claims-Triage System (High-Risk, AI Act Annex III §5(c)) — AGENT-SECURITE-IA\n\nSCOPE & POSTURE\nThis report is the security-engineering counterpart to the architecture/compliance audit provided. It reframes the 12 gaps as an attack-surface and control problem, mapped to OWASP LLM Top 10 (2025), STRIDE-for-AI, and MITRE ATLAS. Regulatory framing (AI Act articles, GDPR, NIS2) is retained for traceability but ownership of the legal verdict stays with AGENT-JURIDIQUE-IA; here the concern is technical exploitability and defensive robustness (ISO 27001 A.8 / NIST AI RMF MANAGE).\n\nTOP RISKS (RED-TEAM VIEW)\n1. [CRITICAL — LLM06 Excessive Agency / GAP-01] The triage service can influence claim state transitions from a raw model label. A prompt-injected or hallucinated output could deprioritize or route-to-denial a legitimate claim with no human commit. Offensive relevance: this is the single highest-impact abuse path — compromise the model output, compromise the decision. Defensive requirement: hard permission boundary — triage identity has WRITE scope only on a `recommendation` field; state transitions require an authenticated claims-handler principal. Enforce by IAM policy (least privilege, deny-by-default), not application convention. MITRE ATLAS: AML.T0048 (external harms / decision manipulation).\n\n2. [CRITICAL — LLM01 Prompt Injection / GAP-02] Free-text claim narratives are attacker-controlled, untrusted input flowing directly into the prompt and into RAG retrieval. Direct and indirect (KB-poisoned) injection can override routing logic, exfiltrate system prompt, or force abstain/accept. Layered defense (Red/Blue): (a) input classifier for injection patterns on narratives; (b) strict instruction hierarchy — untrusted claimant text delimited, tagged, and never interpreted as instructions; (c) output guardrail validating the JSON schema and rejecting out-of-contract responses; (d) an adversarial injection corpus executed per release, results archived as Art. 15 robustness evidence. MITRE ATLAS: AML.T0051 (LLM prompt injection), AML.T0068 (LLM jailbreak).\n\n3. [HIGH — LLM02/LLM08 Sensitive Info & Embedding Leakage / GAP-03] Claim narratives contain GDPR Art. 9 health data. Plaintext prompts, embeddings, and logs create inference and exfiltration surfaces. Controls: pseudonymization at ingestion (token vault, separate KMS key), crypto-shredding for erasure, redaction of direct identifiers before embedding, append-only tamper-evident log store, field-level encryption. Encryption at rest (AES-256) and in transit (TLS 1.3), key separation between operational store and log store (ISO 27001 A.10).\n\n4. [HIGH — LLM04 Data/Model Poisoning / GAP-08/09] The RAG knowledge base is a mutable trust anchor. A poisoned KB chunk becomes an indirect-injection and misinformation vector for every downstream decision. Controls: signed/verified KB ingestion pipeline, provenance datasheets, snapshot hashing, groundedness validation against retrieved chunk IDs, embedding-space drift detection on both narratives (input) and corpus (post-update). MITRE ATLAS: AML.T0020 (poison training/RAG data).\n\n5. [HIGH — LLM09 Misinformation / GAP-04/05] Uncalibrated confidence + ungrounded rationale = confident-but-wrong triage that handlers rubber-stamp (automation bias, GAP-07). Controls: structured-output contract {routing_decision, confidence, cited_evidence[], policy_clauses_referenced[], abstain_flag}, groundedness rejection of non-retrieved citations, per-category ECE calibration driving the mandatory-human-review lane, blind re-review sampling, per-handler override-rate telemetry (low override rate = alarm, not KPI).\n\nDETECTION & RESPONSE (BLUE TEAM)\n- SIEM/SOC ingestion of the append-only decision log + guardrail events; correlation rules for injection-classifier hits, schema-violation spikes, groundedness-failure bursts, and anomalous per-handler override rates.\n- Kill switch / circuit breaker (fail-to-human, never fail-to-auto-deny), blue/green model rollback, per-category partial kill; quarterly timed drills with archived runbooks (DFIR/BCP evidence).\n- Incident response wired to NIS2 timelines (24h early warning / 72h notification) and AI Act serious-incident chain (≤15 days) — but the technical trigger, containment (kill switch), and forensic replay capability are owned here.\n\nVENDOR/SUPPLY CHAIN (LLM03 / GAP-11): DPA with no-training-on-client-data, EU residency, sub-processor disclosure, model-deprecation notice, vendor incident SLA; capture as ISO 27001 A.15 / ISO 42001 A.10 supplier controls.\n\nCONCLUSION: The system is defensible only if the recommendation/commit boundary (LLM06), the layered injection defense (LLM01), and pseudonymized append-only logging with replay (LLM02) are implemented as first-class security components. Current state = CRITICAL exposure on GAP-01 and GAP-02; both must be closed before production authorization.",
+        "owaspLlm": [
+          {
+            "category": "LLM01 — Prompt Injection",
+            "status": "CRITICAL / OPEN — Free-text claim narratives are unmitigated untrusted input (GAP-02). No input classifier, instruction hierarchy, or adversarial test suite in place. Remediate before production."
+          },
+          {
+            "category": "LLM02 — Sensitive Information Disclosure",
+            "status": "HIGH / PARTIAL — Health data (GDPR Art. 9) in prompts, embeddings and logs (GAP-03). Pseudonymization, redaction, key-separated encryption and append-only log store specified but not yet implemented."
+          },
+          {
+            "category": "LLM03 — Supply Chain",
+            "status": "MEDIUM / OPEN — LLM vendor contract lacks AI-specific clauses (GAP-11): no-training-on-client-data, EU residency, sub-processor disclosure, incident SLA missing."
+          },
+          {
+            "category": "LLM04 — Data and Model Poisoning",
+            "status": "HIGH / OPEN — RAG knowledge-base ingestion is a poisoning/indirect-injection vector (GAP-08/09). No signed ingestion, provenance datasheets or corpus-drift detection deployed."
+          },
+          {
+            "category": "LLM05 — Improper Output Handling",
+            "status": "HIGH / PARTIAL — Raw model label consumed downstream without schema validation (GAP-01/04). Output guardrail enforcing the JSON contract and groundedness rejection specified but not enforced."
+          },
+          {
+            "category": "LLM06 — Excessive Agency",
+            "status": "CRITICAL / OPEN — Triage output can influence claim state transitions with no enforced human commit (GAP-01). Requires hard IAM boundary: write access only to a recommendation field. Direct Art. 14 / GDPR Art. 22 exposure."
+          },
+          {
+            "category": "LLM07 — System Prompt Leakage",
+            "status": "MEDIUM / OPEN — Instruction-hierarchy prompting proposed but not implemented; injection surface (LLM01) makes prompt/policy-clause extraction feasible. No leakage test in release gate."
+          },
+          {
+            "category": "LLM08 — Vector and Embedding Weaknesses",
+            "status": "HIGH / OPEN — RAG groundedness unverified, KB snapshots unversioned (GAP-08), embedding-space health-data inference risk (GAP-03), corpus drift unmonitored (GAP-09)."
+          },
+          {
+            "category": "LLM09 — Misinformation",
+            "status": "HIGH / PARTIAL — Ungrounded rationale and uncalibrated confidence (GAP-04/05) drive hallucinated triage; automation bias (GAP-07) amplifies harm. Groundedness check, ECE calibration and blind re-review sampling required."
+          },
+          {
+            "category": "LLM10 — Unbounded Consumption",
+            "status": "MEDIUM / NOT ASSESSED — No rate limiting, per-tenant quotas, cost/latency guardrails or denial-of-wallet controls documented. Requires throughput caps, timeout budgets and consumption monitoring on the triage endpoint."
+          }
+        ],
+        "stride": "STRIDE THREAT MODEL — ADAPTED TO AI (LLM Claims-Triage) — mapped to MITRE ATLAS\n\nSPOOFING\n- Threat: A non-authenticated actor or the triage service itself impersonating a claims-handler to commit a claim state transition; spoofed KB ingestion source poisoning retrieval. (ATLAS AML.T0020)\n- Controls: strong IAM/PAM with least privilege — triage principal has NO state-transition scope; MFA + short-lived tokens for handlers; signed, provenance-verified KB ingestion; mTLS between services. Ties to GAP-01, GAP-11.\n\nTAMPERING\n- Threat: Prompt injection via claim narrative tampering the model's routing logic; indirect injection via poisoned KB chunks; tampering with confidence thresholds or decision logs. (ATLAS AML.T0051, AML.T0068)\n- Controls: instruction hierarchy + delimited untrusted input, injection classifier, output-schema guardrail, versioned/auditable threshold config, append-only tamper-evident log with hash chaining. Ties to GAP-02, GAP-04, GAP-08.\n\nREPUDIATION\n- Threat: A handler denies an override, or an automated deprioritization cannot be attributed/reconstructed; disputed claimant contestation with no evidence trail.\n- Controls: append-only decision log {model_id+version, prompt_template_version, KB snapshot hash, input hash, decision, confidence, human_action, overrider identity, timestamp}; full replay capability; per-handler override telemetry. Ties to GAP-08, GAP-06, GAP-07.\n\nINFORMATION DISCLOSURE\n- Threat: Exfiltration/inference of GDPR Art. 9 health data via prompts, embeddings, logs, or system-prompt/policy-clause leakage through injection. (ATLAS AML.T0057 LLM data leakage)\n- Controls: pseudonymization + tokenization (separate key vault), redaction before embedding, crypto-shredding, field-level encryption, TLS 1.3 / AES-256, output guardrail blocking system-prompt echo. Ties to GAP-03, LLM02/LLM07.\n\nDENIAL OF SERVICE\n- Threat: Unbounded consumption / denial-of-wallet via crafted long narratives or high-volume submission; retrieval amplification; kill-switch overload of manual queue.\n- Controls: rate limiting, per-tenant quotas, token/latency budgets, cost monitoring; manual queue capacity-tested at 100% volume (NIS2 continuity); circuit breaker fail-to-human. Ties to LLM10, GAP-06.\n\nELEVATION OF PRIVILEGE\n- Threat: Excessive agency — LLM output escalating from advisory to effective decision authority; injection escalating claimant text into system-instruction privilege. (ATLAS AML.T0053 LLM plugin/agent compromise)\n- Controls: hard architectural boundary (recommendation field only), instruction-hierarchy enforcement, deny-by-default permission model, confidence-gated mandatory-human lane. Ties to GAP-01 (CRITICAL), GAP-02.\n\nRESIDUAL RISK: highest on Tampering (LLM01) and Elevation of Privilege (LLM06) — both rated CRITICAL until the injection defense stack and the recommendation/commit boundary are enforced and validated by an adversarial test suite.",
+        "controlsPlan": [
+          {
+            "id": "CTRL-01",
+            "priority": "CRITICAL",
+            "gap": "GAP-01 / LLM06",
+            "control": "Enforce recommendation/commit boundary via IAM: triage principal write-scoped only to a 'recommendation' field; state transitions require authenticated human principal (deny-by-default).",
+            "aiActArt": "Art. 14 / Art. 26(2)",
+            "robustness": "Verify by permission model + negative test (attempt state write with triage token → denied).",
+            "riskMgmtArt9": "Eliminates highest-impact abuse path; residual = low once IAM enforced."
+          },
+          {
+            "id": "CTRL-02",
+            "priority": "CRITICAL",
+            "gap": "GAP-02 / LLM01",
+            "control": "Layered prompt-injection defense: input injection classifier on narratives + instruction-hierarchy prompting (delimited untrusted text) + output-schema guardrail + adversarial injection corpus per release.",
+            "aiActArt": "Art. 15",
+            "robustness": "Adversarial test suite (injection/jailbreak corpus) run each release; results archived as robustness evidence; target block-rate threshold with alerting.",
+            "riskMgmtArt9": "Recurring re-test after every prompt/model/KB change."
+          },
+          {
+            "id": "CTRL-03",
+            "priority": "HIGH",
+            "gap": "GAP-03 / LLM02",
+            "control": "Pseudonymized append-only log store: tokenized identifiers via separate KMS, crypto-shredding for erasure, redaction before embedding, AES-256 at rest / TLS 1.3 in transit, ≥6-month retention.",
+            "aiActArt": "Art. 12 vs GDPR Art. 5/32/9",
+            "robustness": "Log-integrity (hash chain) verification job; erasure test proving crypto-shred.",
+            "riskMgmtArt9": "Resolves minimization vs traceability tension."
+          },
+          {
+            "id": "CTRL-04",
+            "priority": "HIGH",
+            "gap": "GAP-04/05 / LLM09",
+            "control": "Structured-output contract {decision, confidence, cited_evidence[], policy_clauses[], abstain_flag} + groundedness rejection of non-retrieved citations + per-category ECE calibration driving the human-review lane.",
+            "aiActArt": "Art. 13/14/15",
+            "robustness": "Reliability diagrams per category on held-out set; recalibrate on any model/prompt/KB change.",
+            "riskMgmtArt9": "Calibrated thresholds are auditable versioned config."
+          },
+          {
+            "id": "CTRL-05",
+            "priority": "HIGH",
+            "gap": "GAP-04/08/09 / LLM04/LLM08",
+            "control": "RAG integrity: signed KB ingestion + provenance datasheets + snapshot hashing + embedding-space drift detection (narratives + corpus) feeding the PMM/risk system.",
+            "aiActArt": "Art. 10 / Art. 72",
+            "robustness": "Groundedness rate & drift dashboards vs declared Art. 15 metrics with alert thresholds.",
+            "riskMgmtArt9": "Bias/poisoning re-assessment on each KB refresh."
+          },
+          {
+            "id": "CTRL-06",
+            "priority": "HIGH",
+            "gap": "GAP-06 / LLM10",
+            "control": "Kill switch (fail-to-human circuit breaker) + per-category partial kill + blue/green model rollback + rate limiting/quotas/token budgets; manual queue dimensioned to 100% volume.",
+            "aiActArt": "Art. 14 / NIS2 Art. 21",
+            "robustness": "Quarterly timed kill-switch drills with archived runbook executions.",
+            "riskMgmtArt9": "Business-continuity evidence for effectiveness."
+          },
+          {
+            "id": "CTRL-07",
+            "priority": "HIGH",
+            "gap": "GAP-07 / LLM09",
+            "control": "Automation-bias countermeasures: blind re-review sampling of high-confidence outputs, per-handler override-rate telemetry with low-rate alarms, symmetric accept/review UI affordances.",
+            "aiActArt": "Art. 14",
+            "robustness": "Sampling coverage % monitored; near-zero override rate raises alert.",
+            "riskMgmtArt9": "Feeds ground-truth signal to PMM."
+          },
+          {
+            "id": "CTRL-08",
+            "priority": "HIGH",
+            "gap": "GAP-08 / LLM05",
+            "control": "Joint versioning + replay: model registry + prompt registry + KB snapshot hash referenced in every log event; replay capability as acceptance criterion; SIEM ingestion of guardrail/decision events.",
+            "aiActArt": "Art. 11/12",
+            "robustness": "Replay test reconstructs a historical decision end-to-end.",
+            "riskMgmtArt9": "Primary evidence source for ISO 42001/19011 audit."
+          },
+          {
+            "id": "CTRL-09",
+            "priority": "MEDIUM",
+            "gap": "GAP-11 / LLM03",
+            "control": "Vendor security clauses: no-training-on-client-data, EU residency, sub-processor disclosure, model-deprecation notice, incident-notification SLA aligned to NIS2 24h/72h.",
+            "aiActArt": "NIS2 Art. 21 / ISO 27001 A.15",
+            "robustness": "Supplier control review; SLA test in tabletop.",
+            "riskMgmtArt9": "Supply-chain risk register entry."
+          },
+          {
+            "id": "CTRL-10",
+            "priority": "MEDIUM",
+            "gap": "GAP-10 / LLM09",
+            "control": "Fairness/bias evaluation on triage outcomes (age, health-status proxies, claim category); equalized deprioritization-rate checks; results feed FRIA/DPIA.",
+            "aiActArt": "Art. 10",
+            "robustness": "Bias re-assessment each KB refresh; thresholds tracked.",
+            "riskMgmtArt9": "Documented in risk-management system."
+          },
+          {
+            "id": "CTRL-11",
+            "priority": "MEDIUM",
+            "gap": "GAP-12 / ISO 42001",
+            "control": "Single versioned AIMS evidence repository mapping each artifact (logs, eval reports, drills, training records, FRIA/DPIA) to its obligation/control ID.",
+            "aiActArt": "Art. 17",
+            "robustness": "Audit-readiness checklist; blind counter-review sampling.",
+            "riskMgmtArt9": "Enables continuous compliance evidence."
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-04",
+      "assetId": "AGENT-DATA-ENGINEER",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "data-report-present",
+          "description": "STEP-04: data audit report (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "data-lineage-present",
+          "description": "STEP-04: end-to-end data lineage mapping (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "data-bias-audit",
+          "description": "STEP-04: bias audit by protected subgroup (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "data-correction-plan",
+          "description": "STEP-04: data correction plan present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "dataReport": "DATA AUDIT REPORT — LLM Claims-Triage System (High-Risk, AI Act Annex III §5(c)) — AGENT-DATA-ENGINEER\n\nSCOPE: Data-engineering counterpart to the security report (AGENT-SECURITE-IA). Covers lawful basis, minimization, storage limitation, transfers, and data-quality obligations (AI Act Art. 10) across the four data domains of the pipeline: (D1) claim intake data — structured fields + free-text narratives containing GDPR Art. 9 health data; (D2) RAG knowledge base — policy clauses, procedures, embeddings; (D3) decision/telemetry data — append-only logs, confidence, overrides; (D4) evaluation data — held-out sets, adversarial corpora, calibration sets.\n\n1. LEGAL BASIS (GDPR Art. 6 / Art. 9)\n- D1 processing rests on Art. 6(1)(b) (contract performance — claims settlement) for structured data; the health content of narratives requires an Art. 9(2) condition: Art. 9(2)(f) (legal claims) or national insurance derogation (e.g. member-state insurance law) — MUST be documented per data element in the ROPA (Art. 30). GAP: current ROPA does not distinguish triage-recommendation processing from claims-settlement processing; the LLM triage is a NEW purpose requiring its own lawful-basis entry and compatibility assessment (Art. 6(4)).\n- GDPR Art. 22 exposure is conditional on CTRL-01: while the triage principal can influence state transitions (GAP-01 open), the processing is de facto automated decision-making with legal/significant effect → Art. 22(2)(a)/(b) basis + safeguards required. Once the recommendation/commit boundary is enforced, processing reclassifies as decision-support; the DPIA must record this dependency explicitly.\n- D3 logging basis: Art. 6(1)(c) (legal obligation — AI Act Art. 12/19 record-keeping) for the log store; this resolves the minimization-vs-traceability tension ONLY if log content is bounded to what Art. 12 requires (see minimization).\n- D4 evaluation/calibration reuse of real claims: Art. 6(4) compatibility test + safeguards (pseudonymization); vendor training on client data is contractually excluded (LLM03/CTRL-09) — verify DPA clause is signed, not just specified.\n\n2. MINIMIZATION (Art. 5(1)(c)) — pipeline-stage analysis\n- Ingestion: full narrative currently enters the prompt verbatim. Target: pseudonymization at ingestion (token vault, separate KMS key per CTRL-03) + structural redaction of direct identifiers (names, NIR/SSN, policy numbers, addresses, DOB→age-band) BEFORE prompt assembly and BEFORE embedding. Only triage-relevant fields flow to the LLM (data contract enforced at the ingestion gate).\n- Embeddings: embeddings of raw health narratives are personal data (re-identification/inversion risk, LLM08). Redact-then-embed; embedding store inherits D1 retention and erasure obligations (crypto-shredding must cover vector store, not only the token vault).\n- Logs: append-only store must log input HASH + pseudonymized decision context, never raw narrative (hash + KB snapshot ref is sufficient for Art. 12 replay). Current spec is compliant on paper; not yet implemented (LLM02 PARTIAL).\n- Retention: D1 per insurance-law limitation periods; D3 ≥6 months (AI Act Art. 19) and aligned to contestation windows; D4 adversarial corpora contain synthetic/attacker text — keep, but purge any real-claim derivatives after each release cycle unless pseudonymized.\n\n3. TRANSFERS (Chapter V)\n- LLM vendor: EU residency clause specified (CTRL-09) but NOT yet contracted → until signed, every inference call is a potential third-country transfer of Art. 9 data with no Art. 46 safeguard. BLOCKER for production. Require: EU-region inference endpoint, sub-processor list with transfer mapping, SCCs + transfer impact assessment as fallback, no-training-on-client-data clause.\n- Vector DB / observability SaaS: sub-processors must be enumerated; telemetry exporters (SIEM, tracing) must be verified for EU residency — commonly missed transfer path.\n\n4. DATA QUALITY (AI Act Art. 10(2-5))\n- D2 (RAG corpus) is training-adjacent data governing outputs: Art. 10 requires relevance, representativeness, error-freeness examination. Signed ingestion + provenance datasheets + snapshot hashing (CTRL-05) are the technical controls; the governance gap is the absence of a data-quality gate (freshness SLA, clause-version reconciliation against the authoritative policy repository, dead-clause detection) — added to correction plan.\n- D1 completeness/consistency checks (schema contract, mandatory-field validation, language detection, length bounds) also serve LLM10 (unbounded consumption) via token budgets.\n\nVERDICT: Legal-basis documentation incomplete (new-purpose entry, Art. 9 condition, Art. 22 dependency on CTRL-01); minimization designed but unimplemented at ingestion/embedding/log layers; transfers UNSAFE until vendor DPA with EU residency is executed. Production authorization must be gated on items DQ-01..DQ-04 of the correction plan.",
+        "lineage": "END-TO-END DATA LINEAGE — LLM Claims-Triage (column/field-level, versioned artifacts in [brackets])\n\nFLOW A — CLAIM INTAKE → RECOMMENDATION\n1. SOURCE: claims-core system (policy admin) → claim_event {claim_id, policy_id, claimant_pii, structured_fields, narrative_freetext[Art.9 health data], attachments} — trust level: UNTRUSTED (claimant-authored narrative = attacker-controlled input, LLM01).\n2. INGESTION GATE: schema/data-contract validation → PSEUDONYMIZATION (token vault, KMS-key-A) → REDACTION (direct identifiers, DOB→age_band) → injection classifier (CTRL-02) → outputs claim_pseudo {claim_token, redacted_narrative, structured_features} + vault entry {claim_token↔identity, KMS-key-A}. Lineage cut-point: everything downstream carries claim_token only.\n3. EMBEDDING PATH: redacted_narrative → embedding model [emb_model_id+version] → query vector (ephemeral, not persisted) → vector search over KB index.\n4. RAG RETRIEVAL: KB index [kb_snapshot_hash] → top-k chunks {chunk_id, clause_ref, provenance_datasheet_ref} → prompt assembler.\n5. PROMPT ASSEMBLY: [prompt_template_version] + instruction hierarchy: system layer / retrieved chunks (tagged, read-only) / delimited untrusted redacted_narrative → LLM [model_id+version, vendor endpoint EU-region].\n6. OUTPUT GUARDRAIL: raw completion → JSON-schema validation → groundedness check (cited_evidence[] ⊆ retrieved chunk_ids) → structured contract {routing_decision, confidence, cited_evidence[], policy_clauses[], abstain_flag}.\n7. CALIBRATION LAYER: confidence → per-category ECE mapping [calibration_config_version] → lane assignment {auto-eligible-recommendation | mandatory-human-review | abstain→human}.\n8. WRITE BOUNDARY (CTRL-01): triage principal writes ONLY claims_db.recommendation{claim_token, decision, confidence, lane, artifact_versions}; state transition written exclusively by authenticated handler principal → claims_db.claim_state + override{handler_id, action, timestamp}.\n\nFLOW B — KNOWLEDGE BASE (D2)\npolicy/procedure authoring system [authoritative repo] → signed ingestion pipeline (signature + provenance datasheet per source) → chunking/embedding [emb_model_id] → KB index versioned by [kb_snapshot_hash] → referenced by every decision log event. Corpus-drift detector reads embedding space post-update → PMM/risk system.\n\nFLOW C — DECISION LOG & OBSERVABILITY (D3)\nEvery step 2–8 emits to append-only hash-chained log store (KMS-key-B, separated from operational KMS-key-A): {timestamp, claim_token, input_hash, model_id+version, prompt_template_version, kb_snapshot_hash, calibration_config_version, guardrail_events, decision, confidence, lane, human_action, handler_id}. Consumers: SIEM (guardrail/injection/override-anomaly correlation), replay service (CTRL-08 — reconstructs any historical decision from versioned artifacts), regulator evidence export (Art. 12/19), PMM dashboards (Art. 72).\n\nFLOW D — FEEDBACK & EVALUATION (D4)\nHandler overrides + blind re-review samples (CTRL-07) → ground-truth dataset [eval_set_version, pseudonymized] → ECE recalibration + fairness/bias evaluation (Art. 10, see biasAudit) → updates [calibration_config_version] and FRIA/DPIA. Adversarial injection corpus [redteam_corpus_version] → per-release robustness runs → evidence repository (CTRL-11).\n\nERASURE LINEAGE (GDPR Art. 17): erasure request → crypto-shred vault entry (KMS-key-A) → claim_token becomes irreversibly pseudonymous → verify propagation to: vector store (delete narrative-derived vectors), eval sets, any cached prompts. Log store retained (Art. 6(1)(c) legal obligation) but contains no re-identifiable data post-shred.\n\nLINEAGE GAPS FOUND: (a) query-vector and prompt caches not covered by erasure lineage; (b) attachments (step 1) have no defined path — currently outside the redaction gate; (c) SIEM export residency unverified; (d) no automated lineage capture — versions are logged but the graph itself should be materialized (e.g. OpenLineage events on flows A–D) so replay and audit do not depend on convention.",
+        "biasAudit": "BIAS AUDIT — Statistical analysis by protected subgroup (AI Act Art. 10(2)(f-g), Art. 15; feeds FRIA/DPIA per CTRL-10)\n\nSTATUS: NOT YET EXECUTED — this section defines the mandatory protocol and the instrumentation the data platform must provide; execution is a production-gate item (CP-07).\n\n1. SUBGROUP DEFINITION\nDirect attributes lawfully available in claims data: age (banded: <30, 30-44, 45-59, 60-74, 75+), sex, disability/chronic-condition status (derivable from claim category — itself Art. 9 data: process under the same Art. 9(2) condition, documented in DPIA). Proxy attributes to test even where direct attributes are absent: claim category (mental-health, chronic, oncology vs acute), narrative language proficiency / non-native phrasing, geography (postal-code deciles as socio-economic proxy), claim channel (paper-scan vs digital — correlates with age). NOTE: redaction (DOB→age_band) must PRESERVE the analytical age_band in the pseudonymized record, otherwise the bias audit becomes impossible — minimization and Art. 10 auditability must be reconciled by design, not by re-identification.\n\n2. METRICS (per subgroup, per claim category, with 95% CIs via stratified bootstrap; minimum cell size n≥100, else aggregate and flag)\n- Deprioritization-rate parity: P(routing=low-priority | group) — demographic-parity difference ≤ 0.05 and ratio ≥ 0.8 (four-fifths rule as screening threshold, not legal safe harbor).\n- Error-rate parity vs ground truth (blind re-review + override data from CTRL-07): FNR gap (legitimate claim deprioritized — the harm-critical direction) and FPR gap; equalized-odds difference ≤ 0.05 on FNR.\n- Calibration parity: per-group ECE and reliability curves — a model calibrated on aggregate but miscalibrated for a subgroup silently routes that subgroup around the human-review lane (interaction with CTRL-04: calibration config must be evaluated per group, not only per category).\n- Abstain-rate parity: P(abstain | group) — systematic abstention on non-native-phrasing narratives shifts burden (delay) onto that group; delay IS the harm in claims triage, so also measure time-to-resolution distributions per group (Mann-Whitney U, report effect size).\n- Groundedness parity: citation-failure rate per group (hallucination concentrated on rare claim types = indirect disparate impact).\n- LLM-specific test: counterfactual narrative probes — paired narratives identical except protected-attribute signals (names, gendered terms, age mentions, disability mentions); flip-rate on routing_decision > 1% per attribute = fail. Executed per release alongside the adversarial corpus (CTRL-02 harness reuse).\n\n3. DATA REQUIREMENTS ON THE PLATFORM\n- Ground-truth pipeline: blind re-review sampling stratified BY SUBGROUP (uniform sampling under-powers small groups); override telemetry joined to subgroup features via claim_token (no re-identification).\n- KB-refresh trigger: re-run the full battery on every [kb_snapshot_hash] change and every model/prompt/calibration version bump (CTRL-05/CTRL-10) — bias is a property of the (model, prompt, corpus, thresholds) tuple, not the model alone.\n- All results versioned in the AIMS evidence repository (CTRL-11) with [eval_set_version, model_id, kb_snapshot_hash, calibration_config_version] — reproducible by replay.\n\n4. KNOWN A-PRIORI RISK CONCENTRATIONS (to prioritize in first run)\n(a) mental-health and chronic-condition narratives: longer, less structured text → higher injection-classifier false positives and higher abstain rates; (b) elderly claimants via paper-scan OCR: degraded input quality → confidence depression → systematic human-lane routing (acceptable) or systematic deprioritization (not acceptable — must be distinguished); (c) RAG coverage bias: rare claim categories with thin KB coverage → groundedness failures clustering on already-vulnerable groups.\n\nACCEPTANCE: production authorization requires one full battery passed, thresholds and residual disparities documented in FRIA/DPIA with mitigation rationale, and the recurring re-assessment wired into the PMM plan (Art. 72).",
+        "correctionPlan": [
+          "CP-01 [BLOCKER | GDPR Ch.V | owner: Data Eng + Legal | pre-prod]: Execute LLM vendor DPA with EU-region inference endpoint, no-training-on-client-data, sub-processor disclosure and transfer mapping; verify SIEM/observability exporters for EU residency. No Art. 9 data leaves the ingestion gate toward the vendor until signed. Evidence: DPA + transfer impact assessment in AIMS repo (CTRL-09/-11).",
+          "CP-02 [BLOCKER | GDPR Art. 5/9/25 | owner: Data Eng | pre-prod]: Implement the ingestion minimization gate as code: data-contract validation → pseudonymization (token vault, KMS-key-A) → identifier redaction (DOB→age_band preserving analytical band) → injection classifier, BEFORE prompt assembly and embedding. Acceptance: negative test proving raw identifiers cannot reach prompt, vector store, or logs; idempotent re-run yields identical claim_token.",
+          "CP-03 [BLOCKER | AI Act Art. 12/19, GDPR Art. 17 | owner: Data Eng | pre-prod]: Deploy append-only hash-chained decision log (KMS-key-B, key-separated) logging input_hash + full artifact versions {model_id, prompt_template_version, kb_snapshot_hash, calibration_config_version}; implement crypto-shredding covering vault AND vector store AND eval sets AND prompt/query caches (closes lineage gap a). Acceptance: chain-integrity verification job green + erasure test proving irreversibility + successful end-to-end replay of a historical decision (CTRL-03/-08).",
+          "CP-04 [BLOCKER | AI Act Art. 14, GDPR Art. 22 | owner: Data Eng + Platform | pre-prod]: Enforce recommendation/commit boundary in the data layer: triage principal write-scoped to recommendation table only, deny-by-default IAM, state transitions require handler principal. Acceptance: negative test (state write with triage token → denied). Update DPIA/ROPA to record the Art. 22 reclassification dependency on this control (CTRL-01).",
+          "CP-05 [HIGH | GDPR Art. 6/9/30 | owner: DPO + Data Eng | pre-prod]: Complete legal-basis documentation: dedicated ROPA entry for LLM triage as a distinct purpose, Art. 9(2) condition per data element, Art. 6(4) compatibility assessment for evaluation-data reuse; document erasure-exempt log basis (Art. 6(1)(c)).",
+          "CP-06 [HIGH | AI Act Art. 10 | owner: Data Eng | pre-prod]: Build the KB data-quality gate: signed ingestion + provenance datasheets + snapshot hashing (CTRL-05) EXTENDED with freshness SLA per source, clause-version reconciliation against the authoritative policy repo, dead-clause detection, and corpus-drift alerting into PMM. Define the attachment-handling path through the redaction gate (closes lineage gap b) or formally exclude attachments from LLM input.",
+          "CP-07 [HIGH | AI Act Art. 10/72 | owner: Data Eng + Data Science | production gate]: Execute the bias-audit battery defined in biasAudit (parity, equalized-odds FNR, per-group ECE, abstain/delay parity, counterfactual probes) with subgroup-stratified blind re-review sampling; wire re-execution to every model/prompt/KB/calibration version change; results versioned in AIMS repo and reflected in FRIA/DPIA (CTRL-07/-10).",
+          "CP-08 [MEDIUM | governance | owner: Data Eng | post-launch 90d]: Materialize automated lineage (OpenLineage events on flows A-D) so audit/replay depend on captured metadata, not convention (closes lineage gap d); publish data contracts for claim_event, claim_pseudo, recommendation, and log-event schemas with breaking-change policy; register all datasets, retention classes and owners in the data catalog.",
+          "CP-09 [MEDIUM | LLM10/NIS2 | owner: Data Eng + SRE | post-launch 90d]: Implement consumption governance on the triage endpoint: per-tenant quotas, token/length budgets enforced at the ingestion contract, cost/latency dashboards; capacity-test the manual queue at 100% volume as the fail-to-human path's data-flow validation (CTRL-06).",
+          "CP-10 [TARGET OPERATING MODEL]: quarterly data-governance review joining this correction plan to the AIMS evidence repository (CTRL-11): each dataset mapped to {lawful basis, retention, residency, quality SLA, owner, obligation ID}; KPIs = redaction-gate pass rate, chain-integrity checks, erasure-propagation latency, bias-battery recency, replay success rate."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-05",
+      "assetId": "AGENT-CDO-DIRECTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "gov-framework-present",
+          "description": "STEP-05: target AI governance framework (ISO 42001 aligned, non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "gov-raci-min-3",
+          "description": "STEP-05: compliance RACI covering ≥ 3 roles (DPO/CISO/AI Officer/Business/IT)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "gov-ai-act-lead",
+          "description": "STEP-05: AI Act lead appointment / articulation with the DPO present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "governanceFramework": "TARGET AI GOVERNANCE FRAMEWORK — ISO/IEC 42001 (AIMS) ALIGNED, scoped to the high-risk LLM claims-triage system (AI Act Annex III §5(c)).\n\nTIER 1 — AI ETHICS & RISK COMMITTEE (board-delegated): quarterly + ad hoc on BLOCKER escalation. Chaired by the Chief AI Officer; members: DPO, CISO, Chief Claims Officer (business owner), General Counsel, an independent ethics voice (external or non-executive). Mandate: approves the AI policy and risk appetite (Clause 5), signs the FRIA/DPIA and residual-risk acceptances (incl. bias-battery residual disparities per CP-07), arbitrates minimization-vs-auditability trade-offs (e.g. age_band preservation), and holds the sole authority to grant production authorization.\n\nTIER 2 — AIMS OPERATING BODIES: (a) AI Governance Office (run by the AI Officer) — maintains the AI system inventory, the ISO 42001 Statement of Applicability, the AIMS evidence repository (CTRL-11), and the obligation register mapping each dataset to {lawful basis, retention, residency, quality SLA, owner} per CP-10; (b) Data & Model Risk Board (monthly) — DPO + CISO + Data Eng lead + Data Science lead: reviews correction-plan burndown (CP-01..CP-09), lineage-gap closure, bias-battery recency, calibration drift, and post-market monitoring signals (Art. 72); (c) Change-Control Board — any change to the (model_id, prompt_template_version, kb_snapshot_hash, calibration_config_version) tuple triggers re-execution of the bias/robustness batteries before release (per CP-07, bias is a property of the tuple, not the model).\n\nTIER 3 — PRODUCTION GATE (stage-gate, evidence-based, no-pass-no-deploy): G1 Legal basis complete (CP-05: ROPA new-purpose entry, Art. 9(2) condition, Art. 6(4) assessment); G2 Data protection engineering proven by negative tests (CP-02 minimization gate, CP-03 crypto-shredding + replay, CP-04 recommendation/commit boundary → Art. 22 reclassification recorded); G3 Transfers safe (CP-01: signed vendor DPA, EU-region endpoint, SIEM residency verified) — hard BLOCKER; G4 Data quality gate live (CP-06); G5 Bias battery passed and documented in FRIA/DPIA (CP-07); G6 Human-oversight readiness (Art. 14: handler capacity test per CP-09). Gate decisions minuted by the Ethics Committee; all evidence versioned in the AIMS repo. Continuous cycle: Plan-Do-Check-Act with quarterly management review (Clause 9.3) joining CP-10 KPIs (redaction-gate pass rate, chain integrity, erasure-propagation latency, replay success, bias-battery recency).",
+        "raci": [
+          {
+            "role": "AI Officer (Chief AI Officer / AI Act lead)",
+            "responsibility": "A — Accountable for overall AI Act conformity of the triage system: owns the AIMS (ISO 42001), the risk-management system (Art. 9), the production gate verdict proposal to the Ethics Committee, technical documentation (Art. 11), post-market monitoring plan (Art. 72), and the correction-plan burndown (CP-01..CP-10). R on FRIA coordination and conformity-assessment readiness."
+          },
+          {
+            "role": "DPO",
+            "responsibility": "R — Responsible for GDPR conformity: DPIA, ROPA new-purpose entry, Art. 9(2) condition per data element, Art. 6(4) compatibility assessments, Art. 22 reclassification dependency on CTRL-01, erasure-lineage validation (CP-05, co-owner CP-03 acceptance). C on every gate decision and on any change touching personal-data flows; independent reporting line to the board preserved (Art. 38(3))."
+          },
+          {
+            "role": "CISO",
+            "responsibility": "R — Responsible for security controls and Art. 15 robustness/cybersecurity: KMS key separation, hash-chained log integrity, IAM deny-by-default on the write boundary (CP-04), injection-classifier and adversarial-corpus operations, SIEM correlation and residency verification (CP-01 telemetry path), NIS2 alignment (CP-09). A on incident response for the AI system; C on FRIA/DPIA."
+          },
+          {
+            "role": "Business (Chief Claims Officer / claims operations)",
+            "responsibility": "A — Accountable for the decision outcomes and Art. 14 human oversight in operation: owns handler-principal staffing, blind re-review sampling (CTRL-07), override discipline, manual-queue capacity at 100% volume (CP-09), and time-to-resolution fairness outcomes. R on defining acceptable-use and lane thresholds with the AI Officer; C on bias-battery acceptance (residual-disparity sign-off)."
+          },
+          {
+            "role": "IT (Data Engineering / Platform / SRE)",
+            "responsibility": "R — Responsible for implementing and evidencing the technical controls: ingestion minimization gate (CP-02), append-only log + crypto-shredding + replay (CP-03), write-boundary enforcement (CP-04), KB data-quality gate (CP-06), bias-battery instrumentation (CP-07), OpenLineage materialization and data contracts (CP-08), consumption governance (CP-09). I on legal-basis decisions; C on DPIA technical sections."
+          },
+          {
+            "role": "Legal / General Counsel",
+            "responsibility": "C — Consulted on vendor DPA execution and Chapter V transfer instruments (R jointly with Data Eng on CP-01), Art. 6(4)/Art. 9(2) legal interpretations, and regulator interactions; I on operational telemetry and release changes."
+          }
+        ],
+        "aiActLead": "APPOINTMENT: name the Chief AI Officer as AI Act lead (single accountable owner for provider/deployer obligations under Arts. 9–15, 17, 26, 72), formally mandated by the Ethics Committee with delegated authority to block releases at the production gate and direct budget for CP-01..CP-09 remediation. The role owns the AIMS evidence repository (CTRL-11), the AI system inventory, and represents the organization toward market-surveillance authorities and the notified body. It is deliberately DISTINCT from the DPO: the AI Act lead drives conformity engineering (a build-and-operate mandate), whereas the DPO must remain an independent second-line advisor (GDPR Art. 38(6) conflict-of-interest bar prohibits merging the roles on a system where the AI lead determines purposes and means).\n\nARTICULATION WITH THE DPO — a defined interface, not an org-chart afterthought: (1) JOINT INSTRUMENTS — one integrated FRIA+DPIA document with dual sign-off; the DPIA records the Art. 22 reclassification dependency on CTRL-01 exactly as CP-04 requires, and the AI Act lead cannot close CP-04 without DPO countersignature. (2) STANDING CADENCE — DPO sits on the monthly Data & Model Risk Board and the Change-Control Board with a veto-escalation right to the Ethics Committee (not a veto in-line, preserving DPO independence while guaranteeing escalation). (3) DIVISION OF LABOR ON SHARED OBLIGATIONS — Art. 10 data governance: AI Act lead accountable for quality/representativeness/bias (CP-06/CP-07), DPO responsible for lawful-basis and minimization dimensions of the same datasets (CP-02/CP-05); Art. 12/19 logging: AI Act lead owns retention and replay, DPO validates that log content stays within the Art. 6(1)(c) minimization bound. (4) SINGLE ESCALATION PATH — any conflict between minimization and auditability (e.g. preserving age_band for the bias battery) is decided by the Ethics Committee with both positions minuted, never settled bilaterally. (5) TRANSITION MILESTONE — the appointment takes effect pre-production with a 30-day mandate to co-sign the gate-readiness assessment on CP-01 (transfers) and CP-05 (legal basis), the two items where AI Act and GDPR accountabilities are most entangled."
+      }
+    },
+    {
+      "stepId": "STEP-06",
+      "assetId": "AGENT-CHANGE-MANAGER",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "chg-adkar-present",
+          "description": "STEP-06: AI compliance ADKAR plan (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "chg-training-program",
+          "description": "STEP-06: training program (≥ 1 population: leads / Data / Business)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "chg-adoption-kpis",
+          "description": "STEP-06: governance adoption KPIs present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "adkarPlan": "ADKAR ASSESSMENT — AI COMPLIANCE OPERATING MODEL (ISO 42001 AIMS + AI Act production gate) — per affected population, scored 1–5 with barrier point and priority action.\n\n■ POPULATION 1 — AI ACT LEADS & GOVERNANCE BODIES (Chief AI Officer, AI Governance Office, Ethics Committee members, DPO, CISO, General Counsel)\n• Awareness 4/5 — These actors drafted or co-signed the framework; regulatory stakes (Annex III §5(c) high-risk classification, no-pass-no-deploy gate) are internalized. Residual gap: the independent ethics voice and non-executive members may not yet grasp the operational weight of gate minuting and residual-risk acceptance (CP-07 bias disparities).\n• Desire 4/5 — Mandate is formal (board delegation, budget authority, release-blocking power). Watch point: the AI Act lead / DPO articulation creates structural tension by design (build mandate vs. independent second line); Desire erodes if the Ethics Committee escalation path (minimization vs. auditability, e.g. age_band) is perceived as slow or political.\n• Knowledge 3/5 — Deep on GDPR and risk; heterogeneous on ISO 42001 mechanics (Statement of Applicability, Clause 9.3 management review, PDCA evidence discipline) and on the tuple-based change-control doctrine (bias as a property of {model_id, prompt_template_version, kb_snapshot_hash, calibration_config_version}).\n• Ability 2/5 — BARRIER POINT. Running a stage-gate G1–G6 with versioned evidence, dual FRIA+DPIA sign-off, and a 30-day co-signed gate-readiness on CP-01/CP-05 has never been rehearsed. First gate execution will expose process friction (who minutes, what counts as evidence, how a BLOCKER is escalated ad hoc).\n• Reinforcement 2/5 — Quarterly Clause 9.3 review exists on paper only; no track record. Priority action: DRY-RUN the full G1–G6 gate on the triage system before the real submission, with the Ethics Committee minuting a mock decision, then embed gate-verdict quality into the AI Officer's and business owner's objectives.\n\n■ POPULATION 2 — DATA & TECHNICAL TEAMS (Data Engineering, Platform/SRE, Data Science, security engineering under CISO)\n• Awareness 3/5 — Teams know the correction plans exist (CP-01..CP-09) but often read them as a compliance backlog imposed from above, not as the condition of production existence for their system. The 'why' behind negative-test evidence (G2: prove minimization by attempted violation) is not yet culturally owned.\n• Desire 2/5 — BARRIER POINT. Anticipated resistance: (a) evidence production (OpenLineage materialization CP-08, hash-chain integrity, replay proofs CP-03) is perceived as overhead competing with feature delivery; (b) the Change-Control Board re-triggering full bias/robustness batteries on ANY tuple change is seen as a velocity tax — a prompt tweak now costs a battery run. Mitigation: frame the tuple discipline as the thing that makes releases defensible and reversible; celebrate first gate passes publicly; give Data Eng an R-role voice on the Data & Model Risk Board (already granted) and visible burndown credit.\n• Knowledge 3/5 — Strong engineering skills; gaps on the legal semantics they must now encode (Art. 9(2) conditions per data element, Art. 6(4) compatibility, why the recommendation/commit boundary reclassifies the system out of Art. 22, crypto-shredding as erasure mechanism vs. deletion).\n• Ability 3/5 — Controls are buildable with current skills; the gap is evidencing (writing negative tests as compliance artifacts, structuring the AIMS repo entries per CTRL-11, data contracts per CP-08).\n• Reinforcement 2/5 — No feedback loop yet from CP-10 KPIs back to the teams. Priority action: monthly Data & Model Risk Board publishes the burndown and KPI dashboard (redaction-gate pass rate, replay success, erasure-propagation latency) to the teams that produce them, with named ownership.\n\n■ POPULATION 3 — BUSINESS / CLAIMS OPERATIONS (Chief Claims Officer, claims handlers, team leads, quality reviewers)\n• Awareness 2/5 — BARRIER POINT. Handlers do not yet know that they ARE a compliance control: Art. 14 human oversight, blind re-review sampling (CTRL-07), override discipline and 100%-volume manual-queue capacity (CP-09) make the human loop a certified component of the system. Most see the triage tool as productivity software, not a high-risk AI system whose lawfulness depends on their vigilance.\n• Desire 2/5 — BARRIER POINT (twin). Two resistance vectors: (1) fear that override monitoring becomes individual surveillance/performance scoring — must be explicitly ruled out in the acceptable-use policy and said out loud by the Chief Claims Officer; (2) automation complacency risk in reverse: handlers may resent being asked to genuinely re-review what 'the machine already did'. The blind re-review design (CTRL-07) helps: position it as protecting handler judgment, not auditing handlers.\n• Knowledge 1/5 — Lowest score of the assessment. Handlers need concrete, scenario-based knowledge: what the recommendation/commit boundary means at their screen, when they MUST override, how the manual queue works in degraded mode, what a fairness signal looks like (time-to-resolution disparities), how to raise a post-market monitoring signal (Art. 72).\n• Ability 1/5 — Untested by definition until the handler capacity test (CP-09 / gate G6) runs. Priority action: run the 100%-volume capacity simulation as a TRAINING event, not only a gate artifact — same exercise, double value.\n• Reinforcement 2/5 — Override quality and re-review participation must enter team rituals (weekly quality huddles) and the Chief Claims Officer's own accountability line (already A on Art. 14), with a no-blame charter on overrides.\n\n■ SEQUENCING LOGIC (PROSCI) — Address Business Awareness/Desire FIRST (sponsor-led, Chief Claims Officer visible from day 1, per PROSCI's #1 success factor: active sponsorship), in parallel with Data-team Desire (manager coalition via Data Eng lead + Data Science lead on the Risk Board). Governance-tier Ability is unblocked by the gate dry-run. No training (Knowledge) before the Awareness campaign lands — ADKAR is sequential: training a population that lacks Desire produces compliant attendance and zero adoption.",
+        "trainingProgram": [
+          {
+            "population": "AI Act leads (Chief AI Officer, AI Governance Office, Ethics Committee, DPO, CISO, General Counsel)",
+            "content": "TRACK A — 'Governing a high-risk AI system' (3 half-days + 1 simulation, executive format). Module A1 (½ day): AI Act obligations map for providers/deployers — Arts. 9–15, 17, 26, 72 walked through against THIS system; Annex III §5(c) qualification rationale; conformity-assessment and notified-body interaction protocol. Module A2 (½ day): ISO/IEC 42001 mechanics — AIMS scoping, Statement of Applicability, Clause 5 risk appetite, Clause 9.3 management review, PDCA evidence discipline, CTRL-11 repository standards (what is admissible evidence, versioning, minuting). Module A3 (½ day): the interfaces — integrated FRIA+DPIA dual sign-off workshop (AI Act lead + DPO co-produce a mock assessment on CP-04's Art. 22 reclassification); division-of-labor drill on Art. 10 and Art. 12/19; escalation protocol rehearsal on a minimization-vs-auditability conflict (age_band case). Module A4 — CAPSTONE SIMULATION (1 day): full G1–G6 production-gate dry-run with real CP evidence packets, Ethics Committee mock deliberation and minuted verdict, including one planted BLOCKER (G3 transfer defect) to rehearse the ad-hoc escalation. OBJECTIVES: every committee member can state the gate criteria and their own decision rights without notes; AI Act lead and DPO have co-signed one complete mock gate-readiness assessment before the real 30-day CP-01/CP-05 milestone; measured via simulation scorecard and post-session decision-rights quiz (target ≥90%).",
+            "population_note": ""
+          },
+          {
+            "population": "Data teams (Data Engineering, Platform/SRE, Data Science, security engineering)",
+            "content": "TRACK B — 'Compliance engineering as code' (4 × ½-day hands-on labs + office hours). Module B1: Legal semantics for engineers — plain-language decode of what they implement: Art. 9(2) per-element conditions, Art. 6(4) compatibility, minimization gate logic (CP-02), why the recommendation/commit write-boundary (CP-04) keeps the system out of Art. 22, crypto-shredding as legally valid erasure (CP-03). Format: one control, one law article, one failing test — no legal theory without a code artifact. Module B2: Evidence-driven engineering lab — write negative tests that PROVE controls (attempt a minimization bypass and capture the block; attempt a write past the boundary and capture the IAM deny); structure the artifact for the AIMS repo (CTRL-11) so it survives an auditor. Module B3: Lineage & contracts lab — OpenLineage materialization (CP-08), data contracts with the obligation register mapping {lawful basis, retention, residency, quality SLA, owner} (CP-10), KB quality gate wiring (CP-06). Module B4: The tuple discipline — why bias is a property of {model_id, prompt_template_version, kb_snapshot_hash, calibration_config_version}; hands-on: submit a prompt-template change through the Change-Control Board process, trigger and interpret the bias/robustness battery (CP-07), read calibration drift. OBJECTIVES: 100% of engineers touching the pipeline certified on B1–B2 before gate G2 submission; each squad produces at least one real gate-admissible evidence artifact during the labs (training output = compliance output); zero tuple changes released without battery re-execution from week 1 post-training.",
+            "population_note": ""
+          },
+          {
+            "population": "Business (Chief Claims Officer, claims handlers, team leads, quality reviewers)",
+            "content": "TRACK C — 'You are the human oversight' (kickoff + 2 × 2h scenario sessions + capacity drill + ambassador layer). Module C0 — SPONSOR KICKOFF (30 min, Chief Claims Officer in person, non-delegable): why the system is high-risk, why handler judgment is a certified safety component, and the explicit no-surveillance commitment — override data governs the SYSTEM, never individual performance scoring; no-blame charter on overrides signed publicly. Module C1 (2h, scenario-based): operating the recommendation/commit boundary — the AI recommends, the handler commits; when to override (worked cases: confident-but-wrong triage, missing-context claims, vulnerable-claimant signals); how blind re-review (CTRL-07) works and why blindness protects their judgment; spotting fairness signals (time-to-resolution disparities) and filing an Art. 72 post-market monitoring signal in under 2 minutes. Module C2 (2h): degraded-mode operations — manual-queue procedures, lane thresholds, escalation to team lead, incident reporting path via CISO's IR process. Module C3 — CAPACITY DRILL: the CP-09 100%-volume manual-queue test run as a live team exercise (doubles as the G6 gate evidence). AMBASSADOR LAYER: 1 trained 'AI oversight champion' per claims team (extra ½ day on bias-battery basics and override-pattern reading) as first-line peer support and feedback channel to the Data & Model Risk Board. OBJECTIVES: 100% of handlers complete C0–C2 BEFORE production authorization (hard G6 prerequisite); scenario-assessment pass rate ≥85% on override decisions; capacity drill demonstrates sustained 100%-volume handling; every handler can name the monitoring-signal path unprompted at 30-day spot check."
+          }
+        ],
+        "adoptionKpis": [
+          "GATE DISCIPLINE — % of production releases passing through the full G1–G6 stage-gate with minuted Ethics Committee decision and versioned evidence in the AIMS repo (CTRL-11). Milestones: gate dry-run completed with mock minutes by M1; 100% of releases gated from first production authorization onward; zero 'retrospective evidence' findings at first Clause 9.3 quarterly review.",
+          "TRAINING COVERAGE & MASTERY — % of each population trained and assessed. Milestones: 100% of Ethics Committee + AI Act lead + DPO through Track A incl. capstone simulation by M1 (before the 30-day CP-01/CP-05 co-sign milestone); 100% of pipeline engineers certified B1–B2 before G2 submission (M2); 100% of claims handlers through C0–C2 with ≥85% scenario pass rate before G6 (hard deploy prerequisite); refresher completion ≥95% annually.",
+          "TUPLE CHANGE-CONTROL COMPLIANCE — % of changes to (model_id, prompt_template_version, kb_snapshot_hash, calibration_config_version) that triggered bias/robustness battery re-execution before release. Milestone: 100% from week 1 post-Track-B, sustained; any bypass = BLOCKER incident reviewed at the next Data & Model Risk Board.",
+          "CORRECTION-PLAN BURNDOWN — CP-01..CP-10 items closed with gate-admissible evidence vs. plan. Milestones: CP-01 (transfers, hard BLOCKER) and CP-05 (legal basis) co-signed by AI Act lead + DPO within the 30-day mandate; full burndown to zero before production authorization; monthly velocity tracked at the Data & Model Risk Board.",
+          "HUMAN-OVERSIGHT VITALITY (Art. 14 anti-rubber-stamping) — override rate within expected band (neither ~0% = automation complacency nor spiking = model distrust), blind re-review sampling completion ≥ target per CTRL-07, and manual-queue capacity re-verified at 100% volume. Milestones: baseline band defined at G6 drill; monthly review from go-live; divergence beyond band for 2 consecutive months triggers Ethics Committee review.",
+          "EVIDENCE & CONTROL HEALTH (CP-10 KPI set at Clause 9.3 review) — redaction-gate pass rate ≥99%, hash-chain integrity 100%, erasure-propagation latency within SLA, replay success 100%, bias-battery recency within policy for the live tuple. Milestones: dashboard live before go-live; all thresholds green at first quarterly management review; trend published back to producing teams monthly (reinforcement loop).",
+          "GOVERNANCE RITUAL ADHERENCE — Data & Model Risk Board held monthly with DPO present and quorum, Change-Control Board decision latency ≤5 business days, Ethics Committee quarterly + 100% of ad-hoc BLOCKER escalations convened ≤10 business days. Milestones: 3 consecutive on-cadence months by end of quarter 1; zero unminuted decisions.",
+          "POST-MARKET SIGNAL RESPONSIVENESS (Art. 72) — number of monitoring signals raised by handlers/ambassadors and median time from signal to Risk Board disposition. Milestones: signal path live at go-live; ≥1 signal exercised (real or test) in month 1 proving the channel works; median disposition ≤15 business days; handler awareness of the path ≥90% at 30-day spot check.",
+          "ADOPTION SENTIMENT & RESISTANCE TRACKING — pulse survey per population (5 questions mapped to ADKAR dimensions) at M0 / M3 / M6. Milestones: Business Desire score rises from baseline ~2/5 to ≥3.5/5 by M3 (validating the no-surveillance commitment landed); Data-team Desire ≥3.5/5 by M3; no population regressing on any ADKAR dimension between waves; resistance log reviewed monthly with named mitigation owners."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-06C",
+      "assetId": "AGENT-AUDIT-METHODO-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "fail",
+      "results": [
+        {
+          "id": "audit-verdict-cleared",
+          "description": "STEP-06C: counter-review verdict = « cleared » (a « returned » verdict halts the spine before STEP-07)",
+          "severity": "blocking",
+          "passed": false
+        },
+        {
+          "id": "audit-bias-log",
+          "description": "STEP-06C: cognitive-bias log documented (non-empty — an empty log is a rubber stamp, anti-theater)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "audit-exit-criteria",
+          "description": "STEP-06C: ISTQB exit criteria applied to the audit deliverable (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "audit-reservations",
+          "description": "STEP-06C: documented reservations list present (if returned)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "verdict": "returned",
+        "biasLog": [
+          {
+            "bias": "Correlated-model blind spot",
+            "impact": "The ADKAR assessment was produced by an AI agent on the same LLM family as this auditor; scoring intuitions (e.g., which population resists most) may be correlated errors rather than independent judgments. Mitigation: treat all 1–5 scores as hypotheses until the M0 pulse survey provides measured baselines, and submit the sequencing logic to a different model or a human PROSCI practitioner for cross-validation.",
+            "": ""
+          },
+          {
+            "bias": "Fluency/halo bias (auditor-side)",
+            "impact": "The deliverable is dense with correct PROSCI and AI Act vocabulary (CLARC-adjacent framing, Annex III, ISO 42001 clauses), which induces leniency — fluency is not validity. Mitigation: each claim was checked against PROSCI doctrine (barrier-point rule, 5-plan structure) and ISTQB exit criteria rather than accepted on stylistic authority; this surfaced the inconsistent barrier threshold and the missing communication-plan artifact.",
+            "": ""
+          },
+          {
+            "bias": "Confirmation/proximity bias (embedded in the audited artifact)",
+            "impact": "Population 1 Awareness/Desire are scored 4/5 for the very actors who 'drafted or co-signed the framework' — authors assessing their own readiness systematically over-score. Impact: governance-tier change risk may be understated, and the plan invests almost no Desire work there. Mitigation: reservation R3 requires the M0 survey to include Population 1 rather than exempting sponsors from measurement.",
+            "": ""
+          },
+          {
+            "bias": "Minimized tier — middle management",
+            "impact": "Team leads and quality reviewers are folded into Population 3 and the 'manager coalition' is one clause in the sequencing note, yet PROSCI identifies people managers as the primary resistance amplifier/absorber (CLARC roles). Impact: the no-surveillance commitment made by the Chief Claims Officer can be silently undone at team-lead level. Mitigation: reservation R4 demands a distinct manager population with its own ADKAR line and coaching plan.",
+            "": ""
+          }
+        ],
+        "exitCriteria": [
+          {
+            "criterion": "Traceability — each barrier point maps to a priority action, each population maps to a training track, each track objective maps to at least one adoption KPI with milestones",
+            "met": true,
+            "": ""
+          },
+          {
+            "criterion": "Evidence — ADKAR scores rest on measured data or documented assessment inputs",
+            "met": false,
+            "": ""
+          },
+          {
+            "criterion": "Reproducibility — the barrier-point determination rule is stated and consistently applied across populations",
+            "met": false,
+            "": ""
+          },
+          {
+            "criterion": "Completeness of the PROSCI artifact set — the plans the sequencing logic depends on (communication/awareness campaign, sponsor roadmap, resistance-management log) exist as deliverables, not references",
+            "met": false,
+            "": ""
+          },
+          {
+            "criterion": "Measurability — training objectives and adoption KPIs have quantified targets, owners or review venues, and dated milestones (≥85% scenario pass rate, 100% coverage gates, M0/M3/M6 pulse waves)",
+            "met": true,
+            "": ""
+          },
+          {
+            "criterion": "Gate integration — training completion and capacity drill are wired as hard prerequisites into the G1–G6 production gate (Track C before G6, Track B before G2), consistent with ISTQB entry/exit-criteria discipline",
+            "met": true,
+            "": ""
+          }
+        ],
+        "reservations": [
+          "R1 — Inconsistent barrier-point rule (method error). Finding: the assessment implicitly treats only scores ≤2 as barriers — Population 1 flags Ability 2/5 although Knowledge 3/5 precedes it; Population 2 flags Desire 2/5 although Awareness 3/5 precedes it; Population 3 declares 'twin' barriers (Awareness AND Desire). Reference: PROSCI ADKAR — the barrier point is the FIRST weak dimension in the sequence, and remediation targets that single point first; downstream weakness is expected consequence, not co-barrier. Recommendation: state the threshold explicitly (e.g., 'barrier = first dimension ≤2; dimensions at 3 are watch items'), re-derive the barrier per population under that rule, and collapse Population 3 to a single barrier (Awareness) with Desire as the immediate next.",
+          "R2 — Missing awareness/communication plan the sequencing depends on (blocking dependency). Finding: the sequencing logic mandates 'no training before the Awareness campaign lands', but no communication plan, message map, or sponsor roadmap exists in the deliverable — only Module C0 (a 30-minute kickoff) partially covers it. Reference: PROSCI methodology — the change-management plan comprises five plans (communication, sponsor roadmap, coaching, training, resistance management); training alone cannot carry Awareness/Desire. Recommendation: produce the communication plan (sender matrix: business messages from the Chief Claims Officer, personal-impact messages from direct managers) and the sponsor roadmap as companion artifacts before Track C scheduling is committed.",
+          "R3 — Unevidenced baseline scores presented as assessment (evidence gap). Finding: all fifteen ADKAR scores are expert judgment; the first measurement (M0 pulse survey) is scheduled AFTER the plan built on those scores, and no confidence qualifier distinguishes hypothesis from measurement. Reference: ISTQB CTAL-TM exit-criteria discipline and ISO 19011:2018 §6.4 — findings must rest on verifiable audit evidence; ISO 42001 PDCA requires baselining before acting. Recommendation: label the current scores 'pre-baseline hypotheses', run the M0 pulse (including Population 1 — do not exempt sponsors) before finalizing training volumes, and define a re-planning trigger if measured scores deviate ≥1 point from hypothesis.",
+          "R4 — Middle management not treated as a distinct ADKAR population (coverage gap). Finding: claims team leads and Data Eng/Science leads appear only as instruments ('manager coalition', 'ambassador layer') and are never scored; no coaching plan exists for them. Reference: PROSCI — people managers fulfill five distinct change roles (communicator, liaison, advocate, resistance manager, coach) and are themselves a population that must traverse ADKAR before they can carry others. Recommendation: add a fourth population line (people managers, mixed business/technical) with its own scores, barrier point, and a coaching-plan module ahead of Track C rollout.",
+          "R5 — Reinforcement under-designed relative to its own scores (design weakness, non-blocking). Finding: Reinforcement scores 2/5 across all three populations, yet reinforcement mechanisms are scattered (objectives embedding, huddles, KPI publication) with no owner for sustainment after go-live and no consequence management beyond the tuple-bypass BLOCKER. Reference: PROSCI ADKAR 'R' — without designed reinforcement, adoption decays to baseline; ISO 42001 Clause 10 continual improvement. Recommendation: name a single reinforcement owner per population (Chief Claims Officer / Data & Model Risk Board chair / AI Governance Office), tie the M6 pulse-survey wave to a formal Clause 9.3 management-review input, and define the corrective loop when a KPI regresses two consecutive periods (KPI 5 has one — generalize the pattern)."
+        ]
+      }
+    }
+  ]
+}
