@@ -1,0 +1,323 @@
+{
+  "status": "failed",
+  "failure": {
+    "stepId": "STEP-04",
+    "kind": "eval-gate",
+    "message": "Eval gate \"STEP-04\" failed (1 blocking criterion(s): rh-shortlist-validated)"
+  },
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-BUSINESS-ANALYST",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "ba-need-sheet",
+          "description": "STEP-01: structured need sheet (context, mission, expected deliverables)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-moscow",
+          "description": "STEP-01: MoSCoW skills grid with the four axes (must/should/could/wont)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-must-nonempty",
+          "description": "STEP-01: at least one non-negotiable Must-have skill",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-culture-fit",
+          "description": "STEP-01: sought personality profile / culture fit present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "ba-work-env",
+          "description": "STEP-01: work environment and conditions (remote, tools, rituals) present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "needSheet": "CONTEXT: The company is scaling a 5-person platform team (Python/TypeScript stack, weekly demo cadence) and needs to fill a Senior AI/LLM Engineer position within 3 months. The role sits on the platform team, hybrid in Paris (2 days on-site/week), permanent contract (€70-85k) with a freelance-equivalent budget also open (€650-750/day), suggesting flexibility on contract type if the right profile is freelance-only.\n\nMISSION: Design, build, and industrialize production-grade LLM/RAG capabilities for the platform. Own the evaluation layer for LLM outputs (quality, hallucination, latency, cost) and apply MLOps fundamentals (versioning, deployment, monitoring) to make these pipelines reliable and observable in production — not just prototypes. Work in close collaboration with the existing 5-person Python/TypeScript team, presenting progress in the team's weekly demo ritual.\n\nEXPECTED DELIVERABLES:\n- One or more production RAG pipeline(s) deployed, monitored, and documented.\n- An evaluation framework/dashboard for LLM outputs (accuracy, hallucination rate, latency, cost tracking).\n- MLOps foundations: versioning of models/prompts/data, CI/CD for LLM components, basic observability/alerting.\n- Technical documentation and knowledge transfer to the platform team.\n- Regular contributions to the weekly demo cadence.\n\nRECRUITMENT PROCESS: Technical interview + practical RAG case study + reference checks. Anti-fraud controls required: diploma verification, LinkedIn cross-check, professional reference calls.",
+        "moscow": {
+          "must": [
+            "Strong Python proficiency (production-grade code, not notebooks-only)",
+            "Hands-on experience building and running LLM/RAG systems in production (not just POC)",
+            "Experience designing and running LLM evaluation (quality, hallucination, latency, cost metrics)",
+            "MLOps basics: model/prompt/data versioning, deployment, monitoring"
+          ],
+          "should": [
+            "TypeScript proficiency for cross-stack collaboration with the platform team",
+            "Kubernetes experience for deployment/orchestration",
+            "Prior experience in a startup or fast-paced small-team environment",
+            "Comfort with weekly demo / short-feedback-loop rituals"
+          ],
+          "could": [
+            "Experience with multi-agent orchestration frameworks",
+            "Advanced MLOps: model registries, feature stores, automated retraining pipelines",
+            "Prompt engineering / fine-tuning at scale",
+            "Experience with vector databases and retrieval optimization at scale"
+          ],
+          "wont": [
+            "Full DevOps/SRE ownership of infrastructure beyond the platform's AI scope",
+            "Classic ML engineering unrelated to LLMs/generative AI",
+            "End-to-end product/frontend ownership beyond TypeScript collaboration",
+            "People management responsibilities (individual contributor role)"
+          ]
+        },
+        "cultureFit": "Autonomous but team-oriented individual contributor, comfortable operating in a small (5-person) cross-functional platform team without heavy process overhead. Production-first mindset: values shipping reliable, observable systems over research-only exploration. Pragmatic about trade-offs and transparent about limitations (critical for evaluation/hallucination work — no overselling model capabilities). Adapts well to a fast, iterative pace with weekly demo accountability. Open to hybrid work and, given the dual permanent/freelance budget framing, flexible on contract format. Prior startup exposure is a plus as a proxy for comfort with ambiguity and fast iteration.",
+        "workEnv": "Hybrid position based in Paris, 2 days on-site per week. Embedded in a 5-person platform team working across a shared Python/TypeScript stack. Team ritual: weekly demos driving short feedback loops and visible incremental delivery. Contract framed as permanent (€70-85k) but explicitly priced with a freelance day-rate equivalent (€650-750/day), indicating openness to either employment model. Hiring urgency is high (3-month fill target), so the process is designed to move fast: technical interview, practical RAG case study, and reference checks, with anti-fraud verification (diplomas, LinkedIn, references) as a standard control."
+      }
+    },
+    {
+      "stepId": "STEP-02A",
+      "assetId": "AGENT-CONSULTANT-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "tech-grid-floor",
+          "description": "STEP-02A: technical assessment grid — ≥ 3 criteria (floor)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "tech-grid-6-10",
+          "description": "STEP-02A: the full 6-10 criteria technical grid (ideal)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "tech-questions-floor",
+          "description": "STEP-02A: calibrated interview questions — ≥ 3 (floor)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "tech-questions-10-15",
+          "description": "STEP-02A: the full 10-15 calibrated interview questions (ideal)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "tech-benchmark",
+          "description": "STEP-02A: 2026 market-level benchmark present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "assessmentGrid": [
+          {
+            "criterion": "Python engineering for production LLM systems",
+            "weight": "High — Must-have",
+            "scale": "1 = notebook-only / prototype scripts; 3 = writes tested, typed Python services but limited production ownership; 5 = ships and maintains production-grade, CI-tested Python services powering LLM features"
+          },
+          {
+            "criterion": "RAG/LLM systems shipped to production",
+            "weight": "High — Must-have",
+            "scale": "1 = demo/POC experience only; 3 = has taken one RAG system to production with basic monitoring; 5 = has designed, deployed and iterated multiple production RAG pipelines under real user load"
+          },
+          {
+            "criterion": "LLM evaluation & quality assurance design",
+            "weight": "High — Must-have",
+            "scale": "1 = no formal evaluation, relies on manual spot-checks; 3 = has built ad hoc eval scripts (accuracy or latency only); 5 = has built a reusable evaluation framework/dashboard covering hallucination rate, accuracy, latency and cost"
+          },
+          {
+            "criterion": "MLOps fundamentals (versioning, deployment, monitoring)",
+            "weight": "High — Must-have",
+            "scale": "1 = manual, undocumented deployments; 3 = versions models/prompts but no CI/CD or alerting; 5 = full versioning of models/prompts/data, CI/CD for LLM components, observability and alerting in production"
+          },
+          {
+            "criterion": "TypeScript proficiency & cross-stack collaboration",
+            "weight": "Medium — Should-have",
+            "scale": "1 = no TypeScript exposure; 3 = can read/debug TS services; 5 = comfortable contributing to and reviewing TypeScript code alongside the platform team"
+          },
+          {
+            "criterion": "Kubernetes / deployment orchestration",
+            "weight": "Medium — Should-have",
+            "scale": "1 = no container/orchestration exposure; 3 = can deploy with guidance; 5 = autonomous on K8s deployment, scaling and troubleshooting for AI workloads"
+          },
+          {
+            "criterion": "Fit for fast-paced, small-team environment",
+            "weight": "Medium — Should-have",
+            "scale": "1 = needs heavy process/documentation to be productive; 3 = adapts within a few weeks; 5 = thrives immediately with short feedback loops and weekly demo accountability"
+          },
+          {
+            "criterion": "Transparency & rigor on model limitations",
+            "weight": "Medium — Culture-critical",
+            "scale": "1 = tends to oversell capabilities, avoids discussing failure modes; 3 = acknowledges limitations when asked; 5 = proactively surfaces hallucination risk, edge cases and confidence levels without being prompted"
+          },
+          {
+            "criterion": "Vector databases & retrieval optimization at scale",
+            "weight": "Low — Could-have",
+            "scale": "1 = no exposure; 3 = has used a vector DB with default settings; 5 = has tuned chunking, embedding choice and retrieval strategy for measurable quality/latency gains at scale"
+          }
+        ],
+        "interviewQuestions": [
+          {
+            "question": "Walk me through how you would structure a Python codebase for a RAG service versus a one-off notebook experiment. What specifically changes — testing, packaging, config management?",
+            "level": "junior"
+          },
+          {
+            "question": "What is the difference between retrieval-augmented generation and fine-tuning, and what factors would make you choose one over the other for a given use case?",
+            "level": "junior"
+          },
+          {
+            "question": "How would you version a prompt template, and why does prompt versioning matter once a system is in production?",
+            "level": "junior"
+          },
+          {
+            "question": "Describe a RAG system you have taken from prototype to production. What broke first once it hit real traffic, and how did you diagnose and fix it?",
+            "level": "senior"
+          },
+          {
+            "question": "How do you measure hallucination rate in a production LLM pipeline? Walk me through the metric definition, the labeling process, and how you'd catch a regression before users do.",
+            "level": "senior"
+          },
+          {
+            "question": "Latency and cost often trade off against retrieval quality. Give a concrete example where you had to make that trade-off, and how you decided where to draw the line.",
+            "level": "senior"
+          },
+          {
+            "question": "What does your CI/CD pipeline look like for an LLM-powered service — what gets tested automatically before a prompt or model change ships?",
+            "level": "senior"
+          },
+          {
+            "question": "How would you design an evaluation dataset for a RAG system when you don't have ground-truth labels yet? What's your bootstrap strategy?",
+            "level": "senior"
+          },
+          {
+            "question": "Tell me about a time a model or pipeline change looked like an improvement in offline eval but caused problems in production. What did you learn about the gap between offline and online evaluation?",
+            "level": "senior"
+          },
+          {
+            "question": "How do you decide what to monitor and alert on for an LLM service in production, beyond standard infra metrics (CPU, memory, uptime)?",
+            "level": "senior"
+          },
+          {
+            "question": "How would you introduce an evaluation and MLOps discipline to a 5-person team that currently ships LLM features without formal versioning or monitoring? What do you prioritize in the first month?",
+            "level": "lead"
+          },
+          {
+            "question": "When would you push back on shipping an LLM feature because the evaluation results aren't good enough, given business pressure to demo progress weekly? How do you communicate that trade-off to non-technical stakeholders?",
+            "level": "lead"
+          },
+          {
+            "question": "How do you balance owning the evaluation/MLOps layer as an individual contributor with enabling the rest of the Python/TypeScript team to build on top of it without becoming a bottleneck?",
+            "level": "lead"
+          }
+        ],
+        "practicalExercise": "Practical RAG case study (2-3h, take-home or pair-programming session): Provide the candidate with a small, messy document corpus (e.g., 30-50 internal-style PDFs/markdown files) and a set of 15 evaluation questions with reference answers. Ask them to: (1) design and implement a minimal RAG pipeline (ingestion, chunking, embedding, retrieval, generation) in Python; (2) build a lightweight evaluation script that scores the pipeline's outputs against the reference answers on at least two axes (e.g., factual accuracy and hallucination rate), plus latency and estimated per-query cost; (3) propose — in a short written note, not necessarily implemented — how they would version prompts/data/model choices and what they'd monitor once this pipeline is live. Assess for: production-minded code structure (not notebook sprawl), a defensible evaluation methodology, and honest discussion of the pipeline's failure modes and limitations rather than overselling results.",
+        "marketBenchmark": "Paris market, 2026: Senior AI/LLM Engineers with proven production RAG + LLM-evaluation/MLOps experience (not just prototyping) are a scarce, high-demand profile. Permanent-contract base salaries for this seniority typically range €65-90k, so the stated €70-85k band is competitive but not top-of-market for a candidate who can demonstrably show production ownership (evaluation dashboards, CI/CD for LLM components, observability) rather than POC-only work — such candidates increasingly command €80-95k or negotiate equity/variable components. On the freelance side, €650-750/day is at or slightly below the going rate for this skill set in Paris, where comparable production LLM/MLOps freelancers command €700-900/day depending on Kubernetes and multi-pipeline ownership depth; expect some negotiation upward from strong candidates, especially those also fluent in TypeScript cross-stack collaboration. Given the 3-month fill target and the must-have combination of production RAG + evaluation design + MLOps fundamentals (a narrower intersection than \"has used an LLM API\"), recommend: (1) being ready to flex toward the top of both bands for candidates clearing all four must-haves, (2) leaning into the freelance-equivalent option to widen the pool, since many engineers with this exact skill profile operate as independents in the current market, and (3) not diluting the must-have bar — this combination is the actual differentiator versus the much larger pool of \"LLM API integration\" candidates."
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-REDACTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "red-job-ad",
+          "description": "STEP-03: publishable job ad (attractive, inclusive, complete)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-agency-brief",
+          "description": "STEP-03: recruitment-agency brief present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "red-linkedin-inmail",
+          "description": "STEP-03: LinkedIn InMail outreach message (subject + body) present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "red-reply-email",
+          "description": "STEP-03: application-received reply email template present",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "jobAd": "**Senior AI/LLM Engineer — Production RAG & Evaluation**\n📍 Paris (hybrid) · Permanent (€70–85K) or Freelance (€650–750/day) · Small, fast-paced team\n\n**About the role**\nWe're a small team shipping LLM-powered features to real users, with weekly demos and short feedback loops. We're looking for a senior engineer who has taken a RAG system beyond the prototype stage — someone who knows what breaks under real traffic, and who can build the evaluation and MLOps discipline our LLM stack currently lacks.\n\n**What you'll own**\n- Design, ship, and maintain production-grade, CI-tested Python services powering our RAG/LLM features — not notebook experiments.\n- Build a reusable evaluation framework covering hallucination rate, factual accuracy, latency, and cost — replacing ad hoc spot-checks.\n- Introduce MLOps fundamentals: versioning of prompts, models, and data; CI/CD for LLM components; observability and alerting in production.\n- Diagnose and fix what breaks when a RAG pipeline meets real user load.\n- Collaborate cross-stack with our TypeScript platform team — reading, debugging, and reviewing their code where it touches your pipelines.\n- Contribute to Kubernetes-based deployment and scaling as our AI workloads grow.\n- Speak plainly about model limitations, edge cases, and confidence levels — to the team and to non-technical stakeholders — without waiting to be asked.\n\n**Must-have**\n- Proven experience shipping and maintaining production Python services for LLM features (tested, typed, CI-integrated).\n- At least one RAG system designed, deployed, and iterated in production under real user load.\n- Experience building LLM evaluation/QA processes beyond manual review — ideally a reusable framework or dashboard.\n- Solid MLOps fundamentals: versioning, CI/CD, monitoring, alerting for LLM components.\n\n**Nice-to-have**\n- Comfortable reading, debugging, or contributing to TypeScript services.\n- Autonomous with Kubernetes deployment, scaling, and troubleshooting.\n- Experience tuning chunking, embeddings, and retrieval strategy at scale.\n\n**Why this role**\n- Real ownership: you'll define what \"production-ready\" means for our LLM stack, not just execute someone else's spec.\n- Fast feedback: weekly demos, short cycles, direct impact.\n- A team that values honesty about what the model *can't* do as much as what it can.\n\n**Process**: intro call → practical RAG case study (2–3h, take-home or paired) → team interview → offer. We're aiming to fill this role within 3 months and are open to both permanent and freelance/independent arrangements.\n\nOpen to candidates operating as freelancers/independent consultants (portage salarial or equivalent).",
+        "agencyBrief": "**Role:** Senior AI/LLM Engineer — Production RAG & Evaluation/MLOps\n**Location:** Paris, hybrid. **Comp:** €70–85K permanent or €650–750/day freelance-equivalent (flex upward for candidates clearing all must-haves). **Target fill:** 3 months.\n\n**Why this search is hard:** the must-have combination — production RAG ownership + LLM evaluation design + MLOps fundamentals — is a narrower intersection than \"has integrated an LLM API.\" Do not screen on API familiarity alone; screen on *production ownership evidence* (can they describe what broke first under real traffic, and how they measured/fixed it).\n\n**Must-have bar (do not dilute):**\n1. Python engineering for production LLM systems — tested, typed, CI-integrated services, not notebooks.\n2. Has shipped at least one RAG system to production under real user load (not POC/demo only).\n3. Has built an LLM evaluation process beyond manual spot-checks — ideally covering hallucination rate, accuracy, latency, cost.\n4. MLOps fundamentals — versioning of models/prompts/data, CI/CD, observability/alerting in production.\n\n**Should-have (differentiators, not gatekeepers):** TypeScript fluency for cross-stack review; Kubernetes autonomy; culture fit for a small, fast-paced, weekly-demo environment; proactive transparency about model limitations (watch for candidates who oversell capabilities in the screen — this is a culture-critical red flag for us).\n\n**Nice-to-have:** vector DB tuning at scale (chunking, embedding choice, retrieval optimization).\n\n**Sourcing guidance:** widen the pool by actively presenting the freelance/independent option — a meaningful share of engineers with this exact profile (production RAG + eval/MLOps) operate as independents in the current Paris market. Comparable freelancers command €700–900/day; be ready to negotiate toward the top of our band for candidates who clear all four must-haves, especially if TypeScript-fluent.\n\n**Screening flow:**\n- CV/portfolio screen against the 4 must-haves above — reject on missing evidence of *production* RAG ownership, not just LLM exposure.\n- Recruiter call: probe with the \"what broke first under real traffic\" question (see interview questions, senior tier) — this single question filters POC-only candidates fast.\n- Client-side: practical RAG case study (2–3h) assessing production-minded code structure, defensible evaluation methodology, and honesty about failure modes — then interview loop (junior/senior/lead question tiers available on request).\n\n**Market note:** €70–85K / €650–750/day is competitive but not top-of-market for this seniority; strong candidates may negotiate up to €80–95K or €700–900/day. Flag any candidate clearing all must-haves for a fast-tracked process given the 3-month deadline.",
+        "linkedinInMail": "**Subject: Production RAG + LLM evaluation — Paris, senior role**\n\nHi [First Name],\n\nI came across your background in [specific production RAG project / company] and wanted to reach out directly rather than send a generic pitch.\n\nWe're a small, fast-moving team in Paris shipping LLM-powered features to real users — weekly demos, short feedback loops — and we're looking for someone who has actually taken a RAG system past the prototype stage: seen what breaks under real traffic, and built the evaluation/MLOps discipline to catch it before users do.\n\nConcretely, you'd own:\n- Production-grade Python services for our RAG pipeline (not notebooks)\n- A reusable evaluation framework — hallucination rate, accuracy, latency, cost\n- MLOps fundamentals we don't yet have: prompt/model/data versioning, CI/CD, observability\n\nOpen to both permanent (€70–85K) and freelance/independent (€650–750/day, negotiable) arrangements — happy to structure around what works for you.\n\nIf a 20-minute conversation sounds useful, let me know a couple of times that work, or feel free to share a good time directly.\n\nBest,\n[Your name]\n[Company / role]",
+        "replyEmail": "Subject: We've received your application — Senior AI/LLM Engineer (RAG & Evaluation)\n\nHi [Candidate First Name],\n\nThank you for applying to the Senior AI/LLM Engineer role — we appreciate you taking the time.\n\nHere's what happens next:\n1. We're reviewing applications against the core requirements (production RAG experience, LLM evaluation design, MLOps fundamentals) and aim to get back to you within [X business days].\n2. If there's a fit, we'll schedule a short introductory call to talk through your experience and answer any questions about the role.\n3. Candidates moving forward will be invited to a practical RAG case study (2–3 hours, take-home or paired) before a final team interview.\n\nWe're hiring for this role on both permanent and freelance/independent terms, so feel free to mention your preference when we speak.\n\nIn the meantime, if you have any questions, just reply to this email.\n\nBest regards,\n[Your name]\n[Company]"
+      }
+    },
+    {
+      "stepId": "STEP-04",
+      "assetId": "AGENT-RH-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "fail",
+      "results": [
+        {
+          "id": "rh-scored-cvs",
+          "description": "STEP-04: CVs scored against the MoSCoW grid (Must met / missing)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "rh-fraud-report",
+          "description": "STEP-04: CV fraud / fake-profile detection report present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "rh-shortlist-validated",
+          "description": "STEP-04: <shortlist validated?> gateway — ≥ 3 REAL shortlisted candidates (rejects self-declared placeholders)",
+          "severity": "blocking",
+          "passed": false
+        },
+        {
+          "id": "rh-shortlist-3-5",
+          "description": "STEP-04: the shortlist holds 3 to 5 candidates (ideal)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "rh-comparison-table",
+          "description": "STEP-04: candidate comparison table (skills × criteria) present",
+          "severity": "advisory",
+          "passed": false
+        }
+      ],
+      "output": {
+        "scoredCvs": [
+          {
+            "candidate": "N/A — no CV/resume submitted",
+            "mustMet": "Cannot be assessed: the materials provided (job ad, agency brief, LinkedIn InMail template, candidate reply-email template) contain no candidate CV, resume, or profile to screen against the 4 must-have criteria (production Python/LLM services, production RAG ownership, LLM evaluation framework, MLOps fundamentals).",
+            "score": 0
+          }
+        ],
+        "fraudReport": "FACTUAL CHECK — no fraud/authenticity assessment was possible. The input supplied to this task consists exclusively of sourcing/hiring-process artifacts for the \"Senior AI/LLM Engineer — Production RAG & Evaluation\" role: (1) the public job ad, (2) the internal agency brief with the MoSCoW must-have bar, (3) a LinkedIn InMail outreach template, and (4) a candidate application-acknowledgment reply-email template. None of these documents is a candidate CV, resume, LinkedIn/GitHub profile export, or portfolio. Per the detection-fraude-cv-profils protocol, a fake-CV / fake-profile / keyword-stuffing / GenAI-fabrication analysis requires an actual candidate submission (CV text, LinkedIn URL/export, GitHub activity, or portfolio links) to check for: internal timeline inconsistencies, skill/seniority mismatches, unverifiable employers, stock-photo or reverse-image-search flags on profile pictures, GitHub commit-history authenticity, and generic/AI-generated phrasing patterns. No such artifact was provided, so no score, verdict, or risk flag can be issued without fabricating findings about a non-existent candidate. Recommended next step: submit the actual candidate CV(s) and public profile links for the 4 must-haves (production Python/LLM services, production RAG under real load, LLM evaluation framework, MLOps fundamentals) to run the full ATS-scoring + fraud-detection pass.",
+        "shortlist": [
+          {
+            "candidate": "No candidate data available (1/3)",
+            "justification": "Placeholder only — schema requires 3–5 shortlist entries, but zero CVs were submitted in this request. Do not treat as a real candidate."
+          },
+          {
+            "candidate": "No candidate data available (2/3)",
+            "justification": "Placeholder only — no CV/resume/profile was provided against which to screen the must-have criteria (production RAG, evaluation framework, MLOps, production Python)."
+          },
+          {
+            "candidate": "No candidate data available (3/3)",
+            "justification": "Placeholder only — request must be resent with actual candidate CVs or LinkedIn/GitHub profiles before a genuine shortlist, ATS scoring, or fraud check can be produced."
+          }
+        ],
+        "comparisonTable": []
+      }
+    }
+  ]
+}
