@@ -111,4 +111,43 @@ describe("WF-009 spine — loading and execution (mocked runner)", () => {
     const last = res.traces[4]!;
     expect(last.gate.results.find((r) => r.id === "sel-candidate-selected")?.passed).toBe(false);
   });
+
+  // Regression — reproduces the FIRST live run's hollow pass (no CVs in the seed): the
+  // agent honestly returned placeholder/refusal content that the bare presence checks
+  // waved through. The hardened gateways must now halt fail-closed on it.
+  it("hardened <shortlist validated?>: 3 self-declared placeholders (STEP-04) → halt (not a real shortlist)", async () => {
+    const broken = {
+      ...happyOutputs,
+      "STEP-04": {
+        ...(happyOutputs["STEP-04"] as object),
+        shortlist: [
+          { candidate: "Not applicable — placeholder 1", justification: "only to satisfy minItems:3" },
+          { candidate: "N/A — placeholder 2", justification: "no CVs were provided" },
+          { candidate: "None — placeholder 3", justification: "schema shape only" },
+        ],
+      },
+    };
+    const steps = loadSpine(WF_009_RECRUTEMENT_MANIFEST, sidecar, buildWf009RecrutementRegistry(), resolveAgent);
+    const res = await runSpine(steps, mockRunner(broken), {});
+    expect(res.status).toBe("failed");
+    expect(res.failure?.stepId).toBe("STEP-04");
+    expect(res.failure?.kind).toBe("eval-gate");
+    expect(res.traces[3]!.gate.results.find((r) => r.id === "rh-shortlist-validated")?.passed).toBe(false);
+  });
+
+  it("hardened <candidate selected?>: selectedCandidate = 'None — no candidate…' (STEP-05) → halt", async () => {
+    const broken = {
+      ...happyOutputs,
+      "STEP-05": {
+        ...(happyOutputs["STEP-05"] as object),
+        selectedCandidate: "None — no candidate can be selected",
+      },
+    };
+    const steps = loadSpine(WF_009_RECRUTEMENT_MANIFEST, sidecar, buildWf009RecrutementRegistry(), resolveAgent);
+    const res = await runSpine(steps, mockRunner(broken), {});
+    expect(res.status).toBe("failed");
+    expect(res.failure?.stepId).toBe("STEP-05");
+    expect(res.failure?.kind).toBe("eval-gate");
+    expect(res.traces[4]!.gate.results.find((r) => r.id === "sel-candidate-selected")?.passed).toBe(false);
+  });
 });

@@ -46,6 +46,8 @@ import {
   arrayLenBetween,
   minArrayLen,
   nonEmptyString,
+  affirmativeString,
+  countAffirmativeField,
 } from "./spine-helpers.js";
 
 // --- Local predicates (traced DoD shapes) ------------------------------------
@@ -195,9 +197,13 @@ const STEP04_CRITERIA: Criterion[] = [
   },
   {
     id: "rh-shortlist-validated",
-    description: "STEP-04: <shortlist validated?> gateway — shortlist of ≥ 3 qualified candidates",
+    description:
+      "STEP-04: <shortlist validated?> gateway — ≥ 3 REAL shortlisted candidates (rejects self-declared placeholders)",
     severity: "blocking",
-    check: (o) => minArrayLen(asRecord(o)["shortlist"], 3),
+    // Hardened after the first live run: an agent given no CVs honestly returned 3
+    // placeholder entries ("… only to satisfy minItems:3"), which a bare
+    // minArrayLen(3) waved through. A decision gateway must count REAL candidates.
+    check: (o) => countAffirmativeField(asRecord(o)["shortlist"], "candidate") >= 3,
   },
   {
     id: "rh-shortlist-3-5",
@@ -247,9 +253,14 @@ const STEP05_CRITERIA: Criterion[] = [
   },
   {
     id: "sel-candidate-selected",
-    description: "STEP-05: <candidate selected?> gateway — a selected candidate is named",
+    description:
+      "STEP-05: <candidate selected?> gateway — a REAL candidate is named (rejects 'none'/negative sentinels)",
     severity: "blocking",
-    check: (o) => nonEmptyString(asRecord(o)["selectedCandidate"]),
+    // Hardened after the first live run: the agent returned selectedCandidate =
+    // "None — no candidate can be selected", a non-empty string that nonEmptyString
+    // accepted — the exact NO branch this gateway must halt on. affirmativeString
+    // rejects the negative sentinel so the gate fails closed as intended.
+    check: (o) => affirmativeString(asRecord(o)["selectedCandidate"]),
   },
   {
     id: "sel-recommendation",
