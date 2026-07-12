@@ -72,3 +72,27 @@ export function isNumber(v: unknown): v is number {
 export function numberAtLeast(v: unknown, min: number): boolean {
   return isNumber(v) && v >= min;
 }
+
+/**
+ * Negative sentinels an agent honestly emits when it CANNOT fulfill a field
+ * ("None — no candidate can be selected", "N/A", "CANNOT BE ISSUED",
+ * "Not applicable — placeholder"). Anchored at the start with a word boundary so a
+ * real value ("Nanette", "Noah", "candidate-1") is never mistaken for a refusal.
+ */
+const NEGATIVE_SENTINEL =
+  /^\s*(n\/?a|none|no (candidate|selection|eligible|match|one|shortlist)|not (applicable|available|selected|provided)|unavailable|cannot|can't|tbd|to be (determined|defined|confirmed)|pending|placeholder|unknown|null|undefined)\b/i;
+
+/**
+ * `true` if `v` is a non-empty string that is NOT a negative sentinel. A DECISION
+ * gate (e.g. "a candidate is selected") must reject "none"/"n/a"/"cannot…" — checking
+ * presence alone (`nonEmptyString`) is fooled by an honest in-band refusal.
+ */
+export function affirmativeString(v: unknown): boolean {
+  return nonEmptyString(v) && !NEGATIVE_SENTINEL.test(v.trim());
+}
+
+/** Count of array items whose `key` field is an affirmative (non-sentinel) string. */
+export function countAffirmativeField(v: unknown, key: string): number {
+  if (!Array.isArray(v)) return 0;
+  return v.filter((e) => affirmativeString(asRecord(e)[key])).length;
+}
