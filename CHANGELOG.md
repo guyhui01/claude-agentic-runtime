@@ -7,6 +7,8 @@
 ---
 
 ## [Unreleased]
+
+## [0.7.0] - 2026-07-12 — Three live-proven backbones: Consulting, Pre-sales, and the compliance-audit counter-review gate 🧱
 > Model: Claude Opus 4.8
 
 ### ✨ Added
@@ -19,6 +21,15 @@
 
 ### 🐛 Fixed
 - **WF-001 INVEST criterion — determiner-agnostic (gate-semantics fix).** The advisory `po-us-format-invest` regex only accepted `As a`/`As an`, so valid stories opening with `As the …` (or a role with no determiner) were wrongly flagged off-template. Reproduced on the **WF-001 Fable live run** (`docs/audit/live-runs/wf-001-live-result.json`): 2 of 13 real stories failed, e.g. *"As the Head of B2B (sponsor), I want … so that …"*. Broadened `/as an? .+i want.+so that/i` → `/\bas\b .+\bi want\b.+\bso that\b/i` (`src/spines/wf-001-cadrage.ts`): only the three narrative anchors (`as …` / `i want …` / `so that …`) are enforced — determiner-agnostic — and a word boundary stops `was a` from being misread as the `as a` opener. Regression cases added (`test/wf-001-output-contract.test.ts`: `As the …`, no-determiner, `was a`). The fixed criterion passes all 13 real stories of the live trace; `npm test` **130/6** + `typecheck` green.
+
+### ⬆️ Dependencies
+- **`@anthropic-ai/claude-agent-sdk`** 0.3.195 → 0.3.201 (Dependabot #30).
+
+### Notes
+- Offline suite green at release: **165 passed / 12 skipped** + strict `typecheck` (live tests skipped by default → no token cost in CI).
+- **Three backbones proven live (billed runs, OAuth subscription only), 2026-07-11:** **WF-004** `completed` 6/6 on Opus 4.8 (opens the fourth domain, Management & Consulting); **WF-006** `completed` 6/6 on Opus 4.8 (the hardened opening `presales-go` gate returning GO on a legitimate opportunity, the pre-sales chain completing to the commercial proposal); **WF-008** `failed` **fail-closed at STEP-06C by design** on Fable (the counter-review gate returned the audit, `verdict="returned"`, halting the report — the first live trace of a gate blocking a deliverable). Verdicts judged per-criterion (`gate.results[].passed`), not on final status. Anonymized traces versioned under `docs/audit/live-runs/`.
+- The orchestrator is **unchanged** across all three backbones (ADR-0007, deterministic fail-closed eval gate, no LLM-as-judge).
+- The released version history below stays frozen in French (audit integrity).
 
 ## [0.6.0] - 2026-06-21 — Full FR → US English transition, live-proven in English 🌐
 > Model: Claude Opus 4.8
