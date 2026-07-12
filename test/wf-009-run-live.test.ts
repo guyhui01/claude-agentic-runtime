@@ -25,6 +25,8 @@ import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { runWf009 } from "../src/spines/run-wf-009.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 import { makeStepProgressHook } from "./live-progress.js";
+import { wf009CandidatePool } from "./fixtures/wf-009-outputs.js";
+import { affirmativeString, countAffirmativeField } from "../src/spines/spine-helpers.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_FILE =
@@ -60,6 +62,11 @@ describe.skipIf(!ENABLED)("WF-009 — LIVE RUN (billed, observed)", () => {
           teamContext: "5-person platform team, Python/TypeScript stack, weekly demos",
           assessment: "Tech interview + practical RAG case + reference checks",
           antiFraud: "Verify diplomas, LinkedIn, references — yes",
+          // Sourced candidate pool (SYNTHETIC / FICTIONAL — RGPD: never a real CV in a
+          // public, versioned trace). Carried unchanged through STEP-01→03 to reach the RH
+          // sourcing step (STEP-04), which scores it into a real shortlist. See the
+          // passthrough + RGPD note in src/spines/wf-009-recrutement.ts.
+          candidatePool: wf009CandidatePool,
         },
         runnerDeps: { caps: { maxBudgetUsd: 4.0, maxTurns: 15 } },
         onStep: makeStepProgressHook(PROGRESS_FILE),
@@ -97,6 +104,28 @@ describe.skipIf(!ENABLED)("WF-009 — LIVE RUN (billed, observed)", () => {
       );
 
       expect(["completed", "failed"]).toContain(res.status);
+
+      // Substance guard (the hollow-pass lesson baked into the test): a `completed` run
+      // must carry REAL content, not merely pass verdicts. Every invariant below is
+      // ALREADY gate-guaranteed for a completed run, so a legitimate run cannot fail them
+      // (no false negative that would waste the billed run) — they lock the intent and
+      // would catch a future gate regression that let a hollow completed slip through.
+      if (res.status === "completed") {
+        expect(res.traces).toHaveLength(6);
+        expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
+        const step04 = res.traces[3]!.output as Record<string, unknown>;
+        const step05 = res.traces[4]!.output as Record<string, unknown>;
+        // A shortlist of ≥ 3 REAL candidates (not sentinels) and a REAL selected candidate.
+        expect(countAffirmativeField(step04["shortlist"], "candidate")).toBeGreaterThanOrEqual(3);
+        expect(affirmativeString(step05["selectedCandidate"])).toBe(true);
+
+        // Observability for the content inspection: did the injected pool actually flow
+        // through and get scored (vs the agent inventing candidates)?
+        const poolIds = wf009CandidatePool.map((c) => c.candidateId);
+        console.log("pool provided     :", poolIds.join(", "));
+        console.log("STEP-04 shortlist :", JSON.stringify(step04["shortlist"]));
+        console.log("STEP-05 selected  :", JSON.stringify(step05["selectedCandidate"]));
+      }
     },
     1_800_000,
   );

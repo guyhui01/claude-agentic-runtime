@@ -34,6 +34,7 @@
  */
 
 import type { SpineManifest } from "../manifest/types.js";
+import type { JsonSchema } from "../handoff/types.js";
 import type { Criterion } from "../eval/types.js";
 import { CriterionRegistry } from "../eval/criteria-registry.js";
 import {
@@ -327,15 +328,55 @@ export function buildWf009RecrutementRegistry(): CriterionRegistry {
  * field per hop): moscow → assessmentGrid → jobAd → shortlist → selectedCandidate.
  * STEP-06 (offer) receives the immediate upstream field and synthesizes the prior
  * deliverables from its prose (WF-003/004 precedent).
+ *
+ * ── `candidatePool` PASSTHROUGH (mild, deliberate idiom deviation) ────────────────────
+ * The BPMN sourcing step STEP-04 scores candidate CVs, but CVs are EXOGENOUS to the
+ * workflow (they arrive from job boards / agencies after the ad is published) — no
+ * upstream backbone step produces them. The linear orchestrator only routes data via the
+ * previous step's output (run-spine.ts: `input = output`), so the only way to feed a
+ * candidate pool to STEP-04 WITHOUT changing the (live-proven, frozen) orchestrator is to
+ * carry it forward as a passthrough field through STEP-01→03. This is a "recruitment
+ * dossier that accumulates" — a conscious step away from the one-field-per-hop idiom.
+ *
+ * ⚠️ RGPD / demonstrator scope: the pool is SYNTHETIC and FICTIONAL by design (this repo
+ * is public and the live trace is versioned — a real CV would be personal data published
+ * with no legal basis, no retention limit, irreversibly). For a REAL deployment this
+ * passthrough would be the WRONG pattern: threading candidate data through steps that do
+ * not need it violates data minimization. A production system would inject the pool
+ * directly at STEP-04 via an ATS side-channel (an orchestrator evolution), never echo it
+ * through the need-sheet / job-ad authors. The passthrough is a demo affordance, not a
+ * blueprint for real candidate data.
  */
+
+/** One synthetic candidate profile (fictional). Anonymized handle, scoring-relevant fields. */
+const candidateItemSchema = objSchema([], {
+  candidateId: {
+    type: "string",
+    description: "Synthetic anonymized handle (e.g. CAND-01). Fictional — never a real person.",
+  },
+  headline: { type: "string", description: "One-line profile summary." },
+  yearsExperience: { type: "number", description: "Years of relevant experience." },
+  coreSkills: { type: "array", description: "Key skills, relevant to the MoSCoW grid." },
+  highlights: { type: "string", description: "Notable strengths / achievements." },
+  flags: { type: "string", description: "Points to verify (anti-fraud / references)." },
+});
+
+/** Passthrough candidate pool carried STEP-01→03 to reach STEP-04 sourcing (see header). */
+const candidatePoolSchema: JsonSchema = {
+  type: "array",
+  minItems: 5,
+  items: candidateItemSchema,
+  description:
+    "Sourced candidate pool (synthetic/fictional). PASSTHROUGH: carry forward UNCHANGED — do not alter, drop, or invent entries — so the RH sourcing step (STEP-04) can score real profiles.",
+};
 export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
   spineId: "WF-009-recrutement-backbone",
   steps: [
     {
       stepId: "STEP-01",
       assetId: "AGENT-BUSINESS-ANALYST",
-      // seed: recruitment context = runSpine's initial input.
-      output: objSchema(["needSheet", "moscow"], {
+      // seed: recruitment context (incl. the sourced candidatePool) = runSpine's initial input.
+      output: objSchema(["needSheet", "moscow", "candidatePool"], {
         needSheet: {
           type: "string",
           description: "Structured need sheet: context, mission, expected deliverables.",
@@ -350,14 +391,19 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
         // Advisory nudges ba-culture-fit / ba-work-env.
         cultureFit: { type: "string", description: "Sought personality profile / culture fit." },
         workEnv: { type: "string", description: "Work environment and conditions (remote, tools, rituals)." },
+        // Passthrough: echo the seed's candidate pool forward unchanged (see header).
+        candidatePool: candidatePoolSchema,
       }),
       criteriaIds: STEP01_CRITERIA.map((c) => c.id),
     },
     {
       stepId: "STEP-02A",
       assetId: "AGENT-CONSULTANT-IA",
-      input: objSchema(["moscow"], { moscow: { type: "object" } }),
-      output: objSchema(["assessmentGrid", "interviewQuestions"], {
+      input: objSchema(["moscow", "candidatePool"], {
+        moscow: { type: "object" },
+        candidatePool: candidatePoolSchema,
+      }),
+      output: objSchema(["assessmentGrid", "interviewQuestions", "candidatePool"], {
         // Blocking floor ≥ 3; the schema communicates the 6-10 ideal (advisory).
         assessmentGrid: arrOf(
           objSchema([], {
@@ -378,30 +424,41 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
         // Advisory nudges: optional practical exercise + market benchmark.
         practicalExercise: { type: "string", description: "Optional practical exercise / mini technical case." },
         marketBenchmark: { type: "string", description: "2026 market-level benchmark." },
+        // Passthrough: carry the candidate pool forward unchanged.
+        candidatePool: candidatePoolSchema,
       }),
       criteriaIds: STEP02A_CRITERIA.map((c) => c.id),
     },
     {
       stepId: "STEP-03",
       assetId: "AGENT-REDACTEUR-IA",
-      input: objSchema(["assessmentGrid"], { assessmentGrid: arr }),
-      output: objSchema(["jobAd"], {
+      input: objSchema(["assessmentGrid", "candidatePool"], {
+        assessmentGrid: arr,
+        candidatePool: candidatePoolSchema,
+      }),
+      output: objSchema(["jobAd", "candidatePool"], {
         jobAd: { type: "string", description: "Publishable job ad (attractive, inclusive, complete)." },
         // Advisory nudges red-agency-brief / red-linkedin-inmail / red-reply-email.
         agencyBrief: { type: "string", description: "Recruitment-agency brief (if outsourced)." },
         linkedinInMail: { type: "string", description: "LinkedIn InMail outreach message (subject + body)." },
         replyEmail: { type: "string", description: "Application-received reply email template." },
+        // Passthrough: last hop — carry the candidate pool forward to STEP-04 sourcing.
+        candidatePool: candidatePoolSchema,
       }),
       criteriaIds: STEP03_CRITERIA.map((c) => c.id),
     },
     {
       stepId: "STEP-04",
+      // Consumes the carried candidatePool (end of the passthrough): scores REAL profiles.
       assetId: "AGENT-RH-IA",
-      input: objSchema(["jobAd"], { jobAd: str }),
+      input: objSchema(["jobAd", "candidatePool"], {
+        jobAd: str,
+        candidatePool: candidatePoolSchema,
+      }),
       output: objSchema(["scoredCvs", "fraudReport", "shortlist"], {
         scoredCvs: arrOf(
           objSchema([], {
-            candidate: { type: "string", description: "Candidate identifier (anonymized)." },
+            candidate: { type: "string", description: "Scored candidate — use the pool's candidateId (anonymized)." },
             mustMet: { type: "string", description: "Must-have skills met / missing." },
             score: { type: "number", description: "ATS score against the MoSCoW grid." },
           }),

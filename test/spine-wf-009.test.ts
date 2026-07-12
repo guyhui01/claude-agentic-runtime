@@ -78,6 +78,21 @@ describe("WF-009 spine — loading and execution (mocked runner)", () => {
     expect(res.traces.every((t) => t.gate.verdict === "pass")).toBe(true);
   });
 
+  it("candidatePool passthrough: dropped by STEP-02A → failed fail-closed at the handoff (not the eval gate)", async () => {
+    // The pool must survive STEP-01→03 to reach STEP-04 sourcing. If a step drops it, the
+    // producer-output contract (candidatePool required) fails closed at the handoff.
+    const step02a = { ...(happyOutputs["STEP-02A"] as Record<string, unknown>) };
+    delete step02a["candidatePool"];
+    const broken = { ...happyOutputs, "STEP-02A": step02a };
+    const steps = loadSpine(WF_009_RECRUTEMENT_MANIFEST, sidecar, buildWf009RecrutementRegistry(), resolveAgent);
+    const res = await runSpine(steps, mockRunner(broken), {});
+    expect(res.status).toBe("failed");
+    expect(res.failure?.stepId).toBe("STEP-02A");
+    expect(res.failure?.kind).toBe("handoff");
+    // The eval gate still passed (the pool is a passthrough contract, not a DoD criterion).
+    expect(res.traces[1]!.gate.verdict).toBe("pass");
+  });
+
   it("<shortlist validated?> gateway: shortlist < 3 (STEP-04) → failed fail-closed at the eval gate", async () => {
     const broken = {
       ...happyOutputs,
