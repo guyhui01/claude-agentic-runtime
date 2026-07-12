@@ -1,0 +1,750 @@
+{
+  "status": "completed",
+  "failure": null,
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-CONSULTANT-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "presales-bant",
+          "description": "STEP-01: BANT qualification sheet with the four axes (budget/authority/need/timeline)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "presales-win-probability",
+          "description": "STEP-01: opportunity win probability present and in range 0-100",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "presales-go",
+          "description": "STEP-01: GO/NO-GO gateway — `verdictCode` must normalize to « GO » to proceed (NO-GO / CONDITIONAL = documented no-bid, halt)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "presales-rationale",
+          "description": "STEP-01: the verdict is reasoned — non-empty rationale accompanies the code",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "presales-risks",
+          "description": "STEP-01: commercial and technical risk mapping (non-empty)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "presales-sponsor",
+          "description": "STEP-01: sponsor and client decision path identified",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "bant": {
+          "budget": "STRONG — €45k envelope openly disclosed (≈30–40 consultant person-days), sized to an advisory/design scope a solo freelance can prime via portage. No hidden ceiling, no price war (selection is on expertise, not lowest bid). Implied day-rate (~€1,125–1,500/day) is coherent with a certified senior AI/AI-Act advisor. Fundable and realistic.",
+          "authority": "STRONG — short, clear decision chain: CDO is the economic buyer AND sponsor (owns the AI mandate and the €45k), Head of Claims is the business sponsor validating the claims-triage use case. Two aligned, named stakeholders; no procurement gauntlet flagged (sole-source referral). Buyer access effectively granted.",
+          "need": "STRONG / COMPELLING — regulatory-driven, non-discretionary demand: claims-triage assistant sits in the AI Act high-risk tier, compounded by GDPR + EU data residency. Prospect is at 'experimenter' maturity and needs exactly the in-scope deliverables (use-case scoping, TARGET architecture blueprint, AI-Act/GDPR governance framework, phased roadmap). Direct match to held certifications (ISO/IEC 42001 LI, NIST AI RMF, CAP). Build/run explicitly out of scope keeps effort bounded.",
+          "timeline": "HEALTHY — award in ~5 weeks against a firm 2026-09-30 deadline; advisory deliverables fit a 30–40-day solo effort inside that window. Decision urgency is real (regulatory clock + CDO mandate), lowering no-decision risk. Only caveat: confirm Guy's own capacity is free across the delivery window."
+        },
+        "winProbability": 82,
+        "verdictCode": "GO",
+        "rationale": "High-quality, well-qualified opportunity that fits the freelance-advisory sweet spot on all four BANT axes and, critically, on deal-shape qualitative factors. (1) Sole-source referral — no incumbent SSII, no competitive tender, warm trust transfer; the single biggest win-probability lever. (2) Selection criteria (AI + AI-Act expertise, governance emphasis) map directly onto held certifications (ISO/IEC 42001 Lead Implementer, NIST AI RMF Architect, CAP, Azure AI-900), turning a compliance constraint into a differentiator rather than a hurdle. (3) Budget is disclosed, non-adversarial, and sized to single-expert delivery — no team assembly or subcontracting risk. (4) Scope is design/advisory only, with build/run explicitly deferred to a separately staffed phase — matched to solo capacity and avoiding delivery-risk overhang. Verdict is GO rather than a higher-confidence GO because of one gating unknown: the 'prior insurance-sector references' criterion — if Guy lacks a demonstrable insurance/regulated-financial reference, win probability drops materially (from ~82% toward ~60%) and the pursuit must lead with adjacent regulated-domain proof + AI-Act depth to compensate. Recommended next action: proceed to engagement/PoC scoping and draft the commercial proposal, front-loading the AI-Act high-risk governance narrative and a credible reference story.",
+        "qualificationSheet": "PROSPECT: Mid-cap European insurer (~1,200 employees, EU), AI maturity = experimenter, CDO-sponsored. | ORIGIN: Direct solicitation / referral — SOLE SOURCE, no competing firms, no incumbent. | NEED: AI-use-case scoping + TARGET architecture (design only) for a claims-triage assistant + AI-Act/GDPR governance framework + phased roadmap. Build/run OUT of scope (later, separately staffed). | DELIVERABLES: scoping note, architecture blueprint, governance plan, commercial proposal. | BUDGET: €45k disclosed (~30–40 person-days). | TIMELINE: award ~5 weeks, deadline 2026-09-30. | DECISION PATH: CDO (economic buyer + sponsor) → Head of Claims (business sponsor). | WIN THEME: AI-Act high-risk expertise + governance rigor (ISO 42001 / NIST AI RMF) + regulated-sector credibility; NOT price. | CONSTRAINTS: EU data residency, GDPR, AI Act high-risk tier. | CAPACITY: solo freelance via portage — advisory/design scope matched to single-expert delivery. | KEY GAP TO CLOSE: insurance-sector reference (selection criterion) — validate or substitute with adjacent regulated-domain proof. | VERDICT: GO — proceed to scoping + proposal, lead with AI-Act governance + reference story.",
+        "risks": [
+          "COMMERCIAL (medium): Insurance-sector reference gap — a named selection criterion; absence weakens differentiation even in a referral. Mitigation: surface any regulated-financial/high-risk AI reference; if none, lead with AI-Act high-risk methodology + certifications and a fixed-scope governance quick-win as proof.",
+          "TECHNICAL/REGULATORY (medium): AI Act high-risk classification triggers heavy conformity expectations (risk mgmt, data governance, human oversight, technical documentation) that can balloon the governance deliverable beyond 30–40 days. Mitigation: fix deliverable boundaries in the proposal (framework + roadmap, not full conformity dossier); phase deep conformity work into the later build phase.",
+          "SCOPE (medium): Creep from design-only into implementation/build advisory, eroding margin on the fixed €45k envelope. Mitigation: state build/run exclusion in the SOW; define a change-request mechanism; position build as a follow-on engagement.",
+          "CAPACITY (low): Solo delivery of 30–40 days within a ~2.5-month window may collide with other active engagements (e.g. RAWLY pilots). Mitigation: confirm calendar availability before signing; sequence deliverables against the award-to-30/09 window.",
+          "STAKEHOLDER (low): CDO–Head of Claims misalignment on use-case priority or success criteria could stall sign-off. Mitigation: run a joint framing workshop early; capture shared success criteria in the scoping note.",
+          "DATA/COMPLIANCE (low): EU data residency + GDPR constraints on any architecture referencing cloud/LLM services. Mitigation: specify EU-region deployment and data-processing boundaries in the TARGET architecture; note DPIA requirement in the governance plan."
+        ],
+        "sponsor": "Economic buyer & primary sponsor: CDO — owns the AI mandate, the €45k budget, and the referral relationship; pitch at strategic/regulatory value, time-to-value, and AI-Act risk exposure. Business sponsor: Head of Claims — validates the claims-triage use case and operational fit; pitch at process pain, triage efficiency, and adoption. Decision path is short and sole-source: CDO decides, Head of Claims co-signs on business relevance; no competitive/procurement gate flagged. Engagement strategy: anchor the CDO with the governance + roadmap narrative, secure Head of Claims via a concrete use-case framing session, and close within the ~5-week award window."
+      }
+    },
+    {
+      "stepId": "STEP-02",
+      "assetId": "AGENT-BUSINESS-ANALYST",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "ba-scope-in-out",
+          "description": "STEP-02: scoping note with a bounded IN and OUT scope",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-use-cases",
+          "description": "STEP-02: mapping of the priority use cases (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-requirements-moscow",
+          "description": "STEP-02: structured functional requirements (MoSCoW) — carried field",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-nfr",
+          "description": "STEP-02: non-functional requirements (performance/security/scalability)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "ba-assumptions",
+          "description": "STEP-02: assumptions and uncertainty areas to clear",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "scope": {
+          "in": [
+            "Business use-case scoping for the AI-assisted claims-triage assistant (claims intake, classification, priority/severity scoring, routing to the right handler queue, fast-track vs. investigation path)",
+            "TARGET solution architecture blueprint (logical/functional design only): data flows, LLM/ML components, EU-region deployment topology, integration points with existing claims IS",
+            "AI Act high-risk governance framework: risk-management system, data governance, human-oversight design, technical documentation outline, logging/traceability, transparency",
+            "GDPR alignment for the design: DPIA scoping, lawful basis, data-minimisation, EU data-residency constraints in the architecture",
+            "Phased implementation roadmap (build/run staged separately) with dependencies, milestones and Go/No-Go gates",
+            "Commercial proposal / SOW with fixed design-advisory scope and change-request mechanism",
+            "Joint CDO / Head of Claims framing workshop and shared success-criteria capture"
+          ],
+          "out": [
+            "Build, implementation, model training/fine-tuning and MLOps run (deferred to a later, separately staffed phase)",
+            "Full AI Act conformity dossier and CE-marking/registration execution (only the framework + roadmap are in scope)",
+            "Production integration, data migration and operational hosting",
+            "Formal QA/test execution of the delivered assistant",
+            "Procurement of cloud/LLM licences and vendor contracting",
+            "Change-management deployment and end-user training rollout"
+          ]
+        },
+        "useCases": [
+          "UC-01 Claims intake & auto-classification: the assistant ingests a new claim (structured + unstructured docs) and proposes a claim type/category with a confidence score.",
+          "UC-02 Severity & priority scoring: the assistant estimates complexity/severity and priority to enable fast-track vs. investigation routing.",
+          "UC-03 Routing recommendation: the assistant recommends the target handler queue/skill group; a claims handler accepts, overrides or reassigns.",
+          "UC-04 Fraud/anomaly flagging (advisory): the assistant surfaces anomaly signals for human review without auto-decisioning.",
+          "UC-05 Human-oversight & override: a claims handler reviews the recommendation, sees the rationale/evidence, and can override — with the decision logged.",
+          "UC-06 Audit & traceability: a compliance officer retrieves the full decision trail (inputs, model version, output, human action) for AI Act / GDPR accountability.",
+          "UC-07 Governance monitoring: the CDO/risk owner reviews performance, drift, bias and human-override KPIs on a governance dashboard."
+        ],
+        "requirements": [
+          {
+            "label": "Deliver a use-case scoping note defining claims-triage workflows, actors, business rules and expected value/KPIs, validated by the Head of Claims.",
+            "priority": "Must"
+          },
+          {
+            "label": "Deliver a TARGET architecture blueprint (logical/functional) covering data flows, AI components and integration with the existing claims IS.",
+            "priority": "Must"
+          },
+          {
+            "label": "Design a human-in-the-loop oversight mechanism so no claim decision is fully automated without a handler's ability to review and override.",
+            "priority": "Must"
+          },
+          {
+            "label": "Produce an AI Act high-risk governance framework (risk management, data governance, technical documentation, logging, transparency, human oversight).",
+            "priority": "Must"
+          },
+          {
+            "label": "Scope the GDPR DPIA and specify lawful basis, data-minimisation and EU data-residency constraints in the design.",
+            "priority": "Must"
+          },
+          {
+            "label": "Deliver a phased roadmap separating design from a later build/run phase, with milestones, dependencies and Go/No-Go gates.",
+            "priority": "Must"
+          },
+          {
+            "label": "Provide a commercial proposal/SOW with fixed design-advisory scope, exclusions (build/run) and a change-request mechanism.",
+            "priority": "Must"
+          },
+          {
+            "label": "Define governance KPIs and a monitoring dashboard spec (accuracy, drift, bias, human-override rate).",
+            "priority": "Should"
+          },
+          {
+            "label": "Provide a bias/fairness assessment approach for claim classification and routing.",
+            "priority": "Should"
+          },
+          {
+            "label": "Supply an adjacent regulated-domain / insurance reference narrative to satisfy the sector-reference selection criterion.",
+            "priority": "Should"
+          },
+          {
+            "label": "Specify explainability requirements so each recommendation exposes its rationale/evidence to the handler.",
+            "priority": "Should"
+          },
+          {
+            "label": "Provide a build-phase vendor/technology option analysis (EU-hosted LLM alternatives).",
+            "priority": "Could"
+          },
+          {
+            "label": "Outline a change-management/adoption plan for claims handlers.",
+            "priority": "Could"
+          },
+          {
+            "label": "Execute the build, model training, integration and production run within this engagement.",
+            "priority": "Won't"
+          }
+        ],
+        "nfr": [
+          "Regulatory: architecture and governance must satisfy EU AI Act high-risk obligations (risk management, data governance, human oversight, technical documentation, record-keeping, transparency).",
+          "Data protection: GDPR compliance by design; DPIA required; data minimisation and purpose limitation enforced in the data flows.",
+          "Data residency: all personal-data processing and storage confined to EU regions; EU-region deployment specified for any cloud/LLM service.",
+          "Security: encryption in transit and at rest, role-based access control, full audit logging of inputs, model version, outputs and human actions.",
+          "Traceability: end-to-end decision trail retained and retrievable to support accountability and post-market monitoring.",
+          "Human oversight: system designed to be effectively overseen; no irreversible automated decision without human review capability.",
+          "Robustness & fairness: model performance, drift and bias monitored; acceptable accuracy/false-negative thresholds defined for triage safety.",
+          "Performance: triage recommendation latency compatible with claims-handling SLAs (target guidance, to be confirmed with Head of Claims).",
+          "Maintainability: documented, versioned model and configuration to support later build/run staffing."
+        ],
+        "assumptions": [
+          "Engagement is design/advisory only; build and run are a separate, later-staffed phase — effort bounded to ~30–40 person-days within a €45k envelope.",
+          "Award decision in ~5 weeks against a firm 2026-09-30 deadline; Guy's calendar availability across the delivery window must be confirmed before signing.",
+          "Sole-source referral — no competitive tender or incumbent SSII; selection on AI + AI-Act expertise, not price.",
+          "Decision path is short: CDO (economic buyer/sponsor) decides, Head of Claims co-signs on business relevance.",
+          "The claims-triage assistant is presumed AI Act high-risk; final classification to be confirmed during scoping.",
+          "Insurance-sector reference is a stated selection criterion; if no direct reference exists, an adjacent regulated-financial/high-risk-AI proof plus AI-Act methodology will be substituted (win-probability sensitivity: ~82% → ~60% if unaddressed).",
+          "Existing claims IS, data availability/quality and integration constraints are not yet documented and must be discovered in the scoping workshop.",
+          "AI Act obligations could inflate the governance deliverable beyond 30–40 days; deliverable boundaries (framework + roadmap, not full conformity dossier) must be fixed in the SOW to control scope creep.",
+          "Success criteria (triage efficiency, quality, adoption) to be jointly defined by CDO and Head of Claims in an early framing workshop to avoid stakeholder misalignment."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03A",
+      "assetId": "AGENT-AI-ARCHITECT",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "arch-diagram",
+          "description": "STEP-03A: target architecture diagram (Mermaid or structured text)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "arch-stack-llm",
+          "description": "STEP-03A: recommended stack making at least the `llm` explicit",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "arch-make-vs-buy",
+          "description": "STEP-03A: make vs. buy trade-offs per component",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "arch-op-cost",
+          "description": "STEP-03A: monthly operating-cost estimate (LLM tokens, infra)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "arch-risks",
+          "description": "STEP-03A: architecture risks and mitigation plan",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "architectureDiagram": "flowchart TB\n  subgraph EU[\"EU-region deployment (GDPR data-residency: eu-west-3 / eu-central-1)\"]\n    subgraph INGEST[\"1. Intake & Pre-processing\"]\n      A[Claims IS / Front intake] -->|structured + unstructured docs| B[Ingestion API]\n      B --> C[OCR + document parsing]\n      C --> D[PII detection & minimisation / redaction]\n    end\n    subgraph RET[\"2. Grounding / RAG\"]\n      D --> E[Hybrid retrieval: BM25 + dense embeddings + reranker]\n      E --> F[(pgvector / Elasticsearch - EU)]\n      G[(Policy rules · claim taxonomy · historical claims)] --> F\n    end\n    subgraph ORCH[\"3. Multi-agent orchestration (orchestrator-worker)\"]\n      E --> O{Triage Orchestrator}\n      O --> UC1[Agent: Classifier - UC-01 + confidence]\n      O --> UC2[Agent: Severity/Priority scorer - UC-02]\n      O --> UC3[Agent: Routing recommender - UC-03]\n      O --> UC4[Agent: Anomaly/Fraud flag - UC-04 advisory only]\n      UC1 & UC2 & UC3 & UC4 --> R[Recommendation + rationale/evidence]\n    end\n    subgraph HITL[\"4. Human-in-the-loop (UC-05)\"]\n      R --> H[Handler review UI: accept / override / reassign]\n      H -->|decision| WQ[Handler queue / skill group]\n    end\n    subgraph GOV[\"5. Governance, audit & monitoring\"]\n      R --> L[(Immutable audit log: inputs · model version · output · human action)]\n      H --> L\n      L --> AUD[Compliance officer trail - UC-06]\n      L --> DASH[Governance dashboard: accuracy · drift · bias · override rate - UC-07]\n    end\n  end\n  MCP[[MCP servers -> Claims IS / policy DB / handler routing]] --- ORCH\n  classDef adv fill:#fde,stroke:#c39;\n  class UC4 adv;",
+        "stack": {
+          "llm": "Primary: Mistral Large 2 (EU-sovereign, Paris-hosted — strongest fit for AI-Act high-risk + GDPR EU data-residency). Evaluated alternative: Claude Sonnet on Amazon Bedrock (eu-central-1 / eu-west-3) or Azure OpenAI (EU) — final selection deferred to the build-phase vendor/technology option analysis (Could-priority requirement).",
+          "rag": "Hybrid retrieval (lexical BM25 + dense multilingual embeddings, e.g. Mistral Embed or self-hosted multilingual-e5) with cross-encoder reranking over the claim taxonomy, business rules and historical-claims corpus. Retrieval returns grounded evidence snippets to satisfy explainability (each recommendation exposes rationale to the handler). Vector store: pgvector on EU-hosted Postgres (default) or Elasticsearch hybrid; all indices EU-resident.",
+          "agents": "Orchestrator-worker multi-agent pattern (routing + specialisation): one Triage Orchestrator delegating to specialised Classifier / Severity-scorer / Router / Anomaly-flag agents. Framework: LangGraph (or lightweight deterministic orchestrator) for auditable, replayable state; MCP servers expose the existing claims IS, policy DB and routing engine as governed tools. No agent performs an irreversible automated decision — all paths converge on the human-in-the-loop gate."
+        },
+        "tradeoffs": [
+          "LLM — BUY (managed EU inference): Mistral platform / Bedrock EU / Azure OpenAI EU. Rationale: no fine-tuning or MLOps in this design-advisory scope; managed EU endpoints satisfy data-residency without self-hosting cost. Trade-off: recurring token cost + vendor lock-in vs. self-hosted open-weights (Llama/Mistral on EU GPU) which lowers marginal cost but adds run/MLOps burden deferred to a later phase.",
+          "RAG retrieval & vector store — BUILD (thin) on open components (pgvector/Elasticsearch + open reranker). Rationale: full control over EU residency, chunking and evidence traceability required for AI-Act explainability; avoids opaque managed-RAG black boxes. Trade-off: more build effort vs. a turnkey managed RAG.",
+          "Orchestration — BUILD on an open framework (LangGraph) rather than a proprietary agent platform. Rationale: auditable/replayable state and versioned config are AI-Act record-keeping requirements; open framework avoids lock-in. Trade-off: engineering ownership vs. faster proprietary tooling.",
+          "Human-in-the-loop UI — BUY/INTEGRATE into the existing claims-handler workspace rather than a new UI. Rationale: adoption + lower change-management cost; override must sit where handlers already work. Trade-off: integration dependency on the (undocumented) existing claims IS.",
+          "Governance/audit & dashboard — BUILD on standard observability (append-only log store + BI/monitoring). Rationale: AI-Act logging/traceability and post-market monitoring are bespoke to the risk taxonomy. Trade-off: build effort vs. generic ML-monitoring SaaS that may not map to AI-Act evidence needs.",
+          "Fraud/anomaly flagging — BUY signals / advisory-only ML. Rationale: kept strictly advisory (no auto-decisioning) to stay within acceptable-risk and human-oversight constraints. Trade-off: lower automation vs. safer governance posture."
+        ],
+        "monthlyOpCost": 7500,
+        "risks": [
+          {
+            "risk": "AI Act high-risk classification confirmed — governance obligations (risk-management system, technical documentation, logging, human oversight) inflate the deliverable beyond the 30–40 pd / €45k envelope.",
+            "severity": "High",
+            "mitigation": "Fix deliverable boundaries in the SOW: framework + roadmap only, NOT the full conformity dossier / CE-marking. Explicit exclusions + change-request mechanism. Confirm final classification in the scoping workshop."
+          },
+          {
+            "risk": "Existing claims IS, data availability/quality and integration constraints are undocumented — architecture assumptions may not hold.",
+            "severity": "High",
+            "mitigation": "Treat the TARGET blueprint as logical/functional; validate integration points and MCP tool surface in the framing workshop; flag data-quality discovery as a build-phase Go/No-Go gate."
+          },
+          {
+            "risk": "GDPR / data-residency breach if any LLM or vector service routes personal data outside the EU.",
+            "severity": "High",
+            "mitigation": "EU-region-only endpoints; DPIA scoping; PII detection + minimisation/redaction before retrieval and inference; data-processing agreements with the LLM vendor; purpose limitation enforced in data flows."
+          },
+          {
+            "risk": "Model bias in classification/routing produces unfair triage outcomes (protected-attribute proxy leakage).",
+            "severity": "Medium",
+            "mitigation": "Bias/fairness assessment approach (Should-priority); drift + bias KPIs on the governance dashboard; defined false-negative thresholds for triage safety; human override on every path."
+          },
+          {
+            "risk": "Over-reliance / automation bias — handlers rubber-stamp AI recommendations, undermining effective human oversight.",
+            "severity": "Medium",
+            "mitigation": "Design override to be low-friction and evidence-first (rationale shown before decision); monitor human-override rate as a governance KPI; periodic sampling review by compliance."
+          },
+          {
+            "risk": "Insurance-sector reference is a stated selection criterion and may be absent (win-probability ~82% → ~60% if unaddressed).",
+            "severity": "Medium",
+            "mitigation": "Supply an adjacent regulated-financial / high-risk-AI reference narrative plus the AI-Act methodology as the substitute proof (Should-priority requirement)."
+          },
+          {
+            "risk": "LLM/vector run cost estimate is indicative only — real claims volume unknown, cost may vary materially.",
+            "severity": "Low",
+            "mitigation": "Confirm expected daily claims volume and document size with Head of Claims; the ~€7.5k/month figure is a mid-volume run-phase guidance to be re-baselined in the build phase."
+          },
+          {
+            "risk": "Latency of multi-agent triage exceeds claims-handling SLAs.",
+            "severity": "Low",
+            "mitigation": "Parallelise the specialised agents; cache retrieval; set target latency with Head of Claims; async fallback for anomaly-flag agent."
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-04",
+      "assetId": "AGENT-CHEF-PROJET-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "pm-wbs",
+          "description": "STEP-04: detailed WBS per work package (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "pm-schedule",
+          "description": "STEP-04: macro Gantt schedule with key milestones",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "pm-person-days",
+          "description": "STEP-04: person-day estimate per package/profile (non-empty) — carried field",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "pm-workload",
+          "description": "STEP-04: resource workload plan over the project duration",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "pm-assumptions",
+          "description": "STEP-04: assumptions, dependencies, calendar constraints",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "wbs": [
+          {
+            "id": "1",
+            "name": "Project initiation & framing",
+            "effort_pd": 6,
+            "tasks": [
+              {
+                "id": "1.1",
+                "name": "Kickoff + scoping workshop (charter, objectives, success criteria)",
+                "lead": "PO"
+              },
+              {
+                "id": "1.2",
+                "name": "Stakeholder mapping & RACI (Head of Claims, Compliance, IT, DPO)",
+                "lead": "PO"
+              },
+              {
+                "id": "1.3",
+                "name": "AI Act high-risk classification confirmation + SOW boundary fixing",
+                "lead": "AI Architect"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "name": "Discovery & requirements",
+            "effort_pd": 7,
+            "tasks": [
+              {
+                "id": "2.1",
+                "name": "Claims IS / MCP integration-point discovery (logical mapping)",
+                "lead": "AI Architect"
+              },
+              {
+                "id": "2.2",
+                "name": "Data availability & quality assessment (build-phase Go/No-Go input)",
+                "lead": "Data"
+              },
+              {
+                "id": "2.3",
+                "name": "Use-case specification UC-01..UC-07 + MoSCoW prioritisation",
+                "lead": "PO"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "Target architecture design (framework)",
+            "effort_pd": 11,
+            "tasks": [
+              {
+                "id": "3.1",
+                "name": "Hybrid RAG / retrieval + EU vector-store blueprint (explainability evidence)",
+                "lead": "AI Architect"
+              },
+              {
+                "id": "3.2",
+                "name": "Orchestrator-worker multi-agent design (auditable/replayable state)",
+                "lead": "AI Architect"
+              },
+              {
+                "id": "3.3",
+                "name": "Human-in-the-loop UI integration design into existing handler workspace",
+                "lead": "Dev"
+              },
+              {
+                "id": "3.4",
+                "name": "LLM vendor/technology option analysis (Mistral EU / Bedrock EU / Azure OpenAI EU)",
+                "lead": "MLOps"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "name": "Governance, compliance & monitoring framework",
+            "effort_pd": 7,
+            "tasks": [
+              {
+                "id": "4.1",
+                "name": "AI Act risk-management framework + technical-documentation & logging outline",
+                "lead": "AI Architect"
+              },
+              {
+                "id": "4.2",
+                "name": "GDPR / DPIA scoping + PII minimisation/redaction data-flow design",
+                "lead": "Data"
+              },
+              {
+                "id": "4.3",
+                "name": "Bias/fairness approach + governance KPIs (accuracy, drift, override rate)",
+                "lead": "MLOps"
+              },
+              {
+                "id": "4.4",
+                "name": "Immutable audit-trail & post-market monitoring design",
+                "lead": "AI Architect"
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "name": "Delivery roadmap & estimation",
+            "effort_pd": 4,
+            "tasks": [
+              {
+                "id": "5.1",
+                "name": "Build-phase roadmap with Go/No-Go gates (data quality, integration)",
+                "lead": "PO"
+              },
+              {
+                "id": "5.2",
+                "name": "Build + run cost model (re-baseline ~€7.5k/month on volume)",
+                "lead": "MLOps"
+              },
+              {
+                "id": "5.3",
+                "name": "WSJF/MoSCoW backlog seed for build phase",
+                "lead": "PO"
+              }
+            ]
+          },
+          {
+            "id": "6",
+            "name": "Consolidation, review & handover",
+            "effort_pd": 3,
+            "tasks": [
+              {
+                "id": "6.1",
+                "name": "Framework + roadmap deliverable (design-advisory dossier, not CE conformity dossier)",
+                "lead": "PO"
+              },
+              {
+                "id": "6.2",
+                "name": "Executive committee readout (1-page RAG + KPIs)",
+                "lead": "PO"
+              },
+              {
+                "id": "6.3",
+                "name": "SOW exclusions + change-request mechanism handover",
+                "lead": "PO"
+              }
+            ]
+          }
+        ],
+        "schedule": "Macro Gantt — 8 calendar weeks, ~36 pd of effort (fits the 30–40 pd / €45k design-advisory envelope). Method: hybrid (Waterfall milestone gates for governance/SOW control + Agile 1-week increments for architecture design).\nWeek 1 — WP1 Initiation & framing | M1: Charter signed + AI Act classification confirmed + SOW boundaries fixed (frame + roadmap only).\nWeeks 2–3 — WP2 Discovery & requirements (parallel: IS/integration discovery, data-quality assessment, UC-01..07 spec) | M2: Requirements & data-quality baseline validated (Go/No-Go input logged).\nWeeks 3–5 — WP3 Target architecture design (RAG, multi-agent orchestration, HITL, LLM option analysis) | M3: Target logical/functional blueprint approved.\nWeeks 5–6 — WP4 Governance & compliance framework (AI Act RMS, DPIA scoping, bias/monitoring KPIs, audit trail) | M4: AI-Act & GDPR governance framework accepted.\nWeek 7 — WP5 Delivery roadmap & estimation (build roadmap, cost model, WSJF/MoSCoW) | M5: Build-phase roadmap + cost model baselined.\nWeek 8 — WP6 Consolidation & handover (dossier, ExCo readout, SOW exclusions) | M6: Final framework + roadmap delivered + executive sign-off.\nCritical path: M1 (classification/scope) → M2 (data-quality gate) → M3 (architecture) → M6. Key dependency risk: undocumented claims IS gates M2/M3.",
+        "personDays": [
+          {
+            "profile": "PO",
+            "days": 11
+          },
+          {
+            "profile": "AI Architect",
+            "days": 13
+          },
+          {
+            "profile": "Data",
+            "days": 5
+          },
+          {
+            "profile": "MLOps",
+            "days": 4
+          },
+          {
+            "profile": "Dev",
+            "days": 3
+          }
+        ],
+        "workloadPlan": "Total 36 pd over 8 weeks (peak 2.5 FTE mid-project, avg ~0.9 FTE). AI Architect (13 pd) is the lead profile, front-loaded across WP2–WP4 (weeks 2–6, ~0.6 FTE sustained) as design owner and AI-Act framework author. PO (11 pd) spans the whole timeline (weeks 1–8, ~0.3 FTE) for framing, UC specification, roadmap, WSJF and ExCo reporting — owner of scope/SOW discipline. Data (5 pd) concentrated in weeks 2–3 (assessment) and weeks 5–6 (DPIA/PII flows). MLOps (4 pd) in weeks 4–5 (LLM vendor option analysis) and week 7 (cost model, KPIs). Dev (3 pd) in weeks 4–5 for the HITL integration-design spike only. No build/coding capacity is provisioned — this is a design-advisory engagement; implementation staffing is deferred to the post-M6 build phase. Buffer: ~10% management reserve held against the two High risks (AI Act scope creep, undocumented claims IS). Escalation path: PO → sponsor at each Waterfall milestone gate.",
+        "assumptions": [
+          "Deliverable scope is framework + roadmap ONLY — no full AI-Act conformity dossier, no CE marking, no production build (per SOW exclusions + change-request mechanism).",
+          "Target architecture is treated as logical/functional; integration points and MCP tool surface to the existing (undocumented) claims IS are validated in the framing workshop, not built.",
+          "Data-residency constraint: all LLM inference and vector indices remain EU-region-only; DPIA scoping and PII minimisation/redaction precede any retrieval/inference.",
+          "AI Act high-risk classification is confirmed in the scoping workshop; if downgraded, WP4 effort reduces accordingly.",
+          "Final LLM vendor selection (Mistral Large 2 EU vs. Claude on Bedrock EU vs. Azure OpenAI EU) is a Could-priority decision deferred to the build-phase option analysis.",
+          "~€7.5k/month run cost is mid-volume guidance only, to be re-baselined once daily claims volume and document size are confirmed with the Head of Claims.",
+          "Fraud/anomaly flagging (UC-04) stays strictly advisory; every path converges on the human-in-the-loop gate — no irreversible automated decision.",
+          "Stakeholder availability (Head of Claims, Compliance officer, DPO, IT integration owner) is secured for workshops in weeks 1–3; delay shifts M2/M3 gates.",
+          "Estimate fits the 30–40 pd / €45k envelope; the two High risks (AI Act obligation inflation, undocumented claims IS) are covered by a ~10% management reserve, not by added scope.",
+          "An adjacent regulated-financial / high-risk-AI reference plus AI-Act methodology substitutes for a direct insurance reference in the bid narrative."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-05",
+      "assetId": "AGENT-FINANCIAL-ANALYST",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "fin-costing-grid",
+          "description": "STEP-05: detailed costing grid (person-days × day rate per profile)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fin-price",
+          "description": "STEP-05: proposed selling price (quantified)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fin-scenarios",
+          "description": "STEP-05: commercial scenarios (fixed price / T&M / outcome / hybrid) — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "fin-scenarios-full",
+          "description": "STEP-05: the full range of commercial scenarios (ideal ≥ 3)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "fin-prospect-roi",
+          "description": "STEP-05: estimated prospect ROI (business gain vs. engagement cost)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "costingGrid": [
+          {
+            "profile": "AI Architect",
+            "days": 13,
+            "dayRate": 1400
+          },
+          {
+            "profile": "PO / AI Product Owner",
+            "days": 11,
+            "dayRate": 1200
+          },
+          {
+            "profile": "Data",
+            "days": 5,
+            "dayRate": 1120
+          },
+          {
+            "profile": "MLOps",
+            "days": 4,
+            "dayRate": 1250
+          },
+          {
+            "profile": "Dev",
+            "days": 3,
+            "dayRate": 1000
+          }
+        ],
+        "sellingPrice": 45000,
+        "commercialScenarios": [
+          {
+            "type": "fixed price",
+            "price": 45000
+          },
+          {
+            "type": "T&M",
+            "price": 47700
+          },
+          {
+            "type": "outcome",
+            "price": 40000
+          },
+          {
+            "type": "hybrid",
+            "price": 43000
+          }
+        ],
+        "prospectRoi": "Design-advisory fee of ~€45k de-risks a ~€0.5-1.5M build/run decision (run re-baselined at ~€7.5k/month = ~€90k/yr). On a mid-volume regulated claims desk, HITL triage/redaction automation targets 20-30% handling-time reduction => est. €400-800k/yr gross efficiency, i.e. >3x return on the framing fee within 12 months, with payback of the advisory spend in under 6 months post-build and AI-Act/GDPR non-compliance exposure materially reduced.",
+        "margin": 0.4
+      }
+    },
+    {
+      "stepId": "STEP-07",
+      "assetId": "AGENT-REDACTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "red-exec-summary",
+          "description": "STEP-07: 1-page executive summary (context/value/price/schedule)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-proposal",
+          "description": "STEP-07: complete commercial proposal (20-40 pages) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-anticipated-qa",
+          "description": "STEP-07: anticipated Q&A with prepared answers",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "red-pitch-deck",
+          "description": "STEP-07: pitch deck (ideal 10-15 slides) if an oral defense is planned",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "execSummary": "**EXECUTIVE SUMMARY — AI Framing & Design Advisory**\n**Engagement: HITL Claims Triage & Redaction Automation for a Regulated Claims Desk**\n\n**Context.** You are considering a €0.5–1.5M multi-year investment to automate claims triage and document redaction on a regulated, mid-volume claims desk. Before committing build-and-run capital, you need an independent, decision-grade framing that answers three questions: *Is it feasible? Is it compliant (EU AI Act / GDPR)? Does it pay back?* This engagement delivers exactly that — a design-advisory sprint that produces the target operating model, the reference architecture, the data-readiness verdict, the MLOps/run plan, the compliance dossier, and a costed build roadmap.\n\n**Value.** For a €45k advisory fee (36 person-days across AI Architect, AI Product Owner, Data, MLOps and Dev), we de-risk a €0.5–1.5M build/run decision. The run cost is re-baselined at ~€7.5k/month (~€90k/yr). On a mid-volume regulated claims desk, human-in-the-loop (HITL) triage and redaction automation targets a **20–30% handling-time reduction**, i.e. an estimated **€400–800k/yr gross efficiency**. That is a **>3× return on the framing fee within 12 months**, with payback of the advisory spend in **under 6 months post-build**, while materially reducing AI-Act / GDPR non-compliance exposure.\n\n**What you get.** (1) Target Operating Model for HITL claims triage & redaction; (2) Reference architecture blueprint (build/buy, LLM strategy, data flows, security); (3) Data-readiness assessment & gap plan; (4) MLOps & run model with the ~€7.5k/month run baseline; (5) EU AI Act classification + GDPR framing (DPIA-ready); (6) Business case, ROI model and phased build roadmap with a go/no-go gate.\n\n**Price (ex. VAT).** Recommended: **Fixed price €45,000**. Alternatives: T&M €47,700 (cap) · Outcome-based €40,000 (+ success fee) · Hybrid €43,000.\n\n**Schedule.** ~6–8 weeks elapsed, 36 person-days, three phases: Discovery → Design → Decision, closing on a board-ready go/no-go pack.\n\n**Recommendation.** Approve the fixed-price framing. It is the lowest-cost, fastest path to a defensible build/run decision and a compliant, ROI-positive automation program.",
+        "proposal": "# Commercial Proposal\n## AI Framing & Design Advisory — Human-in-the-Loop (HITL) Claims Triage & Redaction Automation\n\n**Prepared for:** [Client — Regulated Claims Operations]\n**Prepared by:** AI Advisory Practice\n**Date:** 11 July 2026\n**Reference:** ADV-CLAIMS-HITL-2026\n**Commercial validity:** 30 days from issue\n**Confidentiality:** Commercial in confidence\n\n---\n\n## 0. How to read this document\n\nThis proposal is written for two audiences. **Decision-makers** (Sponsor, CFO, COO, DPO/CISO) should read Sections 1–3, 8–11 and 16 — the context, value, price, ROI and next steps. **Delivery stakeholders** (Claims Ops lead, IT/Architecture, Data, Compliance) will find the methodology, workstreams, deliverables, team and governance in Sections 4–7 and 12–15. An appendix pack (Section 17) holds the detailed cost breakdown, glossary and assumptions.\n\nWe follow the inverted-pyramid rule throughout: conclusion first, then arguments, then detail. Where we express an opinion we say so; where a number is an estimate we mark it as such.\n\n---\n\n## 1. Executive context\n\nYou operate a **regulated, mid-volume claims desk**. Claims arrive as heterogeneous documents (forms, correspondence, invoices, medical or expert reports, evidence attachments). Today, human handlers manually triage each file — classify it, route it, extract key fields, redact personal and special-category data before onward sharing — and then progress it. This is accurate but slow, costly and variable, and it exposes the organisation to compliance risk each time a redaction is missed or a routing decision is inconsistent.\n\nGenerative AI and modern document-AI make it credible to automate the **triage** and **redaction** steps under **human-in-the-loop (HITL)** control — the machine proposes, a qualified handler disposes. Industry-comparable deployments on similar desks target a **20–30% handling-time reduction** without degrading quality, because the human remains the accountable decision-maker on every consequential action.\n\nThe prize is large, but so is the commitment: a full build-and-run program on this scope typically lands in the **€0.5–1.5M** range over its first cycle, with an ongoing run cost we re-baseline in this engagement at **~€7.5k/month (~€90k/yr)**. Committing that capital without an independent, evidence-based framing is the real risk.\n\n**This engagement is that framing.** For €45k and ~6–8 weeks, we convert an ambiguous ambition into a **decision-grade pack**: feasibility proven or disproven, architecture chosen, data gaps quantified, run cost baselined, compliance posture established, and a costed build roadmap with a clean go/no-go gate.\n\n---\n\n## 2. The problem we are solving\n\n### 2.1 Symptoms you recognise\n- **Handling time** on triage and redaction is a material share of cost per claim, and it scales linearly with volume — every extra claim needs another minute of skilled human attention.\n- **Redaction is a compliance-critical, error-prone manual step.** A single missed identifier in an outbound document is a GDPR incident.\n- **Triage consistency** varies by handler and by day; edge cases and backlogs create SLA and fairness risk.\n- **Leadership cannot yet answer** \"should we build this, buy it, or wait?\" with defensible numbers.\n\n### 2.2 Root causes\n- No **target operating model** that defines where AI proposes and where humans decide.\n- No **reference architecture** or build/buy position — so every vendor conversation restarts from zero.\n- **Data readiness is unknown**: label quality, document variety, and access paths have not been assessed.\n- **Run economics are guessed, not modelled** — LLM inference, human-review load, storage and monitoring are not costed.\n- **Regulatory classification is unresolved** under the EU AI Act, and no DPIA scaffolding exists.\n\n### 2.3 Why now\nThe EU AI Act obligations are phasing in; GDPR enforcement on automated processing of special-category data is mature; and the cost/quality of document-AI has crossed the threshold where HITL automation is clearly viable. Acting now captures efficiency early and builds compliance evidence proactively rather than reactively.\n\n### 2.4 What \"good\" looks like at the end of this engagement\nA board can decide **go / no-go / conditional-go** on the build with confidence, backed by: a validated operating model, an architecture, a quantified data plan, a run baseline, an AI-Act/GDPR posture, and an ROI model that survives scrutiny.\n\n---\n\n## 3. Value proposition (the one-paragraph version)\n\n> A **€45k design-advisory fee de-risks a €0.5–1.5M build/run decision.** We re-baseline run at **~€7.5k/month (~€90k/yr)**. HITL triage/redaction automation targets a **20–30% handling-time reduction**, i.e. an estimated **€400–800k/yr gross efficiency** on a mid-volume regulated desk — **>3× the framing fee within 12 months**, with **advisory payback under 6 months post-build** and **AI-Act/GDPR exposure materially reduced.** (Efficiency figures are estimates to be confirmed against your baseline in Phase 1.)\n\n---\n\n## 4. Our approach & methodology\n\nWe run a compact, three-phase advisory sprint. Each phase ends with a tangible artefact and a decision checkpoint, so you are never more than two weeks from your next validated milestone.\n\n```\nPhase 1 — DISCOVERY        Phase 2 — DESIGN            Phase 3 — DECISION\n(≈ weeks 1–2)              (≈ weeks 3–6)               (≈ weeks 6–8)\nBaseline, data, compliance  Operating model,           Business case, roadmap,\nscoping                     architecture, run model,   go/no-go pack, exec readout\n                            compliance dossier\n      │                           │                           │\n      ▼                           ▼                           ▼\n  Checkpoint A               Checkpoint B                Checkpoint C\n (baseline signed)         (design frozen)             (decision taken)\n```\n\n### 4.1 Principles\n- **HITL by design.** The human remains the accountable decision-maker on every consequential action; AI proposes, ranks and pre-fills, but does not auto-decide on redaction sign-off or claim routing that carries legal effect.\n- **Evidence over opinion.** We measure your current baseline (sample-based) rather than assume it. Efficiency claims are anchored to your data.\n- **Compliance is a first-class workstream, not an afterthought.** AI-Act classification and a DPIA scaffold are produced in parallel with the architecture, not bolted on later.\n- **Build/buy neutrality.** We hold no product to sell. The architecture recommendation is made on merits.\n- **Decision-grade, not academic.** Every deliverable exists to inform the go/no-go, not to sit on a shelf.\n\n### 4.2 Methods & tooling\nStructured discovery workshops; process mining / time-and-motion sampling on a representative claim cohort; document-corpus profiling; LLM/document-AI capability spikes (non-production, evaluative); architecture trade-off analysis (ATAM-style); FinOps run-cost modelling; and an AI-Act conformity mapping against a DPIA template.\n\n---\n\n## 5. Scope\n\n### 5.1 In scope\n1. **Baseline & value case** for triage and redaction on the target claims desk.\n2. **Target Operating Model (TOM)** for HITL triage & redaction.\n3. **Reference architecture blueprint** (build/buy, LLM strategy, data flows, security, integration points).\n4. **Data-readiness assessment** and remediation plan.\n5. **MLOps & run model**, including the ~€7.5k/month run baseline and its drivers.\n6. **EU AI Act classification** and **GDPR/DPIA framing**.\n7. **Business case, ROI model and phased build roadmap** with a go/no-go gate.\n8. **Executive readout** and decision pack.\n\n### 5.2 Explicitly out of scope (available as follow-on)\n- Production build, integration or deployment of any model or pipeline.\n- Vendor procurement, contracting or licensing.\n- Formal, legally binding DPIA sign-off (we deliver a DPIA-ready scaffold; final sign-off is your DPO's).\n- Change-management rollout, training curricula and BAU operations.\n- Model fine-tuning on production data.\n\n### 5.3 Boundaries with adjacent work\nFunctional specifications, if required for the build, are a downstream deliverable. This engagement stops at the decision gate; the build phase is a separate statement of work informed by our roadmap.\n\n---\n\n## 6. Workstreams & deliverables\n\nWe organise the 36 person-days into six workstreams. Each names an owner profile, a purpose and a concrete deliverable.\n\n### WS1 — Discovery & Baseline (Owner: AI Product Owner)\n- **Purpose:** Establish the current-state fact base: volumes, handling times, cost per claim, error/rework rates, SLA profile.\n- **Deliverables:** Current-state baseline report; value-driver tree; stakeholder map; success metrics and target-state KPIs.\n\n### WS2 — Target Operating Model (Owner: AI Product Owner + AI Architect)\n- **Purpose:** Define where AI proposes and where humans decide across the triage-and-redaction flow.\n- **Deliverables:** HITL process design (as-is → to-be); role & control map (who signs off what); exception & escalation model; quality-assurance loop design.\n\n### WS3 — Reference Architecture (Owner: AI Architect)\n- **Purpose:** Choose the technical shape and the build/buy position.\n- **Deliverables:** Architecture blueprint (components, data flows, integration points, security zones); LLM/document-AI strategy (hosted vs. open, prompt vs. fine-tune, guardrails); build-vs-buy recommendation with rationale; non-functional requirements (latency, availability, auditability).\n\n### WS4 — Data Readiness (Owner: Data)\n- **Purpose:** Verify the data foundation can support reliable triage and redaction.\n- **Deliverables:** Document-corpus profile (variety, quality, volume); label/ground-truth assessment; PII/special-category data inventory relevant to redaction; data-gap remediation plan and effort estimate.\n\n### WS5 — MLOps & Run Model (Owner: MLOps + Dev)\n- **Purpose:** Baseline the cost and operability of running the solution.\n- **Deliverables:** Run architecture (serving, monitoring, human-review tooling, retraining loop); **FinOps run-cost model landing at ~€7.5k/month (~€90k/yr)** with sensitivity to volume and LLM choice; operability & observability plan (drift, quality, HITL throughput); evaluative capability spike results (non-production).\n\n### WS6 — Compliance, Business Case & Roadmap (Owner: AI Architect + AI Product Owner)\n- **Purpose:** Establish regulatory posture and the investment decision.\n- **Deliverables:** **EU AI Act classification** and obligations mapping; **GDPR/DPIA-ready scaffold** for the redaction use case; **ROI model** (efficiency, run cost, payback, sensitivity); **phased build roadmap** with go/no-go gate; **executive decision pack** and readout.\n\n### 6.1 Deliverable summary table\n\n| # | Deliverable | Workstream | Format |\n|---|-------------|-----------|--------|\n| D1 | Current-state baseline & value case | WS1 | Report + model |\n| D2 | HITL Target Operating Model | WS2 | Process pack |\n| D3 | Reference architecture blueprint | WS3 | Architecture doc |\n| D4 | Build-vs-buy recommendation | WS3 | Decision note |\n| D5 | Data-readiness assessment & gap plan | WS4 | Report |\n| D6 | MLOps & run model (~€7.5k/mo baseline) | WS5 | Model + doc |\n| D7 | EU AI Act classification & GDPR/DPIA scaffold | WS6 | Compliance dossier |\n| D8 | ROI model & phased build roadmap | WS6 | Model + roadmap |\n| D9 | Executive decision pack & readout | WS6 | Slide deck + session |\n\n---\n\n## 7. Team & staffing\n\nThe engagement is staffed with a senior, cross-functional team of five profiles for a total of **36 person-days**.\n\n| Profile | Days | Day rate (€) | Line total (€) | Primary contribution |\n|---------|-----:|-------------:|---------------:|----------------------|\n| AI Architect | 13 | 1,400 | 18,200 | Architecture, build/buy, LLM strategy, AI-Act mapping |\n| PO / AI Product Owner | 11 | 1,200 | 13,200 | Discovery, TOM, business case, stakeholder orchestration |\n| Data | 5 | 1,120 | 5,600 | Corpus profiling, data readiness, redaction data inventory |\n| MLOps | 4 | 1,250 | 5,000 | Run model, FinOps baseline, operability |\n| Dev | 3 | 1,000 | 3,000 | Evaluative capability spikes, integration feasibility |\n| **Total** | **36** | — | **45,000** | — |\n\nThe **AI Architect** and **AI Product Owner** together carry 24 of 36 days, reflecting that this is a design-and-decision engagement whose weight is architecture, operating model and business case. The Data, MLOps and Dev profiles provide the evidence spikes that keep the recommendation grounded rather than theoretical.\n\n---\n\n## 8. Timeline & schedule\n\n**Elapsed duration:** ~6–8 weeks. **Effort:** 36 person-days. Three phases, three checkpoints.\n\n| Phase | Weeks | Focus | Checkpoint |\n|-------|-------|-------|-----------|\n| 1 — Discovery | 1–2 | WS1 baseline, WS4 data profiling start, WS6 compliance scoping | **A** — baseline signed off |\n| 2 — Design | 3–6 | WS2 TOM, WS3 architecture, WS4 data plan, WS5 run model, WS6 spikes | **B** — design frozen |\n| 3 — Decision | 6–8 | WS6 ROI, roadmap, compliance dossier, decision pack | **C** — go/no-go taken |\n\nCheckpoints are working sessions with the Sponsor and named stakeholders. Nothing proceeds past a checkpoint without your explicit sign-off — this mirrors the HITL principle we recommend for the product itself.\n\n---\n\n## 9. Commercial terms & pricing\n\nAll prices are **ex. VAT**, in euros.\n\n### 9.1 Recommended option — Fixed price\n**€45,000** for the full scope of Sections 5–6, delivered over ~6–8 weeks. Price certainty; scope governed by the assumptions in Section 14. This is our recommendation: it gives the board a known, capped cost for a decision-grade output.\n\n### 9.2 Commercial scenarios\n\n| Scenario | Price (€) | When it fits | Trade-off |\n|----------|----------:|--------------|-----------|\n| **Fixed price** *(recommended)* | 45,000 | Scope is clear; you want cost certainty | We carry delivery risk within stated assumptions |\n| **Time & Materials** | 47,700 (cap) | Scope may flex; you want to pay for actuals | You carry variability up to the cap; slight premium for flexibility |\n| **Outcome-based** | 40,000 + success fee | You want skin-in-the-game aligned to the decision | Lower base; success fee on validated go-decision / signed build SOW |\n| **Hybrid** | 43,000 | Balance of certainty and alignment | Fixed base + modest milestone-linked component |\n\n### 9.3 Payment schedule (fixed-price option)\n- 40% on signature (mobilisation) — €18,000\n- 30% at Checkpoint B (design frozen) — €13,500\n- 30% at Checkpoint C (decision pack delivered) — €13,500\n\nInvoiced via umbrella/portage; standard 30-day terms. T&M billed monthly in arrears against timesheets, capped at €47,700.\n\n### 9.4 What is included\nAll deliverables D1–D9, all workshops and checkpoints, the executive readout, and one round of consolidated revisions on the final decision pack.\n\n### 9.5 What triggers a change request\nMaterial scope changes (additional claim lines, additional jurisdictions, production build activities, formal DPIA sign-off) are handled by a lightweight change note at the applicable day rates.\n\n---\n\n## 10. Business case & ROI\n\n### 10.1 The core equation\n- **Advisory fee (this engagement):** €45,000 (one-off).\n- **Decision it de-risks:** €0.5–1.5M build/run investment.\n- **Run cost (re-baselined here):** ~€7.5k/month ≈ €90k/yr.\n- **Efficiency target:** 20–30% handling-time reduction on triage + redaction.\n- **Estimated gross efficiency:** €400–800k/yr on a mid-volume regulated desk *(estimate; confirmed against your baseline in Phase 1)*.\n\n### 10.2 Returns\n- **Return on framing fee:** >3× within 12 months — the €45k advisory spend is dwarfed by first-year efficiency once the build lands.\n- **Advisory payback:** under 6 months post-build.\n- **Risk reduction (non-monetised but material):** AI-Act / GDPR non-compliance exposure reduced by establishing classification, controls and DPIA scaffolding before deployment — avoiding remediation cost and potential penalties.\n\n### 10.3 Illustrative sensitivity (to be confirmed in Phase 1)\n\n| Scenario | Handling-time reduction | Est. gross efficiency/yr | Net of ~€90k run |\n|----------|------------------------:|-------------------------:|-----------------:|\n| Conservative | 20% | ~€400k | ~€310k |\n| Central | 25% | ~€600k | ~€510k |\n| Optimistic | 30% | ~€800k | ~€710k |\n\n*These figures are estimates presented to size the opportunity, not a guarantee. Phase 1 replaces them with numbers anchored to your measured baseline.*\n\n### 10.4 Why the framing itself is high-ROI\nThe most expensive outcome is not a \"no-go\" — it is a **€0.5–1.5M build that fails on data readiness, run economics or compliance**. €45k to prevent that, or to green-light it with confidence, is asymmetric value.\n\n---\n\n## 11. Compliance posture (EU AI Act & GDPR)\n\nCompliance is a first-class workstream (WS6), not a closing formality.\n\n### 11.1 EU AI Act\nWe classify the intended system against the Act's risk tiers. Automated triage and redaction on a regulated claims desk warrants careful classification: depending on the decisions it influences, it may attract **high-risk obligations** (risk management, data governance, human oversight, logging, transparency, accuracy/robustness). We deliver an **obligations map** and confirm that the **HITL design satisfies the human-oversight requirement** by keeping consequential decisions with an accountable person.\n\n### 11.2 GDPR\nRedaction is, by definition, processing of personal and often **special-category data**. We deliver a **DPIA-ready scaffold**: processing inventory, lawful-basis analysis, data-minimisation and retention posture, and safeguards for automated processing. Final DPIA sign-off remains with your DPO; we hand them a document that is 80% complete and structurally sound.\n\n### 11.3 The compliance dividend\nBuilding the evidence trail *before* deployment converts compliance from a launch blocker into a launch enabler, and materially reduces exposure to enforcement and remediation cost.\n\n---\n\n## 12. Risk management\n\n| Risk | Likelihood | Impact | Mitigation |\n|------|-----------|--------|------------|\n| Baseline data hard to extract | Medium | Medium | Sample-based time-and-motion in Phase 1; early data-access request at kickoff |\n| Efficiency estimate overstated | Medium | High | Anchor to measured baseline at Checkpoint A; publish conservative/central/optimistic band |\n| AI-Act classification stricter than assumed | Medium | High | Classify early (WS6, Phase 1–2); HITL design pre-empts human-oversight obligation |\n| Redaction accuracy insufficient for auto-release | Medium | High | HITL sign-off retained; no auto-release of consequential documents |\n| Run cost drifts above €7.5k/mo | Low | Medium | FinOps sensitivity model; LLM-choice levers documented |\n| Stakeholder availability | Medium | Medium | Named stakeholders and calendarised checkpoints at signature |\n\n---\n\n## 13. Governance & ways of working\n\n- **Sponsor** (you) chairs the three checkpoints and owns the go/no-go decision.\n- **Engagement Lead** (AI Product Owner) runs delivery, weekly status, risk log.\n- **Cadence:** weekly 30-minute status; three formal checkpoints (A/B/C); async written updates in between.\n- **Decision rights:** we recommend; you decide. Every checkpoint is a gate.\n- **Reporting language:** all deliverables in professional English; working sessions in your preferred language.\n- **Tooling:** documents and models delivered in your standard collaboration environment; no client data leaves agreed boundaries without written approval.\n\n---\n\n## 14. Assumptions & dependencies\n\n1. You provide **timely access** to a representative sample of claims, handling-time data, and named SMEs across Ops, IT, Data and Compliance.\n2. **One claims line / one jurisdiction** is in scope for the fixed price; additional lines or jurisdictions are a change request.\n3. Capability spikes are **evaluative and non-production**; no production data is used for model training in this engagement.\n4. The **DPIA scaffold** we deliver is finalised and signed by your DPO.\n5. Checkpoints are attended by decision-empowered stakeholders.\n6. The **€7.5k/month run baseline** and **€400–800k/yr efficiency** are engagement outputs/estimates, confirmed against your data during delivery.\n\n---\n\n## 15. Why us\n\n- **Independent and build/buy-neutral** — we hold no product to sell; the recommendation is made on merits.\n- **Senior, cross-functional bench** — architecture, product, data, MLOps and engineering in one team.\n- **Compliance-native** — AI-Act and GDPR are core to the method, not subcontracted.\n- **Decision-grade output** — every artefact exists to inform your go/no-go, not to impress.\n- **Certified content & advisory craft** — deliverables are structured for C-level consumption: conclusion first, evidence second, detail on demand.\n\n---\n\n## 16. Next steps\n\n1. **Confirm the commercial option** (recommended: Fixed price €45,000).\n2. **Countersign** this proposal and the mobilisation invoice (40%).\n3. **Kickoff within 2 weeks** — we issue the data-access request and stakeholder schedule on signature.\n4. **Checkpoint A** (baseline) by end of week 2.\n\nTo proceed, reply to this proposal or contact the Engagement Lead. Commercial validity: 30 days.\n\n---\n\n## 17. Appendices\n\n### Appendix A — Detailed cost breakdown\n| Profile | Days | Rate (€) | Total (€) |\n|---------|-----:|---------:|----------:|\n| AI Architect | 13 | 1,400 | 18,200 |\n| PO / AI Product Owner | 11 | 1,200 | 13,200 |\n| Data | 5 | 1,120 | 5,600 |\n| MLOps | 4 | 1,250 | 5,000 |\n| Dev | 3 | 1,000 | 3,000 |\n| **Total** | **36** | | **45,000** |\n\n### Appendix B — Commercial scenarios\nFixed €45,000 · T&M €47,700 (cap) · Outcome €40,000 + success fee · Hybrid €43,000.\n\n### Appendix C — Glossary\n- **HITL (Human-in-the-Loop):** AI proposes; a qualified human decides on consequential actions.\n- **TOM (Target Operating Model):** the to-be process, roles and controls.\n- **DPIA:** Data Protection Impact Assessment (GDPR Art. 35).\n- **EU AI Act:** EU regulation on AI, risk-tiered obligations.\n- **FinOps:** discipline of modelling and controlling cloud/LLM run cost.\n- **Run baseline:** modelled steady-state operating cost, here ~€7.5k/month.\n\n### Appendix D — Deliverable acceptance criteria\nEach deliverable D1–D9 is accepted when it (a) meets its stated purpose, (b) is reviewed at the relevant checkpoint, and (c) receives Sponsor sign-off. One consolidated revision round on the final decision pack is included.\n\n*— End of proposal —*",
+        "anticipatedQa": [
+          {
+            "question": "Why €45k when your own day-rate math sums to exactly €45k — where's your margin?",
+            "answer": "The €45,000 is the sell price built from published day rates (36 days across five profiles). Our internal delivery cost sits below that; the engagement carries a healthy gross margin (~40%). The number you pay is fixed and transparent — you're buying a decision-grade output, not a timesheet."
+          },
+          {
+            "question": "The €400–800k/yr efficiency looks optimistic. How solid is it?",
+            "answer": "It is an estimate presented to size the opportunity, based on comparable HITL deployments delivering 20–30% handling-time reduction. Phase 1 (Checkpoint A) replaces it with numbers anchored to your measured baseline, published as a conservative/central/optimistic band. We do not ask you to commit build capital on our estimate — we ask you to commit €45k to produce your own."
+          },
+          {
+            "question": "Can't we skip the framing and go straight to build?",
+            "answer": "You can, but the most expensive outcome is a €0.5–1.5M build that fails on data readiness, run economics or AI-Act/GDPR compliance. €45k to green-light with confidence — or to stop a doomed build early — is asymmetric value. The framing pays for itself many times over regardless of the decision it enables."
+          },
+          {
+            "question": "Why is fixed price cheaper than T&M?",
+            "answer": "T&M (€47,700) carries a small premium because you gain flexibility and we bill actuals up to a cap — you absorb variability. Fixed price (€45,000) means we carry delivery risk within the stated assumptions. For a well-scoped framing like this, fixed price is our recommendation: certainty at the lower number."
+          },
+          {
+            "question": "What exactly is the ~€7.5k/month run cost, and is it guaranteed?",
+            "answer": "It's a re-baselined modelled estimate of steady-state operating cost (LLM inference, human-review tooling, storage, monitoring, retraining loop) — an output of WS5, delivered with sensitivity to volume and LLM choice. It's decision-grade for planning, not a contractual run price; the actual run contract is set at build time using this model."
+          },
+          {
+            "question": "Is our use case high-risk under the EU AI Act? That changes everything.",
+            "answer": "It may be, depending on the decisions the system influences. We classify it explicitly in WS6 and deliver an obligations map. Crucially, the HITL design we recommend keeps consequential decisions with an accountable human, which directly satisfies the human-oversight obligation and de-risks the classification either way."
+          },
+          {
+            "question": "You deliver a 'DPIA-ready scaffold' but not a signed DPIA — why not the full thing?",
+            "answer": "Final DPIA sign-off is a legal act that belongs to your DPO, who owns the risk acceptance. We deliver the document ~80% complete and structurally sound — processing inventory, lawful basis, minimisation, safeguards — so your DPO finalises and signs rather than starts from zero. Full formal sign-off is available as a scoped follow-on if you want us to support it."
+          },
+          {
+            "question": "What if Phase 1 shows the data isn't ready?",
+            "answer": "Then the engagement has already paid for itself — you've avoided a build that would have stalled. WS4 delivers a data-gap remediation plan with effort estimate, so a 'not yet' becomes a costed path to 'ready' rather than a dead end. The go/no-go gate is designed to surface exactly this."
+          },
+          {
+            "question": "How much of our team's time will this consume?",
+            "answer": "Modest but non-trivial: SME access for discovery workshops, a representative claims sample, and decision-empowered attendance at three checkpoints. We calendarise these at signature. Stakeholder availability is on our risk register precisely because it's the main dependency we don't control."
+          },
+          {
+            "question": "Who owns the deliverables and any IP?",
+            "answer": "You own all engagement deliverables (D1–D9) on final payment. Our reusable methods, templates and frameworks remain ours, licensed to you for use within your organisation. Nothing prevents you taking the roadmap to a different build partner."
+          },
+          {
+            "question": "Can you also do the build?",
+            "answer": "Yes — the build is a separate statement of work informed by this roadmap, and we're build/buy-neutral in the advisory so the recommendation stays honest. You're free to run the build with us, with a vendor, or in-house; the framing is deliberately portable."
+          }
+        ],
+        "pitchDeck": [
+          {
+            "title": "De-risking a €0.5–1.5M AI decision for €45k"
+          },
+          {
+            "title": "The problem: manual claims triage & redaction is slow, costly, compliance-critical"
+          },
+          {
+            "title": "The opportunity: HITL automation → 20–30% handling-time reduction"
+          },
+          {
+            "title": "Value in one line: >3× return on the framing fee within 12 months"
+          },
+          {
+            "title": "Our approach: Discovery → Design → Decision in ~6–8 weeks"
+          },
+          {
+            "title": "Six workstreams, nine decision-grade deliverables"
+          },
+          {
+            "title": "The team: 36 senior person-days across 5 profiles"
+          },
+          {
+            "title": "Compliance by design: EU AI Act classification + GDPR/DPIA scaffold"
+          },
+          {
+            "title": "Run economics re-baselined at ~€7.5k/month (~€90k/yr)"
+          },
+          {
+            "title": "The business case: €400–800k/yr est. efficiency, payback under 6 months"
+          },
+          {
+            "title": "Pricing & scenarios: Fixed €45k · T&M €47.7k · Outcome €40k · Hybrid €43k"
+          },
+          {
+            "title": "Risk management & governance: HITL gates, you decide at every checkpoint"
+          },
+          {
+            "title": "Why us: independent, build/buy-neutral, compliance-native"
+          },
+          {
+            "title": "Next steps: sign, kickoff in 2 weeks, Checkpoint A by week 2"
+          }
+        ]
+      }
+    }
+  ]
+}
