@@ -1,0 +1,519 @@
+{
+  "status": "completed",
+  "failure": null,
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-CHEF-PROJET-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cp-kickoff-plan",
+          "description": "STEP-01: D1-D5 kickoff plan (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-kickoff-plan-5day",
+          "description": "STEP-01: the full D1-D5 plan (ideal ≥ 5 half-day activities)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cp-raci",
+          "description": "STEP-01: stakeholder mapping / provisional RACI (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-logistics",
+          "description": "STEP-01: D1 logistics checklist (access, tools, meetings)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cp-d1-questions",
+          "description": "STEP-01: questions that must be asked on D1",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "kickoffPlan": [
+          {
+            "slot": "D1-AM",
+            "activity": "Kickoff meeting with Sponsor (COO) + CIO: validate project charter, confirm mandate, business objectives, success criteria, in/out-of-scope boundaries and governance/escalation path."
+          },
+          {
+            "slot": "D1-PM",
+            "activity": "Onboarding & logistics: badges/physical access, laptop/VPN/SSO, collaboration tools (Confluence/Jira/MS Project/Teams); team introductions; initial stakeholder mapping and power/interest grid."
+          },
+          {
+            "slot": "D2-AM",
+            "activity": "One-on-one deep dive with CIO: IS landscape, legacy constraints, data ownership, and the contractual/scope perimeter of the two incumbent SSII."
+          },
+          {
+            "slot": "D2-PM",
+            "activity": "Delivery team working session: roles & capacity, ways of working (hybrid Agile/Waterfall), tooling, and establish the RAID log baseline."
+          },
+          {
+            "slot": "D3-AM",
+            "activity": "CHRO meeting: post-reorg context and mood, change-readiness assessment, HR/social sensitivities, and co-design of the internal communication plan (PROSCI ADKAR)."
+          },
+          {
+            "slot": "D3-PM",
+            "activity": "Legacy IS discovery workshop with IT: architecture walk-through, integration points, data availability/quality assessment on the undocumented estate."
+          },
+          {
+            "slot": "D4-AM",
+            "activity": "Business unit interviews: elicit pain points and candidate AI use cases; capture value hypotheses and feasibility signals."
+          },
+          {
+            "slot": "D4-PM",
+            "activity": "Alignment meeting with the two incumbent SSII: clarify scope boundaries, collaboration model, and information-sharing to prevent overlap and defuse tension."
+          },
+          {
+            "slot": "D5-AM",
+            "activity": "Synthesis & prioritization: consolidate findings, WSJF scoring of candidate use cases, draft the D5 scoping note and the D1-D30 engagement plan."
+          },
+          {
+            "slot": "D5-PM",
+            "activity": "Steering readout with COO + CIO: present RAG status and scoping note, validate prioritized use cases and D1-D30 plan, confirm next-step decisions and owners."
+          }
+        ],
+        "raci": [
+          {
+            "stakeholder": "Sponsor (COO)",
+            "raci": "A"
+          },
+          {
+            "stakeholder": "CIO (direct manager)",
+            "raci": "R"
+          },
+          {
+            "stakeholder": "AI Project Manager (engagement lead)",
+            "raci": "R"
+          },
+          {
+            "stakeholder": "Delivery team",
+            "raci": "R"
+          },
+          {
+            "stakeholder": "CHRO",
+            "raci": "C"
+          },
+          {
+            "stakeholder": "Incumbent SSII #1 & #2",
+            "raci": "C"
+          },
+          {
+            "stakeholder": "Business unit / process owners",
+            "raci": "C"
+          },
+          {
+            "stakeholder": "IT / IS architects & data owners",
+            "raci": "C"
+          },
+          {
+            "stakeholder": "End users & impacted employees",
+            "raci": "I"
+          }
+        ],
+        "logisticsChecklist": [
+          "Physical site access and badges arranged for the two on-site days per week",
+          "Laptop, VPN, SSO/network accounts and email/distribution-list provisioning confirmed",
+          "Access granted to collaboration stack (Confluence, Jira, MS Project, Teams/SharePoint) and shared deliverables workspace",
+          "Read access to IS documentation, architecture diagrams and available data catalogs (NDA / data-room clearance confirmed)",
+          "Meeting rooms booked and calendar invites sent to COO, CIO, CHRO, delivery team, SSII contacts for D1-D5",
+          "On-site cadence (2 days/week) and remote-working tooling validated with the client",
+          "Stakeholder contact directory and escalation contacts collected",
+          "Introduction email issued and D1 report template pre-populated and ready"
+        ],
+        "d1Questions": [
+          "What are the top 3 business outcomes the COO expects from this 3-month AI scoping, and how will success be measured?",
+          "What is explicitly out of scope, and what is the governance / decision-making and escalation path?",
+          "What is the contractual perimeter of the two incumbent SSII and where are the scope boundaries with them?",
+          "What legacy IS documentation exists, who owns it, and who are the key data gatekeepers?",
+          "What budget envelope and regulatory constraints apply (EU AI Act, GDPR)?",
+          "Given the recent reorganization, what communication to the teams is authorized, and what are the known resistance points?",
+          "Which AI use cases or initiatives are already on the table or expected?",
+          "Who must sign off on the D5 scoping note and the D1-D30 plan?"
+        ],
+        "kickoffRisks": [
+          "Political: post-reorg tension may reduce stakeholder availability and candor, slowing elicitation (HR-sensitive).",
+          "Political: the two incumbent SSII may perceive the engagement as a threat and withhold information or resist collaboration.",
+          "Technical: undocumented legacy IS makes discovery slower than planned, with hidden dependencies and data-access delays.",
+          "HR: CHRO sensitivity on the 'AI vs jobs' narrative post-reorg requires carefully framed change communication.",
+          "Governance: ambiguity between Sponsor (COO) mandate and CIO authority could create decision bottlenecks.",
+          "Scope: broad 'AI scoping' ambition within 3 months creates scope-creep risk without early WSJF prioritization.",
+          "Data: unknown data availability/quality, with access gated through incumbent SSII, may delay feasibility assessment."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-02",
+      "assetId": "AGENT-BUSINESS-ANALYST",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "ba-client-context",
+          "description": "STEP-02: client context sheet (sector/stakes/culture) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-is-mapping",
+          "description": "STEP-02: simplified IS mapping (systems in place, non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-org-chart",
+          "description": "STEP-02: organizational chart (business + IT) present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "ba-glossary",
+          "description": "STEP-02: client business glossary (key terms/acronyms)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "ba-grey-areas",
+          "description": "STEP-02: grey areas to clarify on D1",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "clientContext": "CLIENT CONTEXT SHEET (v0.1 — to be confirmed at D1 kickoff; sector not yet disclosed in the brief and flagged as a grey area).\n\n• Sector / activity: Mid-to-large enterprise engaging a 3-month AI scoping mission. Exact sector to be confirmed on D1; the presence of a COO, CIO, CHRO, two incumbent SSII and a regulated-data posture (EU AI Act + GDPR) points to a structured, mid/large services or industrial organization.\n\n• Strategic stakes: (1) Identify and prioritize high-value, feasible AI/GenAI use cases within 3 months; (2) build a credible D1–D30 engagement plan and a D5 scoping note validated by COO + CIO; (3) de-risk delivery on an undocumented legacy IS with data access gated through incumbent SSII; (4) secure regulatory compliance (EU AI Act risk tiering, GDPR lawful basis, data minimization).\n\n• Sponsorship & mandate: Sponsor = COO (Accountable); direct reporting line = CIO (Responsible / line manager). Dual-authority configuration (business sponsor vs. IT authority) to be arbitrated early to avoid decision bottlenecks.\n\n• Culture: Post-reorganization context — sensitive social climate, reduced stakeholder availability/candor, and an \"AI vs. jobs\" narrative to be handled carefully with the CHRO. Change readiness to be assessed via PROSCI ADKAR; communication plan co-designed with HR. Hybrid delivery culture (Agile/Waterfall), 2 days/week on-site.\n\n• Competitive / ecosystem: Two incumbent SSII (integrators) hold contractual scope and act as data gatekeepers on the legacy estate; they may perceive the AI mission as a threat — collaboration model and information-sharing to be clarified early to defuse tension and prevent overlap. External competitive landscape (market rivals) to be captured during D4 business-unit interviews.",
+        "isMapping": [
+          {
+            "domain": "Core business applications",
+            "system": "Legacy transactional core (ERP / line-of-business apps)",
+            "owner": "IT / IS architects (to be named on D2)",
+            "hostingModel": "To confirm (on-prem legacy suspected)",
+            "documentation": "Undocumented / partial — discovery workshop D3-PM",
+            "dataQuality": "Unknown — assessment required",
+            "integrationPoints": "To be mapped (hidden dependencies expected)",
+            "aiRelevance": "Primary source of business data for candidate use cases",
+            "status": "To be confirmed"
+          },
+          {
+            "domain": "Data & analytics",
+            "system": "Reporting / BI / data stores",
+            "owner": "Data owners (gatekeepers to be identified)",
+            "hostingModel": "To confirm",
+            "documentation": "No data catalog confirmed",
+            "dataQuality": "Availability & quality unknown — feasibility blocker",
+            "integrationPoints": "Feeds from transactional core",
+            "aiRelevance": "Feature/data availability drives AI feasibility scoring (WSJF)",
+            "status": "To be confirmed"
+          },
+          {
+            "domain": "HR information system",
+            "system": "HRIS (post-reorg)",
+            "owner": "CHRO",
+            "hostingModel": "To confirm",
+            "documentation": "To confirm",
+            "dataQuality": "Sensitive personal data — GDPR high-attention",
+            "integrationPoints": "Payroll / org data",
+            "aiRelevance": "In-scope only with explicit HR + legal clearance",
+            "status": "Sensitive — restricted"
+          },
+          {
+            "domain": "Integration & middleware",
+            "system": "Interfaces / APIs / batch flows managed by incumbent SSII",
+            "owner": "Incumbent SSII #1 & #2 (contractual perimeter)",
+            "hostingModel": "To confirm",
+            "documentation": "Held by SSII — access to be negotiated",
+            "dataQuality": "N/A",
+            "integrationPoints": "Cross-application data exchange",
+            "aiRelevance": "Access path for data feasibility; potential collaboration friction",
+            "status": "Gated by SSII"
+          },
+          {
+            "domain": "Collaboration & tooling",
+            "system": "Confluence / Jira / MS Project / Teams-SharePoint",
+            "owner": "IT / PMO",
+            "hostingModel": "SaaS (to confirm)",
+            "documentation": "Available",
+            "dataQuality": "N/A",
+            "integrationPoints": "Project delivery workspace",
+            "aiRelevance": "Deliverable and governance backbone for the mission",
+            "status": "Provisioning in progress"
+          },
+          {
+            "domain": "Security & compliance",
+            "system": "IAM / SSO / VPN, data-room / NDA controls",
+            "owner": "IT security",
+            "hostingModel": "To confirm",
+            "documentation": "Partial",
+            "dataQuality": "N/A",
+            "integrationPoints": "Access control across estate",
+            "aiRelevance": "EU AI Act + GDPR guardrails for any AI use case",
+            "status": "Clearance in progress"
+          }
+        ],
+        "orgChart": "ORGANIZATIONAL CHART (business + IT) — as inferred from the kickoff brief; names/details to be completed on D1.\n\nBUSINESS SIDE\n• COO — Project Sponsor (Accountable). Owns the mandate, business objectives and success criteria; final sign-off authority on the D5 scoping note.\n   └─ Business Units / Process Owners (Consulted) — source of pain points and candidate AI use cases (D4-AM interviews).\n   └─ End users & impacted employees (Informed) — targets of change management (post-reorg sensitivity).\n• CHRO — (Consulted). Owns post-reorg change-readiness, HR/social sensitivities and co-design of the internal communication plan (PROSCI ADKAR); gatekeeper on HR data.\n\nIT SIDE\n• CIO — Direct manager / line authority (Responsible). Owns IS landscape, legacy constraints, data ownership and the contractual relationship with the two incumbent SSII.\n   └─ IT / IS Architects & Data Owners (Consulted) — legacy architecture, integration points, data availability/quality.\n   └─ Incumbent SSII #1 & #2 (Consulted / external) — contractual scope holders and data gatekeepers on the legacy estate.\n\nMISSION TEAM (cross-cutting)\n• AI Project Manager / Engagement Lead (Responsible) — this role; drives scoping, elicitation, governance and reporting.\n   └─ Delivery team (Responsible) — capacity, ways of working (hybrid Agile/Waterfall), RAID log baseline.\n\nGOVERNANCE / ESCALATION: COO (Sponsor, arbitration) ← CIO (line + IT decisions) ← AI PM (operational steering). Dual-authority interface (COO vs. CIO) to be clarified on D1 to prevent decision bottlenecks.",
+        "glossary": [
+          {
+            "term": "MOA / AMOA",
+            "definition": "Maîtrise d'ouvrage / Assistance à MOA — the business-ownership side steering needs, specs, UAT and change on behalf of the sponsor."
+          },
+          {
+            "term": "SSII / ESN",
+            "definition": "IT services & integration company; here the two incumbent integrators holding contractual scope and acting as data gatekeepers."
+          },
+          {
+            "term": "COO",
+            "definition": "Chief Operating Officer — mission Sponsor (Accountable)."
+          },
+          {
+            "term": "CIO",
+            "definition": "Chief Information Officer — direct manager and IT authority (Responsible)."
+          },
+          {
+            "term": "CHRO",
+            "definition": "Chief Human Resources Officer — owns change-readiness and HR/social sensitivities (Consulted)."
+          },
+          {
+            "term": "WSJF",
+            "definition": "Weighted Shortest Job First — prioritization score (value / effort proxy) used to rank candidate AI use cases at D5."
+          },
+          {
+            "term": "RAID log",
+            "definition": "Risks, Assumptions, Issues, Dependencies register — mission control baseline set at D2."
+          },
+          {
+            "term": "RACI",
+            "definition": "Responsible, Accountable, Consulted, Informed — stakeholder responsibility matrix."
+          },
+          {
+            "term": "RAG status",
+            "definition": "Red/Amber/Green health indicator used in steering readouts."
+          },
+          {
+            "term": "PROSCI ADKAR",
+            "definition": "Awareness-Desire-Knowledge-Ability-Reinforcement — change-management model framing internal AI communication."
+          },
+          {
+            "term": "EU AI Act",
+            "definition": "European regulation tiering AI systems by risk; drives compliance guardrails for use cases."
+          },
+          {
+            "term": "GDPR",
+            "definition": "General Data Protection Regulation — governs personal-data processing (lawful basis, minimization), critical for HR data."
+          },
+          {
+            "term": "D1–D30 plan",
+            "definition": "First-30-days engagement plan delivered and validated at D5."
+          },
+          {
+            "term": "Scoping note (D5)",
+            "definition": "Consolidated findings + prioritized use cases; requires COO + CIO sign-off."
+          },
+          {
+            "term": "Go/No-Go milestone",
+            "definition": "Decision gate on prioritized use cases and next-step ownership."
+          },
+          {
+            "term": "GenAI / LLM",
+            "definition": "Generative AI / Large Language Models — candidate technology family for content and process use cases."
+          }
+        ],
+        "greyAreas": [
+          "Sector / business activity of the client is not stated in the brief — confirm on D1 to tailor use-case value hypotheses and competitive analysis.",
+          "Top 3 measurable business outcomes expected by the COO and the exact success metrics for the 3-month scoping.",
+          "Explicit out-of-scope boundaries and the governance/decision/escalation path — especially the COO (Sponsor) vs. CIO (line authority) arbitration to avoid decision bottlenecks.",
+          "Contractual perimeter of the two incumbent SSII and the precise scope boundary with the mission (data access, deliverable ownership, collaboration model).",
+          "Existence, ownership and location of legacy IS documentation and data catalogs; identity of the key data gatekeepers.",
+          "Budget envelope and applicable regulatory constraints (EU AI Act risk tier, GDPR lawful basis for any personal/HR data).",
+          "Authorized level of internal communication to teams post-reorg and the known/anticipated resistance points (CHRO-framed).",
+          "AI use cases or initiatives already on the table or expected by leadership, to avoid re-litigating settled decisions.",
+          "Formal sign-off authority on the D5 scoping note and the D1–D30 plan (single vs. joint COO+CIO approval).",
+          "Data availability and quality on the undocumented estate — the main feasibility blocker gating WSJF scoring."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-CHANGE-MANAGER",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cm-stakeholder-map",
+          "description": "STEP-03: map of allies, neutrals, and potential resisters (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-engagement-plan",
+          "description": "STEP-03: D1-D30 engagement plan (who to see, when, why — non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-d1-posture",
+          "description": "STEP-03: recommended D1 posture (observer / actor / expert)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cm-quick-wins",
+          "description": "STEP-03: identified relational quick wins",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "stakeholderMap": [
+          {
+            "stakeholder": "COO — Mission Sponsor (Accountable)",
+            "stance": "ally"
+          },
+          {
+            "stakeholder": "CIO — Line authority / IT owner (Responsible)",
+            "stance": "neutral"
+          },
+          {
+            "stakeholder": "CHRO — Change-readiness & HR data gatekeeper (Consulted)",
+            "stance": "neutral"
+          },
+          {
+            "stakeholder": "Business Units / Process Owners (Consulted)",
+            "stance": "neutral"
+          },
+          {
+            "stakeholder": "IT / IS Architects & Data Owners (Consulted)",
+            "stance": "neutral"
+          },
+          {
+            "stakeholder": "End users & impacted employees (Informed)",
+            "stance": "resister"
+          },
+          {
+            "stakeholder": "Incumbent SSII #1 & #2 — data gatekeepers (external, Consulted)",
+            "stance": "resister"
+          }
+        ],
+        "engagementPlan": [
+          {
+            "phase": "D1 — Kickoff & alignment",
+            "adkar": "Awareness",
+            "objective": "Establish sponsorship clarity and dispel the AI-vs-jobs narrative before it hardens",
+            "actions": [
+              "Confirm sector, top-3 measurable COO outcomes and success metrics (grey area #1-2)",
+              "Arbitrate the COO (Sponsor) vs CIO (line) decision path in a single joint session to prevent bottlenecks",
+              "Adopt a listening/observer posture — capture social climate and candor level post-reorg",
+              "Agree with CHRO the authorized level of internal communication to teams"
+            ],
+            "owners": "AI PM + COO + CIO + CHRO",
+            "kpi": "Signed mandate + agreed escalation path; sponsor coalition confirmed"
+          },
+          {
+            "phase": "D2-D3 — Diagnose & baseline",
+            "adkar": "Awareness / Desire",
+            "objective": "Map impacts and de-risk the SSII relationship early",
+            "actions": [
+              "Build RAID log and impact map of affected populations",
+              "Run a PROSCI ADKAR change-readiness assessment with HR",
+              "Hold an early clarification session with the two incumbent SSII on scope boundary, data-access model and collaboration protocol to defuse the perceived threat",
+              "Name IS architects and data gatekeepers"
+            ],
+            "owners": "AI PM + CHRO + CIO + SSII",
+            "kpi": "ADKAR baseline scored; SSII collaboration charter drafted; RAID baselined"
+          },
+          {
+            "phase": "D4-D15 — Elicit & co-design communication",
+            "adkar": "Desire / Knowledge",
+            "objective": "Build desire through participation and a credible, HR-co-designed narrative",
+            "actions": [
+              "Business-unit interviews to source pain points, candidate use cases and competitive landscape",
+              "Co-design change communication plan with CHRO (key messages, channels, cadence, AI-augmentation-not-replacement framing)",
+              "Recruit change ambassadors within business units to relay messages peer-to-peer",
+              "Address end-user and SSII resistance with targeted, evidence-based reassurance"
+            ],
+            "owners": "AI PM + Business Units + CHRO",
+            "kpi": "Comms plan validated by CHRO; ambassador network stood up; interview coverage %"
+          },
+          {
+            "phase": "D16-D25 — Feasibility & regulatory guardrails",
+            "adkar": "Knowledge / Ability",
+            "objective": "Ground use-case prioritization in data reality and compliance",
+            "actions": [
+              "Assess data availability/quality on the legacy estate (main feasibility blocker) via SSII-gated access",
+              "Apply EU AI Act risk tiering and GDPR lawful-basis / minimization checks, especially on HRIS",
+              "Feed feasibility + compliance signals into WSJF scoring of candidate use cases"
+            ],
+            "owners": "AI PM + Data Owners + IT Security + Legal",
+            "kpi": "WSJF-scored shortlist; each use case tagged with AI-Act tier & GDPR status"
+          },
+          {
+            "phase": "D26-D30 — Scoping note & Go/No-Go",
+            "adkar": "Ability / Reinforcement",
+            "objective": "Secure joint sign-off and embed adoption measurement",
+            "actions": [
+              "Consolidate D5 scoping note with prioritized use cases and D1-D30 plan",
+              "Obtain COO + CIO joint sign-off (clarify single vs joint authority)",
+              "Define adoption KPIs (usage rate, satisfaction, skills uplift) and reinforcement mechanisms for the next phase",
+              "Communicate outcomes and next-step ownership to teams within the CHRO-authorized boundary"
+            ],
+            "owners": "AI PM + COO + CIO + CHRO",
+            "kpi": "Scoping note signed off; adoption KPI baseline & reinforcement plan agreed"
+          }
+        ],
+        "d1Posture": "observer — in a post-reorganization, socially sensitive context with reduced candor, lead D1 by listening and diagnosing (assess ADKAR readiness, surface the AI-vs-jobs narrative, clarify the COO/CIO dual authority) before shifting to an expert/actor posture from D2 onward.",
+        "quickWins": [
+          "Convene a single early joint COO+CIO session to settle the dual-authority decision path — removes the biggest bottleneck and signals unified sponsorship.",
+          "Hold an early, respectful clarification meeting with the two incumbent SSII framing them as partners, not threatened parties — converts likely resisters and unlocks data access.",
+          "Co-brand the first internal message with the CHRO around 'AI augments, does not replace' to pre-empt the AI-vs-jobs resistance among impacted employees.",
+          "Stand up a small change-ambassador network from business units interviewed at D4 — turns consulted stakeholders into desire-building allies.",
+          "Publish an early, honest RAID + grey-areas register to the sponsors, demonstrating candor and control and building trust quickly."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-05",
+      "assetId": "AGENT-REDACTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "red-d1-kit",
+          "description": "STEP-05: D1 kit (kickoff plan + client sheet + key questions) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-intro-email",
+          "description": "STEP-05: D1 introduction email present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-report-template",
+          "description": "STEP-05: D1 report template present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-d5-scoping",
+          "description": "STEP-05: D5 scoping note (first-days review + adjustments) present",
+          "severity": "blocking",
+          "passed": true
+        }
+      ],
+      "output": {
+        "d1Kit": "# D1 Kit — AI Mission Kickoff & Alignment\n\n> **Mission:** 30-day AI opportunity scoping & change-readiness diagnostic\n> **Context:** Post-reorganization, socially sensitive, reduced candor\n> **D1 posture:** Observer — listen and diagnose before shifting to expert/actor from D2\n> **Golden thread:** *AI augments, it does not replace.*\n\n---\n\n## 1. Kickoff Plan (D1 agenda)\n\n| Time | Sequence | Objective | Lead |\n|---|---|---|---|\n| 09:00–09:20 | **Welcome & framing** | Set the observer posture; restate mandate, scope, 30-day horizon | AI PM |\n| 09:20–10:00 | **Sponsor alignment (COO)** | Confirm sector, top-3 measurable outcomes, success metrics | COO + AI PM |\n| 10:00–10:45 | **Dual-authority arbitration (COO + CIO)** | Settle single vs joint decision path & escalation to remove the #1 bottleneck | COO + CIO |\n| 10:45–11:15 | **Change & comms boundary (CHRO)** | Agree authorized level of internal communication + AI-augmentation framing | CHRO + AI PM |\n| 11:15–12:00 | **Working setup** | Access, data owners, IS architects, SSII contacts, meeting cadence | AI PM + CIO |\n| 14:00–15:30 | **Listening rounds** | Informal exchanges to read social climate & candor post-reorg | AI PM |\n| 15:30–16:00 | **RAID & grey-areas capture** | Log open questions, risks, assumptions transparently | AI PM |\n| 16:00–16:30 | **D1 wrap & next-step confirmation** | Recap decisions, owners, D2–D3 diagnostic plan | AI PM + sponsors |\n\n**Success at end of D1:** signed/verbal mandate, agreed escalation path, confirmed sponsor coalition, comms boundary set with CHRO.\n\n---\n\n## 2. Client Sheet (stakeholder cartography)\n\n| Stakeholder | RACI | Stance | Engagement priority |\n|---|---|---|---|\n| **COO** — Mission Sponsor | Accountable | 🟢 Ally | Protect & leverage; single joint session to lock authority |\n| **CIO** — Line authority / IT owner | Responsible | ⚪ Neutral | Convert to co-sponsor; unified message with COO |\n| **CHRO** — Change & HR data gatekeeper | Consulted | ⚪ Neutral | Co-design narrative; HRIS = GDPR-sensitive |\n| **Business Units / Process Owners** | Consulted | ⚪ Neutral | Interview D4+; source use cases & pain points |\n| **IS Architects & Data Owners** | Consulted | ⚪ Neutral | Feasibility & data-quality assessment |\n| **End users / impacted employees** | Informed | 🔴 Resister | Reassure via ambassadors; augmentation framing |\n| **Incumbent SSII #1 & #2** — data gatekeepers | Consulted (external) | 🔴 Resister | Early clarification meeting; partners, not threats |\n\n**Two critical dynamics to manage from D1:**\n1. **COO/CIO dual authority** → decision bottleneck risk.\n2. **SSII + end-user resistance** → data-access and adoption risk.\n\n---\n\n## 3. Key Questions (to close the grey areas)\n\n### To the COO (Sponsor)\n1. In one sentence, what does *success* look like at D+30 — and at D+180?\n2. What are your **top-3 measurable outcomes**, and how are they currently measured?\n3. Which sector-specific constraints (regulatory, competitive, seasonal) must frame our use-case selection?\n4. Where do you personally see the biggest resistance — and the biggest quick win?\n\n### To the CIO (Line authority)\n5. For scoping decisions, is authority **yours, the COO's, or joint**? What is the escalation path?\n6. Who are the named IS architects and data owners I should engage this week?\n7. What are the hard technical/compliance constraints on the legacy estate?\n\n### To the CHRO (Change gatekeeper)\n8. What level of communication to teams is authorized, and through which channels?\n9. What is the current social climate and candor level post-reorganization?\n10. Which HR data can I access, and under what GDPR lawful basis?\n\n### To the incumbent SSII (data gatekeepers)\n11. What is the current scope boundary, data-access model and collaboration protocol?\n12. What would make this collaboration a **win for you**?\n\n### Cross-cutting (RAID seeds)\n13. What has been tried on AI/data before, and why did it stall?\n14. What is off-limits, politically or contractually, that I should know now?\n",
+        "introEmail": "**Subject:** Kickoff tomorrow — quick intro & how I'll work in the first days\n\nDear [Manager first name],\n\nAhead of our start tomorrow, a short note to introduce myself and set expectations for the first days.\n\nI'm Guy Hui-Bon-Hoa, the AI Product Owner / project manager who will lead the 30-day AI opportunity scoping and change-readiness diagnostic. My aim over these four weeks is simple: identify a short, credible list of high-value, feasible AI use cases and a clear D1–D30 plan — grounded in your data reality, compliance constraints (EU AI Act, GDPR) and your teams' readiness.\n\n**A word on my posture for Day 1.** Given the recent reorganization, I'll begin by *listening and observing* rather than prescribing. My first priority is to understand your outcomes, your constraints and your people before proposing anything. I move to a more active, expert posture from Day 2 onward.\n\n**Three things that would help us start fast tomorrow:**\n1. A short joint moment with the COO and CIO to align on the decision path and escalation — this removes the single biggest source of delay.\n2. A brief exchange with the CHRO on the level of internal communication we're authorized to share with teams.\n3. Contacts for the IS architects, data owners and the two incumbent partners so I can plan the diagnostic phase.\n\nOne principle will guide every message I help shape internally: **AI augments people's work — it does not replace them.** I'll co-design that narrative with HR before anything goes to the teams.\n\nI'll come with a light agenda (attached) and adapt it to your priorities. Please tell me if there's anyone I should meet first, or anything sensitive I should be aware of before we begin.\n\nLooking forward to getting started.\n\nBest regards,\n**Guy Hui-Bon-Hoa**\nAI Product Owner — Mission scoping & change readiness\n[phone] · guyhui@proton.me",
+        "d1ReportTemplate": "TITLE: D1 Report — Kickoff & Alignment\nDATE: [D1 date] · Author: Guy Hui-Bon-Hoa · Distribution: COO (Sponsor), CIO, CHRO\n\n---\n1) EXECUTIVE SUMMARY (3 lines max — inverted pyramid)\n- Overall read of D1: [green / amber / red] because …\n- Most important decision secured today: …\n- Top risk to watch: …\n\n2) DECISIONS SECURED TODAY\n| Decision | Owner | Status (confirmed / pending) |\n|---|---|---|\n| Mandate & scope confirmed | COO | |\n| Dual-authority decision path (single vs joint) | COO + CIO | |\n| Escalation path agreed | COO + CIO | |\n| Comms boundary to teams | CHRO | |\n\n3) SPONSORSHIP & OUTCOMES\n- COO top-3 measurable outcomes: 1)… 2)… 3)…\n- Success metric(s) & current baseline: …\n- Sector-specific framing constraints: …\n\n4) SOCIAL CLIMATE READ (observer notes)\n- Candor level post-reorg (low / medium / high): …\n- AI-vs-jobs narrative present? [yes/no] — evidence: …\n- Early signals of resistance / support: …\n\n5) STAKEHOLDER STANCE — UPDATE vs BASELINE\n| Stakeholder | Baseline | Observed D1 | Move needed |\n|---|---|---|---|\n| COO (ally) | | | |\n| CIO (neutral) | | | |\n| CHRO (neutral) | | | |\n| SSII #1 / #2 (resister) | | | |\n| End users (resister) | | | |\n\n6) RAID LOG (opened today)\n| # | Type (Risk/Assumption/Issue/Dependency) | Description | Owner | Severity |\n|---|---|---|---|---|\n\n7) GREY AREAS STILL OPEN\n1. …  2. …  3. …\n\n8) NEXT STEPS (D2–D3 diagnostic)\n| Action | Owner | Due |\n|---|---|---|\n| Name IS architects & data owners | CIO | D2 |\n| Schedule SSII clarification meeting | AI PM | D2–D3 |\n| Launch ADKAR readiness assessment | AI PM + CHRO | D3 |\n| Baseline RAID + impact map | AI PM | D3 |\n\n9) ONE-LINE ASK TO SPONSORS\n- [Single most important thing I need from the COO/CIO this week]: …",
+        "d5ScopingNote": "# D5 Scoping Note — First-Days Review & Adjustments\n\n> **Purpose:** Consolidate what the first five days revealed, confirm what holds, and adjust the D1–D30 trajectory before entering elicitation and feasibility.\n> **Audience:** COO (Sponsor), CIO, CHRO · **Register:** executive · **Length target:** 1 page\n\n---\n\n## 1. Executive Summary\nIn the first five days we [confirmed sponsorship / clarified authority / mapped resistance]. The mission is **[on track / adjusted]**. The single most important adjustment is **[…]**. No blocker prevents entering the elicitation phase (D4–D15) as planned.\n\n## 2. What the First Days Confirmed\n- **Sponsorship & outcomes:** COO top-3 outcomes validated: 1)… 2)… 3)…\n- **Decision path:** COO/CIO authority now [single / joint]; escalation path agreed.\n- **Change readiness (ADKAR baseline):** Awareness [low/med/high] · Desire [low/med/high] — main gap: **[…]**.\n- **SSII relationship:** clarification meeting held; collaboration charter [drafted / pending]; data-access model: **[…]**.\n- **Comms boundary:** CHRO authorized [level]; \"AI augments, not replaces\" framing adopted.\n\n## 3. What Changed vs the Initial Plan\n| Assumption at D1 | Reality at D5 | Adjustment |\n|---|---|---|\n| [Authority clear] | [Still ambiguous on X] | [Single joint arbitration session on D6] |\n| [SSII cooperative] | [Guarded on data] | [Phased access + charter sign-off before D16] |\n| [Candor sufficient] | [Reduced post-reorg] | [Ambassador network + peer relay] |\n\n## 4. Risks & Grey Areas (RAID extract)\n| # | Risk / Issue | Impact | Mitigation | Owner |\n|---|---|---|---|---|\n| R1 | Data availability/quality on legacy estate | High — feasibility blocker | SSII-gated access plan | Data Owners |\n| R2 | End-user AI-vs-jobs resistance | Medium — adoption | Co-branded CHRO comms + ambassadors | AI PM + CHRO |\n| R3 | Dual-authority decision latency | Medium — schedule | Locked escalation path | COO + CIO |\n\n## 5. Use-Case Funnel (early signal, to be WSJF-scored D16–D25)\n- Candidate use cases surfaced: [n] — top themes: **[…]**.\n- Each to be tagged with **EU AI Act tier** + **GDPR lawful basis** (HRIS = high scrutiny).\n\n## 6. Adjusted Plan to D30\n| Phase | Window | Key adjustment |\n|---|---|---|\n| Elicit & co-design comms | D4–D15 | Add ambassador recruitment earlier |\n| Feasibility & guardrails | D16–D25 | Front-load data-quality assessment via SSII |\n| Scoping note & Go/No-Go | D26–D30 | Confirm single vs joint sign-off with COO+CIO |\n\n## 7. Decisions Requested from Sponsors\n1. Confirm the [single/joint] sign-off authority for the D30 Go/No-Go.\n2. Approve the SSII collaboration charter to unlock data access.\n3. Endorse the co-branded internal message with HR.\n\n## 8. Next Milestone\n**D15 — Communication plan validated by CHRO + ambassador network stood up.**\n"
+      }
+    }
+  ]
+}
