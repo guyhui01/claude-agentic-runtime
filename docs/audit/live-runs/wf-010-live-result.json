@@ -1,0 +1,354 @@
+{
+  "status": "completed",
+  "failure": null,
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-CHEF-PROJET-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cp-timeline",
+          "description": "STEP-01: annotated project timeline (milestones, slippages) — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-gaps",
+          "description": "STEP-01: planned vs actual gaps (schedule/budget/scope/quality) — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-root-causes",
+          "description": "STEP-01: root-cause analysis (5 Whys) — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-root-causes-3",
+          "description": "STEP-01: 5 Whys on the three main problems (ideal ≥ 3)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cp-improvement-plan",
+          "description": "STEP-01: prioritized improvement plan — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cp-improvement-plan-5",
+          "description": "STEP-01: the full improvement plan (ideal 5-10 concrete actions)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cp-what-worked",
+          "description": "STEP-01: what worked well (to replicate)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "timeline": [
+          {
+            "milestone": "M0 — Project charter approved & kickoff (Month 1)",
+            "note": "On time. Charter signed by sponsor 'Hélène Vasseur'; scope baselined but AI success criteria (target model precision, acceptable false-positive rate) left qualitative rather than quantified."
+          },
+          {
+            "milestone": "M1 — Data readiness & discovery gate (Month 2)",
+            "note": "5 business days late. Access to production-representative data delayed by data-governance sign-off; team proceeded on a partial sample, seeding hidden model-quality debt."
+          },
+          {
+            "milestone": "M2 — Model PoC / feasibility validated (Month 3)",
+            "note": "On time nominally, but validated on the partial dataset. SPI still ~0.98; slippage not yet visible in EVM because value was being credited on optimistic completion criteria."
+          },
+          {
+            "milestone": "Onboarding of 2 late joiners (early Month 4)",
+            "note": "Corrective staffing decision to recover scope. Net ramp-up cost: ~3 weeks of senior mentoring capacity; short-term velocity dropped before it rose (Brooks's Law effect)."
+          },
+          {
+            "milestone": "M3 — Integration & MLOps pipeline ready (Month 4–5)",
+            "note": "~1.5 weeks late. Integration with the client's legacy system surfaced undocumented interface constraints; first clear CPI erosion appears here (CPI ≈ 0.94)."
+          },
+          {
+            "milestone": "M4 — UAT / model acceptance (Month 5)",
+            "note": "Compressed from 3 weeks to ~1.5 weeks to protect the go-live date. Two of the three eventual P1 defects were latent in edge-case data paths not covered by the shortened UAT."
+          },
+          {
+            "milestone": "M5 — Go-live (Month 6, +2 weeks)",
+            "note": "Shipped 2 weeks late, 8% over budget (final CPI ≈ 0.93, SPI ≈ 0.92), with 3 P1 defects at go-live. Hypercare invoked immediately; steering committee informed via exception report."
+          },
+          {
+            "milestone": "Hypercare & P1 stabilization (post go-live, weeks 1–2)",
+            "note": "All 3 P1 defects resolved within hypercare window; no data-integrity loss. Confirmed partial-failure classification: delivered, but off baseline on time, cost, and quality."
+          }
+        ],
+        "gaps": [
+          "Success criteria for the AI component were not quantified at charter stage (no target precision/recall, no acceptable P1 threshold), so 'done' was negotiable and quality was traded away under deadline pressure.",
+          "Data readiness was treated as an assumption, not a managed dependency with its own gate; governance sign-off was on no one's critical path until it slipped.",
+          "EVM was reported on optimistic percent-complete rather than objective, testable acceptance criteria, masking real schedule/cost erosion until Month 4.",
+          "Staffing risk was mitigated reactively (2 late joiners) instead of resourced at baseline; onboarding cost was not provisioned in the plan, amplifying the budget overrun.",
+          "UAT was the compression valve: when schedule pressure hit, test time was cut rather than scope, directly causing the go-live P1 defects.",
+          "Legacy-integration constraints were discovered late because no early technical spike / interface contract was scheduled with the client's system owners.",
+          "Distributed-team coordination relied on synchronous ceremonies without a strong asynchronous decision/RAID trail, slowing risk escalation."
+        ],
+        "rootCauses": [
+          {
+            "problem": "Go-live shipped with 3 P1 defects (quality failure)",
+            "fiveWhys": [
+              "Why were there 3 P1 defects at go-live? — Critical edge-case data paths were not exercised before release.",
+              "Why were they not exercised? — UAT was compressed from ~3 weeks to ~1.5 weeks.",
+              "Why was UAT compressed? — The go-live date was held fixed while upstream tasks had already slipped.",
+              "Why was the date held while scope/test time absorbed the slip? — No quality gate had authority to block release; only the date was treated as immovable.",
+              "Why was only the date immovable? — Charter defined a hard deadline but never defined a minimum quality bar (P1=0) as an equally binding constraint. → Root cause: quality was not baselined as a non-negotiable acceptance criterion."
+            ]
+          },
+          {
+            "problem": "8% cost overrun",
+            "fiveWhys": [
+              "Why did cost exceed baseline by 8%? — Extra senior effort went into onboarding 2 late joiners and into late rework.",
+              "Why was extra effort needed? — Staffing was under-provisioned at baseline and defects/integration issues surfaced late.",
+              "Why were they under-provisioned and issues late? — The plan assumed a stable, fully-staffed team and clean interfaces from the start.",
+              "Why were those assumptions unvalidated? — They lived as untracked assumptions, not as risks with owners and triggers in the RAID log.",
+              "Why were key assumptions not in the RAID log? — Risk management was run as a periodic formality, not as a live driver of the plan. → Root cause: passive risk/assumption management."
+            ]
+          },
+          {
+            "problem": "2-week schedule slippage detected too late to recover",
+            "fiveWhys": [
+              "Why was the slippage caught too late? — SPI/CPI looked healthy until Month 4.",
+              "Why did the indices look healthy? — Value was credited on optimistic percent-complete estimates.",
+              "Why optimistic estimates? — Completion was self-reported without objective, testable exit criteria per work package.",
+              "Why no objective exit criteria? — Deliverables were defined by activity ('model built') not by measurable acceptance ('model meets precision X on representative data').",
+              "Why activity-based definitions? — Charter-stage success criteria were qualitative. → Root cause (shared with problem 1): unquantified success/acceptance criteria upstream."
+            ]
+          },
+          {
+            "problem": "Late discovery of legacy-integration constraints",
+            "fiveWhys": [
+              "Why were integration constraints found late (M3)? — Interfaces to the client's legacy system were assumed straightforward.",
+              "Why assumed straightforward? — No early technical spike or interface contract was scheduled.",
+              "Why no spike? — Discovery focused on the model/data, not on the target runtime environment.",
+              "Why that focus? — 'AI project' was scoped as a data-science problem more than a systems-integration problem.",
+              "Why that framing? — Architecture and integration owners on the client side were engaged too late. → Root cause: incomplete early stakeholder & technical-environment engagement."
+            ]
+          }
+        ],
+        "improvementPlan": [
+          {
+            "action": "Make quality a baselined constraint: charter must set quantified AI acceptance criteria (target precision/recall, max false-positive rate) AND a hard release gate of P1=0, with the release authority held by the steering committee, not the delivery team.",
+            "priority": "High"
+          },
+          {
+            "action": "Elevate data readiness and legacy-integration to named critical-path dependencies with their own entry/exit gates; schedule a technical spike + signed interface contract in the first 3 weeks.",
+            "priority": "High"
+          },
+          {
+            "action": "Switch EVM to objective, testable percent-complete: credit earned value only against demonstrable acceptance criteria per work package; add a leading indicator (defect-discovery rate, UAT coverage %) alongside CPI/SPI.",
+            "priority": "High"
+          },
+          {
+            "action": "Protect the test window: adopt a 'flex scope, not quality' rule — under pressure, de-scope lowest-WSJF features rather than cutting UAT; ring-fence UAT duration in the baseline.",
+            "priority": "High"
+          },
+          {
+            "action": "Resource staffing risk at baseline: provision the full team from the start or explicitly budget onboarding ramp-up and mentoring capacity if late joiners are anticipated; add a staffing-risk trigger to the RAID log.",
+            "priority": "Medium"
+          },
+          {
+            "action": "Run risk/assumption management as a live process: convert charter assumptions into owned RAID entries with triggers; review at every sprint boundary and steering committee, not just at gates.",
+            "priority": "Medium"
+          },
+          {
+            "action": "Strengthen distributed-team operating model: a written async decision log and RAID trail, one shared source of truth, and a fast escalation path so risks surface within one working day.",
+            "priority": "Medium"
+          },
+          {
+            "action": "Institutionalize this REX: feed these actions into the PMO project-start checklist and the next post-mortem template so lessons are reused, not relearned.",
+            "priority": "Low"
+          }
+        ],
+        "whatWorkedWell": [
+          "Hybrid governance held: Waterfall milestone gates gave the steering committee clear checkpoints while Agile delivery absorbed change within iterations.",
+          "Transparent exception reporting — the slippage and P1 risk were escalated to the steering committee honestly rather than hidden, preserving trust.",
+          "Decisive corrective staffing: adding 2 joiners, though costly, recovered enough scope to still deliver rather than fail outright.",
+          "Effective hypercare: all 3 P1 defects were resolved within the stabilization window with no data-integrity loss.",
+          "Early PoC/feasibility gate de-risked the core model approach before heavy build investment.",
+          "Sponsor engagement stayed strong throughout, enabling fast decisions at the go/no-go point."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-02",
+      "assetId": "AGENT-QA-AGILE",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "qa-quality-review",
+          "description": "STEP-02: deliverables quality review (functional vs technical) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "qa-test-coverage",
+          "description": "STEP-02: test-coverage analysis (unit/integration/E2E) present",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "qa-top-bugs",
+          "description": "STEP-02: top critical bugs and their origin",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "qa-tech-debt",
+          "description": "STEP-02: estimate of technical debt left behind",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "qa-recommendations",
+          "description": "STEP-02: QA process recommendations for the next project",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "qualityReview": "FUNCTIONAL: The AI product was delivered and is operational — all business scope shipped, hypercare resolved the 3 P1 defects within 2 weeks with no data-integrity loss, so functional fitness-for-purpose was ultimately reached but only after go-live, not before it. The core functional failure is that 'done' was negotiable: acceptance was defined by activity ('model built') instead of measurable behaviour ('model meets precision X on representative data'), so the product left the sprint without a verifiable functional acceptance baseline. TECHNICAL: Technical quality was systematically traded to protect a fixed go-live date. The model was validated on a partial, non-production-representative dataset (M1/M2), seeding hidden model-quality debt; MLOps/integration surfaced undocumented legacy interface constraints late (M3, CPI≈0.94); and UAT was compressed from 3 weeks to ~1.5 weeks (M4), which is the direct technical root cause of the escaped defects. ISTQB verdict: this is a classic shift-right failure — quality was inspected at the end under schedule pressure instead of being built in (shift-left) and gated. No quality gate had authority to block release; only the date was immovable. Overall classification consistent with the REX: partial success — delivered, but off baseline on time (+2 weeks), cost (+8%), and quality (3 P1 at go-live).",
+        "testCoverage": "UNIT: No evidence of enforced unit-level coverage or TDD on the model/glue code; because success criteria (precision/recall, max false-positive rate) were never quantified at charter stage, there was no testable oracle to assert against at the lowest level — a critical gap for an AI component where data/model behaviour must be pinned by reproducible fixtures. INTEGRATION: The weakest layer. Legacy-system interfaces were assumed straightforward and discovered late at M3; no early technical spike or signed interface contract existed, so integration test design started from unknown contracts. Two of the three P1 defects lived in edge-case DATA PATHS at the integration boundary — exactly the layer the automation pyramid says should carry dense, fast coverage. E2E / ACCEPTANCE (UAT): Structurally under-provisioned. UAT was the 'compression valve' — halved to protect the date — and edge-case data paths were never exercised end-to-end. Model validation ran on a partial dataset, so representativeness (data coverage) was insufficient regardless of test count. NET ASSESSMENT: Coverage was inverted vs the ISTQB automation pyramid — thin, manual, late acceptance testing bearing risk that unit + integration automation should have absorbed. No leading coverage indicator (UAT coverage %, defect-discovery rate, edge-case data-path coverage) was tracked alongside CPI/SPI, so coverage erosion was invisible until go-live.",
+        "topBugs": [
+          "P1 #1 — Edge-case data-path defect (latent): a critical data path was never exercised end-to-end. ORIGIN: UAT compressed 3w→1.5w to hold the fixed go-live date; escaped to production, caught in hypercare. Root cause = quality not baselined as a non-negotiable acceptance criterion (P1=0 never set as a binding release gate).",
+          "P1 #2 — Second edge-case data-path defect (latent): same failure mode, different path, both traceable to insufficient UAT coverage of edge-case data. ORIGIN: shortened UAT window + model validated on a partial, non-representative dataset that under-covered edge inputs.",
+          "P1 #3 — Third go-live P1 (stabilized in hypercare): resolved within the 2-week window with no data-integrity loss. ORIGIN: schedule pressure diverted risk into test time rather than scope ('cut UAT, not features'); no quality gate had authority to block release.",
+          "Systemic origin behind all three: unquantified AI success criteria at charter (no target precision/recall, no acceptable false-positive rate, no P1 threshold) → 'done' was activity-based, not acceptance-based → quality was the negotiable variable under deadline pressure."
+        ],
+        "techDebt": "MODERATE-TO-HIGH residual, front-loaded onto quality. Explicit paid-down debt: all 3 P1 defects fixed in hypercare (no lingering data-integrity issue). Remaining/structural debt: (1) MODEL-QUALITY DEBT — the model's precision/recall were validated on a partial, non-production-representative dataset and never re-baselined against quantified targets, so real-world accuracy and false-positive behaviour remain unproven — the largest hidden liability. (2) TEST-ASSET DEBT — no ring-fenced automated regression suite for the escaped edge-case data paths; without added regression coverage these defect classes can recur. (3) INTEGRATION-CONTRACT DEBT — legacy interface constraints were discovered ad hoc, not captured in a signed/versioned interface contract, leaving integration fragile to future change. (4) PROCESS DEBT — EVM credited on optimistic percent-complete and passive RAID/risk management persist as recurrence risk. Rough order of magnitude: ~1–2 sprints of hardening to reach a defensible quality baseline (representative-data revalidation + regression automation for the 3 P1 paths + interface-contract documentation).",
+        "qaRecommendations": [
+          "Baseline quality as a non-negotiable constraint (shift-left): the charter must set QUANTIFIED AI acceptance criteria (target precision/recall, max false-positive rate) AND a hard release gate of P1=0, with release authority held by the steering committee — not the delivery team. ISTQB CTFL-AT / CTAL-TM.",
+          "Adopt ATDD/BDD in-sprint: express every story's acceptance in testable Gherkin (Given/When/Then) over representative data so 'done' is demonstrable, not self-reported — this also gives EVM an objective percent-complete oracle. CTFL-AT / CTAL-ATT.",
+          "Rebalance to the automation pyramid: dense automated unit + integration tests (especially at the legacy interface and edge-case data paths) so late manual UAT no longer bears escape risk; ring-fence a CI/CD regression suite that includes the 3 P1 paths. ISTQB Test Automation Engineer.",
+          "Protect the test window with a 'flex scope, not quality' rule: under pressure de-scope the lowest-WSJF features rather than cutting UAT, and lock UAT duration in the baseline. CTAL-TM.",
+          "Track leading quality indicators alongside CPI/SPI: defect-discovery rate, UAT coverage %, edge-case data-path coverage, and requirements-to-test traceability — so coverage/quality erosion is visible before go-live, not after. CTAL-TM.",
+          "Treat data readiness and legacy integration as named critical-path dependencies with their own entry/exit gates; schedule an early technical spike + signed interface contract in the first 3 weeks and add an exploratory (session-based) testing charter for edge-case data paths. CTFL-AT / CTAL-TA.",
+          "Apply ISTQB AI-Testing practices: define data-representativeness and model-quality acceptance thresholds, add drift/regression monitoring in MLOps, and validate on production-representative data before any acceptance sign-off. ISTQB AI Testing / Model-Based Tester.",
+          "Run risk/assumption management live and feed a QA retrospective: convert charter assumptions into owned RAID entries with triggers, review each sprint boundary, and institutionalize this REX in the PMO project-start checklist and post-mortem template. CTFL-AT / CTAL-TM."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-CHANGE-MANAGER",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "cm-team-review",
+          "description": "STEP-03: team dynamics review (cohesion/communication/leadership) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-hr-recommendations",
+          "description": "STEP-03: HR and organizational recommendations — non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "cm-adoption",
+          "description": "STEP-03: user adoption analysis (rate, resistance, champions)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "cm-friction",
+          "description": "STEP-03: friction points between teams or with the client",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "teamReview": "COHESION — The team shows strong under-pressure resilience and ownership: hypercare resolved all 3 P1 defects within 2 weeks with zero data-integrity loss. That is a clear signal of a committed, capable delivery team. However, cohesion was purchased at a human cost — quality was made the negotiable variable and UAT was halved, which typically means the test/QA sub-team absorbed schedule pressure as personal stress and moral injury (\"we shipped knowing it wasn't fully tested\"). This pattern erodes psychological safety and, if unaddressed, drives quiet disengagement in the next cycle.\n\nCOMMUNICATION — Two structural communication failures stand out. (1) Legacy interface constraints surfaced late at M3: this reveals a siloed, low-bandwidth channel between the delivery team and the legacy/operations owners — the two groups were not in a shared-context conversation early enough. (2) Passive RAID/risk management means risks and assumptions were not being escalated openly; the team was carrying unspoken concerns rather than surfacing them to leadership. \"Done\" defined as activity (\"model built\") rather than behaviour also indicates status reporting drifted toward optimistic self-reporting instead of evidence-based transparency.\n\nLEADERSHIP — The defining failure is diffuse accountability: no role held the authority to block release, while the go-live date was the single immovable constraint. Leadership optimised for a date commitment over a quality commitment and did not empower a quality gate. This is a governance/leadership gap, not a team-competence gap — the people executed well within a decision frame that structurally forced the wrong trade-off.",
+        "hrRecommendations": [
+          "Recognition & decompression after hypercare: formally acknowledge the team's hypercare effort (zero data-integrity loss under pressure) and schedule a genuine recovery/decompression period before the next initiative — reinforcement (ADKAR 'R') of the right behaviours, and a burnout-prevention measure for the QA/test members who absorbed the schedule squeeze.",
+          "Clarify decision rights via a release-governance RACI: make explicit WHO can block a go-live (steering committee, not the delivery team) and codify a 'P1=0 is non-negotiable, scope flexes not quality' rule. This removes the accountability diffusion that put an unfair burden on individuals.",
+          "Coach the steering committee / sponsors on quality-vs-date trade-offs: a short leadership-alignment workshop so sponsors own the constraint choices rather than passing pressure down to the team; anchor it in PROSCI sponsor-effectiveness (the #1 contributor to change success is an active, visible sponsor).",
+          "Institutionalise a speak-up / active-RAID culture: convert charter assumptions into owned RAID entries reviewed at each sprint boundary, and make it psychologically safe to raise 'this isn't ready' without career cost — measured via a simple team safety pulse.",
+          "Build cross-functional bridges early: embed a legacy/operations liaison into the team from week 1 (named critical-path dependency) to prevent the late M3 integration surprise from recurring — an organisational-design fix to a communication silo.",
+          "Upskill on AI acceptance criteria & AI-testing literacy: targeted enablement so PO/BA/QA can express quantified, testable acceptance (precision/recall, false-positive thresholds) in-sprint — closes the capability ('A' in ADKAR) gap that let 'done' stay activity-based.",
+          "Establish a change-champion / ambassador network for the deployed product to protect end-user adoption after the rocky go-live, and give champions a feedback channel into the team.",
+          "Run a blameless post-mortem (REX) and feed it into the PMO project-start checklist: convert this experience into organisational learning, framed as system/process improvement rather than individual fault-finding, to preserve morale while fixing the recurrence risk."
+        ],
+        "adoption": "RATE — Adoption metrics were never instrumented: no usage rate, satisfaction score, or competency measure was tracked alongside CPI/SPI, so adoption is currently invisible. This mirrors the delivery-side blind spot (quality erosion unseen until go-live) and must be corrected — you cannot manage adoption you do not measure.\n\nRESISTANCE — The 3 P1 defects at go-live are the principal adoption risk. Early production defects damage the 'Desire' and reinforce negative 'Awareness' stages of ADKAR: users who hit an edge-case failure in week one form a lasting 'this tool is unreliable' narrative that is expensive to reverse. For an AI product this is amplified — trust in model outputs (precision/false-positives never validated on representative data) is fragile, and a few visible wrong answers can trigger workaround behaviour or abandonment. Mitigating factor: hypercare fixed all three within 2 weeks with no data-integrity loss, which limits the trust damage IF it is communicated visibly to users.\n\nCHAMPIONS — No ambassador/champion network is evidenced. This is a gap: champions are the fastest lever to rebuild confidence post-incident and to surface real-world edge cases before they become P1s. Recommended next steps: (1) stand up adoption KPIs (active-usage %, task success rate, user satisfaction/CSAT, model-trust pulse); (2) run a targeted reinforcement communication showing defects are resolved and how to report issues; (3) recruit 3–5 champions per user population to drive Ability and Reinforcement.",
+        "frictionPoints": [
+          "Delivery team ↔ Steering committee: the date was immovable while quality was negotiable — pressure was transmitted downward without the team having authority to push back, the root friction behind the compressed UAT.",
+          "Delivery team ↔ Legacy/Operations owners: undocumented legacy interface constraints surfaced late at M3 (CPI≈0.94), exposing a siloed relationship and missing early technical alignment/interface contract.",
+          "QA/Test ↔ Delivery & Release: no quality gate held authority to block release, creating friction between the people accountable for quality and the schedule-driven release decision.",
+          "Client ↔ Project: go-live delivered off-baseline (+2 weeks, +8% cost, 3 P1 defects), creating trust friction with the client — partially repaired by disciplined hypercare but requiring proactive relationship recovery.",
+          "Sponsors ↔ Team (expectation gap): 'done' defined as activity ('model built') vs the client's implicit expectation of fitness-for-purpose ('meets precision X on representative data') created a latent misalignment that only became visible in production."
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-06",
+      "assetId": "AGENT-REDACTEUR-IA",
+      "catalogTag": "v4.1.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "red-report",
+          "description": "STEP-06: complete lessons-learned report present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-exec-summary",
+          "description": "STEP-06: 1-page executive summary present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-capitalization",
+          "description": "STEP-06: capitalization memo (best practices + pitfalls) present",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "red-best-practices",
+          "description": "STEP-06: top best practices to replicate (ideal 5)",
+          "severity": "advisory",
+          "passed": true
+        },
+        {
+          "id": "red-pitfalls",
+          "description": "STEP-06: top pitfalls to avoid (ideal 5)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "lessonsReport": "LESSONS-LEARNED REPORT — AI PRODUCT GO-LIVE (BLAMELESS REX)\n\nPurpose & framing\nThis report capitalizes on the go-live of the AI product as a system/process improvement exercise, not individual fault-finding. The central finding is that the team executed well inside a decision frame that structurally forced the wrong trade-off. People and craft are not the problem; governance, communication discipline, and measurement are.\n\n1. TIMELINE (what happened)\n- M3 — Undocumented legacy interface constraints surface late (schedule pressure begins to bite; CPI ≈ 0.94). Early technical alignment with the legacy/operations owners was missing.\n- Pre-go-live — The go-live date is treated as the single immovable constraint. With scope and date fixed, quality becomes the negotiable variable: UAT is compressed by roughly half. Precision / false-positive behavior is never validated on representative data.\n- Go-live — Product ships off-baseline: +2 weeks, +8% cost, and 3 P1 defects in production.\n- Hypercare (2 weeks) — All 3 P1 defects are resolved with zero data-integrity loss. Strong, disciplined triage under pressure.\n\n2. ANALYSIS (conclusion first, then evidence)\n\n2.1 Leadership & governance — PRIMARY ROOT CAUSE\nConclusion: accountability was diffuse. No role held the authority to block release, while the date was the only hard commitment. Leadership optimized for a date commitment over a quality commitment and did not empower a quality gate. This is a governance gap, not a competence gap — the frame made the wrong trade-off inevitable.\n\n2.2 Communication\nTwo structural failures. (1) Legacy interface constraints surfaced late at M3, revealing a siloed, low-bandwidth channel between delivery and the legacy/ops owners who were not in shared context early enough. (2) Passive RAID: risks and assumptions were carried privately rather than escalated. \"Done\" was defined as activity (\"model built\") rather than behavior (\"meets precision X on representative data\"), so status reporting drifted toward optimistic self-reporting instead of evidence-based transparency.\n\n2.3 Cohesion & human cost\nThe team showed real under-pressure resilience and ownership — 3 P1s cleared in 2 weeks with zero data-integrity loss is a clear signal of a capable, committed team. But cohesion was purchased at a human cost: quality was the sacrifice variable and UAT was halved, so the QA/test sub-team absorbed the schedule squeeze as personal stress and moral injury (\"we shipped knowing it wasn't fully tested\"). Left unaddressed, this erodes psychological safety and drives quiet disengagement next cycle.\n\n2.4 Adoption risk\nAdoption was never instrumented — no usage rate, satisfaction score, or competency measure sat alongside CPI/SPI — so adoption is currently invisible, mirroring the delivery-side blind spot. The 3 P1 defects are the principal adoption risk: early production failures damage ADKAR Desire and reinforce negative Awareness. For an AI product this is amplified — trust in model outputs is fragile, and a few visible wrong answers can trigger workarounds or abandonment. Mitigating factor: all three were fixed within 2 weeks with no data-integrity loss — but only if that recovery is communicated visibly to users. No champion/ambassador network exists to rebuild confidence or surface edge cases early.\n\n3. FRICTION MAP (relationship-level)\n- Delivery team ↔ Steering committee: date immovable, quality negotiable; pressure transmitted downward without the team having authority to push back — the root friction behind compressed UAT.\n- Delivery team ↔ Legacy/Ops owners: undocumented constraints surfaced late at M3; missing interface contract and early alignment.\n- QA/Test ↔ Release: no quality gate held authority to block, pitting quality accountability against a schedule-driven release decision.\n- Client ↔ Project: go-live off-baseline (+2 wks, +8%, 3 P1) created trust friction, partially repaired by hypercare but needing proactive relationship recovery.\n- Sponsors ↔ Team: expectation gap — \"done\" as activity vs the client's implicit fitness-for-purpose (\"meets precision X on representative data\"), a latent misalignment visible only in production.\n\n4. ACTION PLAN (owned, sequenced)\n\nImmediate (0–2 weeks) — recover the team\n- Formally recognize the hypercare effort (zero data-integrity loss under pressure) and schedule a genuine decompression/recovery period, especially for the QA/test members who absorbed the squeeze. Owner: Delivery lead + Sponsor. (ADKAR Reinforcement; burnout prevention.)\n- Run a blameless post-mortem (REX) and feed it into the PMO project-start checklist. Owner: PMO.\n\nStructural (next cycle) — fix the frame\n- Publish a release-governance RACI: make explicit WHO can block a go-live (steering committee, not the delivery team) and codify \"P1 = 0 is non-negotiable; scope flexes, not quality.\" Owner: Steering committee / PMO.\n- Embed a named legacy/operations liaison from week 1 as a critical-path dependency, with an interface contract, to prevent a repeat M3 surprise. Owner: Delivery lead.\n- Institutionalize active RAID: convert charter assumptions into owned RAID entries reviewed at every sprint boundary, and make it psychologically safe to say \"this isn't ready\" without career cost (measured by a simple team-safety pulse). Owner: PO + Scrum Master.\n\nCapability & adoption\n- Upskill PO/BA/QA on AI acceptance criteria and AI-testing literacy: quantified, testable acceptance in-sprint (precision/recall, false-positive thresholds on representative data). Owner: PO + QA lead. (Closes the ADKAR Ability gap that let \"done\" stay activity-based.)\n- Stand up adoption KPIs (active-usage %, task success rate, CSAT, model-trust pulse) and a targeted reinforcement communication showing the defects are resolved and how to report issues. Owner: Change/adoption lead.\n- Recruit 3–5 champions per user population to rebuild confidence post-incident and surface edge cases before they become P1s; give them a feedback channel into the team. Owner: Change/adoption lead.\n- Coach the steering committee / sponsors on quality-vs-date trade-offs (short alignment workshop, anchored in PROSCI active-visible-sponsor evidence) so sponsors own constraint choices rather than passing pressure down. Owner: Change management.\n\nBottom line: recover the people now, then re-engineer the decision frame (a real quality gate, active risk surfacing, early cross-functional bridges, and instrumented adoption) so the next cycle cannot force quality to be the variable that gives way.",
+        "execSummary": "EXECUTIVE SUMMARY — AI PRODUCT GO-LIVE REX (1 PAGE, FOR STEERING)\n\nVerdict\nA capable, committed team delivered under real pressure — but the governance frame forced quality to become the sacrifice variable. This was a leadership/governance outcome, not a team-competence one: no role was empowered to block release while the date was the only hard commitment.\n\nThe facts\nThe product shipped off-baseline: +2 weeks, +8% cost, and 3 P1 defects in production. With the date fixed and scope held, UAT was compressed by roughly half and AI precision / false-positive behavior was never validated on representative data. Legacy interface constraints had already surfaced late at M3 (CPI ≈ 0.94), signaling a siloed channel with the legacy/operations owners. The recovery was strong: hypercare cleared all 3 P1 defects within 2 weeks with zero data-integrity loss.\n\nThe three lessons\n1. Empower a quality gate. Diffuse accountability + an immovable date guaranteed the wrong trade-off. Decision rights over go-live must be explicit and owned by governance.\n2. Make risk visible. Passive RAID and an activity-based definition of \"done\" (\"model built\") let concerns stay unspoken and status drift optimistic. Risks and readiness must be surfaced as evidence, not activity.\n3. Measure adoption from day one. Adoption was never instrumented, so it is invisible — the same blind spot that hid quality erosion until go-live. For an AI product, early defects erode fragile user trust fastest.\n\nThe three decisive actions\n1. Publish a release-governance RACI: the steering committee (not the delivery team) can block go-live, under the rule \"P1 = 0 is non-negotiable; scope flexes, not quality.\"\n2. Embed a named legacy/operations liaison from week 1 of the next initiative to eliminate late-integration surprises.\n3. Stand up adoption KPIs (active-usage %, task success, CSAT, model-trust pulse) plus a 3–5-person champion network per population to rebuild trust and surface edge cases early.\n\nThe ask\nOwn the constraint choice. Leadership — not the team — should decide the quality-vs-date trade-off explicitly and empower the gate that enforces it. First, recognize and decompress the team (particularly QA/test) that absorbed this cycle's pressure; then re-engineer the frame so quality is never again the variable that gives way.",
+        "capitalizationMemo": "CAPITALIZATION MEMO — WHAT TO REPLICATE, WHAT TO AVOID\n\nContext: one AI product go-live shipped off-baseline (+2 wks, +8% cost, 3 P1 defects) but was recovered by disciplined hypercare (all P1s fixed in 2 weeks, zero data-integrity loss). The lessons below are reusable across future AI initiatives.\n\nBEST PRACTICES TO REPLICATE\n- Hypercare discipline under pressure. A structured, prioritized defect-triage cadence cleared all 3 P1s in 2 weeks — protect and templatize this response.\n- Zero data-integrity loss as a guardrail. Even while sacrificing test coverage, data integrity was never compromised. Keep integrity as a hard, non-negotiable invariant.\n- Ownership and resilience. A committed team absorbed real pressure and delivered — recognize it explicitly (ADKAR Reinforcement) so the behavior repeats without burnout.\n- Blameless REX + PMO feedback loop. Framing this as system improvement preserves morale while fixing recurrence — institutionalize it in the project-start checklist.\n- Active, visible sponsorship (PROSCI). When sponsors own the trade-off, pressure stops cascading unfiltered onto delivery and QA.\n\nPITFALLS TO AVOID\n- Diffuse release accountability. No role empowered to block go-live while the date is the only hard commitment — structurally forces the wrong trade-off. Fix with a release-governance RACI.\n- Quality as the negotiable variable. Halving UAT and never validating AI precision / false-positives on representative data. Codify \"P1 = 0 is non-negotiable; scope flexes, not quality.\"\n- Passive RAID. Risks and assumptions carried privately instead of escalated. Convert charter assumptions into owned RAID entries reviewed at each sprint boundary, in a speak-up-safe culture.\n- Activity-based \"done\". \"Model built\" is not \"meets precision X on representative data.\" Express quantified, testable acceptance (precision/recall, false-positive thresholds) in-sprint.\n- Uninstrumented delivery and adoption. Quality erosion invisible until go-live; adoption never measured. Track adoption KPIs (usage %, task success, CSAT, model-trust pulse) alongside CPI/SPI, and seed a 3–5-person champion network per population — especially critical for fragile AI-output trust.\n\nREUSABLE PMO CHECKLIST LINE\nBefore any AI go-live: (1) a named authority can block release; (2) quantified AI acceptance criteria validated on representative data; (3) week-1 legacy/ops liaison with an interface contract; (4) active RAID at every sprint boundary; (5) adoption instrumented and champions recruited.",
+        "bestPractices": [
+          "Hypercare discipline: a structured, prioritized triage that cleared all 3 P1 defects within 2 weeks under pressure.",
+          "Zero data-integrity loss held as a non-negotiable invariant even while test coverage was sacrificed.",
+          "Team ownership and resilience — recognize it explicitly (ADKAR Reinforcement) so it repeats without burnout.",
+          "Blameless post-mortem (REX) fed into the PMO project-start checklist to convert experience into organizational learning.",
+          "Active, visible sponsorship (PROSCI) so leadership owns the constraint trade-off instead of cascading pressure to delivery/QA."
+        ],
+        "pitfalls": [
+          "Diffuse release accountability: no role empowered to block go-live while the date was the only hard commitment.",
+          "Quality made the negotiable variable — UAT halved and AI precision/false-positives never validated on representative data.",
+          "Passive RAID: risks and assumptions carried privately instead of escalated openly.",
+          "Activity-based definition of 'done' ('model built') instead of behavior ('meets precision X on representative data').",
+          "Delivery and adoption left uninstrumented, so quality erosion and adoption stayed invisible until (and after) go-live."
+        ]
+      }
+    }
+  ]
+}
