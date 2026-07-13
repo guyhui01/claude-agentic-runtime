@@ -1,6 +1,6 @@
 {
   "name": "claude-agentic-runtime",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Runtime agentique exécutant le catalogue claude-agents (lecture seule) via le Claude Agent SDK.",
   "type": "module",
   "license": "PolyForm-Noncommercial-1.0.0",

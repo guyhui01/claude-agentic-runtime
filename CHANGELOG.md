@@ -7,6 +7,8 @@
 ---
 
 ## [Unreleased]
+
+## [0.8.0] - 2026-07-13 — All 10 catalog workflows live-proven: WF-005/007/010 backbones, WF-009 end-to-end, decision-gate sentinel hardening 🏁
 > Model: Claude Opus 4.8
 
 ### ✨ Added
