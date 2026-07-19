@@ -49,3 +49,66 @@ export interface CompletenessIssue {
 export type CompletenessResult =
   | { status: "ok"; brief: NeedBrief }
   | { status: "REJECT_INCOMPLETE"; issues: CompletenessIssue[] };
+
+// --- Routing (contract §5, router draft §2-§4) -------------------------------
+
+/** Strict JSON the router LLM must return (router draft §2). */
+export interface RouterOutput {
+  /** A workflow id from the injected catalog table, or "NO_MATCH". */
+  proposedRoute: string;
+  /** Advisory for the human gate — displayed, never parsed for decisions (ADR-0007). */
+  rationale: string;
+  /** Optional nearest miss named on NO_MATCH. Advisory only. */
+  nearestMiss: string | null;
+}
+
+/** One problem with the router's output (fail-closed reporting). */
+export interface RouteIssue {
+  code: "MALFORMED_OUTPUT" | "UNKNOWN_WORKFLOW" | "UNRESOLVABLE_DEPENDENCY";
+  message: string;
+}
+
+/**
+ * Outcome of the deterministic route validation. NO_MATCH and PARAMS_MISSING
+ * are valid, successful outcomes (returned-for-rework applied to intake) —
+ * only REJECT_ROUTER_OUTPUT marks a proposal the pipeline refuses to trust.
+ */
+export type RouteDecision =
+  | { status: "REJECT_ROUTER_OUTPUT"; issues: RouteIssue[] }
+  | { status: "NO_MATCH"; rationale: string; nearestMiss?: string }
+  | { status: "PARAMS_MISSING"; route: string; missingParams: string[] }
+  | {
+      status: "ROUTED";
+      route: string;
+      rationale: string;
+      /**
+       * `true` when a param manifest existed and was satisfied. `false` when no
+       * manifest covers the route yet (V0 ships WF-001 only) — surfaced honestly
+       * to the human go/no-go, never silently equated with a checked route.
+       */
+      paramsChecked: boolean;
+    };
+
+/** One identity-card parameter of a workflow (dry-run findings 2-3). */
+export interface ParamSpec {
+  name: string;
+  /** Label of the parameter on the catalog card (provenance). */
+  card: string;
+  required: boolean;
+  /** Deterministic accessor: the brief text this parameter is filled from. */
+  mapping: (brief: NeedBrief) => string;
+  /** Deterministic fill detector on the mapped text. Absent = affirmative substance suffices. */
+  pattern?: RegExp;
+  /** Card-sanctioned honest unknown ("Not disclosed", "to be defined") — accepted as filled. */
+  sanctionedUnknown?: RegExp;
+  /** Operator-profile default: the parameter is never missing. */
+  defaultValue?: string;
+}
+
+/** Versioned per-workflow parameter manifest, pinned to the catalog tag. */
+export interface ParamManifest {
+  workflow: string;
+  /** Must match the sidecar's pinned tag — drift is a hard failure (real-sidecar test). */
+  catalogTag: string;
+  params: ParamSpec[];
+}
