@@ -67,6 +67,10 @@ Per-field rules (all deterministic, in the spirit of the existing spine helpers)
    recognizable state marker (matched against a fixed, versioned marker list derived from the
    sidecar descriptions — see matrix §3). No marker ⇒ reject: the operator has not qualified
    *where the client stands*, which is exactly what routing discriminates on.
+   *Implementation note (2026-07-19):* the marker list also carries one **generic
+   qualified-request marker** (an explicit stakeholder ask) — markers are catalog-derived, so
+   without it every off-catalog need would be rejected at intake and the router's honest
+   `NO_MATCH` would be unreachable. A marker match never routes; it only proves qualification.
 3. **`constraints`**: empty array allowed only when `context` explicitly says the engagement is
    unconstrained — otherwise reject (an unstated constraint is the classic silent scope killer).
 4. **No PII**: `submittedBy` must match a role pattern (no email, no proper-name heuristic

@@ -43,6 +43,12 @@ export const STATE_MARKER_PATTERNS: readonly RegExp[] = [
   /\bin production\b|\bcompliance audit\b|\bAI Act\b|\bGDPR\b/i, // WF-008
   /\bhiring\b|\brecruit(ment|ing)?\b|\bjob description\b|\bposition to fill\b|\bneeds? a (senior |junior )?\w+ (engineer|developer|designer|scientist)\b/i, // WF-009
   /\bpost-?mortem\b|\blessons learned\b|\bincident\b|\bproject (closed|shipped|ended|delivered)\b|\bmonths? late\b/i, // WF-010
+  // Generic qualified-request marker — an explicit stakeholder ask ("asked us
+  // to take over X") IS a stated client state even when no catalog workflow
+  // covers it. Without this bucket, every off-catalog need would die at intake
+  // (NO_STATE_MARKER) and the router's honest NO_MATCH would be unreachable —
+  // coverage honesty requires off-catalog briefs to REACH routing.
+  /\b(asks?|asked|requests?|requested|wants us to|needs us to|take over|mandated)\b/i,
 ];
 
 /** Deterministic escape hatch for an empty `constraints` array (contract §4.3). */
