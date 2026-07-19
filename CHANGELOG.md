@@ -7,6 +7,8 @@
 ---
 
 ## [Unreleased]
+
+## [0.9.0] - 2026-07-19 — WF-000 dispatch V0: intake → routing → execution plan, live-proven end-to-end 🚦
 > Model: Claude Fable 5
 
 ### ✨ Added
