@@ -10,6 +10,7 @@
 > need routes to the expected workflow, whether off-catalog needs honestly reach `NO_MATCH`,
 > and — via the two role probes P19/P20 — whether routing stays **invariant to the submitter's
 > role** (role ⊥ route).
+> Drafted 2026-07-19 with Claude Fable 5 (`claude-fable-5`), reviewed by the product owner.
 
 ## 1. The 10 routing targets (from sidecar v4.2.0)
 
@@ -86,6 +87,7 @@ router must NOT route on — P19/P20 probe exactly that.
 1. ~~Exercise the matrix against the real WF identity cards~~ — **DONE**, see
    [identity-card dry run](wf-000-dispatch-identity-card-dry-run.md) (15/15 routed prompts
    gap-profiled; `PARAMS_MISSING` outcome added to the brief contract §5).
-2. Draft the router prompt + the deterministic validation checklist as code-shaped pseudocode
-   (incl. the WF-001 param manifest draft).
+2. ~~Draft the router prompt + the deterministic validation checklist~~ — **DONE**, see
+   [router draft](wf-000-dispatch-router-draft.md) (prompt skeleton, fail-closed validation
+   pseudocode, WF-001 param manifest draft).
 3. Then only: V0 dispatch spine implementation plan (pilot WF-001, human go/no-go gate).

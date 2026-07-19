@@ -12,6 +12,8 @@
 >   "to be defined", "to confirm in STEP-01") or an operator-profile default (deliverables
 >   language, tone, proposal format).
 > - **M — must-ask**: the operator has to go back to the stakeholder before the run.
+>
+> Drafted 2026-07-19 with Claude Fable 5 (`claude-fable-5`), reviewed by the product owner.
 
 ## 1. Parameter inventory (from the real cards)
 

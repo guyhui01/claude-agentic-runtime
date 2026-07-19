@@ -4,6 +4,7 @@
 > approved 2026-07-18). Not an implemented spec: the schema below is a proposal to be exercised
 > against the [coverage matrix](wf-000-dispatch-coverage-matrix.md) before any code is written.
 > Companion deliverable: `wf-000-dispatch-coverage-matrix.md` (20 fictional stakeholder prompts × 10 WF).
+> Drafted 2026-07-19 with Claude Fable 5 (`claude-fable-5`), reviewed by the product owner.
 
 ## 1. Purpose and locked framing
 
