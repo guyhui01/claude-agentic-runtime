@@ -1,0 +1,343 @@
+{
+  "ranAt": "2026-07-19T11:33:18.600Z",
+  "score": "19/20",
+  "results": [
+    {
+      "id": "P01",
+      "expected": "WF-001",
+      "got": "WF-001",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-001",
+        "rationale": "State marker \"client brief received\" and deliverable \"prioritized initial backlog + acceptance criteria\" match WF-001's arrow exactly (Client brief → prioritized backlog + acceptance criteria); the UX-designer submitter is advisory only.",
+        "paramsChecked": true,
+        "plan": {
+          "workflow": "WF-001",
+          "title": "AI Product Scoping",
+          "durationEstimate": "45-90 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P02",
+      "expected": "WF-002",
+      "got": "WF-002",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-002",
+        "rationale": "Current state \"PI-7 planning starts next month\" on a SAFe ART and deliverable \"PI planning outputs, sprint backlog and executive-committee progress reporting\" match WF-002's arrow (PI Planning → sprint backlog → executive-committee progress reporting) end to end.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-002",
+          "title": "Delivery Agile SAFe",
+          "durationEstimate": "60-120 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P03",
+      "expected": "WF-003",
+      "got": "WF-003",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-003",
+        "rationale": "State marker \"validated prototype\" matches WF-003's \"Validated idea\" entry state, and the expected deliverable (architecture, code, deployment, security audit) mirrors its arrow exactly.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-003",
+          "title": "AI Application Launch",
+          "durationEstimate": "90-180 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P04",
+      "expected": "WF-004",
+      "got": "WF-004",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-004",
+        "rationale": "State marker \"Engagement signed\" with expected deliverables \"maturity audit + AI strategy roadmap + training plan + executive readout\" matches WF-004's arrow exactly (engagement signed → maturity audit → strategy → training plan → executive deliverables).",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-004",
+          "title": "AI Consulting Engagement",
+          "durationEstimate": "60-90 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P05",
+      "expected": "WF-005",
+      "got": "WF-005",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-005",
+        "rationale": "State marker \"weekly digest of GenAI market moves\" (market signal / weekly cadence) plus deliverable \"qualified synthesis + LinkedIn publication-ready posts\" matches WF-005's arrow market signal → qualified synthesis → thought-leadership content → publication.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-005",
+          "title": "Strategic Intelligence & Growth",
+          "durationEstimate": "30-60 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P06",
+      "expected": "WF-006",
+      "got": "WF-006",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-006",
+        "rationale": "State marker \"RFP received\" and deliverable \"qualified go/no-go + full commercial proposal with costing\" exactly match WF-006's arrow (RFP received → qualification → scoping → architecture → schedule → costing → commercial proposal).",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-006",
+          "title": "Pre-sales / Commercial proposal",
+          "durationEstimate": "75-120 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P07",
+      "expected": "WF-007",
+      "got": "WF-007",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-007",
+        "rationale": "State marker \"Engagement signed\" with expected deliverable \"kickoff plan + D1 kit + D5 scoping\" matches WF-007's arrow (Engagement signed → client context → kickoff plan → D1 deliverables → D5 scoping) end to end.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-007",
+          "title": "Client Engagement Onboarding D1-D5",
+          "durationEstimate": "45-75 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P08",
+      "expected": "WF-008",
+      "got": "WF-008",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-008",
+        "rationale": "State \"AI system in production flagged for compliance audit\" matches WF-008's entry state \"AI system to audit\", and the expected deliverable \"compliance audit report and remediation plan\" matches its output \"report + remediation plan\".",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-008",
+          "title": "AI Act / GDPR Compliance Audit",
+          "durationEstimate": "90-150 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P09",
+      "expected": "WF-009",
+      "got": "WF-009",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-009",
+        "rationale": "Current state \"identified hiring need\" (no job description, no pipeline) with deliverable \"job description → sourcing → assessment → selection → offer\" exactly matches WF-009's arrow.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-009",
+          "title": "IT/AI Recruitment",
+          "durationEstimate": "60-90 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P10",
+      "expected": "WF-010",
+      "got": "WF-010",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-010",
+        "rationale": "State marker \"project closed\" with expected deliverable \"lessons-learned report and improvement plan\" matches WF-010's arrow exactly (Project closed → collection → analysis → lessons-learned report → improvement plan); submitter role (QA Manager) is advisory only.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-010",
+          "title": "Project Post-mortem / Lessons Learned",
+          "durationEstimate": "45-75 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P11",
+      "expected": "WF-006",
+      "got": "NO_MATCH",
+      "match": false,
+      "detail": {
+        "status": "NO_MATCH",
+        "rationale": "Current state is a direct pre-signature solicitation with explicitly no RFP received, so while the expected deliverable (commercial proposal) matches WF-006's endpoint, its entry state 'RFP received' is not met and no other workflow starts from an unsigned prospect ask.",
+        "nearestMiss": "WF-006"
+      }
+    },
+    {
+      "id": "P12",
+      "expected": "WF-004",
+      "got": "WF-004",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-004",
+        "rationale": "State marker \"engagement signed\" with expected deliverable \"AI maturity diagnostic report\" matches WF-004's arrow (Engagement signed → maturity audit → …), whose first phase produces exactly the maturity diagnostic before strategy and training.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-004",
+          "title": "AI Consulting Engagement",
+          "durationEstimate": "60-90 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    },
+    {
+      "id": "P13",
+      "expected": "WF-010",
+      "got": "WF-010",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-010",
+        "rationale": "State marker \"major incident\" (production fraud-scoring failure, project-level incident with logs available) plus expected deliverable \"post-mortem analysis and lessons-learned report\" match WF-010's arrow \"Project closed (or major incident) → collection → analysis → lessons-learned report → improvement plan\".",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-010",
+          "title": "Project Post-mortem / Lessons Learned",
+          "durationEstimate": "45-75 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P14",
+      "expected": "NO_MATCH",
+      "got": "NO_MATCH",
+      "match": true,
+      "detail": {
+        "status": "NO_MATCH",
+        "rationale": "State \"legal contract drafting need\" with deliverable \"drafted master service agreement\" matches no catalog arrow — WF-008 is the only legal-adjacent workflow but starts from \"AI system to audit\" and ends in a compliance report, which the brief explicitly excludes.",
+        "nearestMiss": "WF-008"
+      }
+    },
+    {
+      "id": "P15",
+      "expected": "NO_MATCH",
+      "got": "NO_MATCH",
+      "match": true,
+      "detail": {
+        "status": "NO_MATCH",
+        "rationale": "State is an unbounded ongoing-operations engagement and the deliverable is continuous 24/7 on-call coverage; no catalog workflow's arrow ends in continuous operations service (all target bounded deliverables like backlogs, launches, audits, proposals, or hires).",
+        "nearestMiss": "WF-002"
+      }
+    },
+    {
+      "id": "P16",
+      "expected": "NO_MATCH",
+      "got": "NO_MATCH",
+      "match": true,
+      "detail": {
+        "status": "NO_MATCH",
+        "rationale": "Current state \"model pretraining program on proprietary corpus\" with deliverable \"pretrained proprietary LLM\" matches no catalog arrow — no workflow covers foundation-model training, and the brief explicitly excludes an application build.",
+        "nearestMiss": "WF-003"
+      }
+    },
+    {
+      "id": "P17",
+      "expected": "NO_MATCH",
+      "got": "NO_MATCH",
+      "match": true,
+      "detail": {
+        "status": "NO_MATCH",
+        "rationale": "State \"office move to organize\" with deliverable \"executed office move\" is pure facilities logistics; no catalog workflow's state → deliverable arrow covers non-digital facilities execution."
+      }
+    },
+    {
+      "id": "P18",
+      "expected": "REJECT_INCOMPLETE",
+      "got": "REJECT_INCOMPLETE",
+      "match": true,
+      "detail": {
+        "status": "REJECT_INCOMPLETE",
+        "issues": [
+          {
+            "field": "domain",
+            "code": "SCHEMA",
+            "message": "domain must have required property 'domain'"
+          },
+          {
+            "field": "expectedDeliverable",
+            "code": "SCHEMA",
+            "message": "expectedDeliverable must have required property 'expectedDeliverable'"
+          },
+          {
+            "field": "constraints",
+            "code": "SCHEMA",
+            "message": "constraints must have required property 'constraints'"
+          },
+          {
+            "field": "context",
+            "code": "SCHEMA",
+            "message": "context must have required property 'context'"
+          }
+        ]
+      }
+    },
+    {
+      "id": "P19",
+      "expected": "WF-001",
+      "got": "WF-001",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-001",
+        "rationale": "State marker \"Client brief received\" plus expected deliverable \"prioritized initial backlog with acceptance criteria\" matches WF-001's arrow (Client brief → prioritized backlog + acceptance criteria) exactly; HR submitter is advisory only and does not pull toward WF-009.",
+        "paramsChecked": true,
+        "plan": {
+          "workflow": "WF-001",
+          "title": "AI Product Scoping",
+          "durationEstimate": "45-90 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "P20",
+      "expected": "WF-008",
+      "got": "WF-008",
+      "match": true,
+      "detail": {
+        "status": "ROUTED",
+        "route": "WF-008",
+        "rationale": "State \"AI system in production to audit\" plus deliverable \"compliance audit report against AI Act/GDPR with remediation actions\" matches WF-008's arrow (AI system to audit → obligations mapping → … → report + remediation plan); submitter role (Lead Data Scientist) is ignored per rules.",
+        "paramsChecked": false,
+        "plan": {
+          "workflow": "WF-008",
+          "title": "AI Act / GDPR Compliance Audit",
+          "durationEstimate": "90-150 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    }
+  ]
+}
