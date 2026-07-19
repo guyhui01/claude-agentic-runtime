@@ -90,4 +90,6 @@ router must NOT route on — P19/P20 probe exactly that.
 2. ~~Draft the router prompt + the deterministic validation checklist~~ — **DONE**, see
    [router draft](wf-000-dispatch-router-draft.md) (prompt skeleton, fail-closed validation
    pseudocode, WF-001 param manifest draft).
-3. Then only: V0 dispatch spine implementation plan (pilot WF-001, human go/no-go gate).
+3. ~~V0 dispatch spine implementation plan~~ — **DONE**, see
+   [V0 implementation plan](wf-000-dispatch-v0-implementation-plan.md). Discovery complete;
+   next work is implementation (Lot 1 = brief schema + completeness check, offline).
