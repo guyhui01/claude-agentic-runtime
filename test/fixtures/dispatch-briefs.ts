@@ -257,3 +257,21 @@ export const DISPATCH_FIXTURES: DispatchFixture[] = [
     },
   },
 ];
+
+/**
+ * P01 BEFORE amendment — the pilot's PARAMS_MISSING probe (identity-card dry
+ * run §2: Team size, Project method and Level of detail are must-ask). Same
+ * qualified brief as fixture P01 MINUS the three facts the operator collects
+ * from the stakeholder on the return loop: the squad and method statements in
+ * `context`, the "(full scoping)" depth marker in `expectedDeliverable`.
+ * `need` is unchanged, so the brief PASSES intake and the gap surfaces at the
+ * per-param manifest check — fixture P01 above IS the amended version.
+ */
+export const P01_UNAMENDED: NeedBrief = {
+  need: "Client brief received from Nordwind Insurance: the claims department wants an AI assistant for adjusters and management approved exploring it, so we must decide what to build first.",
+  domain: "Agile & Product",
+  expectedDeliverable: "Prioritized initial backlog with acceptance criteria",
+  constraints: ["GDPR applies to claimant data", "pilot budget capped for Q3"],
+  context: "Mid-size European insurer, claims department of 40 adjusters, no imposed stack.",
+  submittedBy: "Lead UX Designer",
+};

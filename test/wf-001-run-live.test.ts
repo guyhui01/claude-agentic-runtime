@@ -36,6 +36,16 @@ const RESULT_FILE =
 
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 
+/**
+ * Spine seed — `LIVE_BRIEF` overrides it for brief-derived runs (the WF-000
+ * pilot P01 injects its qualified-brief seed here); default unchanged: the
+ * proven insurer seed.
+ */
+const LIVE_BRIEF =
+  process.env.LIVE_BRIEF ??
+  "Rebuild an insurer's B2B customer portal: self-care area, " +
+    "policy tracking and claims filing, web and mobile.";
+
 describe.skipIf(!ENABLED)("WF-001 — LIVE RUN (billed, observed)", () => {
   it(
     "runs the WF-001 spine live (capped, read-only)",
@@ -45,11 +55,7 @@ describe.skipIf(!ENABLED)("WF-001 — LIVE RUN (billed, observed)", () => {
         sidecar,
         catalogRoot: CATALOG_ROOT,
         ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
-        initialInput: {
-          brief:
-            "Rebuild an insurer's B2B customer portal: self-care area, " +
-            "policy tracking and claims filing, web and mobile.",
-        },
+        initialInput: { brief: LIVE_BRIEF },
         runnerDeps: { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } },
       });
 
@@ -76,6 +82,7 @@ describe.skipIf(!ENABLED)("WF-001 — LIVE RUN (billed, observed)", () => {
         JSON.stringify(
           {
             status: res.status,
+            seed: LIVE_BRIEF,
             failure: res.failure ?? null,
             traces: res.traces.map((t) => ({
               stepId: t.provenance.stepId,

@@ -4,7 +4,7 @@ import { extractPlanFields } from "../src/dispatch/plan.js";
 import type { ExecutionPlan } from "../src/dispatch/plan.js";
 import type { StepRunner } from "../src/orchestrator/types.js";
 import type { Sidecar, Asset } from "../src/sidecar/types.js";
-import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
+import { DISPATCH_FIXTURES, P01_UNAMENDED } from "./fixtures/dispatch-briefs.js";
 
 /**
  * Hermetic guard of the V0 dispatch pipeline: intake short-circuits before any
@@ -91,6 +91,24 @@ describe("runDispatch — pipeline order and bounded retry", () => {
       route: "WF-001",
       paramsChecked: true,
       plan: FAKE_PLAN,
+    });
+    expect(runner.calls()).toBe(1);
+  });
+
+  it("returns PARAMS_MISSING with the three pilot gaps on the unamended P01", async () => {
+    // Pilot return loop (identity-card dry run §2): the pre-amendment P01
+    // passes intake but cannot fill the WF-001 card — deterministic outcome.
+    const runner = runnerOf(GOOD);
+    const res = await runDispatch(P01_UNAMENDED, {
+      sidecar: SIDECAR,
+      catalogRoot: "/nowhere",
+      runner,
+      planBuilder: fakePlanBuilder,
+    });
+    expect(res).toEqual({
+      status: "PARAMS_MISSING",
+      route: "WF-001",
+      missingParams: ["team_size", "project_method", "level_of_detail"],
     });
     expect(runner.calls()).toBe(1);
   });
