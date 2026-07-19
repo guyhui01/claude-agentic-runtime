@@ -81,11 +81,16 @@ The router returns exactly one of:
 - `{ route: "WF-00X", rationale, planRef }` — after deterministic validation (WF exists in
   sidecar, `dependsOn` resolvable, identity-card params fillable from `context`). `rationale`
   is advisory for the human gate, never evaluated by another LLM.
+- `{ route: "WF-00X", status: "PARAMS_MISSING", missingParams: [...] }` — the route is valid
+  but the brief cannot fill the workflow's identity-card parameters; the brief is **returned
+  to the operator with the missing params named** (upstream of the go/no-go). Established by
+  the [identity-card dry run](wf-000-dispatch-identity-card-dry-run.md) (finding 4): 15/15
+  routed matrix prompts carry a param gap before operator qualification.
 - `{ route: "NO_MATCH", rationale }` — honest coverage answer; surfaced to the operator as
   *"no workflow for this"*, with the nearest-miss WF named when one exists (advisory only).
 
-A `NO_MATCH` is a **valid, successful outcome** of the dispatch — the returned-for-rework
-pattern applied to intake.
+`NO_MATCH` and `PARAMS_MISSING` are **valid, successful outcomes** of the dispatch — the
+returned-for-rework pattern applied to intake.
 
 ## 6. Slicing (locked)
 

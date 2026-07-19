@@ -81,9 +81,11 @@ router must NOT route on — P19/P20 probe exactly that.
 - **Pilot run target: WF-001 (P01).** Smallest backbone with a fully proven spine and no
   passthrough caveat.
 
-## 4. Next discovery steps (not started)
+## 4. Next discovery steps
 
-1. Exercise the matrix against the real WF identity cards (params fillable from `context`?) —
-   deterministic-validation dry run, offline, no LLM.
-2. Draft the router prompt + the deterministic validation checklist as code-shaped pseudocode.
+1. ~~Exercise the matrix against the real WF identity cards~~ — **DONE**, see
+   [identity-card dry run](wf-000-dispatch-identity-card-dry-run.md) (15/15 routed prompts
+   gap-profiled; `PARAMS_MISSING` outcome added to the brief contract §5).
+2. Draft the router prompt + the deterministic validation checklist as code-shaped pseudocode
+   (incl. the WF-001 param manifest draft).
 3. Then only: V0 dispatch spine implementation plan (pilot WF-001, human go/no-go gate).
