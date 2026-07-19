@@ -1,0 +1,56 @@
+{
+  "ranAt": "2026-07-19T17:35:29.383Z",
+  "phases": [
+    {
+      "phase": "unamended (return loop)",
+      "expected": "PARAMS_MISSING [team_size, project_method, level_of_detail]",
+      "brief": {
+        "need": "Client brief received from Nordwind Insurance: the claims department wants an AI assistant for adjusters and management approved exploring it, so we must decide what to build first.",
+        "domain": "Agile & Product",
+        "expectedDeliverable": "Prioritized initial backlog with acceptance criteria",
+        "constraints": [
+          "GDPR applies to claimant data",
+          "pilot budget capped for Q3"
+        ],
+        "context": "Mid-size European insurer, claims department of 40 adjusters, no imposed stack.",
+        "submittedBy": "Lead UX Designer"
+      },
+      "outcome": {
+        "status": "PARAMS_MISSING",
+        "route": "WF-001",
+        "missingParams": [
+          "team_size",
+          "project_method",
+          "level_of_detail"
+        ]
+      }
+    },
+    {
+      "phase": "amended (fixture P01)",
+      "expected": "ROUTED WF-001, paramsChecked true, plan attached",
+      "brief": {
+        "need": "Client brief received from Nordwind Insurance: the claims department wants an AI assistant for adjusters and management approved exploring it, so we must decide what to build first.",
+        "domain": "Agile & Product",
+        "expectedDeliverable": "Prioritized initial backlog with acceptance criteria (full scoping)",
+        "constraints": [
+          "GDPR applies to claimant data",
+          "pilot budget capped for Q3"
+        ],
+        "context": "Mid-size European insurer, claims department of 40 adjusters, one product squad available, Scrum in place, no imposed stack.",
+        "submittedBy": "Lead UX Designer"
+      },
+      "outcome": {
+        "status": "ROUTED",
+        "route": "WF-001",
+        "rationale": "State \"client brief received\" plus deliverable \"prioritized initial backlog with acceptance criteria (full scoping)\" matches WF-001's client-brief → prioritized-backlog + acceptance-criteria arrow.",
+        "paramsChecked": true,
+        "plan": {
+          "workflow": "WF-001",
+          "title": "AI Product Scoping",
+          "durationEstimate": "45-90 min",
+          "recommendedModel": "claude-sonnet-5"
+        }
+      }
+    }
+  ]
+}

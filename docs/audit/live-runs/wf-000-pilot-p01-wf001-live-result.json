@@ -1,0 +1,514 @@
+{
+  "status": "completed",
+  "seed": "AI product scoping for Nordwind Insurance (mid-size European insurer): the claims department wants an AI assistant for its 40 adjusters; management approved exploring it. Deliverable: prioritized initial backlog with acceptance criteria (full scoping). One product squad available, Scrum in place, no imposed stack; GDPR applies to claimant data; pilot budget capped for Q3.",
+  "failure": null,
+  "traces": [
+    {
+      "stepId": "STEP-01",
+      "assetId": "AGENT-BUSINESS-ANALYST",
+      "catalogTag": "v4.2.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "ba-besoins-non-vide",
+          "description": "STEP-01: needs map (job-to-be-done) non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-parties-prenantes-non-vide",
+          "description": "STEP-01: stakeholder list non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-perimetre-in-out",
+          "description": "STEP-01: explicit functional scope — `in` non-empty AND `out` present (in/out scope)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "ba-questions-ouvertes-presentes",
+          "description": "STEP-01: open questions listed (array present, even if empty when the brief is clear)",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "besoins": [
+          {
+            "id": "BES-01",
+            "titre": "Claim file summarization",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I want the assistant to generate a structured summary of an incoming claim file (facts, parties, damages, timeline) so I can grasp the case in minutes instead of reading the full dossier.",
+            "valeurMetier": "Reduces file-triage time; primary lever for the 40 adjusters",
+            "priorite": "MUST",
+            "moscow": "Must have",
+            "criteresAcceptation": [
+              "Given a claim file (PDF/scan/notes), when the adjuster requests a summary, then a structured summary (loss facts, claimant, policy ref, estimated amount, key dates) is produced in < 30s",
+              "Every summary displays the source references (page/document) for each stated fact",
+              "The adjuster can flag/correct an inaccurate summary; the correction is logged",
+              "No summary is auto-validated: human confirmation is required before use in the file"
+            ]
+          },
+          {
+            "id": "BES-02",
+            "titre": "Policy & coverage assistance (RAG over policy wordings)",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I want to ask whether a given damage is covered and retrieve the relevant policy clauses so I can justify a coverage decision with a traceable citation.",
+            "valeurMetier": "Improves decision consistency and reduces coverage errors/disputes",
+            "priorite": "MUST",
+            "moscow": "Must have",
+            "criteresAcceptation": [
+              "Given a coverage question, when the adjuster queries the assistant, then the answer cites the exact clause(s) of the applicable policy version",
+              "The assistant states 'insufficient information' rather than inventing a clause when no supporting text is found",
+              "Answers are grounded only in the ingested policy corpus (no free-form legal advice)",
+              "Response includes a confidence/uncertainty indication reviewed by the adjuster"
+            ]
+          },
+          {
+            "id": "BES-03",
+            "titre": "Structured data extraction from claim documents",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I want key entities (IBAN, amounts, dates, policy number, third parties) auto-extracted from attached documents so I avoid manual re-keying.",
+            "valeurMetier": "Cuts manual data entry and transcription errors",
+            "priorite": "SHOULD",
+            "moscow": "Should have",
+            "criteresAcceptation": [
+              "Given a supported document, when it is uploaded, then key fields are extracted with a per-field confidence score",
+              "Low-confidence fields are highlighted for mandatory human review",
+              "Extraction accuracy on the pilot sample is measured and reported against a baseline"
+            ]
+          },
+          {
+            "id": "BES-04",
+            "titre": "Draft claimant correspondence",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I want to generate a first draft of a letter/email to the claimant (acknowledgement, request for documents, decision) so I can send faster while keeping editorial control.",
+            "valeurMetier": "Speeds up claimant communication and standardizes tone/compliance",
+            "priorite": "SHOULD",
+            "moscow": "Should have",
+            "criteresAcceptation": [
+              "Given a claim context and a template intent, when requested, then an editable draft in the claimant's language is produced",
+              "No message is sent automatically; the adjuster edits and sends manually",
+              "Drafts respect approved compliance templates and mandatory legal mentions"
+            ]
+          },
+          {
+            "id": "BES-05",
+            "titre": "Knowledge-base Q&A (procedures & guidelines)",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I want a conversational search over internal procedures and claims guidelines so I find the right rule without browsing intranet pages.",
+            "valeurMetier": "Reduces onboarding time and process deviations",
+            "priorite": "SHOULD",
+            "moscow": "Should have",
+            "criteresAcceptation": [
+              "Given a procedural question, when queried, then the answer cites the source procedure and its version/date",
+              "Deprecated procedures are excluded from retrieval"
+            ]
+          },
+          {
+            "id": "BES-06",
+            "titre": "Human-in-the-loop control & audit trail",
+            "typeExigence": "non-functional",
+            "description": "As a compliance/claims manager, I need every AI output to be reviewable, correctable and logged so the department keeps accountability over decisions.",
+            "valeurMetier": "Regulatory defensibility and trust adoption",
+            "priorite": "MUST",
+            "moscow": "Must have",
+            "criteresAcceptation": [
+              "Every AI interaction (prompt, output, source, user, timestamp) is logged and retrievable",
+              "No AI output can trigger a claims decision without explicit human validation",
+              "An adjuster can rate/reject outputs; feedback feeds quality monitoring"
+            ]
+          },
+          {
+            "id": "BES-07",
+            "titre": "GDPR-compliant data handling of claimant data",
+            "typeExigence": "non-functional",
+            "description": "As DPO, I require claimant personal data to be processed under GDPR (lawful basis, minimization, retention, no unauthorized training) throughout the assistant.",
+            "valeurMetier": "Legal condition to operate; blocks go-live if unmet",
+            "priorite": "MUST",
+            "moscow": "Must have",
+            "criteresAcceptation": [
+              "A DPIA is completed and approved before pilot go-live",
+              "Claimant data is not used to train external/base models; data residency in EU is guaranteed",
+              "PII access is role-restricted; retention and deletion policies are enforced and testable"
+            ]
+          },
+          {
+            "id": "BES-08",
+            "titre": "Fraud / anomaly signal flagging",
+            "typeExigence": "functional",
+            "description": "As an adjuster, I would like non-binding anomaly signals highlighted to prioritize deeper review.",
+            "valeurMetier": "Potential loss-ratio improvement, but higher risk/complexity",
+            "priorite": "COULD",
+            "moscow": "Could have (candidate for exclusion in pilot)",
+            "criteresAcceptation": [
+              "Signals are advisory only, never a decision or a claimant-facing statement",
+              "Any flag is explainable and human-reviewed before any action"
+            ]
+          }
+        ],
+        "partiesPrenantes": [
+          {
+            "role": "Sponsor / Management (claims direction)",
+            "type": "decision",
+            "interet": "ROI, adoption, risk control",
+            "attentes": "Value demonstrated within capped Q3 pilot budget",
+            "influence": "high",
+            "raci": "Accountable"
+          },
+          {
+            "role": "Claims department head (business owner / MOA)",
+            "type": "metier",
+            "interet": "Productivity of the 40 adjusters, decision quality",
+            "attentes": "Real workflow fit, not a gadget",
+            "influence": "high",
+            "raci": "Accountable/Responsible (business)"
+          },
+          {
+            "role": "Claims adjusters (40 end users)",
+            "type": "utilisateur",
+            "interet": "Time saved, trust, no extra workload",
+            "attentes": "Reliable, source-cited, keeps them in control",
+            "influence": "medium",
+            "raci": "Consulted (co-construction, UAT)"
+          },
+          {
+            "role": "Product Owner / AMOA",
+            "type": "pilotage",
+            "interet": "Backlog prioritization, value delivery",
+            "attentes": "Clear scope and acceptance criteria",
+            "influence": "high",
+            "raci": "Responsible"
+          },
+          {
+            "role": "Product squad (Scrum team: dev, data/ML, design, QA)",
+            "type": "realisation",
+            "interet": "Feasibility, stack choice, tech debt",
+            "attentes": "Clear, testable requirements",
+            "influence": "medium",
+            "raci": "Responsible"
+          },
+          {
+            "role": "DPO / Legal",
+            "type": "conformite",
+            "interet": "GDPR, DPIA, lawful basis, retention",
+            "attentes": "Compliance by design; veto power",
+            "influence": "high",
+            "raci": "Consulted (blocking)"
+          },
+          {
+            "role": "CISO / IT Security",
+            "type": "conformite",
+            "interet": "Data security, hosting, access control",
+            "attentes": "Approved architecture and data residency",
+            "influence": "high",
+            "raci": "Consulted"
+          },
+          {
+            "role": "IT / Enterprise Architecture",
+            "type": "support",
+            "interet": "Integration with claims system, stack fit",
+            "attentes": "Interoperability, maintainability",
+            "influence": "medium",
+            "raci": "Consulted"
+          },
+          {
+            "role": "Claimants (data subjects)",
+            "type": "externe",
+            "interet": "Fair, timely, lawful processing of their data",
+            "attentes": "Protection of personal data (indirect)",
+            "influence": "low",
+            "raci": "Informed (via DPO)"
+          },
+          {
+            "role": "Compliance / Internal audit",
+            "type": "conformite",
+            "interet": "Auditability, accountability",
+            "attentes": "Traceable human-in-the-loop",
+            "influence": "medium",
+            "raci": "Consulted"
+          }
+        ],
+        "perimetre": {
+          "in": [
+            "AI assistant scoped to the claims department and its 40 adjusters (single-department pilot)",
+            "Assistive/augmentation use cases only: summarization, coverage retrieval (RAG), document data extraction, drafting, knowledge-base Q&A",
+            "Human-in-the-loop by design: every output reviewable, correctable, logged; no autonomous decision",
+            "Ingestion of existing claim files, policy wordings and internal procedures for retrieval",
+            "GDPR compliance workstream: DPIA, data minimization, EU data residency, retention/deletion",
+            "Q3 time-boxed pilot delivered by one existing Scrum squad within the capped pilot budget",
+            "Success metrics (time saved, accuracy, adoption, satisfaction) and a Go/No-Go for scale-up"
+          ],
+          "out": [
+            "Fully automated claims decisions, payouts or settlements without human validation",
+            "Claimant-facing chatbot / direct external interaction (adjuster-facing only in pilot)",
+            "Company-wide or multi-department rollout beyond the 40 pilot adjusters",
+            "Automated fraud scoring as a decision engine (at most advisory signals, likely excluded from pilot)",
+            "Replacement or deep re-engineering of the core claims management system",
+            "Definitive technology stack lock-in and production-grade scaling/industrialization",
+            "Underwriting, pricing, or non-claims processes",
+            "Training base/foundation models on claimant personal data"
+          ]
+        },
+        "questionsOuvertes": [
+          {
+            "id": "Q-01",
+            "question": "What is the exact capped pilot budget for Q3, and does it cover LLM inference/hosting costs and DPIA effort?",
+            "impact": "Determines scope of MUST items and build-vs-API stack options",
+            "priorite": "high"
+          },
+          {
+            "id": "Q-02",
+            "question": "What are the current claims systems and document formats, and what integration/API access is available for the pilot?",
+            "impact": "Feasibility and effort of ingestion/extraction (BES-01, BES-03)",
+            "priorite": "high"
+          },
+          {
+            "id": "Q-03",
+            "question": "What lawful basis and data-residency constraints does the DPO impose (EU-only hosting, no external model training, anonymization needs)?",
+            "impact": "May block certain stacks and the DPIA timeline (BES-07)",
+            "priorite": "high"
+          },
+          {
+            "id": "Q-04",
+            "question": "Which single use case should anchor the pilot MVP if we must narrow to one (recommend BES-01 summarization)?",
+            "impact": "Focuses backlog to fit Q3 time-box",
+            "priorite": "high"
+          },
+          {
+            "id": "Q-05",
+            "question": "What baseline metrics exist today (avg triage time, files/adjuster/day) to quantify pilot value?",
+            "impact": "Defines measurable success criteria and Go/No-Go",
+            "priorite": "medium"
+          },
+          {
+            "id": "Q-06",
+            "question": "Which languages must the assistant support for claimant correspondence and policy wordings?",
+            "impact": "Scope of BES-02 and BES-04",
+            "priorite": "medium"
+          },
+          {
+            "id": "Q-07",
+            "question": "Are adjusters available for co-construction workshops and UAT during Q3, and who is the designated business owner?",
+            "impact": "Adoption risk and validation cadence",
+            "priorite": "medium"
+          },
+          {
+            "id": "Q-08",
+            "question": "What is the appetite for advisory fraud signals in the pilot vs. deferring (BES-08)?",
+            "impact": "Scope in/out decision and added risk",
+            "priorite": "low"
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-03",
+      "assetId": "AGENT-PO-SCRUM",
+      "catalogTag": "v4.2.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "po-backlog-8-15",
+          "description": "STEP-03: backlog of 8 to 15 User Stories",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "po-us-champs-requis",
+          "description": "STEP-03: each US carries statement + priorite + estimation (number) + dod",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "po-epics-3-5",
+          "description": "STEP-03: 3 to 5 grouping epics",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "po-us-format-invest",
+          "description": "STEP-03: each US follows the « As a … I want … so that … » template",
+          "severity": "advisory",
+          "passed": false
+        }
+      ],
+      "output": {
+        "epics": [
+          "EPIC-1 — Claim File Comprehension: assistive summarization of incoming claim files with source-referenced facts and human validation (covers BES-01).",
+          "EPIC-2 — Coverage & Knowledge Retrieval (RAG): grounded, citation-based answers over policy wordings and internal procedures (covers BES-02, BES-05).",
+          "EPIC-3 — Document Intelligence & Correspondence: structured entity extraction and editable claimant-correspondence drafting (covers BES-03, BES-04).",
+          "EPIC-4 — Trust, Compliance & Governance: human-in-the-loop control, full audit trail, and GDPR-by-design (covers BES-06, BES-07).",
+          "EPIC-5 — Advisory Risk Signals (pilot-optional): non-binding, explainable anomaly flags for review prioritization (covers BES-08)."
+        ],
+        "backlog": [
+          {
+            "statement": "As a claims adjuster, I want a structured summary (loss facts, claimant, policy ref, estimated amount, key dates) generated from an incoming claim file so that I can grasp the case in minutes instead of reading the full dossier.",
+            "priorite": "MUST",
+            "estimation": 13,
+            "dod": "Summary produced in <30s for PDF/scan/notes; structured sections rendered; measured on pilot sample; demoed at Sprint Review; adjuster UAT passed; audit log entry created; deployed behind feature flag."
+          },
+          {
+            "statement": "As a claims adjuster, I want each stated fact in the summary to display its source reference (document/page) so that I can trust and trace every assertion back to the original evidence.",
+            "priorite": "MUST",
+            "estimation": 8,
+            "dod": "Every fact carries a clickable source ref (doc+page); zero unsourced claims on the test set; QA verified against gold sample; accepted by business owner; logged."
+          },
+          {
+            "statement": "As a claims adjuster, I want to flag and correct an inaccurate summary so that errors are captured and the assistant's quality is monitored over time.",
+            "priorite": "MUST",
+            "estimation": 5,
+            "dod": "Correction captured, timestamped and linked to the file; feedback feeds quality dashboard; no auto-validation path exists; unit + e2e tested; DoD reviewed with QA."
+          },
+          {
+            "statement": "As a claims adjuster, I want to ask whether a given damage is covered and receive the exact applicable policy clause(s) so that I can justify a coverage decision with a traceable citation.",
+            "priorite": "MUST",
+            "estimation": 13,
+            "dod": "Answer grounded only in ingested policy corpus with exact clause citation and policy version; RAG evaluation set passed (grounding/precision thresholds met); adjuster UAT passed; logged; Review demo done."
+          },
+          {
+            "statement": "As a claims adjuster, I want the assistant to reply 'insufficient information' with a confidence indication rather than invent a clause so that I am never misled when no supporting text exists.",
+            "priorite": "MUST",
+            "estimation": 8,
+            "dod": "No-answer/uncertainty behavior validated on adversarial no-evidence prompts; hallucination rate below agreed threshold; confidence indicator displayed and reviewed; QA sign-off."
+          },
+          {
+            "statement": "As a compliance/claims manager, I want every AI interaction (prompt, output, source, user, timestamp) logged and retrievable so that the department retains accountability and regulatory defensibility over decisions.",
+            "priorite": "MUST",
+            "estimation": 8,
+            "dod": "All interactions persisted and queryable; retrieval tested; retention aligned with policy; reviewed by Compliance/Internal audit; access-restricted; e2e audit-trail test green."
+          },
+          {
+            "statement": "As a compliance/claims manager, I want no AI output to trigger a claims decision without explicit human validation so that the human-in-the-loop principle is enforced by design.",
+            "priorite": "MUST",
+            "estimation": 5,
+            "dod": "No autonomous decision path in the system; validation gate enforced and tested; verified with business owner; documented in DoD; audit entry on each validation."
+          },
+          {
+            "statement": "As DPO, I want claimant personal data processed under GDPR (DPIA approved, EU residency, no external model training, enforced retention/deletion) so that the pilot is lawful to operate.",
+            "priorite": "MUST",
+            "estimation": 13,
+            "dod": "DPIA completed and approved before go-live; EU data residency evidenced; no-training clause contractually and technically enforced; role-based PII access and deletion tested; DPO sign-off recorded."
+          },
+          {
+            "statement": "As a claims adjuster, I want key entities (IBAN, amounts, dates, policy number, third parties) auto-extracted from attached documents with per-field confidence so that I avoid manual re-keying and transcription errors.",
+            "priorite": "SHOULD",
+            "estimation": 8,
+            "dod": "Per-field confidence scored; low-confidence fields flagged for mandatory review; extraction accuracy measured vs baseline on pilot sample and reported; UAT passed; logged."
+          },
+          {
+            "statement": "As a claims adjuster, I want low-confidence extracted fields highlighted for mandatory human review so that uncertain data is never silently trusted in the file.",
+            "priorite": "SHOULD",
+            "estimation": 3,
+            "dod": "Threshold configurable; highlighted fields block silent acceptance; UX validated with adjusters; tested on low/high-confidence cases; reviewed at Review."
+          },
+          {
+            "statement": "As a claims adjuster, I want a first editable draft of claimant correspondence (acknowledgement, document request, decision) in the claimant's language so that I can send faster while keeping full editorial control.",
+            "priorite": "SHOULD",
+            "estimation": 8,
+            "dod": "Draft respects approved compliance templates and mandatory legal mentions; editable, never auto-sent; language selection works for pilot languages; legal review passed; UAT green."
+          },
+          {
+            "statement": "As a claims adjuster, I want conversational search over internal procedures and guidelines with cited source and version/date so that I find the right rule without browsing intranet pages.",
+            "priorite": "SHOULD",
+            "estimation": 5,
+            "dod": "Answers cite source procedure + version/date; deprecated procedures excluded from retrieval and tested; retrieval accuracy validated on Q&A set; adjuster UAT passed; logged."
+          },
+          {
+            "statement": "As a Product Owner, I want baseline and pilot success metrics (triage time, accuracy, adoption, satisfaction) instrumented and reported so that a fact-based Go/No-Go for scale-up can be made at the end of Q3.",
+            "priorite": "SHOULD",
+            "estimation": 5,
+            "dod": "Baseline captured pre-pilot; metrics dashboard live; data collected across the pilot; Go/No-Go report produced and reviewed with Sponsor; EBM indicators defined."
+          },
+          {
+            "statement": "As a claims adjuster, I would like non-binding anomaly signals highlighted so that I can prioritize deeper review, without any signal ever being a decision or claimant-facing statement.",
+            "priorite": "COULD",
+            "estimation": 8,
+            "dod": "Signals advisory-only and never claimant-facing; each flag explainable and human-reviewed before any action; explicitly de-scopable for pilot; DPO/Compliance reviewed; logged."
+          }
+        ]
+      }
+    },
+    {
+      "stepId": "STEP-04",
+      "assetId": "AGENT-QA-AGILE",
+      "catalogTag": "v4.2.0",
+      "verdict": "pass",
+      "results": [
+        {
+          "id": "qa-gherkin-non-vide",
+          "description": "STEP-04: at least one Gherkin scenario produced",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "qa-given-when-then",
+          "description": "STEP-04: each scenario carries given + when + then (non-empty)",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "qa-plan-test-present",
+          "description": "STEP-04: sprint 1 test plan non-empty",
+          "severity": "blocking",
+          "passed": true
+        },
+        {
+          "id": "qa-cas-erreur-et-limite",
+          "description": "STEP-04: coverage beyond the nominal — at least one `error` case and one `boundary` case",
+          "severity": "advisory",
+          "passed": true
+        }
+      ],
+      "output": {
+        "planTest": "In-sprint Agile test plan — EPIC-1 \"Claim File Comprehension\" (stories BES-01: structured summary; source-referenced facts; flag/correct inaccurate summary). Certifications applied: CTFL-AT, CTAL-ATT (BDD/Gherkin, ATDD), CTAL-TA (exploratory), ISTQB AI Testing (LLM grounding/hallucination).\n\nSCOPE & ACCEPTANCE (ATDD): three MUST stories. Acceptance is driven by the executable Gherkin scenarios below, agreed in the Three Amigos (PO / adjuster / QA) before dev starts (shift-left). Every scenario is traced to a DoD line.\n\nTEST TYPES (test pyramid):\n- Unit (automated, dev-owned): section parser, source-ref anchoring, correction persistence model, timestamping. Target: fast, deterministic.\n- API/integration (automated, CI/CD): summarization endpoint contract (structured sections present), source-ref object (doc+page) on every fact, correction-capture endpoint (timestamp + file link, no auto-validation path).\n- E2E (automated, gated): upload → summary render → click source ref → flag → correct → audit-log entry. Runs on the regression suite behind the feature flag.\n- Exploratory (manual, session-based, CTAL-TA): 60-min charters on OCR-degraded scans, mixed-language notes, multi-document dossiers, adversarial \"invented fact\" hunting.\n- AI-specific (ISTQB AI Testing): grounding evaluation on a gold/reference sample — 0 unsourced claims; hallucination rate below agreed threshold; non-determinism handled via metamorphic checks (same file → semantically stable summary) and a tolerance-based oracle rather than exact-string match.\n\nDATA: pilot sample of representative claim files (native PDF, scanned/OCR, free-text notes) + a QA gold set with expected facts and their true source (doc+page) for grounding/precision measurement.\n\nENTRY: feature flag available; ingestion pipeline stubbed/live; gold sample signed off by business owner.\nEXIT (DoD): summary <30s on pilot sample; every fact carries a clickable doc+page ref (0 unsourced on test set); corrections captured, timestamped, linked to file and feeding the quality dashboard; NO auto-validation path exists; unit+e2e green; adjuster UAT passed; audit log entry created; demoed at Sprint Review.\n\nNON-FUNCTIONAL: performance oracle = P95 generation time < 30s on the pilot sample (report P50/P95, not a single run). Security/traceability: correction and validation events land in the audit trail (feeds EPIC-4).\n\nMETRICS (Agile quality): grounding rate (=100% target), hallucination/unsourced-claim rate, summary generation P95, correction rate per file, adjuster UAT pass rate — published to the quality dashboard for the QA retrospective and the Q3 Go/No-Go.\n\nRISKS: LLM non-determinism (mitigate with tolerance oracle + metamorphic tests); OCR quality on scans (exploratory charter + boundary tests); silent trust of unsourced facts (hard gate: any fact lacking a source ref fails the build).\n\nReady-to-paste: scenarios are Gherkin/Cucumber-formatted (Given/When/Then) for direct import into Xray/Cucumber; tag suggestions @epic1 @must @ai-grounding @insprint.",
+        "gherkin": [
+          {
+            "type": "nominal",
+            "given": "An adjuster has opened an incoming claim file (native PDF, scan or free-text notes) from the pilot sample",
+            "when": "They request an assisted summary of the file",
+            "then": "A structured summary is rendered within 30 seconds showing the sections loss facts, claimant, policy reference, estimated amount and key dates, and an audit log entry is created"
+          },
+          {
+            "type": "nominal",
+            "given": "A summary has been generated for a claim file",
+            "when": "The adjuster inspects any stated fact in the summary",
+            "then": "Each fact displays a clickable source reference (document + page) that opens the exact original evidence, with zero unsourced facts in the summary"
+          },
+          {
+            "type": "nominal",
+            "given": "A generated summary contains a fact the adjuster judges inaccurate",
+            "when": "They flag the fact and submit a correction",
+            "then": "The correction is captured, timestamped and linked to the claim file, it feeds the quality dashboard, and no automatic re-validation of the summary occurs"
+          },
+          {
+            "type": "error",
+            "given": "An unreadable or corrupted document that yields no extractable text is submitted",
+            "when": "The adjuster requests a summary",
+            "then": "The assistant returns an explicit 'unable to extract content' message instead of fabricating facts, produces no unsourced statements, and logs the failed attempt"
+          },
+          {
+            "type": "error",
+            "given": "The generation model proposes a candidate fact for which no supporting source (document + page) can be anchored",
+            "when": "The summary is assembled and validated by the grounding check",
+            "then": "The unsourced fact is withheld from the rendered summary and the case is flagged in the grounding evaluation report, keeping the unsourced-claim rate at zero on the test set"
+          },
+          {
+            "type": "boundary",
+            "given": "A large multi-document dossier whose summarization completes at the 30-second service-level limit",
+            "when": "The adjuster requests the summary and the P95 generation time is measured on the pilot sample",
+            "then": "The structured summary is returned within the 30-second threshold (P95 < 30s), all sections are populated, and the timing is recorded to the metrics dashboard"
+          },
+          {
+            "type": "boundary",
+            "given": "A claim file where a mandatory section (e.g. estimated amount) has no supporting evidence in the source documents",
+            "when": "The summary is generated",
+            "then": "The section is shown as 'not found / insufficient information' rather than an invented value, and no source reference is fabricated for it"
+          }
+        ]
+      }
+    }
+  ]
+}
