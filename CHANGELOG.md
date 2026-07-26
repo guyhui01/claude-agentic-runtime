@@ -7,6 +7,15 @@
 ---
 
 ## [Unreleased]
+> Model: Claude Opus 5
+
+### ⬆️ Dependencies
+- **Dependabot backlog triaged and cleared — 7 alerts down to 1, qualified at source rather than blind-bumped.** GitHub reported 7 vulnerabilities (2 high / 4 moderate / 1 low) on the default branch and 5 open Dependabot PRs (#42-#46) that nobody had mapped onto them. Resolved with `gh api …/dependabot/alerts` + `npm audit` + `npm ls`, splitting the execution path from the unreachable surface:
+  - **`ajv` → `fast-uri` 3.1.2 → 3.1.4 — both `high` alerts, and the only ones on the execution path.** `ajv` validates every dispatch brief and every step handoff, so host-confusion in its URI resolver is the one finding that mattered here. Fixed.
+  - **`@anthropic-ai/claude-agent-sdk` 0.3.207 → 0.3.215** (the execution substrate) and, through its `@modelcontextprotocol/sdk` dependency, **`hono` and `body-parser`** — clearing 2 moderate and the low.
+  - **`actions/setup-node` v6 → v7** (CI only, no advisory attached).
+  - **Left in place, deliberately: `@hono/node-server` (1 moderate, path traversal in `serve-static` on Windows).** The fix needs a major bump to `>=2.0.5`, pinned by `@modelcontextprotocol/sdk`; `npm audit`'s proposed remedy is a **semver-major downgrade of the Agent SDK to 0.2.85**, which would break the runtime and orphan the live proofs. The advisory is also **unreachable here**: this runtime never instantiates the Hono node server or serves static files — it calls the SDK's `query()` locally — and CI runs on Linux. Forcing a major override on a transitive dependency to silence a finding that cannot fire is a worse trade than carrying it. Revisit when `@modelcontextprotocol/sdk` widens the range upstream.
+- Suite **276 passed / 22 skipped** and strict typecheck green after the bumps; the versioned live-run traces are untouched (verified by diff).
 
 ## [0.9.1] - 2026-07-27 — README realigned with the repo's own proofs 📄
 > Model: Claude Opus 5
