@@ -8,6 +8,18 @@
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-07-27 — README realigned with the repo's own proofs 📄
+> Model: Claude Opus 5
+
+### 🔧 Fixed
+- **`README.md` was frozen at `v0.5.0` and contradicted this repository's own evidence.** Untouched since the i18n batch of 2026-06-19, it still advertised *"3 workflows (WF-001/002/003) proven live end to end"* and *"126 tests green"*, and left the roadmap item `WF-002/003 live run end to end` unticked — while `v0.6.0`→`v0.9.0` had since live-proven **all ten** catalog workflows and added the **WF-000 dispatch** layer, which the file did not mention once. Since this repository is public and is the source cited for those proofs, the stalest surface was also the most exposed one. Every figure below was re-derived at source before writing:
+  - **Status line** — `v0.5.0` → `v0.9.0`; *3 workflows* → **10** (WF-001 … WF-010), stated as **9 runs `completed` + 1 returned for rework** (WF-008, halted by its counter-review gate **by design** — a fail-closed proof, not a failed run); *126 tests* → **276 passed / 22 skipped**; the **WF-000 dispatch layer** named as what it is — a layer **upstream** of the spines, not an eleventh catalog workflow.
+  - **POC scope** — the WF-001→002→003 delivery spine is recorded as reached and extended (ten spines on the same unchanged linear orchestrator); dispatch added as a fourth building block; the SDK-integration sentence widened from `runWf001` to `runWf001` … `runWf010`.
+  - **Roadmap** — `WF-002/003 live run` ticked; entries added for the WF-004…WF-010 live proofs and for WF-000 dispatch V0; the two genuinely open items (dispatch V1, multi-workflow chaining) listed unticked, chaining stated as discovery-stage and blocked on inter-workflow context accumulation.
+  - **Documentation** — direct pointers to `docs/audit/live-runs/` (the verbatim traces) and `docs/discovery/` (the dispatch deliverables), so a reader can check the claims rather than take them.
+  - **Stack** — `Sonnet 4.6` → `Sonnet 5`, with the distinction made explicit: the per-workflow `modele_recommande` is a catalog artifact read verbatim, while the model a live proof is routed to is a runtime decision.
+  - Model-provenance line updated (Opus 4.8 through `v0.9.0`, Opus 5 from `v0.9.1`).
+
 ## [0.9.0] - 2026-07-19 — WF-000 dispatch V0: intake → routing → execution plan, live-proven end-to-end 🚦
 > Model: Claude Fable 5
 

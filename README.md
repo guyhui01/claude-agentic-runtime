@@ -3,7 +3,7 @@
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-blue.svg)](LICENSE)
 
 > **Governance compiler** on top of the **Claude Agent SDK**: it reads the declarative [`claude-agents`](https://github.com/guyhui01/claude-agents) catalog, **validates its contracts**, then runs it through the SDK — which provides the engine.
-> **Status: runnable POC / portfolio asset** — `v0.5.0`: full backbone, the **3 workflows (WF-001/002/003) proven live end to end** (real agents + real catalog, all *blocking* and *advisory* gates green), CI green, **126 tests green** (6 *skipped*) · ISO quality audit v1 delivered (P1–P4 remediations closed).
+> **Status: runnable POC / portfolio asset** — `v0.9.1`: full backbone, the **10 catalog workflows (WF-001 … WF-010) proven live end to end** (real agents + real catalog) — **9 runs `completed`** with their *blocking* and *advisory* gates green, **1 returned for rework** by a fail-closed gate (WF-008: the counter-review gate halted the deliverable **by design**) — plus the **WF-000 dispatch layer** (validated brief → deterministic completeness check → routing → execution plan) proven live upstream of the spines. CI green, **276 tests green** (22 *skipped*) · ISO quality audit v1 delivered (P1–P4 remediations closed).
 
 ## Why this repo
 
@@ -25,14 +25,15 @@ The agentic execution engine (agent loop, tools, sandbox, sessions) is **commodi
 
 ## POC scope
 
-Run the *delivery spine* **WF-001 scoping → WF-002 SAFe delivery → WF-003 app launch** by consuming the catalog.
+Initial scope: run the *delivery spine* **WF-001 scoping → WF-002 SAFe delivery → WF-003 app launch** by consuming the catalog. **Reached and extended** — each of the catalog's **ten** workflows now has a deterministic spine on the same unchanged linear orchestrator, and a **dispatch layer (WF-000)** sits upstream of them.
 
-Three building blocks (the rest is carried by the Claude Agent SDK):
+Building blocks (the rest is carried by the Claude Agent SDK):
 1. ✅ **Loader** — catalog sidecar → typed `Sidecar` (fail-closed)
 2. ✅ **Typed handoff contracts** — schematized I/O between steps
 3. ✅ **Eval gate** — quality guardrail on an agent output
+4. ✅ **Dispatch (WF-000)** — validated need brief → deterministic completeness check → LLM routing proposal → **deterministic** validation against the pinned sidecar → execution plan read verbatim from the routed card, then **stop**: the go/no-go before any billed run stays human
 
-**Claude Agent SDK** integration: the `Asset → AgentDefinition` adapter (§2.4-A) **and the live spine executor** (§2.4-B) are **delivered** — `runWf001` runs the backbone through `query()` (capped, `permissionMode:"plan"`, subscription OAuth).
+**Claude Agent SDK** integration: the `Asset → AgentDefinition` adapter (§2.4-A) **and the live spine executor** (§2.4-B) are **delivered** — `runWf001` … `runWf010` run their backbone through `query()` (capped, `permissionMode:"plan"`, subscription OAuth).
 
 ## Documentation
 
@@ -46,6 +47,8 @@ Three building blocks (the rest is carried by the Claude Agent SDK):
   - [ADR-0005 — Feedback through human PR](docs/adr/0005-feedback-par-pr-humaine.md)
   - [ADR-0006 — Quality standards (ISO 42010 / 25012 / 25010 / 42001)](docs/adr/0006-referentiels-qualite.md)
   - [ADR-0007 — Contracts & criteria: a spine manifest owned by the runtime](docs/adr/0007-source-contrats-criteres-manifeste-runtime.md)
+- 🔬 [Live-run traces](docs/audit/live-runs/) — every billed live run is versioned verbatim, `completed` and returned-for-rework alike
+- 🚦 [Dispatch discovery](docs/discovery/) — the WF-000 brief contract, coverage matrix, router draft, and V0 plan
 - 📏 [Contributing & conventions](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
 ## Progress
@@ -61,11 +64,15 @@ Three building blocks (the rest is carried by the Claude Agent SDK):
 - [x] WF-002 / WF-003 spines modeled + tested (offline)
 - [x] CI (strict typecheck + tests, Node 20/22) + Dependabot
 - [x] Index the WF-002/003 agents in the sidecar (`claude-agents` repo) — 14 assets, consumable, default `CATALOG_ROOT` realigned
-- [ ] WF-002/003 live run end to end (on explicit approval + observed run)
+- [x] WF-002 / WF-003 live run end to end (on explicit approval + observed run)
+- [x] WF-004 … WF-010 spines modeled, tested, and **run live** — all ten catalog workflows live-proven (9 `completed`, WF-008 *returned for rework* by its counter-review gate)
+- [x] WF-000 dispatch V0 — intake → routing → execution plan, live-proven end to end (router accuracy run + a pilot brief carried through to a spine delivery)
+- [ ] Dispatch V1 — the nine remaining parameter manifests, assisted parameter filling, cost estimate
+- [ ] Multi-workflow chaining (WF-006 → WF-007 → WF-001) — discovery stage; blocked on inter-workflow context accumulation, which the linear orchestrator does not carry
 
 ## Stack
 
-Claude Agent SDK (execution substrate) · JSON Schema (contracts + sidecar) · Opus 4.8 / Sonnet 4.6 depending on the step.
+Claude Agent SDK (execution substrate) · JSON Schema (contracts + sidecar) · Opus 4.8 / Sonnet 5 depending on the step — the per-workflow `modele_recommande` is a **catalog artifact**, read verbatim; which model a given live proof is routed to is a runtime decision.
 
 ## License
 
@@ -79,4 +86,4 @@ Claude Agent SDK (execution substrate) · JSON Schema (contracts + sidecar) · O
 
 ## Tooling
 
-Documentation and design assisted by **Claude Opus 4.8** (model currently in use).
+Documentation and design assisted by **Claude Opus** — Opus 4.8 through `v0.9.0`, **Opus 5** from `v0.9.1` on. Per-release model provenance is stated in the [changelog](CHANGELOG.md).
