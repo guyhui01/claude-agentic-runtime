@@ -6,6 +6,7 @@ import { buildPlan } from "../src/dispatch/plan.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
 import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
 import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
+import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 
@@ -53,6 +54,7 @@ describe.skipIf(!HAVE_CATALOG)("dispatch against the real sidecar", () => {
   it.each([
     ["WF-002", WF002_MANIFEST],
     ["WF-003", WF003_MANIFEST],
+    ["WF-004", WF004_MANIFEST],
   ])("pins the %s manifest to the sidecar's catalog tag (drift = hard fail)", (id, manifest) => {
     const sidecar = loadSidecar(SIDECAR_PATH);
     const asset = sidecar.assets.find((a) => a.id === id && a.type === "workflow");

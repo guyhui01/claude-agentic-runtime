@@ -3,6 +3,7 @@ import { validateRoute } from "../src/dispatch/validate-route.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
 import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
 import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
+import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -54,6 +55,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-004",
+      type: "workflow",
+      path: "workflows/WF-004.md",
+      title: "AI Consulting Engagement",
+      description: "Engagement signed → maturity audit, roadmap and training plan",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-004.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       id: "WF-006",
       type: "workflow",
       path: "workflows/WF-006.md",
@@ -80,6 +91,7 @@ const MANIFESTS = {
   "WF-001": WF001_MANIFEST,
   "WF-002": WF002_MANIFEST,
   "WF-003": WF003_MANIFEST,
+  "WF-004": WF004_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -293,5 +305,115 @@ describe("WF-003 manifest — an enum-rich technical card", () => {
       " monthly LLM budget is €800 and the target SLA is 99.5% with under 2s latency.";
     const res = validateRoute(proposal("WF-003"), b, FAKE_SIDECAR, MANIFESTS);
     expect(res).toMatchObject({ status: "ROUTED", route: "WF-003", paramsChecked: true });
+  });
+});
+
+describe("WF-004 manifest — a commercial card, where prose imitates card vocabulary", () => {
+  it("routes the P04 fixture with paramsChecked=true, and diverges from the oracle in three places", () => {
+    // Dry-run §2 row P04 names three must-ask parameters — Engagement duration,
+    // Stakeholders, Priority stakes — and this reports none of them missing.
+    // Documented divergence class, not an error on either side: §2 was computed
+    // against the coverage-matrix SKETCH, while the qualified fixture states the
+    // window ("three-month engagement window"), the sponsor ("CDO sponsor") and
+    // two stakes ("upskilling" in the need, "GDPR" in the constraints).
+    const res = validateRoute(proposal("WF-004"), fixtureBrief("P04"), FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-004", paramsChecked: true });
+  });
+
+  it("names the gap when the brief is thinned back to the sketch, in card labels", () => {
+    // The sketch-level brief: the engagement and the client are stated, the
+    // engagement's own context is not. This is the return loop the operator
+    // actually sees.
+    //
+    // Written expecting `Stakeholders` to be missing too; the check disagreed
+    // and was right — the fixture's constraint list says "executive readout
+    // expected", which names an audience, so the card line is answered. Recorded
+    // here rather than narrowed away: the reminder that commercial facts live in
+    // `constraints` as readily as in the prose cuts both ways.
+    const b = fixtureBrief("P04");
+    b.context = "Food-industry mid-cap client.";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual(["Client AI maturity", "Engagement duration"]);
+  });
+
+  it("names the missing HALF of the Client line, not the whole line", () => {
+    // `Client [Name / Sector / Size]` is a conjunction: an operator who has
+    // already named the client must be asked for the size, not for "Client".
+    const b = fixtureBrief("P04");
+    b.context = "Beginner AI maturity, CDO sponsor, three-month engagement window.";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual(["Client (sector)", "Client (size)"]);
+    expect(res.missingParams).not.toContain("Client (name)");
+  });
+
+  it("does not accept a WF-001 product-scoping brief as a filled engagement card", () => {
+    // Cross-vocabulary guard. Two specs DO fill, and the assertion records it
+    // rather than hiding it behind a narrower regex: the P01 brief states an
+    // insurer (sector) and GDPR (a compliance stake). Both are true statements
+    // of the card's own questions — `Priority stakes` is the least
+    // discriminating spec of this manifest and is documented as such.
+    const res = validateRoute(proposal("WF-004"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Client (name)",
+      "Client (size)",
+      "Client AI maturity",
+      "Engagement duration",
+      "Engagement scope",
+      "Expected deliverables",
+      "Stakeholders",
+    ]);
+  });
+
+  it("falsifies the tightened scope detector: 'decision support' is not a Support engagement", () => {
+    const b = fixtureBrief("P04");
+    b.need =
+      "Engagement signed with Marlowe Foods to give their managers decision support" +
+      " on their operations, and we support the team through the change.";
+    b.expectedDeliverable = "A report for the executive committee";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Engagement scope");
+  });
+
+  it("falsifies the tightened maturity detector: an 'advanced RAG pipeline' is not a maturity level", () => {
+    const b = fixtureBrief("P04");
+    b.context =
+      "Food-industry mid-cap running an advanced RAG pipeline in production," +
+      " CDO sponsor, three-month engagement window.";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Client AI maturity"]);
+  });
+
+  it("accepts 'advanced' when it does qualify the maturity, not the technology", () => {
+    const b = fixtureBrief("P04");
+    b.context =
+      "Food-industry mid-cap, advanced AI maturity, CDO sponsor, three-month" +
+      " engagement window.";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-004", paramsChecked: true });
+  });
+
+  it("reads the client name in either word order, as the card asks for an identifier", () => {
+    // The WF-002 `ART name` lesson applied before it bites: the fixture's form
+    // is "signed with Marlowe Foods", and this records what the apposition form
+    // does. It is NOT read as a name — the documented weakness of this detector,
+    // whose failure direction is the safe one.
+    const b = fixtureBrief("P04");
+    b.need =
+      "Marlowe Foods, a food-industry mid-cap, signed the engagement for an AI" +
+      " maturity audit and a transformation roadmap including upskilling.";
+    const res = validateRoute(proposal("WF-004"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Client (name)"]);
   });
 });
