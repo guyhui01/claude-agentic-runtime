@@ -101,7 +101,12 @@ export interface ParamSpec {
   pattern?: RegExp;
   /** Card-sanctioned honest unknown ("Not disclosed", "to be defined") — accepted as filled. */
   sanctionedUnknown?: RegExp;
-  /** Operator-profile default: the parameter is never missing. */
+  /**
+   * The parameter can never be missing — an operator-profile default, or a
+   * value an upstream invariant (intake) already guarantees. Declaring it is
+   * what distinguishes a deliberately non-discriminating spec from a forgotten
+   * `pattern`, which is reported missing.
+   */
   defaultValue?: string;
 }
 

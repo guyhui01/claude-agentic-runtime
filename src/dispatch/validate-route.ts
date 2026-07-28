@@ -11,7 +11,6 @@
 
 import { Ajv2020 } from "ajv/dist/2020.js";
 import type { ValidateFunction } from "ajv";
-import { affirmativeString } from "../spines/spine-helpers.js";
 import type { Sidecar } from "../sidecar/types.js";
 import type {
   NeedBrief,
@@ -57,7 +56,16 @@ export function parseRouterOutput(raw: unknown): {
   return { issues };
 }
 
-/** One workflow param against the brief — `true` when deterministically filled. */
+/**
+ * One workflow param against the brief — `true` when deterministically filled.
+ *
+ * Fail-closed on the detector itself: a spec with no `pattern` and no
+ * `defaultValue` is reported MISSING, never accepted on "the mapped text is
+ * non-empty". Most card params map onto the same shared brief fields, so an
+ * emptiness test would pass a whole card on one sentence of context — a false
+ * "filled", the unsafe direction. A spec that genuinely cannot be missing
+ * declares it with `defaultValue`.
+ */
 function paramFilled(
   brief: NeedBrief,
   spec: ParamManifest["params"][number],
@@ -65,8 +73,7 @@ function paramFilled(
   if (spec.defaultValue !== undefined) return true;
   const text = spec.mapping(brief);
   if (spec.sanctionedUnknown?.test(text)) return true;
-  if (spec.pattern !== undefined) return spec.pattern.test(text);
-  return affirmativeString(text);
+  return spec.pattern?.test(text) ?? false;
 }
 
 /**

@@ -59,6 +59,10 @@ export const WF001_MANIFEST: ParamManifest = {
         b.constraints.length > 0
           ? b.constraints.join("; ")
           : "unconstrained (justified in context)",
+      // Satisfied upstream, so it can never be missing: intake already rejects
+      // an unjustified empty `constraints`. Declared, not implicit — a required
+      // spec carrying no detector is otherwise reported missing (fail-closed).
+      defaultValue: "(guaranteed by the intake completeness check)",
     },
     {
       name: "deliverables_language",
