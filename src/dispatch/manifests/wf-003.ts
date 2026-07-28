@@ -50,10 +50,11 @@ export const WF003_MANIFEST: ParamManifest = {
       card: "Cloud provider",
       required: true,
       mapping: technical,
-      // DIVERGES from dry-run §2, which lists this as must-ask for P03: the
-      // brief's constraint list states "existing Azure tenancy", and Azure is in
-      // the card's own enumeration. The oracle read `need` and `context` only —
-      // the same omission as its `PI duration` call on P02.
+      // Reads as filled for P03, where dry-run §2 lists it must-ask. Not a table
+      // error: §2 was computed against the coverage-matrix sketch, which names no
+      // cloud at all, while the fixture's constraint list states "existing Azure
+      // tenancy" — and Azure is in the card's own enumeration. Technical facts
+      // land in `constraints` as readily as in the prose; hence the mapping.
       pattern: /\baws\b|\bamazon web services\b|\bgcp\b|\bgoogle cloud\b|\bazure\b|\bon[-\s]premises?\b|\bvercel\b/i,
     },
     {

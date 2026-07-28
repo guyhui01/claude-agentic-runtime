@@ -50,11 +50,13 @@
 | P19 | WF-001 | 2 | 1 | 4 | Sector, Team size, Project method, Level of detail |
 | P20 | WF-008 | 7 | 1 | 3 | Volumes, Geography, Expected deliverables |
 
-> **Annotation 2026-07-28 — this table is a dated prediction, and building the first manifest against it contradicted one cell.** The WF-002 manifest, derived from the real card and checked deterministically, finds the **P02** row over-counts by one: `PI duration` is stated verbatim in the brief ("PI of 10 weeks" — the card's own example format), so the check reports it filled. P02's real must-ask set is `ART capacity` + `Dependencies`. The row is left exactly as written: a dated snapshot is annotated, never rewritten.
+> **Annotation 2026-07-28 — this replaces an earlier annotation of the same date whose diagnosis was wrong. The correction is recorded here rather than edited away, because the wrong version was published.** That first note claimed the **P02** row "over-counts by one" on `PI duration`, and blamed the same class of divergence on this table having skipped the brief's `constraints` array. Both claims were wrong, and one of them doubly so — `PI duration` sits in `context`, which the method above says was read.
 >
-> The same comparison corrected the implementation in the other direction, which is the reason to keep consulting this table rather than trusting a fresh detector: the first `ART name` pattern read *"the ART at Helvetia Rail"* as unnamed and would have asked the operator for something the brief already carried. This table read it as filled, and was right — the field asks for an identifier of the train, in either word order.
+> **The table was right about its own input.** Per the method statement, it was computed against the **coverage-matrix sketches** — the raw stakeholder asks — not against the qualified fixture briefs the deterministic check runs on. The sketches are the thinner input: P02's names no PI duration, P03's names no cloud provider, P04's names neither the sponsor role nor the engagement window. Every one of those facts exists only in the fixture.
 >
-> **Use §2 as the acceptance oracle when building each remaining manifest**, and expect it to be right more often than not rather than always: every divergence is a finding on one side or the other, and must be resolved at the card before either is changed. The fourteen rows whose manifest does not exist yet remain unverified predictions.
+> The consequence is a **requalification, not a correction**: §2 answers *"what must still be asked of the stakeholder, given the raw ask"*, while a manifest check answers *"what is absent from the qualified brief"*. Two different questions on two different inputs — that their cells coincided on P01 is a coincidence, not an equivalence. Read §2 as a **checklist of the parameters that are hard to obtain**, and treat a divergence as a signal to settle the point **at the card**, never as a verdict on either side.
+>
+> What does hold from the first annotation, and is the reason to keep running the comparison: it caught a real defect in the code. The first `ART name` detector read *"the ART at Helvetia Rail"* as unnamed and would have asked the operator for a name the brief already carried. This table read it as filled, and was right — the field asks for an identifier of the train, in either word order.
 
 ## 3. Findings
 
