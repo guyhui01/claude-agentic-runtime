@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { validateRoute } from "../src/dispatch/validate-route.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
 import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
+import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -43,6 +44,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-003",
+      type: "workflow",
+      path: "workflows/WF-003.md",
+      title: "AI Application Launch",
+      description: "Validated prototype → deployed, security-audited application",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-003.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       id: "WF-006",
       type: "workflow",
       path: "workflows/WF-006.md",
@@ -65,7 +76,18 @@ const FAKE_SIDECAR: Sidecar = {
   ],
 };
 
-const MANIFESTS = { "WF-001": WF001_MANIFEST, "WF-002": WF002_MANIFEST } as const;
+const MANIFESTS = {
+  "WF-001": WF001_MANIFEST,
+  "WF-002": WF002_MANIFEST,
+  "WF-003": WF003_MANIFEST,
+} as const;
+
+/** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
+function fixtureBrief(id: string): NeedBrief {
+  const fixture = DISPATCH_FIXTURES.find((f) => f.id === id);
+  if (fixture?.brief === undefined) throw new Error(`${id} fixture carries no brief`);
+  return { ...fixture.brief, constraints: [...fixture.brief.constraints] };
+}
 
 /**
  * The P02 coverage-matrix brief, reused rather than re-invented: it is
@@ -73,9 +95,7 @@ const MANIFESTS = { "WF-001": WF001_MANIFEST, "WF-002": WF002_MANIFEST } as cons
  * dry-run finding that every routed prompt still has a param gap.
  */
 function p02Brief(): NeedBrief {
-  const fixture = DISPATCH_FIXTURES.find((f) => f.id === "P02");
-  if (fixture?.brief === undefined) throw new Error("P02 fixture carries no brief");
-  return { ...fixture.brief, constraints: [...fixture.brief.constraints] };
+  return fixtureBrief("P02");
 }
 
 /** P02 after the operator answered the two gaps the card check names. */
@@ -222,5 +242,56 @@ describe("WF-002 manifest — the SAFe card, on a vocabulary far from WF-001", (
       "Number of teams",
       "PI duration",
     ]);
+  });
+});
+
+describe("WF-003 manifest — an enum-rich technical card", () => {
+  it("names the P03 gap, and diverges from the dry-run oracle in two places", () => {
+    const res = validateRoute(proposal("WF-003"), fixtureBrief("P03"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    // Dry-run §2 row P03 predicts six must-ask parameters and this finds six,
+    // but not the same six. `Cloud provider` is stated in the constraint list
+    // ("existing Azure tenancy") which the oracle did not read; `Target LLM` is
+    // the client application's model — a card field to fill before starting,
+    // not the operator-profile default the oracle took it for.
+    expect(res.missingParams.sort()).toEqual([
+      "Database",
+      "GDPR constraints (personal data)",
+      "Monthly API budget",
+      "Target LLM",
+      "Target SLA",
+      "Tech stack",
+    ]);
+  });
+
+  it("names the missing HALF of the GDPR line, not the whole line", () => {
+    // P03 states "EU data location" and nothing about personal data. Reporting
+    // "GDPR constraints" whole would tell an operator who already answered half
+    // of it to supply something they can see in their own brief.
+    const res = validateRoute(proposal("WF-003"), fixtureBrief("P03"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("GDPR constraints (personal data)");
+    expect(res.missingParams).not.toContain("GDPR constraints (data location)");
+  });
+
+  it("accepts a negative answer on the personal-data half — stating NO is stating it", () => {
+    const b = fixtureBrief("P03");
+    b.context += " No personal data is processed by the corpus.";
+    const res = validateRoute(proposal("WF-003"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).not.toContain("GDPR constraints (personal data)");
+  });
+
+  it("routes the amended P03 brief with paramsChecked=true (the return loop closes)", () => {
+    const b = fixtureBrief("P03");
+    b.context +=
+      " Target LLM is Claude Sonnet 5 on a Python FastAPI stack with Qdrant as the" +
+      " vector database; personal data is involved and must stay in the EU; the" +
+      " monthly LLM budget is €800 and the target SLA is 99.5% with under 2s latency.";
+    const res = validateRoute(proposal("WF-003"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-003", paramsChecked: true });
   });
 });

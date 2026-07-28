@@ -18,6 +18,7 @@ import { buildRouterPrompt } from "./router-prompt.js";
 import { validateRoute, ROUTER_OUTPUT_SCHEMA } from "./validate-route.js";
 import { WF001_MANIFEST } from "./manifests/wf-001.js";
 import { WF002_MANIFEST } from "./manifests/wf-002.js";
+import { WF003_MANIFEST } from "./manifests/wf-003.js";
 import { buildPlan, type ExecutionPlan } from "./plan.js";
 import type {
   CompletenessIssue,
@@ -33,6 +34,7 @@ import type {
 export const DEFAULT_MANIFESTS: Readonly<Record<string, ParamManifest>> = {
   "WF-001": WF001_MANIFEST,
   "WF-002": WF002_MANIFEST,
+  "WF-003": WF003_MANIFEST,
 };
 
 /** Final outcome of one dispatch pass — every variant is shown to the operator. */
