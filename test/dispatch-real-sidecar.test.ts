@@ -4,6 +4,7 @@ import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { validateRoute } from "../src/dispatch/validate-route.js";
 import { buildPlan } from "../src/dispatch/plan.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
+import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 
@@ -46,6 +47,13 @@ describe.skipIf(!HAVE_CATALOG)("dispatch against the real sidecar", () => {
     const wf001 = sidecar.assets.find((a) => a.id === "WF-001" && a.type === "workflow");
     expect(wf001).toBeDefined();
     expect(WF001_MANIFEST.catalogTag).toBe(wf001?.source.catalogTag);
+  });
+
+  it("pins the WF-002 manifest to the sidecar's catalog tag (drift = hard fail)", () => {
+    const sidecar = loadSidecar(SIDECAR_PATH);
+    const wf002 = sidecar.assets.find((a) => a.id === "WF-002" && a.type === "workflow");
+    expect(wf002).toBeDefined();
+    expect(WF002_MANIFEST.catalogTag).toBe(wf002?.source.catalogTag);
   });
 
   it("builds the execution plan from the real WF-001 card (duration + recommended model verbatim)", () => {

@@ -108,7 +108,7 @@ describe("runDispatch — pipeline order and bounded retry", () => {
     expect(res).toEqual({
       status: "PARAMS_MISSING",
       route: "WF-001",
-      missingParams: ["team_size", "project_method", "level_of_detail"],
+      missingParams: ["Team size", "Project method", "Level of detail"],
     });
     expect(runner.calls()).toBe(1);
   });

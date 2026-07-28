@@ -17,6 +17,7 @@ import { checkCompleteness } from "./completeness-check.js";
 import { buildRouterPrompt } from "./router-prompt.js";
 import { validateRoute, ROUTER_OUTPUT_SCHEMA } from "./validate-route.js";
 import { WF001_MANIFEST } from "./manifests/wf-001.js";
+import { WF002_MANIFEST } from "./manifests/wf-002.js";
 import { buildPlan, type ExecutionPlan } from "./plan.js";
 import type {
   CompletenessIssue,
@@ -24,9 +25,14 @@ import type {
   RouteIssue,
 } from "./types.js";
 
-/** V0 manifest registry — WF-001 only (plan §6: the other nine are V1). */
+/**
+ * Manifest registry. Registering a manifest here is what makes it take effect:
+ * a route with no entry reports an honest `paramsChecked: false` instead of
+ * failing, so a half-registered set degrades quietly rather than loudly.
+ */
 export const DEFAULT_MANIFESTS: Readonly<Record<string, ParamManifest>> = {
   "WF-001": WF001_MANIFEST,
+  "WF-002": WF002_MANIFEST,
 };
 
 /** Final outcome of one dispatch pass — every variant is shown to the operator. */

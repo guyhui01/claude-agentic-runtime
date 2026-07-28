@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { validateRoute } from "../src/dispatch/validate-route.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
+import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
+import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 
@@ -31,6 +33,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST", "AGENT-PO-SCRUM"],
     },
     {
+      id: "WF-002",
+      type: "workflow",
+      path: "workflows/WF-002.md",
+      title: "Delivery Agile SAFe",
+      description: "PI Planning → sprint backlog → executive-committee reporting",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-002.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       id: "WF-006",
       type: "workflow",
       path: "workflows/WF-006.md",
@@ -53,7 +65,27 @@ const FAKE_SIDECAR: Sidecar = {
   ],
 };
 
-const MANIFESTS = { "WF-001": WF001_MANIFEST } as const;
+const MANIFESTS = { "WF-001": WF001_MANIFEST, "WF-002": WF002_MANIFEST } as const;
+
+/**
+ * The P02 coverage-matrix brief, reused rather than re-invented: it is
+ * qualified for ROUTING, which is a weaker bar than filling the ART card — the
+ * dry-run finding that every routed prompt still has a param gap.
+ */
+function p02Brief(): NeedBrief {
+  const fixture = DISPATCH_FIXTURES.find((f) => f.id === "P02");
+  if (fixture?.brief === undefined) throw new Error("P02 fixture carries no brief");
+  return { ...fixture.brief, constraints: [...fixture.brief.constraints] };
+}
+
+/** P02 after the operator answered the two gaps the card check names. */
+function p02AmendedBrief(): NeedBrief {
+  const b = p02Brief();
+  b.context +=
+    " The ART has a capacity of 120 story points per PI and depends on the" +
+    " ticketing vendor plus two external systems.";
+  return b;
+}
 
 /** P01 qualified brief BEFORE amendment — the dry-run 3-param gap. */
 function p01Brief(): NeedBrief {
@@ -133,12 +165,18 @@ describe("validateRoute — valid decisions", () => {
     });
   });
 
-  it("returns PARAMS_MISSING with the dry-run P01 gap named (team_size, project_method, level_of_detail)", () => {
+  it("returns PARAMS_MISSING with the dry-run P01 gap named in CARD labels, not internal keys", () => {
     const res = validateRoute(proposal("WF-001"), p01Brief(), FAKE_SIDECAR, MANIFESTS);
     expect(res.status).toBe("PARAMS_MISSING");
     if (res.status !== "PARAMS_MISSING") return;
     expect(res.route).toBe("WF-001");
-    expect(res.missingParams.sort()).toEqual(["level_of_detail", "project_method", "team_size"]);
+    // Same three params as the 2026-07-19 live proof, now surfaced as the
+    // business vocabulary the operator reads instead of snake_case keys.
+    expect(res.missingParams.sort()).toEqual([
+      "Level of detail",
+      "Project method",
+      "Team size",
+    ]);
   });
 
   it("routes the amended P01 brief with paramsChecked=true (the return loop closes)", () => {
@@ -149,5 +187,40 @@ describe("validateRoute — valid decisions", () => {
   it("routes a manifest-less workflow with paramsChecked=false — honest, never silently checked", () => {
     const res = validateRoute(proposal("WF-006"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
     expect(res).toMatchObject({ status: "ROUTED", route: "WF-006", paramsChecked: false });
+  });
+});
+
+describe("WF-002 manifest — the SAFe card, on a vocabulary far from WF-001", () => {
+  it("names the P02 gap: routing-qualified is not card-qualified", () => {
+    const res = validateRoute(proposal("WF-002"), p02Brief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    // P02 identifies the train, its team count, its PI duration and the current
+    // PI, but states neither capacity nor dependencies. This is the acceptance
+    // oracle of the 2026-07-19 dry-run (§2) minus its `PI duration` entry, which
+    // the brief does state verbatim — see the annotation in that document.
+    expect(res.missingParams).toEqual(["ART capacity", "Dependencies"]);
+  });
+
+  it("routes the amended P02 brief with paramsChecked=true (the return loop closes)", () => {
+    const res = validateRoute(proposal("WF-002"), p02AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-002", paramsChecked: true });
+  });
+
+  it("does not accept a WF-001 product-scoping brief as a filled ART card", () => {
+    // Cross-vocabulary guard: if these detectors passed on prose that mentions
+    // no train, PI or capacity, they would be keying on something other than
+    // the card — the hollow pass this manifest exists to prevent.
+    const res = validateRoute(proposal("WF-002"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "ART capacity",
+      "ART name",
+      "Current PI number",
+      "Dependencies",
+      "Number of teams",
+      "PI duration",
+    ]);
   });
 });

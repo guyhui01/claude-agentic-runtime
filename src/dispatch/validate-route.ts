@@ -138,9 +138,13 @@ export function validateRoute(
     };
   }
 
+  // Surface the CARD label, not the internal key: PARAMS_MISSING is read by the
+  // operator who has to amend the brief, and the card labels are business
+  // vocabulary by construction (copied verbatim from the catalog card). `name`
+  // stays the internal identifier and is never shown here.
   const missing = manifest.params
     .filter((p) => p.required && !paramFilled(brief, p))
-    .map((p) => p.name);
+    .map((p) => p.card);
   if (missing.length > 0) {
     return { status: "PARAMS_MISSING", route: asset.id, missingParams: missing };
   }
