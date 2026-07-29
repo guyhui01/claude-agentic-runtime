@@ -1,17 +1,25 @@
 version: 2
 
-# Bumps de dépendances en PR tracées (§2.5 NEXT_STEPS) — cohérent ADR-0002 :
-# la propagation d'une nouvelle version est un acte EXPLICITE et tracé (PR), jamais
-# implicite. NB : le catalogue `claude-agents` n'est PAS une dépendance npm
-# (consommé en lecture seule via sidecar, épinglé par `catalogTag`) ; son bump
-# reste un commit manuel tracé, hors périmètre Dependabot.
+# Dependency bumps as tracked pull requests (docs/NEXT_STEPS.md §2.5) — consistent
+# with ADR-0002: propagating a new version is an EXPLICIT, traced act (a PR), never
+# an implicit one. NB: the `claude-agents` catalog is NOT an npm dependency (it is
+# consumed read-only through the sidecar and pinned by `catalogTag`); bumping it
+# stays a manual, traced commit, outside Dependabot's scope.
 
 updates:
-  # Dépendances npm (SDK, ajv, vitest, typescript, @types/node).
+  # npm dependencies (SDK, ajv, vitest, typescript, @types/node).
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
+    # 5 is also GitHub's default; it is stated explicitly so a future change of
+    # that default cannot silently change this repository's behaviour.
+    #
+    # It caps VERSION updates only. Security update pull requests are not subject
+    # to it and do not count toward it (verified against GitHub's documentation on
+    # 2026-07-29 — an earlier note in this repo's tracker claimed the opposite and
+    # used it as an argument; it was wrong). So a stale backlog delays routine
+    # bumps, never a security fix.
     open-pull-requests-limit: 5
     groups:
       dev-dependencies:
@@ -20,7 +28,7 @@ updates:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
 
-  # Actions des workflows GitHub (checkout, setup-node…).
+  # GitHub workflow actions (checkout, setup-node…).
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

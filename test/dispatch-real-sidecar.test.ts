@@ -1,5 +1,4 @@
 import { describe, it, expect } from "vitest";
-import { existsSync } from "node:fs";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { validateRoute } from "../src/dispatch/validate-route.js";
 import { buildPlan } from "../src/dispatch/plan.js";
@@ -10,6 +9,7 @@ import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { HAVE_CATALOG, describeCatalogAbsent } from "./catalog-sentinel.js";
 
 /**
  * Real-sidecar proof (offline, zero LLM): the dispatch validation runs against
@@ -20,8 +20,6 @@ import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
  * CI-safe: skipped cleanly when the catalog is not checked out (ADR-0002 —
  * the runtime does not depend on the catalog repo).
  */
-
-const HAVE_CATALOG = existsSync(SIDECAR_PATH);
 
 const amendedP01: NeedBrief = {
   need: "Client brief received from Nordwind Insurance: the claims department wants an AI assistant for adjusters and management approved exploring it, so we must decide what to build first.",
@@ -86,3 +84,5 @@ describe.skipIf(!HAVE_CATALOG)("dispatch against the real sidecar", () => {
     expect(res.status).toBe("REJECT_ROUTER_OUTPUT");
   });
 });
+
+describeCatalogAbsent("dispatch");

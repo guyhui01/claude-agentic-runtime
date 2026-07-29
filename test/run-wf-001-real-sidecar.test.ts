@@ -15,15 +15,13 @@
  * and is authoritative.
  */
 import { describe, it, expect } from "vitest";
-import { existsSync } from "node:fs";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { toAgentDefinition } from "../src/sdk/to-agent-definition.js";
 import { assembleWf001Spine } from "../src/spines/run-wf-001.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
 import type { StepRunner } from "../src/orchestrator/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
-
-const HAVE_CATALOG = existsSync(SIDECAR_PATH);
+import { HAVE_CATALOG, describeCatalogAbsent } from "./catalog-sentinel.js";
 
 // DoD-conformant step outputs (same shapes as spine-wf-001.test.ts).
 const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
@@ -86,8 +84,4 @@ describe.skipIf(!HAVE_CATALOG)("WF-001 spine — REAL sidecar (ready for live ru
 });
 
 // If the catalog is absent, document the skip rather than silencing it.
-describe.runIf(!HAVE_CATALOG)("WF-001 spine — real sidecar (skip)", () => {
-  it("skipped: catalog not found (set CATALOG_ROOT or checkout sibling)", () => {
-    expect(HAVE_CATALOG).toBe(false);
-  });
-});
+describeCatalogAbsent("WF-001 spine");

@@ -9,16 +9,14 @@
  * CI-safe: clean skip if the catalog is absent (see `catalog-root.ts`).
  */
 import { describe, it, expect } from "vitest";
-import { existsSync } from "node:fs";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { toAgentDefinition } from "../src/sdk/to-agent-definition.js";
 import { assembleWf005Spine } from "../src/spines/run-wf-005.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
 import type { StepRunner } from "../src/orchestrator/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { HAVE_CATALOG, describeCatalogAbsent } from "./catalog-sentinel.js";
 import { wf005HappyOutputs } from "./fixtures/wf-005-outputs.js";
-
-const HAVE_CATALOG = existsSync(SIDECAR_PATH);
 
 const WF_005_BACKBONE = [
   "AGENT-VEILLE-STRATEGIQUE",
@@ -53,8 +51,4 @@ describe.skipIf(!HAVE_CATALOG)("WF-005 spine — REAL sidecar (ready for live ru
   });
 });
 
-describe.runIf(!HAVE_CATALOG)("WF-005 spine — real sidecar (skip)", () => {
-  it("skipped: catalog not found (set CATALOG_ROOT or checkout sibling)", () => {
-    expect(HAVE_CATALOG).toBe(false);
-  });
-});
+describeCatalogAbsent("WF-005 spine");

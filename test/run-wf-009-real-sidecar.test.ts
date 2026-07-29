@@ -9,16 +9,14 @@
  * CI-safe: clean skip if the catalog is absent (see `catalog-root.ts`).
  */
 import { describe, it, expect } from "vitest";
-import { existsSync } from "node:fs";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { toAgentDefinition } from "../src/sdk/to-agent-definition.js";
 import { assembleWf009Spine } from "../src/spines/run-wf-009.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
 import type { StepRunner } from "../src/orchestrator/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { HAVE_CATALOG, describeCatalogAbsent } from "./catalog-sentinel.js";
 import { wf009HappyOutputs } from "./fixtures/wf-009-outputs.js";
-
-const HAVE_CATALOG = existsSync(SIDECAR_PATH);
 
 // The four distinct core agents of the WF-009 backbone (RH-IA carries STEP-04/05/06).
 const WF_009_BACKBONE = [
@@ -56,8 +54,4 @@ describe.skipIf(!HAVE_CATALOG)("WF-009 spine — REAL sidecar (ready for live ru
   });
 });
 
-describe.runIf(!HAVE_CATALOG)("WF-009 spine — real sidecar (skip)", () => {
-  it("skipped: catalog not found (set CATALOG_ROOT or checkout sibling)", () => {
-    expect(HAVE_CATALOG).toBe(false);
-  });
-});
+describeCatalogAbsent("WF-009 spine");
