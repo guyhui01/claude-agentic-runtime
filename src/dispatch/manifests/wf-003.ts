@@ -117,7 +117,18 @@ export const WF003_MANIFEST: ParamManifest = {
       card: "Monthly API budget",
       required: true,
       mapping: technical,
-      pattern: /[€$£]\s?\d|\b\d+\s*(€|eur|usd|dollars?|euros?)\b|\bbudget\b[^.]{0,30}\d/i,
+      // A monetary AMOUNT and the MONTHLY qualifier, in the same sentence.
+      //
+      // Both halves were paid for. The former third branch, `budget … digit`,
+      // filled this line from the WF-001 brief's "pilot budget capped for Q3" —
+      // the digit it matched being the **3 of "Q3"**, a quarter label read as a
+      // sum (found by the cross-vocabulary probe, 2026-07-29). And a bare amount
+      // is not this card's question either: the card asks for a MONTHLY API
+      // budget, so "€45k total project budget" would answer something else. Same
+      // policy as WF-004 `Engagement duration` and WF-005 `Horizon` — a quantity
+      // counts only next to what qualifies it.
+      pattern:
+        /(monthly|per month|a month|\/\s?mo)[^.]{0,40}([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))|([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))[^.]{0,40}(monthly|per month|a month|\/\s?mo)/i,
     },
     {
       name: "target_sla",

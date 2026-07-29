@@ -440,6 +440,70 @@ function p05AmendedBrief(): NeedBrief {
   return b;
 }
 
+describe("cross-vocabulary probe findings — the four detectors it caught", () => {
+  // Each of these filled a card line from prose written for ANOTHER workflow,
+  // and none was visible to the neutral-prose probe: the words were present, not
+  // absent. Found 2026-07-29 by `dispatch-cross-vocabulary-probe`, and each case
+  // below is the exact foreign text that filled it.
+
+  it("WF-003: a quarter label is not a monthly budget", () => {
+    // "pilot budget capped for Q3" matched `budget … digit` on the 3 of "Q3".
+    const res = validateRoute(proposal("WF-003"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Monthly API budget");
+  });
+
+  it("WF-003: a bare amount is not a MONTHLY budget either", () => {
+    // Beyond the proven defect, and deliberately so: the card asks for a monthly
+    // budget, so a total states something else. Same policy as `Horizon`.
+    const b = fixtureBrief("P03");
+    b.context += " A total project budget of €45k is approved.";
+    const res = validateRoute(proposal("WF-003"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Monthly API budget");
+  });
+
+  it("WF-004: a NEGATED audit does not state an engagement scope", () => {
+    // P14 is a legal-drafting brief; its only "audit" is "not an audit of an AI
+    // system". Reading a denial as a statement inverts the check's semantics.
+    const res = validateRoute(proposal("WF-004"), fixtureBrief("P14"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Engagement scope");
+  });
+
+  it("WF-004: model-training infrastructure is not a training engagement", () => {
+    // P16 wants to pretrain an LLM: "research-grade training infrastructure".
+    const res = validateRoute(proposal("WF-004"), fixtureBrief("P16"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Engagement scope");
+  });
+
+  it("WF-004: a sprint, a response deadline and a project length are not engagement durations", () => {
+    // The three foreign briefs the bare quantity+unit detector filled on. WF-005
+    // `Horizon` refused exactly this; the two manifests disagreeing was the find.
+    for (const id of ["P02", "P06", "P10"]) {
+      const res = validateRoute(proposal("WF-004"), fixtureBrief(id), FAKE_SIDECAR, MANIFESTS);
+      expect(res.status, `${id} must not fill the whole card`).toBe("PARAMS_MISSING");
+      if (res.status !== "PARAMS_MISSING") continue;
+      expect(res.missingParams, `${id} duration`).toContain("Engagement duration");
+    }
+  });
+
+  it("still reads the engagement's OWN duration, in either word order", () => {
+    // Guard against over-tightening: the anchored detector must keep answering
+    // the card on the two briefs that genuinely state an engagement window.
+    for (const id of ["P04", "P12"]) {
+      const res = validateRoute(proposal("WF-004"), fixtureBrief(id), FAKE_SIDECAR, MANIFESTS);
+      const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+      expect(missing, `${id} duration must be filled`).not.toContain("Engagement duration");
+    }
+  });
+});
+
 describe("WF-005 manifest — where one card's own tokens compete across three of its lines", () => {
   it("names the three gaps of the P05 fixture, in card labels", () => {
     // The gap the operator actually sees. Note what does NOT appear:

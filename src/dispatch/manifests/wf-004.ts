@@ -92,19 +92,45 @@ export const WF004_MANIFEST: ParamManifest = {
       // on Support: the bare word is ordinary prose ("decision support", "we
       // support the team") and would fill this line from any brief. Only the
       // engagement forms of it are accepted.
+      //
+      // Two further tightenings, both found by the cross-vocabulary probe
+      // (2026-07-29) and neither visible to the neutral-prose probe, because the
+      // words were present rather than absent:
+      //   - a NEGATION guard. This filled on a legal-drafting brief whose only
+      //     occurrence of the word is "*not* an audit of an AI system". A check
+      //     that reads a denial as a statement inverts its own semantics — same
+      //     class as the WF-005 `Sources to prioritize` defect.
+      //   - `training` no longer counts bare. It filled on "research-grade
+      //     training infrastructure", which is MODEL training, not the card's
+      //     training engagement. Narrowed positively, the form already used by
+      //     `expected_deliverables` below rather than a lookahead blacklist.
       pattern:
-        /\baudits?\b|\bstrateg(y|ic roadmap|ic advisory)\b|\btraining\b|\bupskilling\b|\bongoing support\b|\brun\s*(&|and)\s*support\b|\bsupport (engagement|phase|mission)\b|\bfull (engagement|programme|program)\b/i,
+        /(?<!\bnot )(?<!\bnot an )(?<!\bno )(?:\baudits?\b|\bstrateg(y|ic roadmap|ic advisory)\b|\btraining (plan|programme|program|engagement|mission)\b|\btraining of (their|the|its) (staff|teams?|managers?|people)\b|\bupskilling\b|\bongoing support\b|\brun\s*(&|and)\s*support\b|\bsupport (engagement|phase|mission)\b|\bfull (engagement|programme|program)\b)/i,
     },
     {
       name: "engagement_duration",
       card: "Engagement duration",
       required: true,
       mapping: engagement,
-      // A quantity AND a unit, in digits or in words ("three-month engagement
-      // window"). A bare "timeline" or "deadline" states that time exists, not
-      // how long the engagement runs.
+      // A quantity AND a unit AND what the quantity measures, in the same
+      // sentence. A bare "timeline" or "deadline" states that time exists, not
+      // how long the engagement runs — and a bare quantity states a duration
+      // without saying whose.
+      //
+      // The anchoring was paid for: the bare quantity+unit detector filled on a
+      // SPRINT length ("2-week sprints"), a RESPONSE DEADLINE ("due in three
+      // weeks") and a PROJECT length ("10-month project") — three foreign briefs,
+      // none of them an engagement duration (cross-vocabulary probe, 2026-07-29).
+      // It is the same policy as WF-005 `Horizon`, which refused the bare
+      // quantity for this exact reason; leaving the two manifests to disagree was
+      // the real finding.
+      //
+      // `programme`/`program` are deliberately NOT anchors: a "chatbot program"
+      // names the CLIENT's initiative at least as often as the engagement. With
+      // them included, the pre-sales brief missed only because its gap measured
+      // 25 characters against a 24-character window — luck, not design.
       pattern:
-        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
+        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.]{0,24}\b(engagement|mission|assignment|phase|contract|intervention)\b|\b(engagement|mission|assignment|phase|contract|intervention)\b[^.]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
     },
     {
       name: "stakeholders",

@@ -39,11 +39,11 @@ Foreign fills: **1** cell(s) over 1 brief(s).
 
 ## WF-003 — 9 measurable specs × 18 foreign briefs
 
-Foreign fills: **7** cell(s) over 5 brief(s).
+Foreign fills: **6** cell(s) over 5 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
-| P01 | WF-001 | GDPR constraints (data location) · Monthly API budget |
+| P01 | WF-001 | GDPR constraints (data location) |
 | P06 | WF-006 | AI app type |
 | P08 | WF-008 | AI app type · GDPR constraints (data location) |
 | P10 | WF-010 | AI app type |
@@ -51,23 +51,23 @@ Foreign fills: **7** cell(s) over 5 brief(s).
 
 ## WF-004 — 9 measurable specs × 17 foreign briefs
 
-Foreign fills: **40** cell(s) over 16 brief(s).
+Foreign fills: **35** cell(s) over 16 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
 | P01 | WF-001 | Client (sector) · Priority stakes |
-| P02 | WF-002 | Client (name) · Engagement duration · Priority stakes · Stakeholders |
+| P02 | WF-002 | Client (name) · Priority stakes · Stakeholders |
 | P03 | WF-003 | Client (name) · Client (sector) |
-| P06 | WF-006 | Client (sector) · Engagement duration · Priority stakes |
+| P06 | WF-006 | Client (sector) · Priority stakes |
 | P07 | WF-007 | Client (name) · Client (sector) |
 | P08 | WF-008 | Client (sector) · Engagement scope · Expected deliverables · Priority stakes · Stakeholders |
 | P09 | WF-009 | Client (size) |
-| P10 | WF-010 | Client (name) · Client (sector) · Engagement duration · Expected deliverables · Stakeholders |
+| P10 | WF-010 | Client (name) · Client (sector) · Expected deliverables · Stakeholders |
 | P11 | WF-006 | Client (sector) |
 | P13 | WF-010 | Client (name) · Expected deliverables · Stakeholders |
-| P14 | NO_MATCH | Client (sector) · Engagement scope |
+| P14 | NO_MATCH | Client (sector) |
 | P15 | NO_MATCH | Client (sector) |
-| P16 | NO_MATCH | Client (size) · Engagement scope |
+| P16 | NO_MATCH | Client (size) |
 | P17 | NO_MATCH | Client (sector) |
 | P19 | WF-001 | Client (sector) · Priority stakes |
 | P20 | WF-008 | Client (name) · Client (sector) · Expected deliverables · Priority stakes |
