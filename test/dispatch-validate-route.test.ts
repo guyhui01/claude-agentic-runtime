@@ -4,6 +4,7 @@ import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
 import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
 import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
 import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
+import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -65,6 +66,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-005",
+      type: "workflow",
+      path: "workflows/WF-005.md",
+      title: "Strategic Intelligence & Growth",
+      description: "Weekly signal → qualified synthesis and publication-ready content",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-005.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       id: "WF-006",
       type: "workflow",
       path: "workflows/WF-006.md",
@@ -92,6 +103,7 @@ const MANIFESTS = {
   "WF-002": WF002_MANIFEST,
   "WF-003": WF003_MANIFEST,
   "WF-004": WF004_MANIFEST,
+  "WF-005": WF005_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -415,5 +427,134 @@ describe("WF-004 manifest — a commercial card, where prose imitates card vocab
     expect(res.status).toBe("PARAMS_MISSING");
     if (res.status !== "PARAMS_MISSING") return;
     expect(res.missingParams).toEqual(["Client (name)"]);
+  });
+});
+
+/** P05 after the operator answered the three gaps the card check names. */
+function p05AmendedBrief(): NeedBrief {
+  const b = fixtureBrief("P05");
+  b.context +=
+    " The intelligence runs on a 12-month horizon, prioritizing arXiv, GitHub" +
+    " releases and trade press, with positioning on large accounts as the" +
+    " growth focus.";
+  return b;
+}
+
+describe("WF-005 manifest — where one card's own tokens compete across three of its lines", () => {
+  it("names the three gaps of the P05 fixture, in card labels", () => {
+    // The gap the operator actually sees. Note what does NOT appear:
+    // `Sources to prioritize` is missing although the brief says "LinkedIn"
+    // twice — the card lists LinkedIn as a source, but the token is refused
+    // there precisely so that an AUDIENCE statement cannot answer a SOURCES
+    // question. Under-detecting is the safe direction.
+    const res = validateRoute(proposal("WF-005"), fixtureBrief("P05"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Horizon",
+      "Opportunity focus",
+      "Sources to prioritize",
+    ]);
+  });
+
+  it("routes the amended P05 brief with paramsChecked=true", () => {
+    const res = validateRoute(proposal("WF-005"), p05AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-005", paramsChecked: true });
+  });
+
+  it("accepts the operator's OWN attested phrasing of six of the seven card lines", () => {
+    // Positive control whose source is INDEPENDENT of this manifest: the seven
+    // values of the WF-005 live-harness seed (`wf-005-run-live.test.ts`, written
+    // 2026-07-13 for the spine and live-proven by the `completed` Opus run),
+    // flattened into prose. It is the only check here whose text was not written
+    // against these detectors — the reason it exists is that controls written
+    // from a regex prove only that the regex is non-empty.
+    //
+    // Six of seven fill. `Horizon` does not, and that is the seed's shape rather
+    // than a defect: it says `horizon: "3 months"`, where the label lives in the
+    // FIELD NAME. A brief carries no field names, and accepting a bare quantity
+    // was measured to fill on P04's "three-month engagement window" and P10's
+    // "10-month project" — a duration and a project length.
+    const seedAsBrief: NeedBrief = {
+      need: "Weekly flash + 2-3 LinkedIn posts on generative AI / LLM and AI agents: model releases, agentic runtimes, evaluation frameworks, and the AI-consulting job market.",
+      domain: "Management & Consulting",
+      expectedDeliverable: "Weekly synthesis and ready-to-publish LinkedIn posts",
+      constraints: ["ArXiv, GitHub trending, vendor engineering blogs, trade press"],
+      context:
+        "Public LinkedIn (AI product leaders and practitioners), thought leader and plain-language expert tone, over 3 months. Positioning and freelance AI-consulting engagements.",
+      submittedBy: "Managing Partner",
+    };
+    const res = validateRoute(proposal("WF-005"), seedAsBrief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Horizon"]);
+  });
+
+  it("reads the horizon in the card's OWN word order, value last", () => {
+    // Regression on a defect of the first draft: STEP-01's input line reads
+    // "Focus horizon: [short / medium / long term]" — the horizon word BEFORE a
+    // qualitative value — and the detector rejected it.
+    const b = p05AmendedBrief();
+    b.context = b.context.replace("on a 12-month horizon", "on a focus horizon of medium term");
+    const res = validateRoute(proposal("WF-005"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-005", paramsChecked: true });
+  });
+
+  it("refuses a bare quantity as a horizon, which is what an engagement duration looks like", () => {
+    const b = p05AmendedBrief();
+    b.context = b.context.replace("on a 12-month horizon", "over 12 months");
+    const res = validateRoute(proposal("WF-005"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Horizon"]);
+  });
+
+  it("does not read a statement of ABSENT sources as filled", () => {
+    // Regression on the second defect of the first draft: "no monitored sources
+    // yet" satisfied the sources line — a false "filled" on a statement of
+    // absence, the class a decision check must reject rather than merely detect.
+    const b = p05AmendedBrief();
+    b.context = b.context.replace(
+      "prioritizing arXiv, GitHub releases and trade press",
+      "with no monitored sources yet",
+    );
+    const res = validateRoute(proposal("WF-005"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Sources to prioritize"]);
+  });
+
+  it("leaves all seven missing on AI-rich prose that says nothing about intelligence", () => {
+    // The generic discrimination probe feeds prose with NO card vocabulary at
+    // all, so it cannot see a spec that keys on plain AI vocabulary — and this
+    // manifest's widest spec is exactly that risk. Measured: widening
+    // `Intelligence scope` to a bare `\bAI\b` left the whole suite green until
+    // this case existed. The P01 product-scoping brief is dense with AI
+    // vocabulary and states not one WF-005 parameter.
+    const res = validateRoute(proposal("WF-005"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toHaveLength(7);
+    expect(res.missingParams).toContain("Intelligence scope");
+  });
+
+  it("does not accept a WF-008 compliance brief as a filled intelligence card", () => {
+    // Cross-vocabulary guard, and it records the one fill instead of narrowing
+    // it away: P08's context mentions an "external LLM", which IS a statement of
+    // the card's own `AI/LLM` scope item. `Intelligence scope` is the least
+    // discriminating spec of this manifest and is documented as such — while
+    // `AI Act`, this brief's actual subject, is refused because its watch
+    // framing is absent.
+    const res = validateRoute(proposal("WF-005"), fixtureBrief("P08"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Audience",
+      "Horizon",
+      "Opportunity focus",
+      "Sources to prioritize",
+      "Target format",
+      "Tone",
+    ]);
   });
 });
