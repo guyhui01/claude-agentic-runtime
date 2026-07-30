@@ -81,3 +81,26 @@ Foreign fills: **3** cell(s) over 3 brief(s).
 | P04 | WF-004 | Intelligence scope |
 | P08 | WF-008 | Intelligence scope |
 | P16 | NO_MATCH | Intelligence scope |
+
+## WF-006 — 14 measurable specs × 17 foreign briefs
+
+Foreign fills: **32** cell(s) over 16 brief(s).
+
+| Foreign brief | Written for | Specs it fills |
+|---|---|---|
+| P01 | WF-001 | Prospect (name) · Prospect (sector) |
+| P02 | WF-002 | Decision-makers · Prospect (name) |
+| P03 | WF-003 | Prospect (name) · Prospect (sector) |
+| P04 | WF-004 | Decision-makers · Prospect (AI maturity) · Prospect (name) · Prospect (sector) · Prospect (size) |
+| P07 | WF-007 | Prospect (name) · Prospect (sector) |
+| P08 | WF-008 | Constraints · Prospect (sector) |
+| P09 | WF-009 | Prospect (size) |
+| P10 | WF-010 | Decision-makers · Prospect (name) · Prospect (sector) |
+| P12 | WF-004 | Decision-makers · Prospect (name) · Prospect (sector) |
+| P13 | WF-010 | Prospect (name) |
+| P14 | NO_MATCH | Decision-makers · Prospect (sector) |
+| P15 | NO_MATCH | Prospect (sector) |
+| P16 | NO_MATCH | Prospect (size) |
+| P17 | NO_MATCH | Prospect (sector) |
+| P19 | WF-001 | Prospect (name) · Prospect (sector) |
+| P20 | WF-008 | Prospect (name) · Prospect (sector) |
