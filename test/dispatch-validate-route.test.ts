@@ -389,16 +389,26 @@ describe("WF-004 manifest — a commercial card, where prose imitates card vocab
   });
 
   it("does not accept a WF-001 product-scoping brief as a filled engagement card", () => {
-    // Cross-vocabulary guard. Two specs DO fill, and the assertion records it
-    // rather than hiding it behind a narrower regex: the P01 brief states an
-    // insurer (sector) and GDPR (a compliance stake). Both are true statements
-    // of the card's own questions — `Priority stakes` is the least
-    // discriminating spec of this manifest and is documented as such.
+    // Cross-vocabulary guard. THREE specs now fill, and the assertion records
+    // it rather than hiding it behind a narrower regex: the P01 brief states an
+    // insurer (sector), GDPR (a compliance stake) and — since 2026-07-30 — the
+    // client's name. All three are true statements of the card's own questions;
+    // `Priority stakes` is the least discriminating spec of this manifest and
+    // is documented as such.
+    //
+    // `Client (name)` moved out of this list when the policy-consistency table
+    // showed the `from` introducer present in the WF-006 sibling and absent
+    // here, with no basis on either card. The brief opens on "Client brief
+    // received FROM Nordwind Insurance", so the name was there all along and
+    // this detector was failing to read it. Unlike the `CAC 40` correction of
+    // the same lot, this one is NOT a no-op: it fills on three foreign briefs
+    // and moved the cross-vocabulary matrix from 35 cells to 38, inside the
+    // class that matrix already records — every brief names a company.
     const res = validateRoute(proposal("WF-004"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
     expect(res.status).toBe("PARAMS_MISSING");
     if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).not.toContain("Client (name)");
     expect(res.missingParams.sort()).toEqual([
-      "Client (name)",
       "Client (size)",
       "Client AI maturity",
       "Engagement duration",

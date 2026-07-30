@@ -121,9 +121,16 @@ export const WF006_MANIFEST: ParamManifest = {
       card: "Prospect (AI maturity)",
       required: true,
       mapping: presales,
-      // Same tightening as WF-004 `client_ai_maturity`: the bare adjective
-      // qualifies a technology far more often than an organisation ("an
-      // advanced RAG pipeline"), so it only counts next to maturity vocabulary.
+      // Carries the same tightening as WF-004 `client_ai_maturity` — the bare
+      // adjective qualifies a technology far more often than an organisation
+      // ("an advanced RAG pipeline"), so it only counts next to maturity
+      // vocabulary — but it is deliberately WIDER, and the policy-consistency
+      // table makes that visible rather than letting it read as an accident.
+      // The reason is on the cards: WF-004's line offers an enumeration
+      // ("[Beginner / Experimenter / Advanced — estimate]") the detector can
+      // key on, while this fact sits inside the `Prospect` conjunction with no
+      // list at all. A card that names no values needs a detector that
+      // recognises maturity statements generically.
       pattern:
         /\b(beginner|novice|experimenter|experimenting)\b|\b(advanced|mature)\b[^.]{0,20}\b(maturity|ai adoption|ai practice)\b|\b(maturity|ai adoption|ai practice)\b[^.]{0,20}\b(advanced|mature|beginner|low|high)\b|\bno prior (AI|machine[-\s]learning)\b|\bfirst AI (project|initiative)\b|\b(several|multiple) models in production\b/i,
     },
