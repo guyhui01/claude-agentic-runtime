@@ -49,30 +49,56 @@ jobs:
   # The job above runs WITHOUT a catalog checkout, which is deliberate (ADR-0002:
   # the runtime does not depend on the catalog repo) — so every `real-sidecar`
   # block skips cleanly there. Measured on 2026-07-29: that silently left **28
-  # assertions unverified by CI**, among them the five that compare each param
-  # manifest's pinned `catalogTag` against the sidecar's own tag and whose comments
-  # claim they "hard-fail on drift, forcing a re-derive". They only ever failed on
-  # a workstation with the catalog checked out. A manifest pinned to a stale tag
-  # merged green — a guard reporting success without having guarded.
+  # assertions unverified by CI** — every backbone resolution against real agent
+  # prose, the plan built from the real WF-001 card, the route validated against
+  # the real sidecar, and the five manifest catalog-tag comparisons.
   #
-  # This job closes that. The catalog is PUBLIC, so no secret is involved.
+  # This job closes that, at the tag the manifests PIN — see the two comments
+  # below for why the default branch was tried first and rejected, and why the
+  # catalog is cloned rather than checked out with an action.
   catalog-integration:
-    name: real-sidecar integration (catalog at HEAD)
+    name: real-sidecar integration (catalog at the pinned tag)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout runtime
         uses: actions/checkout@v7
 
-      # Deliberately the DEFAULT BRANCH, not the tag the manifests pin. Checking
-      # out the pinned tag would make the drift comparison tautological — manifest
-      # and sidecar would carry the same tag by construction, and the guard could
-      # never fail. On HEAD, a catalog release turns this job red until the
-      # manifests are re-derived, which is what "forcing a re-derive" means.
-      - name: Checkout catalog (public, default branch)
-        uses: actions/checkout@v7
-        with:
-          repository: guyhui01/claude-agents
-          path: catalog
+      # The tag is read FROM THE CODE, never written here: a literal in this file
+      # would be a second source of truth for the pin, free to drift from the
+      # manifests it is supposed to mirror.
+      - name: Read the catalog tag the manifests pin
+        id: pin
+        run: |
+          tag=$(grep -oE 'catalogTag: "v[0-9]+\.[0-9]+\.[0-9]+"' src/dispatch/manifests/wf-001.ts \
+                | head -1 | grep -oE 'v[0-9.]+')
+          test -n "$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      # Cloned at the PINNED TAG, not at the default branch.
+      #
+      # `main` was the first design and it was wrong: ADR-0002 rejects a live
+      # import of the catalog precisely because "a catalog edit would break the
+      # runtime with no safety net", and accepts as a cost that "freshness is not
+      # immediate — you must bump to propagate". Pointing this job at `main` turns
+      # a catalog RELEASE into a red CI here until the manifests are re-derived,
+      # converting a deliberately unhurried freshness into an urgency, and leaving
+      # a standing red that hides real regressions.
+      #
+      # At the pinned tag the comparison is tautological only for `wf-001`, whose
+      # tag was extracted above; for the other four manifests it still catches an
+      # internal disagreement (falsified 2026-07-30: pinning wf-002 to v4.1.0
+      # turns its assertion red). Drift against the LATEST catalog tag stays a
+      # session-start fact in next_steps.md, deliberately not a CI failure.
+      #
+      # A plain anonymous clone, not `actions/checkout`: the action's own README
+      # says `${{ github.token }}` is scoped to the current repository and is
+      # silent on cross-repository PUBLIC reads. A shallow HTTPS clone of a public
+      # repo needs no token at all, so the question does not arise — and it fails
+      # loudly if the tag does not exist.
+      - name: Clone the catalog at that tag (public, anonymous, shallow)
+        run: |
+          git clone --depth 1 --branch "${{ steps.pin.outputs.tag }}" \
+            https://github.com/guyhui01/claude-agents.git catalog
 
       - name: Setup Node 22
         uses: actions/setup-node@v7
@@ -93,7 +119,7 @@ jobs:
       # a failure mode: rename a file out of the pattern and this job runs fewer
       # tests while staying green — the very defect it exists to close. Running
       # everything costs a few seconds and removes the mode instead of guarding it.
-      - name: Tests with the catalog present (catalog-tag drift = hard fail)
+      - name: Tests with the catalog present (real prose, real cards, real sidecar)
         env:
           CATALOG_ROOT: ${{ github.workspace }}/catalog
         run: npm test
