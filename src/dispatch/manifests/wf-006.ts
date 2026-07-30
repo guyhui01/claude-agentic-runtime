@@ -103,7 +103,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // same conjunction and is the point to reconsider — if by then the three
       // texts have converged to the identical alternation.
       pattern:
-        /\b(food[-\s]?(industry|processing|retail)?|agri\w*|bank\w*|insur\w*|retail\w*|industr\w*|manufactur\w*|health\w*|pharma\w*|logistic\w*|energy|utilit\w*|telecom\w*|public[- ]sector|e-?commerce|automotive|luxury|media|mutual insurer)\b/i,
+        /\b(food[-\s]?(industry|processing|retail)?|agri\w*|bank\w*|insur\w*|retail\w*|industr\w*|manufactur\w*|health\w*|pharma\w*|logistic\w*|energy|utilit\w*|telecom\w*|public[- ]sector|e-?commerce|automotive|luxury|media)\b/i,
     },
     {
       name: "prospect_size",
