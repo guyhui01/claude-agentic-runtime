@@ -23,10 +23,20 @@ jobs:
   build-test:
     name: typecheck + tests (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    # Observed duration: 23-28 s. A ceiling this far above it turns a hung job
+    # into a fast red instead of hours of silence.
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        node: ["20", "22"]
+        # Maintenance LTS + Active LTS. Node 20 was dropped on 2026-07-30: it
+        # reached END OF LIFE on 2026-03-24, so half the matrix was spent on a
+        # dead runtime while Node 24 — the Active LTS, and a version `engines`
+        # claimed to support — was never exercised. `engines` moved to ">=22" in
+        # the same lot: claiming support for a runtime nothing tests is the same
+        # class of empty guarantee. Node 26 (Current) is the workstation's own
+        # version, so it is covered by every local run.
+        node: ["22", "24"]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -59,6 +69,10 @@ jobs:
   catalog-integration:
     name: real-sidecar integration (catalog at the pinned tag)
     runs-on: ubuntu-latest
+    # Same reasoning as above; this job adds a ~1 s shallow clone to the same
+    # steps, and runs in PARALLEL with the matrix — so it costs runner minutes
+    # (free on a public repo), not wall-clock.
+    timeout-minutes: 10
     # Declared ONCE for the whole job. `REQUIRE_CATALOG` is what makes this job's
     # green mean something: it turns "skipped for lack of a catalog" into a test
     # FAILURE, so a mistyped path or a clone that silently produced nothing cannot
