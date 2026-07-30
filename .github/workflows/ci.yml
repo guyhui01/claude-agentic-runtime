@@ -59,6 +59,14 @@ jobs:
   catalog-integration:
     name: real-sidecar integration (catalog at the pinned tag)
     runs-on: ubuntu-latest
+    # Declared ONCE for the whole job. `REQUIRE_CATALOG` is what makes this job's
+    # green mean something: it turns "skipped for lack of a catalog" into a test
+    # FAILURE, so a mistyped path or a clone that silently produced nothing cannot
+    # pass as success. Asserting the cloned file exists would only have proven the
+    # clone — not that the tests read it.
+    env:
+      CATALOG_ROOT: ${{ github.workspace }}/catalog
+      REQUIRE_CATALOG: "1"
     steps:
       - name: Checkout runtime
         uses: actions/checkout@v7
@@ -109,17 +117,13 @@ jobs:
       - name: Install (clean, lockfile-faithful)
         run: npm ci
 
-      # Guard the guard. Without this, a failed or misplaced checkout would leave
-      # `HAVE_CATALOG` false, every real-sidecar block would skip, and the job
-      # would pass green — reproducing the exact defect it exists to fix.
-      - name: Assert the catalog is actually present
-        run: test -f "${{ github.workspace }}/catalog/sidecar.json"
-
       # The whole suite, not a `real-sidecar` filter. A substring filter is itself
       # a failure mode: rename a file out of the pattern and this job runs fewer
       # tests while staying green — the very defect it exists to close. Running
       # everything costs a few seconds and removes the mode instead of guarding it.
+      #
+      # No billed call can fire here: the twelve live harnesses require `LIVE_RUN`
+      # in ADDITION to a catalog, the one other `*live*` file is hermetic (mocked
+      # `query()`, interim sidecar), and the runner refuses `ANTHROPIC_API_KEY`.
       - name: Tests with the catalog present (real prose, real cards, real sidecar)
-        env:
-          CATALOG_ROOT: ${{ github.workspace }}/catalog
         run: npm test

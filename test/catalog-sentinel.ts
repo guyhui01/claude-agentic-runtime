@@ -26,6 +26,18 @@ import { SIDECAR_PATH } from "./catalog-root.js";
 export const HAVE_CATALOG = existsSync(SIDECAR_PATH);
 
 /**
+ * Set by the CI job that exists to run these blocks: it turns "skipped for lack
+ * of a catalog" into a FAILURE.
+ *
+ * Without it the job's green means nothing. Asserting that the clone exists only
+ * proves the clone exists — if `CATALOG_ROOT` were mistyped in the step that runs
+ * the tests, every real-sidecar block would skip and the job would pass, which is
+ * the exact defect the job was added to close. The demand travels with the run
+ * instead: whoever asks for a catalog gets a red when there is none.
+ */
+const REQUIRE_CATALOG = !!process.env.REQUIRE_CATALOG;
+
+/**
  * Declares the no-catalog fallback for one real-sidecar suite. `subject` is a
  * free label, not a workflow id: the dispatch suite is not a spine, and its
  * eight assertions used to vanish with no explanation at all when the catalog
@@ -37,6 +49,10 @@ export function describeCatalogAbsent(subject: string): void {
     () => {
       it("records that no catalog is checked out (set CATALOG_ROOT or check out the sibling)", () => {
         expect(HAVE_CATALOG).toBe(false);
+        expect(
+          REQUIRE_CATALOG,
+          `REQUIRE_CATALOG is set, so this block must not run: no catalog was found at ${SIDECAR_PATH}`,
+        ).toBe(false);
       });
     },
   );
