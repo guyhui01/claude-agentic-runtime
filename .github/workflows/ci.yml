@@ -1,8 +1,9 @@
 name: CI
 
-# Validation continue (§2.5 NEXT_STEPS) : typecheck strict + suite de tests.
-# Les tests couvrent la validation des schémas (ajv : sidecar.schema + intégrité)
-# et les eval gates (briques 1/2 + spines réelles WF-001/002/003), fail-closed.
+# Continuous validation (docs/NEXT_STEPS.md §2.5): strict typecheck + test suite.
+# The tests cover schema validation (ajv: sidecar.schema + integrity) and the
+# fail-closed eval gates of the ten catalog spines (WF-001 … WF-010) plus the
+# WF-000 dispatch layer.
 
 on:
   push:
@@ -10,7 +11,7 @@ on:
   pull_request:
     branches: [main]
 
-# Annule les exécutions précédentes encore en cours sur la même ref.
+# Cancels earlier runs still in flight on the same ref.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -43,4 +44,56 @@ jobs:
         run: npm run typecheck
 
       - name: Tests
+        run: npm test
+
+  # The job above runs WITHOUT a catalog checkout, which is deliberate (ADR-0002:
+  # the runtime does not depend on the catalog repo) — so every `real-sidecar`
+  # block skips cleanly there. Measured on 2026-07-29: that silently left **28
+  # assertions unverified by CI**, among them the five that compare each param
+  # manifest's pinned `catalogTag` against the sidecar's own tag and whose comments
+  # claim they "hard-fail on drift, forcing a re-derive". They only ever failed on
+  # a workstation with the catalog checked out. A manifest pinned to a stale tag
+  # merged green — a guard reporting success without having guarded.
+  #
+  # This job closes that. The catalog is PUBLIC, so no secret is involved.
+  catalog-integration:
+    name: real-sidecar integration (catalog at HEAD)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout runtime
+        uses: actions/checkout@v7
+
+      # Deliberately the DEFAULT BRANCH, not the tag the manifests pin. Checking
+      # out the pinned tag would make the drift comparison tautological — manifest
+      # and sidecar would carry the same tag by construction, and the guard could
+      # never fail. On HEAD, a catalog release turns this job red until the
+      # manifests are re-derived, which is what "forcing a re-derive" means.
+      - name: Checkout catalog (public, default branch)
+        uses: actions/checkout@v7
+        with:
+          repository: guyhui01/claude-agents
+          path: catalog
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install (clean, lockfile-faithful)
+        run: npm ci
+
+      # Guard the guard. Without this, a failed or misplaced checkout would leave
+      # `HAVE_CATALOG` false, every real-sidecar block would skip, and the job
+      # would pass green — reproducing the exact defect it exists to fix.
+      - name: Assert the catalog is actually present
+        run: test -f "${{ github.workspace }}/catalog/sidecar.json"
+
+      # The whole suite, not a `real-sidecar` filter. A substring filter is itself
+      # a failure mode: rename a file out of the pattern and this job runs fewer
+      # tests while staying green — the very defect it exists to close. Running
+      # everything costs a few seconds and removes the mode instead of guarding it.
+      - name: Tests with the catalog present (catalog-tag drift = hard fail)
+        env:
+          CATALOG_ROOT: ${{ github.workspace }}/catalog
         run: npm test

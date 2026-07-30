@@ -11,7 +11,7 @@
 
 ```
 Resume session — runtime /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, `gh api repos/guyhui01/claude-agentic-runtime/dependabot/alerts --jq '[.[]|select(.state=="open")]|length'` (expected: **1**, the Hono/Windows one left in place on purpose — anything higher is untriaged), docs/NEXT_STEPS.md — never from memory.
+Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, `gh api repos/guyhui01/claude-agentic-runtime/dependabot/alerts --jq '[.[]|select(.state=="open")]|length'` (expected: **1**, the Hono/Windows one left in place on purpose — anything higher is untriaged), `gh run list --limit 1 --json conclusion --jq '.[0].conclusion'` (expected: `success`; `main` is NOT branch-protected, so a red CI blocks nothing mechanically — it is only seen if someone looks, which is why it is checked here), docs/NEXT_STEPS.md — never from memory.
 
 ▶▶ **NEXT UNIT, START IT COLD — the nine remaining dispatch param manifests (Dispatch V1).** Chosen by Guy on 2026-07-27 over the multi-WF arc (see the requalified entry below for why). Deliberately NOT started at the end of that session: it is 12× the WF-001 pilot, and half-rushed regex is the textbook cohérent-faux ([[feedback-gros-morceaux-debut-de-session]], [[feedback-pas-de-mode-degrade]]). Sizing measured at source 2026-07-27 by reading each card's `## Contextual parameters` block:
   - **81 param specs across 9 files** — WF-002: 8 · WF-003: 8 · WF-004: 8 · WF-005: 7 · WF-006: **11** · WF-007: 9 · WF-008: **11** · WF-009: 10 · WF-010: 9. (WF-001, the shipped pilot, has 7.)
