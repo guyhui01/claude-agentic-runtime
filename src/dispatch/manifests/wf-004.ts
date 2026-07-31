@@ -59,8 +59,17 @@ export const WF004_MANIFEST: ParamManifest = {
       // failure direction is the safe one (a false "missing" costs the operator
       // one line), and articles plus all-caps acronyms are excluded so that
       // "for an AI audit" cannot pass as a client name.
+      //
+      // `from` was added 2026-07-30 by the policy-consistency table, which put
+      // this detector beside its WF-006 sibling and showed the introducer
+      // present in one copy only. It is a GENERIC introducer with no card
+      // basis for the asymmetry — unlike WF-006's `Prospect`, which that card's
+      // own field label licenses and which stays there. Measured: it makes this
+      // line fill on three foreign briefs that say "from <Name>", inside the
+      // class the cross-vocabulary matrix already records (every brief names a
+      // company).
       pattern:
-        /\b(?:with|for|at)\s+(?!the\b|a\b|an\b|our\b|their\b|its\b|this\b)[A-Z][a-z][\w&'-]*(?:\s+[A-Z][\w&'-]+){0,3}|\b[A-Z][\w&'-]+\s+(?:GmbH|SAS|SARL|SA|Ltd|Limited|Inc\.?|LLC|plc|AG|BV|NV)\b/,
+        /\b(?:with|for|at|from)\s+(?!the\b|a\b|an\b|our\b|their\b|its\b|this\b)[A-Z][a-z][\w&'-]*(?:\s+[A-Z][\w&'-]+){0,3}|\b[A-Z][\w&'-]+\s+(?:GmbH|SAS|SARL|SA|Ltd|Limited|Inc\.?|LLC|plc|AG|BV|NV)\b/,
     },
     {
       name: "client_sector",
@@ -80,8 +89,15 @@ export const WF004_MANIFEST: ParamManifest = {
       // Size CLASSES and headcounts only. "mid-size" is deliberately absent:
       // it is ordinary prose (the neutral-probe brief says "a mid-size
       // company"), whereas "mid-cap" is a stated size class.
+      //
+      // `CAC ?40` was added 2026-07-30 by the policy-consistency table, which
+      // showed it present in the WF-006 sibling and absent here — an asymmetry
+      // introduced in the WF-006 lot with no basis on either card, since a
+      // CAC 40 client is a size statement in any engagement. Measured: no
+      // coverage-matrix brief contains the token, so this closes an
+      // inconsistency without changing a single verdict.
       pattern:
-        /\b(mid[-\s]?cap|large[-\s]?cap|small[-\s]?cap|SME|SMB|ETI|start-?up|scale-?up|multinational|\d+\s*(employees|staff|FTEs?|headcount))\b/i,
+        /\b(mid[-\s]?cap|large[-\s]?cap|small[-\s]?cap|SME|SMB|ETI|start-?up|scale-?up|multinational|CAC ?40|\d+\s*(employees|staff|FTEs?|headcount))\b/i,
     },
     {
       name: "engagement_scope",

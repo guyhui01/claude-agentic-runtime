@@ -51,14 +51,14 @@ Foreign fills: **6** cell(s) over 5 brief(s).
 
 ## WF-004 — 9 measurable specs × 17 foreign briefs
 
-Foreign fills: **35** cell(s) over 16 brief(s).
+Foreign fills: **38** cell(s) over 16 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
-| P01 | WF-001 | Client (sector) · Priority stakes |
+| P01 | WF-001 | Client (name) · Client (sector) · Priority stakes |
 | P02 | WF-002 | Client (name) · Priority stakes · Stakeholders |
 | P03 | WF-003 | Client (name) · Client (sector) |
-| P06 | WF-006 | Client (sector) · Priority stakes |
+| P06 | WF-006 | Client (name) · Client (sector) · Priority stakes |
 | P07 | WF-007 | Client (name) · Client (sector) |
 | P08 | WF-008 | Client (sector) · Engagement scope · Expected deliverables · Priority stakes · Stakeholders |
 | P09 | WF-009 | Client (size) |
@@ -69,7 +69,7 @@ Foreign fills: **35** cell(s) over 16 brief(s).
 | P15 | NO_MATCH | Client (sector) |
 | P16 | NO_MATCH | Client (size) |
 | P17 | NO_MATCH | Client (sector) |
-| P19 | WF-001 | Client (sector) · Priority stakes |
+| P19 | WF-001 | Client (name) · Client (sector) · Priority stakes |
 | P20 | WF-008 | Client (name) · Client (sector) · Expected deliverables · Priority stakes |
 
 ## WF-005 — 7 measurable specs × 18 foreign briefs
@@ -81,3 +81,26 @@ Foreign fills: **3** cell(s) over 3 brief(s).
 | P04 | WF-004 | Intelligence scope |
 | P08 | WF-008 | Intelligence scope |
 | P16 | NO_MATCH | Intelligence scope |
+
+## WF-006 — 14 measurable specs × 17 foreign briefs
+
+Foreign fills: **32** cell(s) over 16 brief(s).
+
+| Foreign brief | Written for | Specs it fills |
+|---|---|---|
+| P01 | WF-001 | Prospect (name) · Prospect (sector) |
+| P02 | WF-002 | Decision-makers · Prospect (name) |
+| P03 | WF-003 | Prospect (name) · Prospect (sector) |
+| P04 | WF-004 | Decision-makers · Prospect (AI maturity) · Prospect (name) · Prospect (sector) · Prospect (size) |
+| P07 | WF-007 | Prospect (name) · Prospect (sector) |
+| P08 | WF-008 | Constraints · Prospect (sector) |
+| P09 | WF-009 | Prospect (size) |
+| P10 | WF-010 | Decision-makers · Prospect (name) · Prospect (sector) |
+| P12 | WF-004 | Decision-makers · Prospect (name) · Prospect (sector) |
+| P13 | WF-010 | Prospect (name) |
+| P14 | NO_MATCH | Decision-makers · Prospect (sector) |
+| P15 | NO_MATCH | Prospect (sector) |
+| P16 | NO_MATCH | Prospect (size) |
+| P17 | NO_MATCH | Prospect (sector) |
+| P19 | WF-001 | Prospect (name) · Prospect (sector) |
+| P20 | WF-008 | Prospect (name) · Prospect (sector) |

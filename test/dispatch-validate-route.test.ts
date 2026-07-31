@@ -5,6 +5,7 @@ import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
 import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
 import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
+import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -86,6 +87,21 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      // A resolvable route deliberately kept OUT of the manifest registry, so
+      // that the honest `paramsChecked: false` path has a permanent subject.
+      // It used to be played by whichever real workflow had no manifest yet
+      // (WF-006 until this lot), which meant every manifest lot had to move the
+      // test — and the tenth would have left it with no subject at all.
+      id: "WF-UNMANIFESTED",
+      type: "workflow",
+      path: "workflows/WF-UNMANIFESTED.md",
+      title: "Unmanifested",
+      description: "Resolvable, intentionally absent from the manifest registry",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-UNMANIFESTED.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       id: "WF-BROKEN",
       type: "workflow",
       path: "workflows/WF-BROKEN.md",
@@ -104,6 +120,7 @@ const MANIFESTS = {
   "WF-003": WF003_MANIFEST,
   "WF-004": WF004_MANIFEST,
   "WF-005": WF005_MANIFEST,
+  "WF-006": WF006_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -229,8 +246,17 @@ describe("validateRoute — valid decisions", () => {
   });
 
   it("routes a manifest-less workflow with paramsChecked=false — honest, never silently checked", () => {
-    const res = validateRoute(proposal("WF-006"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
-    expect(res).toMatchObject({ status: "ROUTED", route: "WF-006", paramsChecked: false });
+    const res = validateRoute(
+      proposal("WF-UNMANIFESTED"),
+      p01AmendedBrief(),
+      FAKE_SIDECAR,
+      MANIFESTS,
+    );
+    expect(res).toMatchObject({
+      status: "ROUTED",
+      route: "WF-UNMANIFESTED",
+      paramsChecked: false,
+    });
   });
 });
 
@@ -363,16 +389,26 @@ describe("WF-004 manifest — a commercial card, where prose imitates card vocab
   });
 
   it("does not accept a WF-001 product-scoping brief as a filled engagement card", () => {
-    // Cross-vocabulary guard. Two specs DO fill, and the assertion records it
-    // rather than hiding it behind a narrower regex: the P01 brief states an
-    // insurer (sector) and GDPR (a compliance stake). Both are true statements
-    // of the card's own questions — `Priority stakes` is the least
-    // discriminating spec of this manifest and is documented as such.
+    // Cross-vocabulary guard. THREE specs now fill, and the assertion records
+    // it rather than hiding it behind a narrower regex: the P01 brief states an
+    // insurer (sector), GDPR (a compliance stake) and — since 2026-07-30 — the
+    // client's name. All three are true statements of the card's own questions;
+    // `Priority stakes` is the least discriminating spec of this manifest and
+    // is documented as such.
+    //
+    // `Client (name)` moved out of this list when the policy-consistency table
+    // showed the `from` introducer present in the WF-006 sibling and absent
+    // here, with no basis on either card. The brief opens on "Client brief
+    // received FROM Nordwind Insurance", so the name was there all along and
+    // this detector was failing to read it. Unlike the `CAC 40` correction of
+    // the same lot, this one is NOT a no-op: it fills on three foreign briefs
+    // and moved the cross-vocabulary matrix from 35 cells to 38, inside the
+    // class that matrix already records — every brief names a company.
     const res = validateRoute(proposal("WF-004"), p01AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
     expect(res.status).toBe("PARAMS_MISSING");
     if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).not.toContain("Client (name)");
     expect(res.missingParams.sort()).toEqual([
-      "Client (name)",
       "Client (size)",
       "Client AI maturity",
       "Engagement duration",
@@ -620,5 +656,182 @@ describe("WF-005 manifest — where one card's own tokens compete across three o
       "Target format",
       "Tone",
     ]);
+  });
+});
+
+/** P06 after the operator answered the nine gaps the card check names. */
+function p06AmendedBrief(): NeedBrief {
+  const b = fixtureBrief("P06");
+  b.context +=
+    " The prospect is a mid-cap whose AI maturity is beginner; they want a scoping" +
+    " mission with a budget envelope around 250k€, three other firms bidding, award" +
+    " criteria weighting price and expertise, a sovereign cloud constraint, an oral" +
+    " presentation of the proposal, and known risks include aggressive competition.";
+  return b;
+}
+
+describe("WF-006 manifest — the first with TWO home briefs, and the first to use a sanctioned unknown", () => {
+  it("names the nine gaps of the P06 fixture, in card labels", () => {
+    // What does NOT appear is the point of this list: `Decision-makers`. The
+    // brief says "procurement-led process", which names one of the card's four
+    // enumerated deciders using decision vocabulary. Dry-run §2 classes it
+    // must-ask on P06 — the requalification its own annotation describes: §2
+    // was computed on the raw sketch, which does not carry that phrase, and
+    // this check runs on the qualified fixture, which does. It is the ONLY cell
+    // where the two disagree across both WF-006 briefs.
+    const res = validateRoute(proposal("WF-006"), fixtureBrief("P06"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Competition",
+      "Constraints",
+      "Indicative budget",
+      "Known risks",
+      "Proposal format",
+      "Prospect (AI maturity)",
+      "Prospect (size)",
+      "Requested scope",
+      "Selection criteria",
+    ]);
+  });
+
+  it("names the ten gaps of P11 and agrees with dry-run §2 on all five of its must-ask lines", () => {
+    // WF-006 is the only workflow with two coverage-matrix briefs, so it gets a
+    // second independent measurement that the other five manifests never had.
+    // P11 also exercises the apposition that WF-004 `client_name` documents as
+    // an accepted miss ("Prospect Kestrel Mutual"): here the card's own field
+    // label licenses `Prospect` as an introducer, so the name IS read.
+    const res = validateRoute(proposal("WF-006"), fixtureBrief("P11"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toHaveLength(10);
+    expect(res.missingParams).not.toContain("Prospect (name)");
+    // The five §2 names them for P11: Response deadline, Competition,
+    // Decision-makers, Selection criteria, Constraints. Full agreement.
+    for (const card of [
+      "Response deadline",
+      "Competition",
+      "Decision-makers",
+      "Selection criteria",
+      "Constraints",
+    ]) {
+      expect(res.missingParams).toContain(card);
+    }
+  });
+
+  it("routes the amended P06 brief with paramsChecked=true", () => {
+    const res = validateRoute(proposal("WF-006"), p06AmendedBrief(), FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-006", paramsChecked: true });
+  });
+
+  it("accepts the card's own honest unknown on the budget line", () => {
+    // First real exercise of `sanctionedUnknown` in this codebase: the field was
+    // wired into `validate-route.ts` when the field-class policy was settled and
+    // no manifest had used it. The card reads `[Estimated range / Not
+    // disclosed]`, so a stated non-disclosure is a filled line, NOT one of the
+    // negative sentinels intake refuses.
+    const b = p06AmendedBrief();
+    b.context = b.context.replace("a budget envelope around 250k€", "a budget not disclosed");
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-006", paramsChecked: true });
+  });
+
+  it("refuses a budget word carrying no amount", () => {
+    // Two measured hazards in one assertion. The discrimination probe's brief
+    // states "the budget is fixed", so a bare token turns it red; and a digit is
+    // not an amount — WF-003's `Monthly API budget` filled on "capped for Q3",
+    // reading a quarter label as a figure.
+    const b = p06AmendedBrief();
+    b.context = b.context.replace("a budget envelope around 250k€", "a budget capped for Q3");
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Indicative budget"]);
+  });
+
+  it("does not read a bare departmental mention as identifying the decision-makers", () => {
+    // The admission split this manifest applies: TITLES count bare, FUNCTIONS
+    // only next to decision vocabulary. "procurement-led" fills; a procurement
+    // portal is a system, not a decider. Removing the adjacency requirement
+    // makes this case fill and is what this test exists to catch.
+    const b = fixtureBrief("P06");
+    b.context = b.context.replace("procurement-led process", "a procurement portal");
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Decision-makers");
+  });
+
+  it("reads 'sole source' as a FILLED competition line, not as an absent one", () => {
+    // The inverse of the WF-005 sources guard, and the difference is what each
+    // card asks. WF-005 asks WHICH sources, so "no monitored sources" is a false
+    // "filled". This card asks WHETHER there is competition, so an absence of
+    // competitors is the answer.
+    const b = p06AmendedBrief();
+    b.context = b.context.replace("three other firms bidding", "a sole source situation");
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res).toMatchObject({ status: "ROUTED", route: "WF-006", paramsChecked: true });
+  });
+
+  it("refuses the bare token 'competition' as a request type", () => {
+    // The card lists `Competition` as a Request-type value AND as the label of
+    // another line. Counting it bare would make the two specs non-independent —
+    // the WF-005 `LinkedIn` policy. Only the process forms count.
+    //
+    // Isolating the token took a correction: a first version of this case left
+    // P11's context intact, which says "first contact through REFERRAL" — a
+    // legitimate Request-type value of the same card. The line filled, the test
+    // went red, and it had never been measuring `competition` at all. A probe
+    // whose subject is masked by another branch of the same detector proves
+    // nothing about the branch it names.
+    //
+    // What remains under test, besides the collision: the negation guard. The
+    // constraint below opens on "no RFP document", and the RFP branch must not
+    // read a DENIAL that an RFP exists as a stated request type.
+    const b = fixtureBrief("P11");
+    b.constraints = ["no RFP document, a competition against other firms"];
+    b.context = b.context.replace("first contact through referral, ", "");
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Request type");
+  });
+
+  it("does not read a delivery milestone of a SIGNED engagement as a response deadline", () => {
+    // Measured on the nineteen coverage-matrix briefs before this test existed:
+    // a first draft accepting `deadline` + a bare quantity filled on P12's
+    // "phase-one deadline in six weeks", inside an already-signed engagement.
+    // That is the anchorless quantity WF-005 `Horizon` refused and the
+    // cross-vocabulary probe removed from WF-004 `engagement_duration`.
+    const res = validateRoute(proposal("WF-006"), fixtureBrief("P12"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Response deadline");
+  });
+
+  it("does not read a regulatory context as a hosting constraint", () => {
+    // P06 states a "banking regulatory context" and this line stays missing.
+    // The card's Constraints enumeration is hosting (On-premise / Sovereign
+    // cloud / SecNumCloud / HDS), which is why this spec takes no
+    // `defaultValue` although WF-001/002/004 do on their own generic line:
+    // intake guarantees A constraint, never an infrastructure one.
+    const res = validateRoute(proposal("WF-006"), fixtureBrief("P06"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Constraints");
+  });
+
+  it("refuses a bare 'written' deliverable as a stated proposal format", () => {
+    // This is the only spec here reading `expectedDeliverable`, and the
+    // discrimination probe's is "A written document the stakeholder can act
+    // on". Only `written Q&A` counts; a bare `proposal` is refused too, since
+    // P11's deliverable names WHAT is produced, not the format it arrives in.
+    const b = p06AmendedBrief();
+    b.context = b.context.replace("an oral presentation of the proposal", "a written summary");
+    b.expectedDeliverable = "A written commercial proposal document";
+    const res = validateRoute(proposal("WF-006"), b, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toEqual(["Proposal format"]);
   });
 });
