@@ -33,6 +33,26 @@
  * §2 records only COUNTS per class, never which parameter sits in which, so
  * there is no attribution to disagree with — only a total.
  *
+ * SLASH LISTS ARE CLOSED, COMMA LISTS ARE OPEN — the rule RULE 2 already
+ * implies, written down here because a second verification pass caught this
+ * manifest breaking it three times. A comma list is the card giving EXAMPLES
+ * ("Badge, PC, VPN, tools, accounts", "Social context, restructuring,
+ * post-incident, etc."), so a detector may add neighbours of the same kind. A
+ * slash list is the card's own ENUMERATION, so a SYNONYM of a listed value is
+ * fair (WF-004 reads `upskilling` for Training and `GDPR` for Compliance) while
+ * a NEW MEMBER invents a value the card does not offer. That is the line the
+ * three removals below crossed, and the distinction matters in both
+ * directions — stripping the synonyms would break detectors that are right. Removed on that basis: `onboarding` from
+ * `Engagement type` and from `Expected deliverables` — the word appears on this
+ * card only in its TITLE and its filename, never as a value, so it promoted the
+ * workflow's own name to an engagement type; and `operational` from
+ * `Identified stakes`, which is a fifth category beside Business / Technical /
+ * Organizational / Political rather than a synonym of any. Measured before
+ * removing: both words occur in the nineteen briefs (`onboarding` twice in the
+ * NO_MATCH legal brief, `operational` once) but neither produced a fill, so
+ * this changes no verdict — it removes a latent false "filled" and restores the
+ * criterion this same lot applied to WF-004's `business units`.
+ *
  * ⚠️ ONE PHRASE OF THAT DOCUMENT PULLS TOWARD BREAKING AN INVARIANT. §3 reads
  * "self-briefs (P07) make the submitter the answer source", and this fixture's
  * `submittedBy` is "Consultant (self-brief)". Mapping it would fill
@@ -116,7 +136,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // probe. The negation guard is carried over from that same spec: a brief
       // saying "not an audit" must not be read as stating one.
       pattern:
-        /(?<!\bnot )(?<!\bnot an )(?<!\bno )(?:\baudits?\b|\bAMS\b|\bapplication (maintenance|management) services?\b|\b(scoping|build|consulting|training|onboarding) (engagement|mission|assignment|phase|contract)\b|\b(engagement|mission|assignment)\b[^.]{0,20}\b(scoping|build|consulting|training) (phase|work|stream)\b|\btraining (plan|programme|program)\b)/i,
+        /(?<!\bnot )(?<!\bnot an )(?<!\bno )(?:\baudits?\b|\bAMS\b|\bapplication (maintenance|management) services?\b|\b(scoping|build|consulting|training) (engagement|mission|assignment|phase|contract)\b|\b(engagement|mission|assignment)\b[^.]{0,20}\b(scoping|build|consulting|training) (phase|work|stream)\b|\btraining (plan|programme|program)\b)/i,
     },
     {
       name: "engagement_duration",
@@ -262,7 +282,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // Every value is an adjective that qualifies almost anything, so none
       // counts bare — the stake vocabulary must sit beside it.
       pattern:
-        /\b(business|technical|organi[sz]ational|political|operational)\b[^.]{0,24}\b(stakes?|challenges?|issues?|risks?|drivers?)\b|\b(stakes?|challenges?|issues?|risks?|drivers?)\b[^.]{0,24}\b(business|technical|organi[sz]ational|political|operational)\b/i,
+        /\b(business|technical|organi[sz]ational|political)\b[^.]{0,24}\b(stakes?|challenges?|issues?|risks?|drivers?)\b|\b(stakes?|challenges?|issues?|risks?|drivers?)\b[^.]{0,24}\b(business|technical|organi[sz]ational|political)\b/i,
     },
     {
       name: "sensitivities",
@@ -313,7 +333,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // report]`. The policy table will show two disjoint vocabularies under one
       // name; that is the cards diverging, not the manifests.
       pattern:
-        /\bkick-?off (plan|kit|deck|pack)\b|\bD-?1 kit\b|\bclient (sheet|fact ?sheet|profile)\b|\bD-?1 report\b|\bD-?5 scoping note\b|\bonboarding (plan|kit|pack)\b/i,
+        /\bkick-?off (plan|kit|deck|pack)\b|\bD-?1 kit\b|\bclient (sheet|fact ?sheet|profile)\b|\bD-?1 report\b|\bD-?5 scoping note\b/i,
     },
   ],
 };

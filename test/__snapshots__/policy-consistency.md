@@ -120,7 +120,7 @@ itself. Read them against the manifests when they move.
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
 | WF-004 | Expected deliverables | `board` `comex` `committee` `curriculum` `executive` `materials` `presentation` `program` `programme` `readout` `reports` `roadmaps` `steering` `training` |
-| WF-007 | Expected deliverables | `client` `fact` `kick` `kit` `off` `onboarding` `pack` `profile` `report` `scoping note` `sheet` |
+| WF-007 | Expected deliverables | `client` `fact` `kick` `kit` `off` `pack` `profile` `report` `scoping note` `sheet` |
 
 ### role `name` — WF-004, WF-006, WF-007
 
