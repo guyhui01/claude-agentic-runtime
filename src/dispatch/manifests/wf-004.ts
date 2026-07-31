@@ -240,6 +240,14 @@ export const WF004_MANIFEST: ParamManifest = {
       // non-empty, NOT that it names one of the card's four families. A
       // `defaultValue` here would pass the line on any sentence — the hollow
       // pass the fail-closed detector policy exists to prevent.
+      //
+      // A bare `Training` is refused although the card lists it as a family, and
+      // the reason was until now written only on `engagement_scope` above, which
+      // says it copied "the form already used by expected_deliverables below" —
+      // the rationale sat on the COPY and not on the original. It is the same
+      // one: "research-grade training infrastructure" is model training, not a
+      // training deliverable, so the word counts beside what is delivered (a
+      // plan, a programme, a curriculum, materials).
       pattern:
         /\breports?\b|\broadmaps?\b|\btraining (plan|programme|program|curriculum|materials?)\b|\b(executive[-\s]committee|comex|steering[-\s]committee|board)\s+(presentation|deck|readout)\b/i,
     },
