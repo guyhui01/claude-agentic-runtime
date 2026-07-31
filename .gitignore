@@ -1,4 +1,4 @@
-# Secrets & environnement
+# Secrets & environment
 .env
 .env.*
 *.local
@@ -6,7 +6,7 @@ secrets/
 *.key
 *.pem
 
-# Catalogue importé (dépendance read-only — jamais committé ici)
+# Imported catalog (read-only dependency — never committed here)
 /vendor/claude-agents/
 /.catalog-cache/
 
@@ -18,14 +18,17 @@ coverage/
 *.tsbuildinfo
 npm-debug.log*
 
-# Python (si SDK Python)
+# Control-tool build output (scripts/tsconfig.json)
+/.tools-build/
+
+# Python (if the Python SDK is used)
 __pycache__/
 *.py[cod]
 .venv/
 .pytest_cache/
 .mypy_cache/
 
-# Sorties de run du runtime (stores locaux)
+# Runtime run outputs (local stores)
 /runs/
 /logs/
 *.log

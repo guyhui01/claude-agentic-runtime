@@ -10,6 +10,25 @@ detector may legitimately be wider where its card gives no enumeration. It IS a
 defect when the same fact is treated differently for no reason found on the cards.
 Read, decide, and record the decision on the spec — never silently regenerate.
 
+## 0. How many specs carry each family
+
+These counts exist because a marker that had 25% sensitivity went unnoticed while
+its rows were on the page: three rows among thirty look exactly like three rows.
+A count line moves visibly in a diff, which is the only thing being claimed here —
+it gives VISIBILITY, never proof. ⛔ Do not assert these numbers in a test: an
+expectation derived from the same predicate would only prove the marker equals
+itself. Read them against the manifests when they move.
+
+| Family | Specs |
+|---|---|
+| (all specs, 6 manifests) | 55 |
+| `NO DETECTOR` | 5 |
+| `adjacency-window` | 19 |
+| `default` | 5 |
+| `negation-guard` | 3 |
+| `quantity-vocabulary` | 12 |
+| `sanctioned-unknown` | 1 |
+
 ## 1. Brief fields each spec reads
 
 | Manifest | Fields read | Specs deviating from the manifest's own norm |

@@ -65,8 +65,13 @@ export function parseRouterOutput(raw: unknown): {
  * emptiness test would pass a whole card on one sentence of context — a false
  * "filled", the unsafe direction. A spec that genuinely cannot be missing
  * declares it with `defaultValue`.
+ *
+ * Exported for `scripts/measure-manifest.ts`. That instrument reports which
+ * specs a brief fills, so it must read THIS verdict rather than re-implement
+ * it — a measurement that reproduces the rule it describes drifts from it
+ * silently, and would then describe a check that is not the one running.
  */
-function paramFilled(
+export function paramFilled(
   brief: NeedBrief,
   spec: ParamManifest["params"][number],
 ): boolean {

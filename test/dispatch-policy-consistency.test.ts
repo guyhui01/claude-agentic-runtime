@@ -165,11 +165,36 @@ function renderTable(): string {
     "defect when the same fact is treated differently for no reason found on the cards.",
     "Read, decide, and record the decision on the spec — never silently regenerate.",
     "",
+    "## 0. How many specs carry each family",
+    "",
+    "These counts exist because a marker that had 25% sensitivity went unnoticed while",
+    "its rows were on the page: three rows among thirty look exactly like three rows.",
+    "A count line moves visibly in a diff, which is the only thing being claimed here —",
+    "it gives VISIBILITY, never proof. ⛔ Do not assert these numbers in a test: an",
+    "expectation derived from the same predicate would only prove the marker equals",
+    "itself. Read them against the manifests when they move.",
+    "",
+    "| Family | Specs |",
+    "|---|---|",
+  ];
+
+  const allSpecs = ids.flatMap((id) => DEFAULT_MANIFESTS[id]?.params ?? []);
+  const families = new Map<string, number>();
+  for (const s of allSpecs) {
+    for (const m of markers(s)) families.set(m, (families.get(m) ?? 0) + 1);
+  }
+  lines.push(`| (all specs, ${ids.length} manifests) | ${allSpecs.length} |`);
+  for (const [family, count] of [...families.entries()].sort()) {
+    lines.push(`| \`${family}\` | ${count} |`);
+  }
+
+  lines.push(
+    "",
     "## 1. Brief fields each spec reads",
     "",
     "| Manifest | Fields read | Specs deviating from the manifest's own norm |",
     "|---|---|---|",
-  ];
+  );
 
   for (const id of ids) {
     const specs = DEFAULT_MANIFESTS[id]?.params ?? [];

@@ -1,0 +1,12 @@
+{
+  "//": "Build config for the control tools only. The root tsconfig has rootDir 'src' and cannot reach test/fixtures, which the measurement instrument reads by design — it measures the manifests against the SHIPPED fixture corpus, not against a copy. Emits to a gitignored directory; `npm run measure` compiles then runs.",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "../.tools-build",
+    "declaration": false,
+    "sourceMap": false,
+    "noEmit": false
+  },
+  "include": ["./*.ts", "../src/**/*.ts", "../test/fixtures/dispatch-briefs.ts"]
+}
