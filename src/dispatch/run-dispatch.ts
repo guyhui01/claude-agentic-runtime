@@ -23,6 +23,7 @@ import { WF004_MANIFEST } from "./manifests/wf-004.js";
 import { WF005_MANIFEST } from "./manifests/wf-005.js";
 import { WF006_MANIFEST } from "./manifests/wf-006.js";
 import { WF007_MANIFEST } from "./manifests/wf-007.js";
+import { WF008_MANIFEST } from "./manifests/wf-008.js";
 import { buildPlan, type ExecutionPlan } from "./plan.js";
 import type {
   CompletenessIssue,
@@ -43,6 +44,7 @@ export const DEFAULT_MANIFESTS: Readonly<Record<string, ParamManifest>> = {
   "WF-005": WF005_MANIFEST,
   "WF-006": WF006_MANIFEST,
   "WF-007": WF007_MANIFEST,
+  "WF-008": WF008_MANIFEST,
 };
 
 /** Final outcome of one dispatch pass — every variant is shown to the operator. */

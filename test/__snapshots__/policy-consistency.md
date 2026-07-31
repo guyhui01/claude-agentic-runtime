@@ -21,13 +21,13 @@ itself. Read them against the manifests when they move.
 
 | Family | Specs |
 |---|---|
-| (all specs, 7 manifests) | 66 |
+| (all specs, 8 manifests) | 85 |
 | `NO DETECTOR` | 5 |
-| `adjacency-window` | 23 |
+| `adjacency-window` | 32 |
 | `default` | 5 |
 | `negation-guard` | 4 |
-| `quantity-vocabulary` | 14 |
-| `sanctioned-unknown` | 1 |
+| `quantity-vocabulary` | 17 |
+| `sanctioned-unknown` | 2 |
 
 ## 1. Brief fields each spec reads
 
@@ -40,6 +40,7 @@ itself. Read them against the manifests when they move.
 | WF-005 | need+context+constraints | — |
 | WF-006 | need+context+constraints | `proposal_format` → need+context+constraints+expectedDeliverable |
 | WF-007 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
+| WF-008 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
 
 ## 2. Policy markers per spec
 
@@ -82,6 +83,17 @@ itself. Read them against the manifests when they move.
 | WF-007 | `engagement_type` | negation-guard · adjacency-window |
 | WF-007 | `engagement_duration` | quantity-vocabulary · adjacency-window |
 | WF-007 | `identified_stakes` | adjacency-window |
+| WF-008 | `client_name` | adjacency-window |
+| WF-008 | `client_size` | quantity-vocabulary |
+| WF-008 | `client_geographic_footprint` | quantity-vocabulary · adjacency-window |
+| WF-008 | `ai_system_use_case` | adjacency-window |
+| WF-008 | `ai_system_status` | adjacency-window |
+| WF-008 | `audit_origin` | adjacency-window |
+| WF-008 | `ai_act_tier` | sanctioned-unknown |
+| WF-008 | `volume_individuals` | adjacency-window |
+| WF-008 | `volume_training_data` | adjacency-window |
+| WF-008 | `geography` | adjacency-window |
+| WF-008 | `compliance_deadline` | quantity-vocabulary · adjacency-window |
 
 ## 3. Sibling specs — the same role carried by several cards
 
@@ -115,22 +127,24 @@ itself. Read them against the manifests when they move.
 | WF-004 | Engagement duration | — |
 | WF-007 | Engagement duration | `duration` `long` `medium` `short` `term` |
 
-### role `expected_deliverables` — WF-004, WF-007
+### role `expected_deliverables` — WF-004, WF-007, WF-008
 
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
-| WF-004 | Expected deliverables | `board` `comex` `committee` `curriculum` `executive` `materials` `presentation` `program` `programme` `readout` `reports` `roadmaps` `steering` `training` |
+| WF-004 | Expected deliverables | `comex` `committee` `curriculum` `materials` `program` `programme` `reports` `roadmaps` `steering` `training` |
 | WF-007 | Expected deliverables | `client` `fact` `kick` `kit` `off` `pack` `profile` `report` `scoping note` `sheet` |
+| WF-008 | Expected deliverables | `actions` `audit reports` `cnil filing` `compliance reports` `exec` `filing` `regulator` `remediation` `roadmap` |
 
-### role `name` — WF-004, WF-006, WF-007
+### role `name` — WF-004, WF-006, WF-007, WF-008
 
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
 | WF-004 | Client (name) | — |
 | WF-006 | Prospect (name) | `rospect` |
 | WF-007 | Client (name) | — |
+| WF-008 | Client (name) | — |
 
-### role `sector` — WF-001, WF-004, WF-006, WF-007
+### role `sector` — WF-001, WF-004, WF-006, WF-007, WF-008
 
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
@@ -138,14 +152,16 @@ itself. Read them against the manifests when they move.
 | WF-004 | Client (sector) | — |
 | WF-006 | Prospect (sector) | — |
 | WF-007 | Client (sector) | — |
+| WF-008 | Client (sector) | — |
 
-### role `size` — WF-004, WF-006, WF-007
+### role `size` — WF-004, WF-006, WF-007, WF-008
 
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
 | WF-004 | Client (size) | — |
 | WF-006 | Prospect (size) | — |
 | WF-007 | Client (size) | — |
+| WF-008 | Client (size) | — |
 
 ### role `stakeholders` — WF-004, WF-007
 

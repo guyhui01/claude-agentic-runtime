@@ -128,3 +128,27 @@ Foreign fills: **41** cell(s) over 17 brief(s).
 | P17 | NO_MATCH | Client (sector) |
 | P19 | WF-001 | Client (name) · Client (sector) · Sensitivities |
 | P20 | WF-008 | Client (name) · Client (sector) |
+
+## WF-008 — 19 measurable specs × 17 foreign briefs
+
+Foreign fills: **36** cell(s) over 17 brief(s).
+
+| Foreign brief | Written for | Specs it fills |
+|---|---|---|
+| P01 | WF-001 | Client (name) · Client (sector) · Data processed (personal) · Targeted frameworks |
+| P02 | WF-002 | Client (name) |
+| P03 | WF-003 | AI system audited (status) · Client (name) · Client (sector) |
+| P04 | WF-004 | AI model · Client (name) · Client (sector) · Client (size) · Data processed (personal) · Targeted frameworks |
+| P05 | WF-005 | AI model |
+| P06 | WF-006 | Client (name) · Client (sector) |
+| P07 | WF-007 | Client (name) · Client (sector) |
+| P09 | WF-009 | Client (size) |
+| P10 | WF-010 | Client (name) · Client (sector) |
+| P11 | WF-006 | Client (sector) |
+| P12 | WF-004 | Client (name) · Client (sector) |
+| P13 | WF-010 | AI system audited (status) · AI system audited (use case) · Client (name) |
+| P14 | NO_MATCH | Client (sector) |
+| P15 | NO_MATCH | Client (sector) |
+| P16 | NO_MATCH | Client (size) |
+| P17 | NO_MATCH | Client (sector) |
+| P19 | WF-001 | Client (name) · Client (sector) · Data processed (personal) · Targeted frameworks |

@@ -7,6 +7,7 @@ import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
 import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
 import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
+import { WF008_MANIFEST } from "../src/dispatch/manifests/wf-008.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -98,6 +99,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-008",
+      type: "workflow",
+      path: "workflows/WF-008.md",
+      title: "AI Act / GDPR Compliance Audit",
+      description: "AI system in production → compliance verdict + remediation plan",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-008.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       // A resolvable route deliberately kept OUT of the manifest registry, so
       // that the honest `paramsChecked: false` path has a permanent subject.
       // It used to be played by whichever real workflow had no manifest yet
@@ -133,6 +144,7 @@ const MANIFESTS = {
   "WF-005": WF005_MANIFEST,
   "WF-006": WF006_MANIFEST,
   "WF-007": WF007_MANIFEST,
+  "WF-008": WF008_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -1037,5 +1049,168 @@ describe("WF-007 manifest — a self-brief, where the card's own values are ordi
     const ok = validateRoute(proposal("WF-007"), stated, FAKE_SIDECAR, MANIFESTS);
     const missing = ok.status === "PARAMS_MISSING" ? ok.missingParams : [];
     expect(missing).not.toContain("Identified stakes");
+  });
+});
+
+describe("WF-008 manifest — the largest card, four conjunctions and two home briefs", () => {
+  const AMENDMENT =
+    " Engagement with Meridian Health, a mid-cap operating in 6 countries." +
+    " The system is called Triadex; this is a preventive audit ahead of the AI Act," +
+    " high-risk tier suspected, covering 120000 patients and 40 GB of training data," +
+    " with a compliance deadline in six months.";
+
+  it("names the nine gaps of the P08 fixture, in card labels", () => {
+    const res = validateRoute(proposal("WF-008"), fixtureBrief("P08"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "AI system audited (name)",
+      "Audit origin",
+      "Client (geographic footprint)",
+      "Client (name)",
+      "Client (size)",
+      "Compliance deadline",
+      "Suspected AI Act tier",
+      "Volumes (individuals concerned)",
+      "Volumes (training data)",
+    ]);
+  });
+
+  it("names the nine gaps of P20, and the ONE fact the two briefs disagree on", () => {
+    // The second home brief is what makes `Data processed (sensitive)` and
+    // `Data processed (Art. 9 categories)` provably distinct specifications
+    // rather than one fact written twice: P08 says "health data (GDPR art. 9)"
+    // and fills both, P20 says only "health data involved" and fills the
+    // category while leaving the sensitivity statement missing. Conversely P20
+    // names its client where P08 buries it in a genitive.
+    const res = validateRoute(proposal("WF-008"), fixtureBrief("P20"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Data processed (sensitive)");
+    expect(res.missingParams).not.toContain("Data processed (Art. 9 categories)");
+    expect(res.missingParams).not.toContain("Client (name)");
+  });
+
+  it("routes the amended P08 brief with paramsChecked=true", () => {
+    const brief = fixtureBrief("P08");
+    brief.context += AMENDMENT;
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("ROUTED");
+    if (res.status !== "ROUTED") return;
+    expect(res.paramsChecked).toBe(true);
+  });
+
+  it("does not read an OFFICE MOVE as a geographic footprint", () => {
+    // Measured on the nineteen briefs before this test existed: the first draft
+    // accepted a bare `in` after the footprint noun and filled on the NO_MATCH
+    // office-move brief through "office move of the Lyon site in". A building is
+    // not a footprint.
+    const brief = fixtureBrief("P08");
+    brief.context += " We are also handling the office move of the Lyon site in June.";
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Client (geographic footprint)");
+  });
+
+  it("does not let DATA geography answer the client's corporate footprint", () => {
+    // The independence guard between the two specifications. Both fixtures state
+    // where the DATA is processed and neither states where the COMPANY operates;
+    // if this line read the data-flow vocabulary the split would be decorative.
+    const res = validateRoute(proposal("WF-008"), fixtureBrief("P08"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams, "footprint is not answered by 'EU only'").toContain(
+      "Client (geographic footprint)",
+    );
+    expect(res.missingParams, "but Geography IS answered by it").not.toContain("Geography");
+  });
+
+  it("does not read a CONSULTING diagnostic as an audited system's use case", () => {
+    // First draft filled on the WF-004 brief through "AI maturity diagnostic",
+    // a consulting deliverable rather than what a system does.
+    const brief = fixtureBrief("P08");
+    brief.need = "They ordered an AI maturity diagnostic; the vendor also runs an AI Act review.";
+    brief.context = "Health provider, EU only, external LLM behind a proxy.";
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("AI system audited (use case)");
+  });
+
+  it("does not read a PILOT BUDGET as a deployment status", () => {
+    // First draft filled on the WF-001 brief through "pilot budget capped for
+    // Q3" — a budget line, not a status.
+    const brief = fixtureBrief("P08");
+    brief.need = "They need an AI Act and GDPR compliance audit with a remediation plan.";
+    brief.context = "Health provider, patient triage chatbot, EU only, external LLM behind a proxy.";
+    brief.constraints = ["pilot budget capped for Q3", "health data (GDPR art. 9)"];
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("AI system audited (status)");
+  });
+
+  it("does not read an RFP deadline or a phase milestone as a COMPLIANCE deadline", () => {
+    // The FIFTH appearance of this policy in the repository, and the first draft
+    // of this manifest failed it: the anchor list contained a bare `deadline`,
+    // so it filled on the pre-sales brief's "deadline in three weeks" and on the
+    // WF-004 brief's "deadline in six weeks" — the phase milestone removed from
+    // WF-004 `engagement_duration` in this very lot.
+    //
+    // The third string exercises the OTHER word order, and it is here because
+    // falsification found it missing: restoring the bare `deadline` on the
+    // quantity-first branch survived the whole suite, so that branch was
+    // measured by nothing while its mirror was.
+    for (const text of [
+      "response deadline in three weeks",
+      "phase-one deadline in six weeks",
+      "six weeks until the delivery deadline",
+    ]) {
+      const brief = fixtureBrief("P08");
+      brief.constraints = [text, "health data (GDPR art. 9)"];
+      const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+      expect(res.status, text).toBe("PARAMS_MISSING");
+      if (res.status !== "PARAMS_MISSING") continue;
+      expect(res.missingParams, text).toContain("Compliance deadline");
+    }
+  });
+
+  it("treats SILENCE on the AI Act tier as a gap, and an explicit deferral as an answer", () => {
+    // The card's "— to confirm in STEP-01" licenses an explicit deferral, never
+    // the absence of any statement. Deliberately stricter than the dry-run
+    // table, which counts this covered: an intake that does not ask a compliance
+    // audit for its suspected tier is not doing its job.
+    const silent = validateRoute(proposal("WF-008"), fixtureBrief("P08"), FAKE_SIDECAR, MANIFESTS);
+    const silentMissing = silent.status === "PARAMS_MISSING" ? silent.missingParams : [];
+    expect(silentMissing, "silence is a gap").toContain("Suspected AI Act tier");
+
+    const deferred = fixtureBrief("P08");
+    deferred.context += " AI Act tier to be confirmed during the audit.";
+    const res = validateRoute(proposal("WF-008"), deferred, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "an explicit deferral is an answer").not.toContain("Suspected AI Act tier");
+  });
+
+  it("lets Article 9 vocabulary answer `personal`, one way only", () => {
+    // Special-category data IS personal data by definition, so the implication
+    // runs from Art. 9 to personal and never back. Making the operator restate
+    // "personal: yes" beside "health data" would be a redundant round trip.
+    const brief = fixtureBrief("P08");
+    brief.constraints = ["health data (GDPR art. 9)"];
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).not.toContain("Data processed (personal)");
+
+    // The reverse does not hold: a plain personal-data statement names no
+    // category and leaves the Article 9 line open.
+    const plain = fixtureBrief("P08");
+    plain.need = "They need an AI Act and GDPR compliance audit with a remediation plan.";
+    plain.context = "Insurer, claimant triage chatbot live in production, EU only, external LLM.";
+    plain.constraints = ["personal data of claimants is processed"];
+    const res2 = validateRoute(proposal("WF-008"), plain, FAKE_SIDECAR, MANIFESTS);
+    const missing2 = res2.status === "PARAMS_MISSING" ? res2.missingParams : [];
+    expect(missing2).not.toContain("Data processed (personal)");
+    expect(missing2).toContain("Data processed (Art. 9 categories)");
   });
 });
