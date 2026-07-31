@@ -89,19 +89,30 @@ export const WF008_MANIFEST: ParamManifest = {
       card: "Client (geographic footprint)",
       required: true,
       mapping: audit,
-      // THE DEMOTION CANDIDATE OF THE NINETEEN, and the file records why in
-      // advance rather than after someone asks. Two independent weak signals:
-      // searching the whole card for `geographic|footprint` returns exactly ONE
-      // hit, this parameter block, with no step consuming it — while the
-      // separate `Geography` line IS a verbatim step input; and §2 asks for it
-      // on NEITHER of this workflow's two briefs. That profile is weaker than
-      // WF-006 `Selection criteria`, which §2 at least classed must-ask twice.
+      // DEMOTION CANDIDATE, RE-EXAMINED 2026-08-01 AND KEPT REQUIRED — read the
+      // correction below before acting on the label, because the argument that
+      // first supported it was partly wrong.
       //
-      // It stays required because dropping a card fact silently is the one thing
-      // splitting conjunctions exists to prevent, and because `defaultValue` is
-      // not honestly available: the type means "can never be missing — an
-      // operator-profile constant or an intake-guaranteed value", and a client's
-      // geographic footprint is neither. A default here would ASSERT a value.
+      // ⛔ THE CLAIM "no step consumes it" WAS TOO STRONG and is withdrawn.
+      // STEP-01 carries exactly three inputs, and the second is "Geography of
+      // operation and concerned populations" — a SINGLE input that is ambiguous
+      // between this card line and the `Geography` line below: "of operation"
+      // touches where the company operates, "concerned populations" the data
+      // subjects. The accurate statement is that no input names the footprint
+      // DISTINCTLY, not that none consumes it. What survives of the original
+      // reasoning is the other signal, unchanged: searching the whole card for
+      // `geographic|footprint` returns exactly one hit, this parameter block,
+      // and §2 asks for it on NEITHER of the two briefs.
+      //
+      // It stays required for three reasons that outlived the correction.
+      // Dropping a card fact silently is the one thing splitting conjunctions
+      // exists to prevent. `defaultValue` is not honestly available: the type
+      // means "can never be missing — an operator-profile constant or an
+      // intake-guaranteed value", and a client's geographic footprint is
+      // neither, so a default would ASSERT a value. And the return loop it
+      // causes asks for something real — which national supervisory authorities
+      // are in scope is part of what STEP-01 has to qualify, and the operator
+      // answers it in one line, once per engagement.
       //
       // ⚠️ IT MUST NOT READ DATA-FLOW VOCABULARY, or it is not a separate fact at
       // all. `Geography` below owns "EU only / transfers outside EU / outside EU
