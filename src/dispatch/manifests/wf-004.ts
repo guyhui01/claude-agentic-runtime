@@ -141,12 +141,28 @@ export const WF004_MANIFEST: ParamManifest = {
       // quantity for this exact reason; leaving the two manifests to disagree was
       // the real finding.
       //
+      // `phase` was REMOVED 2026-07-31, and its removal completes a fix this
+      // repository already believed it had made. The WF-006 test "does not read
+      // a delivery milestone of a SIGNED engagement as a response deadline"
+      // states in its own comment that the cross-vocabulary probe "removed this
+      // from WF-004 engagement_duration" — it removed the BARE quantity, while
+      // `phase` kept the same string filling here: P12 states no engagement
+      // duration at all (need: "Contract signed yesterday", context: "advisory
+      // engagement signed"), and its only quantity is the constraint
+      // "phase-one deadline in six weeks", a delivery milestone. One card asked
+      // whether that string is a response deadline and answered no; this one
+      // read it as a duration and answered yes. Found by measuring WF-007,
+      // which reads the same fact, and it is the fourth appearance of the same
+      // policy — the sibling test asserting P12 "genuinely states an engagement
+      // window" carried a premise falsified by the fixture, and is corrected in
+      // the same lot.
+      //
       // `programme`/`program` are deliberately NOT anchors: a "chatbot program"
       // names the CLIENT's initiative at least as often as the engagement. With
       // them included, the pre-sales brief missed only because its gap measured
       // 25 characters against a 24-character window — luck, not design.
       pattern:
-        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.]{0,24}\b(engagement|mission|assignment|phase|contract|intervention)\b|\b(engagement|mission|assignment|phase|contract|intervention)\b[^.]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
+        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.]{0,24}\b(engagement|mission|assignment|contract|intervention)\b|\b(engagement|mission|assignment|contract|intervention)\b[^.]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
     },
     {
       name: "stakeholders",
@@ -158,8 +174,19 @@ export const WF004_MANIFEST: ParamManifest = {
       // live (role ⊥ route). The engagement's stakeholders are stated in the
       // brief or they are missing.
       mapping: engagement,
+      // `sponsors?` carries the plural since 2026-07-31. It did not, while its
+      // immediate neighbours in the same alternation (`operational teams?`,
+      // `business units?`) did — an oversight rather than a policy, since no
+      // card distinguishes the singular from the plural and the WF-007 card
+      // writes `[Sponsors / …]` in the plural itself. Found while measuring the
+      // WF-007 manifest, which reads the same fact: this detector was reported
+      // as NOT filling on a brief saying "sponsors identified". Neither existing
+      // guard could see it — the cross-vocabulary probe records only the cells
+      // that ARE lit, and the policy table only pairs siblings that exist.
+      // Measured impact: exactly one brief of the nineteen carries the plural,
+      // so this lights one new cell (P07) and changes no other verdict.
       pattern:
-        /\b(CIO|CDO|CTO|CEO|COO|CFO|CHRO|CISO)\b|\b(executive|steering|management) committee\b|\bcomex\b|\bboard\b|\bexecutive (sponsor|readout)\b|\bsponsor\b|\boperational teams?\b|\bbusiness units?\b/i,
+        /\b(CIO|CDO|CTO|CEO|COO|CFO|CHRO|CISO)\b|\b(executive|steering|management) committee\b|\bcomex\b|\bboard\b|\bexecutive (sponsor|readout)\b|\bsponsors?\b|\boperational teams?\b|\bbusiness units?\b/i,
     },
     {
       name: "client_ai_maturity",

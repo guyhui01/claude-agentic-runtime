@@ -6,6 +6,7 @@ import { WF003_MANIFEST } from "../src/dispatch/manifests/wf-003.js";
 import { WF004_MANIFEST } from "../src/dispatch/manifests/wf-004.js";
 import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
 import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
+import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -87,6 +88,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-007",
+      type: "workflow",
+      path: "workflows/WF-007.md",
+      title: "Client Engagement Onboarding D1-D5",
+      description: "Engagement signed → kickoff plan → D1 kit → D5 scoping",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-007.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       // A resolvable route deliberately kept OUT of the manifest registry, so
       // that the honest `paramsChecked: false` path has a permanent subject.
       // It used to be played by whichever real workflow had no manifest yet
@@ -121,6 +132,7 @@ const MANIFESTS = {
   "WF-004": WF004_MANIFEST,
   "WF-005": WF005_MANIFEST,
   "WF-006": WF006_MANIFEST,
+  "WF-007": WF007_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -518,10 +530,19 @@ describe("cross-vocabulary probe findings — the four detectors it caught", () 
     expect(res.missingParams).toContain("Engagement scope");
   });
 
-  it("WF-004: a sprint, a response deadline and a project length are not engagement durations", () => {
+  it("WF-004: a sprint, a response deadline, a project length and a phase milestone are not engagement durations", () => {
     // The three foreign briefs the bare quantity+unit detector filled on. WF-005
     // `Horizon` refused exactly this; the two manifests disagreeing was the find.
-    for (const id of ["P02", "P06", "P10"]) {
+    //
+    // P12 JOINED THEM 2026-07-31, and it is the most instructive of the four
+    // because it is this workflow's OWN brief. It states no engagement duration
+    // anywhere — "Contract signed yesterday", "advisory engagement signed" — and
+    // its only quantity is the constraint "phase-one deadline in six weeks", a
+    // delivery milestone. It kept filling through the `phase` anchor long after
+    // the bare quantity was removed, and the WF-006 test below already ruled
+    // that this exact string is a milestone rather than a deadline. One card
+    // answered no and this one answered yes, on the same words, both green.
+    for (const id of ["P02", "P06", "P10", "P12"]) {
       const res = validateRoute(proposal("WF-004"), fixtureBrief(id), FAKE_SIDECAR, MANIFESTS);
       expect(res.status, `${id} must not fill the whole card`).toBe("PARAMS_MISSING");
       if (res.status !== "PARAMS_MISSING") continue;
@@ -531,12 +552,23 @@ describe("cross-vocabulary probe findings — the four detectors it caught", () 
 
   it("still reads the engagement's OWN duration, in either word order", () => {
     // Guard against over-tightening: the anchored detector must keep answering
-    // the card on the two briefs that genuinely state an engagement window.
-    for (const id of ["P04", "P12"]) {
-      const res = validateRoute(proposal("WF-004"), fixtureBrief(id), FAKE_SIDECAR, MANIFESTS);
-      const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
-      expect(missing, `${id} duration must be filled`).not.toContain("Engagement duration");
-    }
+    // the card whenever a brief genuinely states an engagement window.
+    //
+    // P04 carries the quantity-first order ("a three-month engagement window").
+    // P12 used to supply the anchor-first order and no longer does — it never
+    // stated a duration at all, only a phase milestone (see the test above), so
+    // the reverse order is exercised by an AMENDED brief instead of by a fixture
+    // that was answering for the wrong reason. Losing the coverage silently
+    // would have been the worse outcome of that correction.
+    const res = validateRoute(proposal("WF-004"), fixtureBrief("P04"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "P04 duration must be filled").not.toContain("Engagement duration");
+
+    const reversed = fixtureBrief("P12");
+    reversed.context += " The engagement runs for three months.";
+    const rev = validateRoute(proposal("WF-004"), reversed, FAKE_SIDECAR, MANIFESTS);
+    const revMissing = rev.status === "PARAMS_MISSING" ? rev.missingParams : [];
+    expect(revMissing, "anchor-first order must fill").not.toContain("Engagement duration");
   });
 });
 
@@ -833,5 +865,177 @@ describe("WF-006 manifest — the first with TWO home briefs, and the first to u
     expect(res.status).toBe("PARAMS_MISSING");
     if (res.status !== "PARAMS_MISSING") return;
     expect(res.missingParams).toEqual(["Proposal format"]);
+  });
+});
+
+describe("WF-007 manifest — a self-brief, where the card's own values are ordinary English", () => {
+  it("names the four gaps of the P07 fixture, in card labels", () => {
+    const res = validateRoute(proposal("WF-007"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Client (size)",
+      "Engagement type",
+      "Identified stakes",
+      "Sensitivities",
+    ]);
+  });
+
+  it("routes the amended P07 brief with paramsChecked=true", () => {
+    const brief = fixtureBrief("P07");
+    brief.context +=
+      " Mid-cap retailer, scoping engagement, business and organizational stakes," +
+      " no particular sensitivities reported.";
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("ROUTED");
+    if (res.status !== "ROUTED") return;
+    expect(res.paramsChecked).toBe(true);
+  });
+
+  it("does not read a client SIZE as an engagement duration", () => {
+    // The first-draft defect of this manifest, found by measuring it before any
+    // test existed. The reverse branch accepted the whole engagement vocabulary,
+    // so the fixture filled on "engagement, sponsors identified, medium" — the
+    // class word tied to an `engagement` sitting in an unrelated clause. Proven
+    // rather than suspected: the same detector filled identically on a brief
+    // stating a size and no duration whatsoever.
+    const brief = fixtureBrief("P07");
+    brief.context = "Retail group, hybrid on-site engagement, sponsors identified, medium-sized client.";
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Engagement duration");
+  });
+
+  it("still reads the card's own phrasing, which puts the label before the value", () => {
+    // Guard against over-tightening the fix above: the card writes
+    // "Engagement duration : [Short / Medium / Long]", so the anchor-first order
+    // is the operator's most likely phrasing and must keep filling.
+    const brief = fixtureBrief("P07");
+    brief.context = "Retail group, hybrid on-site. Engagement duration: medium. Sponsors identified.";
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).not.toContain("Engagement duration");
+  });
+
+  it("does not let the brief's DOMAIN state the engagement type", () => {
+    // `Consulting` is a value of this card's enumeration AND the second half of
+    // this fixture's domain, "Management & Consulting". A mapping that read
+    // `domain` would fill this line for every brief of the domain without the
+    // operator ever stating what kind of engagement was sold.
+    //
+    // THE DOMAIN IS DELIBERATELY QUALIFIED HERE, and the first version of this
+    // test was worthless without it: the detector never accepts a bare
+    // "Consulting", so asserting on the fixture's own domain left the test green
+    // whether `domain` was mapped or not. Falsification caught it — mapping
+    // `domain` in reproduced no red here, only a snapshot move. The text below
+    // WOULD fill the line, so the assertion now measures its subject.
+    const brief = { ...fixtureBrief("P07"), domain: "Management & Consulting engagement" };
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Engagement type");
+  });
+
+  it("does not let a DELIVERABLE named scoping state the engagement type", () => {
+    // P07 expects "Kickoff plan, D1 kit and D5 scoping deliverables". "Scoping"
+    // is a value of the card's type enumeration, but here it names an output of
+    // this very workflow, not the engagement that was bought.
+    const brief = fixtureBrief("P07");
+    expect(brief.expectedDeliverable).toContain("scoping");
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).toContain("Engagement type");
+  });
+
+  it("reads the plural `sponsors`, which its WF-004 sibling used to miss", () => {
+    // The fixture says "sponsors identified". WF-004 carried `\bsponsor\b` with
+    // no optional plural while its immediate neighbours had one — an oversight,
+    // corrected in the same lot. This locks the reading on both sides.
+    const res = validateRoute(proposal("WF-007"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "WF-007 must read the plural").not.toContain("D1 stakeholders");
+
+    const four = validateRoute(proposal("WF-004"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
+    const fourMissing = four.status === "PARAMS_MISSING" ? four.missingParams : [];
+    expect(fourMissing, "WF-004 must read it too").not.toContain("Stakeholders");
+  });
+
+  it("does not read a bare `team` as identifying the D1 stakeholders", () => {
+    // The card lists Team among its values, and `team` is the most common noun
+    // in this corpus — counting it bare would leave this spec discriminating
+    // nothing. Same call as WF-005 refusing a bare `LinkedIn` and WF-006
+    // refusing a bare `competition`.
+    const brief = fixtureBrief("P07");
+    brief.context = "Retail group, hybrid on-site engagement, the team is in place, medium duration.";
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("D1 stakeholders");
+  });
+
+  it("accepts an EXPLICIT absence of sensitivities, but not silence", () => {
+    // The WF-006 `Competition` treatment rather than the WF-005
+    // `Sources to prioritize` refusal, and the cards are what separate them:
+    // STEP-03 here runs perfectly well on a declared absence, whereas WF-005's
+    // STEP-01 cannot run on "no sources". Leaving the operator in a return loop
+    // they cannot exit would be the defect.
+    const silent = validateRoute(proposal("WF-007"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
+    const silentMissing = silent.status === "PARAMS_MISSING" ? silent.missingParams : [];
+    expect(silentMissing, "silence is not an answer").toContain("Sensitivities");
+
+    const declared = fixtureBrief("P07");
+    declared.context += " No particular sensitivities reported.";
+    const res = validateRoute(proposal("WF-007"), declared, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "an explicit absence IS an answer").not.toContain("Sensitivities");
+  });
+
+  it("reads D1 access from the CONSTRAINT list, where the operator actually puts it", () => {
+    // The fixture states it as a constraint ("badge and VPN access to validate
+    // before D1") and nowhere in the prose. A detector reading only need+context
+    // would report a gap the operator has already filled.
+    const brief = fixtureBrief("P07");
+    expect(brief.constraints.join(" ")).toContain("badge");
+    const withNoConstraint = { ...brief, constraints: ["deliverables reviewed weekly"] };
+    const res = validateRoute(proposal("WF-007"), withNoConstraint, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("D1 access");
+  });
+
+  it("treats `to validate` as a deferred VALIDATION, not as a sanctioned unknown", () => {
+    // §1 of the dry-run lists this card's honest unknown as D1 access
+    // "to validate". This manifest diverges: the accesses are enumerated ON the
+    // card, and what the annotation defers is checking them, not stating them.
+    // So a brief that names no access at all is a gap, however openly it says
+    // the point is pending.
+    const brief = fixtureBrief("P07");
+    const res = validateRoute(
+      proposal("WF-007"),
+      { ...brief, constraints: ["D1 accesses to be confirmed later"] },
+      FAKE_SIDECAR,
+      MANIFESTS,
+    );
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("D1 access");
+  });
+
+  it("does not read a bare adjective as an identified stake", () => {
+    // Business / Technical / Organizational / Political qualify almost anything,
+    // so the stake vocabulary must sit beside them.
+    const bare = fixtureBrief("P07");
+    bare.context += " The business unit is ready and the technical setup is done.";
+    const res = validateRoute(proposal("WF-007"), bare, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Identified stakes");
+
+    const stated = fixtureBrief("P07");
+    stated.context += " The stakes are organizational and political.";
+    const ok = validateRoute(proposal("WF-007"), stated, FAKE_SIDECAR, MANIFESTS);
+    const missing = ok.status === "PARAMS_MISSING" ? ok.missingParams : [];
+    expect(missing).not.toContain("Identified stakes");
   });
 });
