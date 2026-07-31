@@ -1245,3 +1245,72 @@ describe("WF-008 manifest — the largest card, four conjunctions and two home b
     expect(missing2).toContain("Data processed (Art. 9 categories)");
   });
 });
+
+describe("the card-taught `Label: value` form — a brief may answer by naming the parameter", () => {
+  // The catalog's own quick-start blocks tell the operator to write
+  // "- Engagement type: [to fill in]" and even inline the enumerations
+  // ("- Audit origin: [Preventive / Inspection / Due diligence]"). Card values
+  // are ordinary English — Scoping, Build, Training, Team, Neutral, Demo — so
+  // every detector narrows them to a qualified form, which is right for PROSE
+  // and wrong for the form the card teaches. Measured across the eight
+  // manifests: 22 card values were refused when written the way the card writes
+  // them, all 22 read once the label counts. The corpus invariance is NOT
+  // re-asserted here: the eight per-manifest gap tests already pin every
+  // fixture's PARAMS_MISSING set, and measuring showed zero of them moves.
+
+  it("reads a bare card value when the brief names the parameter", () => {
+    // `scoping` alone is refused on purpose — "D5 scoping deliverables" names an
+    // output, not the engagement bought. The label removes the ambiguity.
+    const bare = fixtureBrief("P07");
+    bare.context = "Retail group, hybrid on-site engagement, medium duration, scoping.";
+    const res = validateRoute(proposal("WF-007"), bare, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "a bare value stays refused in prose").toContain("Engagement type");
+
+    const declared = fixtureBrief("P07");
+    declared.context = "Retail group, hybrid on-site engagement, medium duration. Engagement type: Scoping.";
+    const res2 = validateRoute(proposal("WF-007"), declared, FAKE_SIDECAR, MANIFESTS);
+    const missing2 = res2.status === "PARAMS_MISSING" ? res2.missingParams : [];
+    expect(missing2, "the card's own form is read").not.toContain("Engagement type");
+  });
+
+  it("refuses a declared label with an in-band refusal behind it", () => {
+    // Declaring a parameter and answering "TBD" is not an answer. The existing
+    // NEGATIVE_SENTINEL list is what says so, rather than a second one written
+    // here.
+    for (const value of ["TBD", "to be defined", "unknown", "n/a"]) {
+      const brief = fixtureBrief("P07");
+      brief.context = `Retail group, hybrid on-site engagement, medium duration. Engagement type: ${value}.`;
+      const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+      const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+      expect(missing, `"${value}" is not an answer`).toContain("Engagement type");
+    }
+  });
+
+  it("does NOT let a conjunction's line label answer any of its halves", () => {
+    // `Client (name)`, `(sector)` and `(size)` all sit on a line labelled
+    // `Client`, and "Client: Acme Corp" says which company — not which sector or
+    // which size. Accepting the line label would fill three facts from one, the
+    // hollow pass that splitting conjunctions exists to prevent.
+    const brief = fixtureBrief("P07");
+    brief.need = "Engagement signed; the consultant starts Monday on site.";
+    brief.context = "Client: Vantage Group. Hybrid on-site engagement, medium duration.";
+    const res = validateRoute(proposal("WF-007"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Client (sector)");
+    expect(res.missingParams).toContain("Client (size)");
+  });
+
+  it("leaves the card-sanctioned unknown working, which the sentinel list would reject", () => {
+    // "AI Act tier to be confirmed" is a NEGATIVE SENTINEL for the label rule and
+    // a legitimate answer for the card. `sanctionedUnknown` is tested before the
+    // label, so the card's licence wins where the card grants one — and only
+    // there.
+    const brief = fixtureBrief("P08");
+    brief.context += " Suspected AI Act tier: to be confirmed during the audit.";
+    const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).not.toContain("Suspected AI Act tier");
+  });
+});

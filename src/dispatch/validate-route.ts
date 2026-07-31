@@ -10,6 +10,7 @@
  */
 
 import { Ajv2020 } from "ajv/dist/2020.js";
+import { affirmativeString } from "../spines/spine-helpers.js";
 import type { ValidateFunction } from "ajv";
 import type { Sidecar } from "../sidecar/types.js";
 import type {
@@ -71,6 +72,48 @@ export function parseRouterOutput(raw: unknown): {
  * it — a measurement that reproduces the rule it describes drifts from it
  * silently, and would then describe a check that is not the one running.
  */
+/**
+ * `true` when the brief ANSWERS this parameter by naming it — the `Label: value`
+ * form the catalog's own quick-start blocks teach the operator to write
+ * ("- Engagement type: [to fill in]", "- Audit origin: [Preventive / Inspection
+ * / Due diligence]").
+ *
+ * WHY THIS EXISTS. Card values are ordinary English — Scoping, Build, Training,
+ * Support, Team, Neutral, Demo — so every detector narrows them to a qualified
+ * form ("a scoping engagement"), which is right for PROSE and wrong for the form
+ * the card teaches. Measured across the eight manifests: 22 card values were
+ * refused when written the way the card writes them, and the mismatch is between
+ * the catalog and this runtime, not inside either. Patching 22 regular
+ * expressions would encode the same rule twenty-two times; this reads the label
+ * the specification already carries.
+ *
+ * TWO GUARDS, both load-bearing:
+ *   - CONJUNCTIONS ARE EXCLUDED BY CONSTRUCTION. The label matched is the spec's
+ *     own `card`, qualifier included, so a brief writing the LINE label —
+ *     "Client: Acme" — answers none of `Client (name)`, `(sector)`, `(size)`.
+ *     It says which company, not which sector or size, and filling all three
+ *     halves from one fact is the hollow pass splitting exists to prevent.
+ *   - THE VALUE MUST BE AFFIRMATIVE. `affirmativeString` rejects the in-band
+ *     refusals ("TBD", "to be defined", "unknown", "n/a"), so declaring a label
+ *     with nothing behind it is not an answer. A card-sanctioned unknown still
+ *     passes, because `sanctionedUnknown` is tested before this.
+ */
+function labelDeclared(text: string, card: string): boolean {
+  // No conjunction guard is written here, and that is deliberate: the label
+  // matched is the specification's OWN `card` string, qualifier included
+  // (`Client (name)`), so a brief writing the LINE label — "Client: Acme" —
+  // matches none of the three halves. The exclusion is structural rather than
+  // conditional. A guard was drafted (`if (/\(.*\)$/.test(card)) return false`)
+  // and removed once falsification showed it changed nothing: dropping it turned
+  // no test red, because the case it claimed to stop cannot arise. A dead
+  // alternative reads as a guard being applied — the WF-007 `Sensitivities`
+  // lesson. ⚠️ If this ever matches on a BASE label instead, the guard has to
+  // come back, and the test below is what will say so.
+  const label = card.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const declared = new RegExp(`\\b${label}\\s*[:\u2014-]\\s*([^.;\\n]+)`, "i").exec(text);
+  return declared !== null && affirmativeString(declared[1]);
+}
+
 export function paramFilled(
   brief: NeedBrief,
   spec: ParamManifest["params"][number],
@@ -78,7 +121,8 @@ export function paramFilled(
   if (spec.defaultValue !== undefined) return true;
   const text = spec.mapping(brief);
   if (spec.sanctionedUnknown?.test(text)) return true;
-  return spec.pattern?.test(text) ?? false;
+  if (spec.pattern?.test(text) === true) return true;
+  return labelDeclared(text, spec.card);
 }
 
 /**
