@@ -179,8 +179,17 @@ export const WF008_MANIFEST: ParamManifest = {
       // deliberate divergence: who raised the question internally does not say
       // whether the audit answers a regulator, a deal, or an incident, and the
       // three lead to different audits.
+      //
+      // The reverse `audit … incident` order was added 2026-07-31, after
+      // checking each card value against this detector: `Preventive` was read in
+      // both word orders while `Incident` was read in only one, so "Audit
+      // origin: Incident" and "the audit follows a production incident" were
+      // both refused. An asymmetry inside one specification, with no basis on
+      // the card. Measured before adding: the only brief carrying the word is
+      // the post-mortem one, where no audit vocabulary sits beside it, so this
+      // lights no foreign cell.
       pattern:
-        /\b(preventive|proactive|pre-?emptive)\b[^.]{0,24}\b(audit|review|check|assessment)\b|\b(audit|review|assessment)\b[^.]{0,24}\b(preventive|proactive)\b|\b(CNIL|AI Office|supervisory authority|regulator|DPA)\b[^.]{0,24}\b(inspection|audit|request|enquiry|investigation|notice)\b|\bdue diligence\b|\bpost-?incident\b|\b(data )?breach\b|\bincident\b[^.]{0,24}\b(audit|review|triggered)\b/i,
+        /\b(preventive|proactive|pre-?emptive)\b[^.]{0,24}\b(audit|review|check|assessment)\b|\b(audit|review|assessment)\b[^.]{0,24}\b(preventive|proactive)\b|\b(CNIL|AI Office|supervisory authority|regulator|DPA)\b[^.]{0,24}\b(inspection|audit|request|enquiry|investigation|notice)\b|\bdue diligence\b|\bpost-?incident\b|\b(data )?breach\b|\bincident\b[^.]{0,24}\b(audit|review|triggered)\b|\b(audit|review|assessment)\b[^.]{0,24}\b(incident|breach)\b/i,
     },
     // --- Suspected AI Act tier ----------------------------------------------
     {
@@ -267,8 +276,14 @@ export const WF008_MANIFEST: ParamManifest = {
       mapping: audit,
       // Where the DATA goes — distinct from the client's corporate footprint
       // above, and the only one of the two any step consumes.
+      //
+      // `the` is optional since 2026-07-31: the article was required, so the
+      // card's OWN third value — "Outside EU with EU impact" — was refused by
+      // the detector derived from it. Same class as WF-005 `Horizon` rejecting
+      // the word order of its own card line, and found the same way, by testing
+      // each card value against the detector that claims to read it.
       pattern:
-        /\bEU[- ]only\b|\bEU\b[^.]{0,20}\b(only|processing|processed|hosted|hosting|residency|based|region)\b|\b(transfers?|transferred|transferring)\b[^.]{0,24}\b(outside|third countr\w+|US|non-?EU|abroad)\b|\bdata residency\b|\bcross[- ]border transfers?\b|\boutside the EU\b|\bextraterritorial\b/i,
+        /\bEU[- ]only\b|\bEU\b[^.]{0,20}\b(only|processing|processed|hosted|hosting|residency|based|region)\b|\b(transfers?|transferred|transferring)\b[^.]{0,24}\b(outside|third countr\w+|US|non-?EU|abroad)\b|\bdata residency\b|\bcross[- ]border transfers?\b|\boutside (?:the )?EU\b|\bextraterritorial\b/i,
     },
     // --- AI model -----------------------------------------------------------
     {

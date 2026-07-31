@@ -1192,6 +1192,37 @@ describe("WF-008 manifest — the largest card, four conjunctions and two home b
     expect(missing, "an explicit deferral is an answer").not.toContain("Suspected AI Act tier");
   });
 
+  it("reads the card's OWN values, in the card's own words", () => {
+    // Found by a re-verification pass that checked every value of every closed
+    // enumeration against the detector claiming to read it — the direction the
+    // fixtures cannot exercise, since a fixture is prose and a card is a form.
+    // Two detectors refused their own card:
+    //   - `Geography` required the article in "outside THE EU", so the card's
+    //     third value, "Outside EU with EU impact", did not fill;
+    //   - `Audit origin` read `Preventive` in both word orders but `Incident` in
+    //     only one, so "Audit origin: Incident" and "the audit follows a
+    //     production incident" were both refused — an asymmetry inside one
+    //     specification with no basis on the card.
+    // Same class as WF-005 `Horizon` rejecting the word order of its own line.
+    // ⚠️ THE CONTEXT IS REPLACED, NOT APPENDED TO, and falsification is what
+    // forced that: appending left P08's own "EU only" in place, so `Geography`
+    // filled through another branch and the assertion held whether the fix was
+    // present or not. A case whose subject is already answered elsewhere in the
+    // brief measures nothing — the WF-006 `competition` lesson again.
+    const BASE = "Health provider, patient triage chatbot live in production, external LLM behind a proxy.";
+    for (const [text, label] of [
+      ["Outside EU with EU impact.", "Geography"],
+      ["Audit origin: Incident.", "Audit origin"],
+      ["The audit follows a production incident.", "Audit origin"],
+    ] as const) {
+      const brief = fixtureBrief("P08");
+      brief.context = `${BASE} ${text}`;
+      const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
+      const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+      expect(missing, `${label} must read "${text}"`).not.toContain(label);
+    }
+  });
+
   it("lets Article 9 vocabulary answer `personal`, one way only", () => {
     // Special-category data IS personal data by definition, so the implication
     // runs from Art. 9 to personal and never back. Making the operator restate
