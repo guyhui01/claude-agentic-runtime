@@ -1425,6 +1425,49 @@ describe("WF-009 manifest — one home brief, and an independent control that re
     expect(missing.sort()).toEqual(["Must-have skills", "Role sought (title)", "Urgency"]);
   });
 
+  it("refuses the values the card does not offer, even plausible ones", () => {
+    // Three tokens were admitted in the first draft and removed after checking
+    // each detector's vocabulary against its card: `portage` on Contract type
+    // ("portage salarial" is a distinct French arrangement the card does not
+    // list — and it is the OPERATOR's own situation, which has no business
+    // inside a card's values), `distributed` on Location (a TEAM property, and
+    // `Distribution` is a WF-010 card value), and `head of` on Role sought
+    // (level) (an org-chart title, not a rung of the junior→senior→lead→director
+    // ladder; a brief saying "Head of Data Science" has stated a TITLE).
+    //
+    // ⚠️ THIS TEST EXISTS BECAUSE FALSIFICATION COULD NOT MEASURE TWO OF THEM.
+    // Re-admitting `portage` and `head of` turned NOTHING red — the first
+    // appears in no brief at all, the second only inside `submittedBy`, which is
+    // mapped nowhere. A green falsification is a finding about the corpus, not a
+    // licence, so the inputs the corpus lacks are supplied here.
+    const cases = [
+      ["Contract type", "The mission would run through portage salarial."],
+      ["Role sought (level)", "The Head of Engineering position is open."],
+      ["Location", "The platform team is a distributed team across Europe."],
+    ] as const;
+    // ⚠️ The `head of` case names a POSITION on purpose. A first wording, "a
+    // Head of Data Science to run it", left the case green under mutation for a
+    // second reason: even re-admitted, the token needs a role noun within its
+    // window, and "Data Science" is not one — so the text did not exercise the
+    // branch it was written for. A case must be able to FAIL before it can pass.
+    //
+    // ⚠️ BOTH `need` AND `context` are replaced, and the first version of this
+    // test replaced only the context: P09's own need says "senior MLOps
+    // engineer", so `Role sought (level)` was already answered and the case held
+    // whether the token was admitted or not. Third time this repository has hit
+    // an assertion whose subject was answered elsewhere in the same brief.
+    for (const [label, text] of cases) {
+      const brief = fixtureBrief("P09");
+      brief.need = "They are recruiting for the platform team.";
+      brief.context = text;
+      brief.constraints = [];
+      const res = validateRoute(proposal("WF-009"), brief, FAKE_SIDECAR, MANIFESTS);
+      expect(res.status, text).toBe("PARAMS_MISSING");
+      if (res.status !== "PARAMS_MISSING") continue;
+      expect(res.missingParams, `${label} must not be answered by "${text}"`).toContain(label);
+    }
+  });
+
   it("does not read the CLIENT's own CDO as the role sought", () => {
     // Measured before this test existed: the bare title list fills on the WF-004
     // brief through "CDO sponsor", the client's chief data officer sponsoring an

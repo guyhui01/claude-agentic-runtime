@@ -77,10 +77,20 @@ export const WF009_MANIFEST: ParamManifest = {
       // STAFF" — the workforce, not the Staff Engineer grade. Anchored, the
       // detector fills on P09 alone and on zero foreign brief. The card's own
       // four values are junior / senior / lead / director; `principal` and
-      // `staff` are the same grade ladder under other names, `head of` is not
-      // (it is a management title) and is admitted only beside a role noun.
+      // `staff` are the same grade ladder under other names.
+      //
+      // ⛔ `head of` WAS ADMITTED AND IS REMOVED, and this comment used to argue
+      // both sides at once — it said in so many words that it "is not the same
+      // ladder" while the pattern accepted it. Two reasons, the second measured:
+      // the card offers four levels and this was a fifth, a new member on a
+      // closed enumeration (the WF-007 `onboarding` defect class); and it is the
+      // token most likely to smuggle the SUBMITTER's role into a card parameter
+      // — its only four occurrences in the whole corpus are `submittedBy` values
+      // ("Head of Sales", "Head of Engineering", "Head of Data Science", "Head
+      // of HR"), the field deliberately mapped nowhere because routing must be
+      // invariant to who submits.
       pattern:
-        /\b(junior|senior|lead|principal|staff|director|head of)\b[^.]{0,28}\b(engineers?|developers?|architects?|scientists?|analysts?|managers?|role|profile|position|hire|candidate)\b|\b(engineers?|developers?|architects?|scientists?|analysts?|role|profile|position|hire|candidate)\b[^.]{0,28}\b(junior|senior|lead|principal|staff|director)\b/i,
+        /\b(junior|senior|lead|principal|staff|director)\b[^.]{0,28}\b(engineers?|developers?|architects?|scientists?|analysts?|managers?|role|profile|position|hire|candidate)\b|\b(engineers?|developers?|architects?|scientists?|analysts?|role|profile|position|hire|candidate)\b[^.]{0,28}\b(junior|senior|lead|principal|staff|director)\b/i,
     },
     {
       name: "contract_type",
@@ -91,10 +101,14 @@ export const WF009_MANIFEST: ParamManifest = {
       // habit: across the nineteen briefs this fires on zero of them, own and
       // foreign alike, so there is nothing to disambiguate. Anchoring it would
       // cost what over-tightening cost WF-008 `Geography` — refusing the card's
-      // own word for no gain. `CDI`/`CDD`/`contractor`/`portage` are the market
-      // synonyms of the card's five.
+      // own word for no gain. `CDI`/`CDD`/`contractor` are the market
+      // synonyms of the card's five. ⛔ `portage` was admitted and is REMOVED:
+      // "portage salarial" is a distinct French arrangement the card does not
+      // list — a new member on a closed enumeration — and it is the OPERATOR's
+      // own employment situation, which has no business inside a recruitment
+      // card's values. Measured: no brief of the nineteen contains it.
       pattern:
-        /\b(permanent|fixed[- ]term|freelance|internship|apprenticeship|CDI|CDD|contractor|portage)\b/i,
+        /\b(permanent|fixed[- ]term|freelance|internship|apprenticeship|CDI|CDD|contractor)\b/i,
     },
     {
       name: "urgency",
@@ -119,7 +133,13 @@ export const WF009_MANIFEST: ParamManifest = {
       // than an oversight: city names are proper nouns with no closed list, and
       // the failure direction is safe. "Location: Paris" is read by the
       // label-declaration rule, which is where the card's own form lands.
-      pattern: /\b(remote(ly)?|hybrid|on-?site|distributed)\b|\bbased in [A-Z]/,
+      //
+      // ⛔ `distributed` was admitted and is REMOVED. It describes a TEAM's
+      // dispersion rather than a role's location, it is what made this line fill
+      // on the post-mortem brief ("distributed team"), and `Distribution` is a
+      // value of the WF-010 card — borrowing another card's vocabulary. The
+      // foreign matrix drops from 2 cells to 1.
+      pattern: /\b(remote(ly)?|hybrid|on-?site)\b|\bbased in [A-Z]/,
     },
     {
       name: "must_have_skills",
@@ -210,9 +230,11 @@ export const WF009_MANIFEST: ParamManifest = {
       mapping: recruitment,
       // Card values taken bare, on measurement: zero fills across the nineteen
       // briefs, own and foreign, so there is nothing to disambiguate here
-      // either.
+      // either. ⛔ `pair programming` and `assessment centre` were admitted and
+      // are REMOVED — distinct methods this card does not list, absent from every
+      // brief, so removing them changes no verdict.
       pattern:
-        /\b(tech(nical)? interview|code test|coding test|practical case|take[- ]home|pair programming|reference checks?|assessment centre|assessment center)\b/i,
+        /\b(tech(nical)? interview|code test|coding test|practical case|take[- ]home|reference checks?)\b/i,
     },
     {
       name: "anti_fraud_required",

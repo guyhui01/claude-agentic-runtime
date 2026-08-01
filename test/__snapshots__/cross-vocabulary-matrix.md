@@ -155,9 +155,8 @@ Foreign fills: **36** cell(s) over 17 brief(s).
 
 ## WF-009 — 10 measurable specs × 18 foreign briefs
 
-Foreign fills: **2** cell(s) over 2 brief(s).
+Foreign fills: **1** cell(s) over 1 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
 | P07 | WF-007 | Location |
-| P10 | WF-010 | Location |
