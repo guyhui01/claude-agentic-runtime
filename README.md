@@ -62,12 +62,13 @@ Building blocks (the rest is carried by the Claude Agent SDK):
 - [x] §2.4-B — Live executor for a workflow backbone (e.g. WF-001) (+ provenance)
 - [x] WF-001 live run end to end (*blocking* + *advisory* gates green) + ISO quality audit v1
 - [x] WF-002 / WF-003 spines modeled + tested (offline)
-- [x] CI (strict typecheck + tests, Node 20/22) + Dependabot
+- [x] CI (strict typecheck + tests on Node 22 / 24 — Maintenance + Active LTS — plus a real-catalog integration job at the pinned tag) + Dependabot
 - [x] Index the WF-002/003 agents in the sidecar (`claude-agents` repo) — 14 assets, consumable, default `CATALOG_ROOT` realigned
 - [x] WF-002 / WF-003 live run end to end (on explicit approval + observed run)
 - [x] WF-004 … WF-010 spines modeled, tested, and **run live** — all ten catalog workflows live-proven (9 `completed`, WF-008 *returned for rework* by its counter-review gate)
 - [x] WF-000 dispatch V0 — intake → routing → execution plan, live-proven end to end (router accuracy run + a pilot brief carried through to a spine delivery)
-- [ ] Dispatch V1 — the nine remaining parameter manifests, assisted parameter filling, cost estimate
+- [x] Dispatch — the **ten** parameter manifests, one per catalog card, pinned to the catalog tag (an unregistered route reports an honest `paramsChecked: false` rather than passing silently)
+- [ ] Dispatch V1 — assisted parameter filling, cost estimate
 - [ ] Multi-workflow engagement arc (WF-006 → WF-007 → WF-001) — V2 scope, not started. Designed as a **human-gated brief hand-off at the dispatch layer**, not as autonomous context accumulation inside the orchestrator: each workflow is a separate engagement with its own accountable go/no-go, so the one-step-upstream handoff is a deliberate boundary, not a gap to close
 
 ## Stack
