@@ -1646,6 +1646,59 @@ describe("WF-010 manifest — the tenth, two home briefs, and the live seed as a
     ]);
   });
 
+  it("RECORDS what the card's own quick-start form does — 10 of 12, and the two misses share one cause", () => {
+    // A SECOND INDEPENDENT INPUT, and a probe direction never run in this
+    // repository: the card teaches the operator a form (`- Label: value`), so
+    // what does that form produce when it is filled and sent through the check?
+    // Neither a fixture (prose) nor a card-value probe (single values) exercises
+    // it. Written from the card's block, not from these detectors.
+    const brief = {
+      need: "Post-mortem requested after the closeout.",
+      domain: "Management & Consulting",
+      expectedDeliverable: "Lessons-learned report and improvement plan",
+      constraints: [],
+      context: [
+        "Project / Incident: Atlas migration, from March 2024 to January 2025",
+        "Closeout type: Partial failure",
+        "Project duration: 3-12 months",
+        "Team involved: 9 people, distributed, hybrid",
+        "Client stakes: Deadline",
+        "Available data: KPIs, metrics, meeting minutes, logged incidents",
+        "Report audience: Steering committee",
+        "Expected format: Detailed report",
+        "HR sensitivities: Team tensions to manage",
+      ].join(". "),
+      submittedBy: "QA Manager",
+    };
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+
+    // ⚠️ THE TWO MISSES HAVE ONE CAUSE, and it is structural rather than a
+    // detector defect: the label rule matches the SPEC's `card` string,
+    // qualifier included, so a conjunction's halves are never served by the
+    // card's own BASE label ("Team involved:" answers none of its three). That
+    // exclusion was settled deliberately on 2026-07-31 — a guard was written for
+    // it and removed as a no-op, because the exclusion falls out of the string.
+    // What had never been MEASURED is its cost on the form the card teaches:
+    // the halves fall back to their prose detectors, and here two of five are
+    // not read. `Team involved (remote or on-site)` refuses "9 people,
+    // distributed, hybrid" through the comma guard earned against P09, and
+    // `Project / Incident (name)` does not read "Atlas migration" because only
+    // this card's own two nouns count — the same accepted syntactic miss as
+    // WF-004 `client_name`, in the safe direction, with the operator told
+    // exactly which half to restate.
+    //
+    // ⛔ Do NOT "fix" this by widening either detector: `migration` was removed
+    // on measurement (it read P03's "before rollout") and dropping the comma
+    // guard re-admits P09. The systemic point — conjunctions versus the label
+    // rule, across the six manifests that carry one — belongs to the
+    // end-of-project audit, not to a patch here.
+    expect(missing.sort()).toEqual([
+      "Project / Incident (name)",
+      "Team involved (remote or on-site)",
+    ]);
+  });
+
   it("reads a project NAME only where one is designated — not from a denial of one", () => {
     // The first draft accepted any qualifier before a project noun and filled on
     // P15, "this is ongoing operations staffing, NOT A bounded project" — a

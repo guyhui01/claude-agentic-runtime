@@ -88,6 +88,16 @@ export const WF010_MANIFEST: ParamManifest = {
       // project" and P13 "incident hit the fraud-scoring model", zero foreign
       // brief. A bare CLIENT name never fills it — that is `client_name` on
       // four other cards, and this line asks for the project.
+      //
+      // ⚠️ ACCEPTED MISS, measured against the card's own quick-start form and
+      // written here rather than left to be discovered: a project NAMED without
+      // the word "project" is not read — "Project / Incident: Atlas migration"
+      // reports missing. Only this card's two nouns count, so the detector
+      // recognises a syntactic FORM and not a name, exactly as WF-004
+      // `client_name` documents for appositions. Widening it was measured and
+      // refused: `migration` and `rollout` are what filled on P03's "before
+      // rollout". Safe direction, and `PARAMS_MISSING` names the half to
+      // restate. See the quick-start test, which records the behaviour.
       pattern:
         /(?<!\bnot )(?<!\bnot a )\b[a-z][a-z-]{2,}\s+project\b|\bincidents?\b[^.]{0,40}\b(the|a)\s+[a-z][a-z-]{2,}(-[a-z]+)?\s+(model|system|platform|service|chatbot|pipeline|application)\b/i,
     },
@@ -239,9 +249,8 @@ export const WF010_MANIFEST: ParamManifest = {
       // own one: P07 "hybrid on-site engagement" (the engagement's location,
       // WF-007's own line) and P09 "platform team of eight, HYBRID Paris" (where
       // the role is hybrid, not the team). A window of `{0,24}` would still
-      // have caught P09 across its comma — the fifteen characters between
-      // "team" and "hybrid" are exactly the accident the WF-007 lesson warns
-      // about — so the class separator is refused inside the window instead of
+      // have caught P09 across its comma — the eleven characters between "team"
+      // and "hybrid" are exactly the accident the WF-007 lesson warns about — so the class separator is refused inside the window instead of
       // counting characters.
       //
       // Result: fills on NOTHING in the corpus, and that is the honest outcome
@@ -253,6 +262,15 @@ export const WF010_MANIFEST: ParamManifest = {
       // ⛔ It must never read `distributed`: that is the sibling above, and
       // reading it here would make the two halves of the same conjunction
       // answer each other.
+      //
+      // ⚠️ THE COST OF THAT GUARD IS PAID ON THE CARD'S OWN FORM, and it is
+      // measured rather than suspected: "Team involved: 9 people, distributed,
+      // hybrid" — the three halves listed as the card lists them — leaves THIS
+      // one missing, because the comma guard refuses to cross the separator and
+      // the label rule cannot serve a conjunction's halves (it matches the
+      // spec's qualified `card` string, a structural exclusion settled
+      // 2026-07-31). The other two halves fill. Recorded by the quick-start
+      // test; dropping the guard re-admits P09 and is not the answer.
       pattern:
         /\bteams?\b[^,.]{0,20}\b(remote(ly)?|on-?site|hybrid)\b|\b(remote(ly)?|on-?site|hybrid)\b[^,.]{0,12}\bteams?\b|\bworks? from home\b/i,
     },
