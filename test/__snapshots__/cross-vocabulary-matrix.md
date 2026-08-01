@@ -152,3 +152,12 @@ Foreign fills: **36** cell(s) over 17 brief(s).
 | P16 | NO_MATCH | Client (size) |
 | P17 | NO_MATCH | Client (sector) |
 | P19 | WF-001 | Client (name) · Client (sector) · Data processed (personal) · Targeted frameworks |
+
+## WF-009 — 10 measurable specs × 18 foreign briefs
+
+Foreign fills: **2** cell(s) over 2 brief(s).
+
+| Foreign brief | Written for | Specs it fills |
+|---|---|---|
+| P07 | WF-007 | Location |
+| P10 | WF-010 | Location |

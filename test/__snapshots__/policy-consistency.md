@@ -21,13 +21,13 @@ itself. Read them against the manifests when they move.
 
 | Family | Specs |
 |---|---|
-| (all specs, 8 manifests) | 85 |
-| `NO DETECTOR` | 5 |
-| `adjacency-window` | 32 |
-| `default` | 5 |
+| (all specs, 9 manifests) | 96 |
+| `NO DETECTOR` | 6 |
+| `adjacency-window` | 39 |
+| `default` | 6 |
 | `negation-guard` | 4 |
-| `quantity-vocabulary` | 17 |
-| `sanctioned-unknown` | 2 |
+| `quantity-vocabulary` | 20 |
+| `sanctioned-unknown` | 3 |
 
 ## 1. Brief fields each spec reads
 
@@ -41,6 +41,7 @@ itself. Read them against the manifests when they move.
 | WF-006 | need+context+constraints | `proposal_format` → need+context+constraints+expectedDeliverable |
 | WF-007 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
 | WF-008 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
+| WF-009 | need+context+constraints | `nice_to_have_skills` → (nothing) |
 
 ## 2. Policy markers per spec
 
@@ -94,6 +95,14 @@ itself. Read them against the manifests when they move.
 | WF-008 | `volume_training_data` | adjacency-window |
 | WF-008 | `geography` | adjacency-window |
 | WF-008 | `compliance_deadline` | quantity-vocabulary · adjacency-window |
+| WF-009 | `role_title` | adjacency-window |
+| WF-009 | `role_level` | adjacency-window |
+| WF-009 | `urgency` | quantity-vocabulary · adjacency-window |
+| WF-009 | `must_have_skills` | adjacency-window |
+| WF-009 | `nice_to_have_skills` | default · NO DETECTOR |
+| WF-009 | `salary_day_rate` | sanctioned-unknown · quantity-vocabulary · adjacency-window |
+| WF-009 | `team_context` | quantity-vocabulary · adjacency-window |
+| WF-009 | `anti_fraud_required` | adjacency-window |
 
 ## 3. Sibling specs — the same role carried by several cards
 

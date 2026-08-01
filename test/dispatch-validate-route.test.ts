@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { validateRoute } from "../src/dispatch/validate-route.js";
 import { WF001_MANIFEST } from "../src/dispatch/manifests/wf-001.js";
 import { WF002_MANIFEST } from "../src/dispatch/manifests/wf-002.js";
@@ -8,6 +10,7 @@ import { WF005_MANIFEST } from "../src/dispatch/manifests/wf-005.js";
 import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
 import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
 import { WF008_MANIFEST } from "../src/dispatch/manifests/wf-008.js";
+import { WF009_MANIFEST } from "../src/dispatch/manifests/wf-009.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -109,6 +112,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-009",
+      type: "workflow",
+      path: "workflows/WF-009.md",
+      title: "IT / AI Recruitment",
+      description: "Hiring need → job ad → sourcing → assessment → offer",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-009.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       // A resolvable route deliberately kept OUT of the manifest registry, so
       // that the honest `paramsChecked: false` path has a permanent subject.
       // It used to be played by whichever real workflow had no manifest yet
@@ -145,6 +158,7 @@ const MANIFESTS = {
   "WF-006": WF006_MANIFEST,
   "WF-007": WF007_MANIFEST,
   "WF-008": WF008_MANIFEST,
+  "WF-009": WF009_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -1312,5 +1326,169 @@ describe("the card-taught `Label: value` form — a brief may answer by naming t
     const res = validateRoute(proposal("WF-008"), brief, FAKE_SIDECAR, MANIFESTS);
     const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
     expect(missing).not.toContain("Suspected AI Act tier");
+  });
+});
+
+describe("WF-009 manifest — one home brief, and an independent control that replaces the second", () => {
+  it("names the five gaps of the P09 fixture, in card labels", () => {
+    const res = validateRoute(proposal("WF-009"), fixtureBrief("P09"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Anti-fraud required",
+      "Assessment methods",
+      "Contract type",
+      "Must-have skills",
+      "Salary / day rate",
+    ]);
+  });
+
+  it("routes the amended P09 brief with paramsChecked=true", () => {
+    const brief = fixtureBrief("P09");
+    brief.context +=
+      " Permanent contract, must-have skills Python and Kubernetes, salary €70-85k," +
+      " tech interview and reference checks, verify diplomas and LinkedIn.";
+    const res = validateRoute(proposal("WF-009"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("ROUTED");
+    if (res.status !== "ROUTED") return;
+    expect(res.paramsChecked).toBe(true);
+  });
+
+  it("THE INDEPENDENT CONTROL — the WF-009 live seed, flattened without its field labels", () => {
+    // This lot has ONE home brief where WF-006 and WF-008 each had two, and it
+    // was the second brief that PROVED two overlapping specs distinct. The
+    // replacement is a source this manifest cannot have influenced: the seed of
+    // the WF-009 live harness, written 2026-07-12/13 for the spine and proven by
+    // two billed runs, months before any parameter manifest existed. It is a
+    // stronger control than a second brief written by the same hand as the
+    // detectors — the WF-005 precedent, where a positive control derived from
+    // the regular expression it tested proved only that the regex was non-empty.
+    //
+    // It is flattened WITHOUT the field labels on purpose. With them, the
+    // label-declaration rule would read every line and the control would measure
+    // that rule rather than these detectors.
+    const SEED = [
+      "Senior AI/LLM Engineer (platform team)",
+      "Permanent",
+      "3 months",
+      "Paris / hybrid (2 days on-site)",
+      "Python, production LLM/RAG experience, evaluation, MLOps basics",
+      "TypeScript, Kubernetes, prior startup experience",
+      "\u20ac70-85k or \u20ac650-750/day freelance equivalent",
+      "5-person platform team, Python/TypeScript stack, weekly demos",
+      "Tech interview + practical RAG case + reference checks",
+      "Verify diplomas, LinkedIn, references \u2014 yes",
+    ];
+
+    // Guard the guard: the strings above are copied from the harness, so the
+    // control is worthless the day the harness changes and this copy does not.
+    const harness = readFileSync(
+      fileURLToPath(new URL("./wf-009-run-live.test.ts", import.meta.url)),
+      "utf8",
+    );
+    for (const value of SEED) {
+      expect(harness, `the live seed no longer carries ${JSON.stringify(value)}`).toContain(value);
+    }
+
+    const brief = {
+      need: `Hiring need. ${SEED.slice(0, 3).join(". ")}.`,
+      domain: "HR & Talent",
+      expectedDeliverable: "Job description, sourcing, assessment and selection",
+      constraints: [SEED[6] ?? ""],
+      context: `${SEED.slice(3, 6).join(". ")}. ${SEED.slice(7).join(". ")}.`,
+    };
+    const res = validateRoute(proposal("WF-009"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+
+    // EIGHT OF ELEVEN fill. The three that do not are all the same class — the
+    // seed is a set of LABELLED FIELDS, and flattening drops the labels that
+    // carry the meaning. None is a defect of a detector, and the expectation is
+    // NOT tuned until the number looks better: crafting the prose until it
+    // passes is the circular control the WF-005 lesson exists to refuse.
+    //   - `Urgency`: the seed states "3 months", a bare quantity meaningful only
+    //     under its field name. Verbatim the WF-005 `Horizon` finding reproduced
+    //     on another card — the anchoring policy corroborated by a source that
+    //     knows nothing about it.
+    //   - `Must-have skills`: the list carries no requirement marker, and the
+    //     seed's NICE-to-have list sits right beside it, which is exactly why
+    //     the marker is required.
+    //   - `Role sought (title)`: "Senior AI/LLM Engineer" states a title, not
+    //     that anyone is being HIRED, and the recruitment anchor is what stops
+    //     a client's own CDO from filling it.
+    //
+    // ⚠️ AND THEY ARE NOT ALL RECOVERABLE THE SAME WAY. `Urgency: 3 months` and
+    // `Must-have skills: …` are read by the label-declaration rule, because
+    // those labels are whole card lines. `Role sought (title)` is NOT: it is
+    // half of a conjunction, its `card` carries the qualifier, and the line
+    // label `Role sought` deliberately answers neither half. For that one, prose
+    // naming the hire is the only route — which is the behaviour, not a gap.
+    expect(missing.sort()).toEqual(["Must-have skills", "Role sought (title)", "Urgency"]);
+  });
+
+  it("does not read the CLIENT's own CDO as the role sought", () => {
+    // Measured before this test existed: the bare title list fills on the WF-004
+    // brief through "CDO sponsor", the client's chief data officer sponsoring an
+    // engagement rather than a post being recruited.
+    const res = validateRoute(proposal("WF-009"), fixtureBrief("P04"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Role sought (title)");
+  });
+
+  it("does not read `upskilling of their staff` as a seniority level", () => {
+    // The workforce, not the Staff Engineer grade.
+    const res = validateRoute(proposal("WF-009"), fixtureBrief("P04"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).toContain("Role sought (level)");
+  });
+
+  it("does not read a bare squad or a sprint cadence as team context or urgency", () => {
+    // Measured: the bare team words fill on five foreign briefs, and the bare
+    // quantity on the SAFe brief ("PI of 10 weeks"), which states a cadence and
+    // not a hiring deadline.
+    for (const id of ["P01", "P02"]) {
+      const res = validateRoute(proposal("WF-009"), fixtureBrief(id), FAKE_SIDECAR, MANIFESTS);
+      expect(res.status, id).toBe("PARAMS_MISSING");
+      if (res.status !== "PARAMS_MISSING") continue;
+      expect(res.missingParams, `${id} team context`).toContain("Team context");
+      expect(res.missingParams, `${id} urgency`).toContain("Urgency");
+    }
+  });
+
+  it("does not let the TEAM's stack answer the must-have skills", () => {
+    // P09 states "Kubernetes and MLflow stack" — the team's stack, which is the
+    // subject of `Team context`. Without a requirement marker the two
+    // specifications would answer each other; with it, `Team context` fills and
+    // `Must-have skills` does not.
+    const res = validateRoute(proposal("WF-009"), fixtureBrief("P09"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams).toContain("Must-have skills");
+    expect(res.missingParams).not.toContain("Team context");
+  });
+
+  it("never reports the card-declared optional as missing", () => {
+    // `Nice-to-have skills [Desired but non-blocking skills]` is the only
+    // card-declared optional in the catalog. §2 classes it must-ask on P09; the
+    // card wins over the table when the card speaks.
+    const brief = fixtureBrief("P09");
+    brief.context = "Nothing else is known about this hire.";
+    const res = validateRoute(proposal("WF-009"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).not.toContain("Nice-to-have skills");
+  });
+
+  it("treats an approved budget as no salary range, and an explicit deferral as an answer", () => {
+    // The WF-008 `AI Act tier` rule: silence is not the sanctioned unknown, and
+    // "budget is approved" says a budget EXISTS rather than what the range is.
+    const silent = validateRoute(proposal("WF-009"), fixtureBrief("P09"), FAKE_SIDECAR, MANIFESTS);
+    const silentMissing = silent.status === "PARAMS_MISSING" ? silent.missingParams : [];
+    expect(silentMissing, "an approved budget is not a range").toContain("Salary / day rate");
+
+    const deferred = fixtureBrief("P09");
+    deferred.context += " Salary to be defined with HR.";
+    const res = validateRoute(proposal("WF-009"), deferred, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "an explicit deferral is an answer").not.toContain("Salary / day rate");
   });
 });
