@@ -244,8 +244,26 @@ export const WF007_MANIFEST: ParamManifest = {
       // quick-start block asks for five of the nine lines and omits this one.
       // It stays required because §2 classes it must-ask; if one specification
       // here is ever demoted to optional-with-default, it is this one.
+      //
+      // ⛔ `distributed team` WAS ADMITTED AND IS REMOVED (2026-08-01, found by
+      // the WF-010 analytical hardening). This card enumerates exactly
+      // `[On-site / Remote / Hybrid]`, so it was a NEW MEMBER on a closed
+      // enumeration — the `onboarding` defect of this very manifest and the
+      // `portage` defect of WF-009 — and worse, it borrowed the vocabulary of
+      // ANOTHER card: `Distribution` is a value of WF-010 `Team involved`. The
+      // identical token was removed from WF-009 `Location` on 2026-08-01 for
+      // that written reason; this copy survived the same correction.
+      //
+      // NO GUARD COULD SEE IT, which is why it is documented rather than
+      // quietly patched: the cross-vocabulary matrix RECORDS the cell it lit
+      // (P10, "distributed team") as a legitimate crossing, and the policy
+      // table pairs by name convention — `location` and `engagement_location`
+      // do not share a stripped prefix, so the siblings were never put side by
+      // side. Impact measured before the edit and confirmed by the diff: the
+      // P10 cell drops, and P07, this manifest's own brief, still fills through
+      // "hybrid on-site engagement" — no verdict moves.
       pattern:
-        /\bon-?site\b|\bon (the )?premises\b|\bremote(ly)?\b|\bhybrid\b|\bdistributed team\b|\bwork from home\b/i,
+        /\bon-?site\b|\bon (the )?premises\b|\bremote(ly)?\b|\bhybrid\b|\bwork from home\b/i,
     },
     {
       name: "d1_access",

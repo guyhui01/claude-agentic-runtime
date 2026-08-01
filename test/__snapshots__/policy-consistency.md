@@ -21,12 +21,12 @@ itself. Read them against the manifests when they move.
 
 | Family | Specs |
 |---|---|
-| (all specs, 9 manifests) | 96 |
-| `NO DETECTOR` | 6 |
-| `adjacency-window` | 39 |
-| `default` | 6 |
-| `negation-guard` | 4 |
-| `quantity-vocabulary` | 20 |
+| (all specs, 10 manifests) | 108 |
+| `NO DETECTOR` | 7 |
+| `adjacency-window` | 44 |
+| `default` | 7 |
+| `negation-guard` | 5 |
+| `quantity-vocabulary` | 22 |
 | `sanctioned-unknown` | 3 |
 
 ## 1. Brief fields each spec reads
@@ -42,6 +42,7 @@ itself. Read them against the manifests when they move.
 | WF-007 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
 | WF-008 | need+context+constraints | `expected_deliverables` → expectedDeliverable |
 | WF-009 | need+context+constraints | `nice_to_have_skills` → (nothing) |
+| WF-010 | need+context+constraints | `expected_format` → (nothing) |
 
 ## 2. Policy markers per spec
 
@@ -103,6 +104,12 @@ itself. Read them against the manifests when they move.
 | WF-009 | `salary_day_rate` | sanctioned-unknown · quantity-vocabulary · adjacency-window |
 | WF-009 | `team_context` | quantity-vocabulary · adjacency-window |
 | WF-009 | `anti_fraud_required` | adjacency-window |
+| WF-010 | `project_incident_name` | negation-guard · adjacency-window |
+| WF-010 | `project_incident_dates` | adjacency-window |
+| WF-010 | `project_duration` | quantity-vocabulary · adjacency-window |
+| WF-010 | `team_size` | quantity-vocabulary · adjacency-window |
+| WF-010 | `team_work_mode` | adjacency-window |
+| WF-010 | `expected_format` | default · NO DETECTOR |
 
 ## 3. Sibling specs — the same role carried by several cards
 
@@ -163,6 +170,13 @@ itself. Read them against the manifests when they move.
 | WF-007 | Client (sector) | — |
 | WF-008 | Client (sector) | — |
 
+### role `sensitivities` — WF-007, WF-010
+
+| Manifest | Card label | Vocabulary unique to this copy |
+|---|---|---|
+| WF-007 | Sensitivities | `acquisition` `charged` `incident` `merger` `politically` `post` `sensitive` `strike` `tense` `tension` `works council` |
+| WF-010 | HR sensitivities | `conflicts` `morale` `strikes` `tensions` `works councils` |
+
 ### role `size` — WF-004, WF-006, WF-007, WF-008
 
 | Manifest | Card label | Vocabulary unique to this copy |
@@ -178,3 +192,10 @@ itself. Read them against the manifests when they move.
 |---|---|---|
 | WF-004 | Stakeholders | `business units` `readout` `sponsor` |
 | WF-007 | D1 stakeholders | `direct` `line` `managers` `reporting` |
+
+### role `team_size` — WF-001, WF-010
+
+| Manifest | Card label | Vocabulary unique to this copy |
+|---|---|---|
+| WF-001 | Team size | `safe teams` `scrum teams` `solo` `squads` |
+| WF-010 | Team involved (size) | `eight` `five` `four` `nine` `people` `person` `seven` `six` `team size` `ten` `three` |

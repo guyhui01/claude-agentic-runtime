@@ -11,6 +11,7 @@ import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
 import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
 import { WF008_MANIFEST } from "../src/dispatch/manifests/wf-008.js";
 import { WF009_MANIFEST } from "../src/dispatch/manifests/wf-009.js";
+import { WF010_MANIFEST } from "../src/dispatch/manifests/wf-010.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
@@ -122,6 +123,16 @@ const FAKE_SIDECAR: Sidecar = {
       dependsOn: ["AGENT-BUSINESS-ANALYST"],
     },
     {
+      id: "WF-010",
+      type: "workflow",
+      path: "workflows/WF-010.md",
+      title: "Project Post-mortem / Lessons Learned",
+      description: "Project closeout or major incident → lessons-learned report + improvement plan",
+      catalogVersion: "v4.2.0",
+      source: { file: "workflows/WF-010.md", catalogTag: "v4.2.0" },
+      dependsOn: ["AGENT-BUSINESS-ANALYST"],
+    },
+    {
       // A resolvable route deliberately kept OUT of the manifest registry, so
       // that the honest `paramsChecked: false` path has a permanent subject.
       // It used to be played by whichever real workflow had no manifest yet
@@ -159,6 +170,7 @@ const MANIFESTS = {
   "WF-007": WF007_MANIFEST,
   "WF-008": WF008_MANIFEST,
   "WF-009": WF009_MANIFEST,
+  "WF-010": WF010_MANIFEST,
 } as const;
 
 /** Any coverage-matrix brief, by id — one source of truth for the fixtures. */
@@ -1533,5 +1545,306 @@ describe("WF-009 manifest — one home brief, and an independent control that re
     const res = validateRoute(proposal("WF-009"), deferred, FAKE_SIDECAR, MANIFESTS);
     const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
     expect(missing, "an explicit deferral is an answer").not.toContain("Salary / day rate");
+  });
+});
+
+describe("WF-010 manifest — the tenth, two home briefs, and the live seed as an independent control", () => {
+  it("names the four gaps of the P10 fixture, in card labels", () => {
+    const res = validateRoute(proposal("WF-010"), fixtureBrief("P10"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Closeout type",
+      "Project / Incident (start/end dates)",
+      "Team involved (remote or on-site)",
+      "Team involved (size)",
+    ]);
+  });
+
+  it("names the seven gaps of the P13 fixture — the SECOND home brief", () => {
+    // WF-009 shipped with one home brief and said so as a weakness. This card
+    // has two, and P13 is what proves the three halves of `Team involved`
+    // independent: P10 fills `distribution` alone through "distributed team",
+    // P13 fills none of the three.
+    const res = validateRoute(proposal("WF-010"), fixtureBrief("P13"), FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect(res.missingParams.sort()).toEqual([
+      "Client stakes",
+      "HR sensitivities",
+      "Project / Incident (start/end dates)",
+      "Project duration",
+      "Team involved (distribution)",
+      "Team involved (remote or on-site)",
+      "Team involved (size)",
+    ]);
+  });
+
+  it("routes the amended P10 brief with paramsChecked=true", () => {
+    const brief = fixtureBrief("P10");
+    // ⚠️ The first version of this amendment wrote "a team of nine, working
+    // on-site" and the route stayed PARAMS_MISSING — the comma guard of
+    // `team_work_mode` refused it, correctly. The detector was right and the
+    // test prose was wrong, which is worth recording: the guard fires on
+    // ordinary phrasing, and that cost is accepted deliberately.
+    brief.context +=
+      " Partial failure; the project ran from January 2024 to October 2024." +
+      " The team of nine worked on-site.";
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("ROUTED");
+    if (res.status !== "ROUTED") return;
+    expect(res.paramsChecked).toBe(true);
+  });
+
+  it("THE INDEPENDENT CONTROL — the WF-010 live seed, flattened without its field labels", () => {
+    // Same method as WF-005 and WF-009: the seed of the WF-010 live harness was
+    // written for the SPINE, by a concern that knows nothing of this policy, so
+    // it is a source these detectors cannot have influenced. Flattened WITHOUT
+    // its field labels — with them, the label-declaration rule would read every
+    // line and the control would measure that rule instead of these patterns.
+    const SEED = [
+      "Synthetic AI delivery project (mid-cap, 6 months, hybrid team).",
+      "Partial failure (shipped 2 weeks late, 8% over budget, 3 P1 bugs at go-live)",
+      "3-12 months",
+      "8 people, distributed, 2 late joiners",
+      "Deadline + quality; steering-committee audience",
+      "Synthetic KPIs, meeting minutes, logged incidents (fictional)",
+      "Steering committee",
+      "Detailed report + 1-page summary",
+    ];
+
+    // Guard the guard: these strings are copied from the harness, so the control
+    // is worthless the day the harness changes and this copy does not.
+    const harness = readFileSync(
+      fileURLToPath(new URL("./wf-010-run-live.test.ts", import.meta.url)),
+      "utf8",
+    );
+    for (const value of SEED) {
+      expect(harness, `the live seed no longer carries ${JSON.stringify(value)}`).toContain(value);
+    }
+
+    const brief = {
+      need: `Post-mortem request. ${SEED.slice(0, 2).join(". ")}.`,
+      domain: "Management & Consulting",
+      expectedDeliverable: "Lessons-learned report and improvement plan",
+      constraints: [SEED[4] ?? ""],
+      context: `${SEED.slice(2, 4).join(". ")}. ${SEED.slice(5).join(". ")}.`,
+    };
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+
+    // TEN OF TWELVE fill. The two that do not are the seed's own silence, and
+    // the expectation is NOT tuned until the number improves — tailoring the
+    // prose until it passes is the circular control the WF-005 lesson refuses.
+    //   - `Project / Incident (start/end dates)`: the seed states no date at
+    //     all, in any form.
+    //   - `HR sensitivities`: the harness has no HR field. Its absence here says
+    //     nothing about the detector.
+    expect(missing.sort()).toEqual([
+      "HR sensitivities",
+      "Project / Incident (start/end dates)",
+    ]);
+  });
+
+  it("reads a project NAME only where one is designated — not from a denial of one", () => {
+    // The first draft accepted any qualifier before a project noun and filled on
+    // P15, "this is ongoing operations staffing, NOT A bounded project" — a
+    // project name read out of a sentence denying there is a project — and on
+    // P03's "before rollout", a preposition promoted to a designation. Found by
+    // measuring the corpus before any test existed.
+    const res = validateRoute(proposal("WF-010"), fixtureBrief("P15"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "a denied project is not a project name").toContain(
+      "Project / Incident (name)",
+    );
+
+    const p03 = validateRoute(proposal("WF-010"), fixtureBrief("P03"), FAKE_SIDECAR, MANIFESTS);
+    const p03Missing = p03.status === "PARAMS_MISSING" ? p03.missingParams : [];
+    expect(p03Missing, "`before rollout` designates nothing").toContain(
+      "Project / Incident (name)",
+    );
+  });
+
+  it("keeps the two halves of `Team involved` from answering each other", () => {
+    // `distributed` is the DISTRIBUTION half and must never satisfy the work
+    // mode: P10 states one and not the other, and reading it twice would report
+    // a fact the operator never gave. The isolation matters — asserted on a
+    // REPLACED context, not an appended one, because P10's own prose could
+    // otherwise fill the line through another branch (the WF-006 `competition`
+    // lesson, third occurrence).
+    const brief = fixtureBrief("P10");
+    brief.context = "Logistics group, distributed team across three sites.";
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "`distributed` is not a work mode").toContain(
+      "Team involved (remote or on-site)",
+    );
+    expect(missing, "`distributed` IS the distribution half").not.toContain(
+      "Team involved (distribution)",
+    );
+
+    const mode = fixtureBrief("P10");
+    mode.context = "Logistics group, the team was fully remote.";
+    const modeRes = validateRoute(proposal("WF-010"), mode, FAKE_SIDECAR, MANIFESTS);
+    const modeMissing = modeRes.status === "PARAMS_MISSING" ? modeRes.missingParams : [];
+    expect(modeMissing, "a remote TEAM answers the work mode").not.toContain(
+      "Team involved (remote or on-site)",
+    );
+  });
+
+  it("does not read a work mode across a class separator", () => {
+    // P09 writes "platform team of eight, HYBRID Paris": fifteen characters
+    // apart, so any window counted in characters would have caught it. The comma
+    // is refused inside the window instead — the mode of a ROLE in a recruitment
+    // brief is not the mode of the post-mortem's team.
+    const res = validateRoute(proposal("WF-010"), fixtureBrief("P09"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).toContain("Team involved (remote or on-site)");
+  });
+
+  it("requires a stake to be MATERIALIZED, not merely named", () => {
+    // The four card values taken bare fill on nine of the twenty briefs:
+    // `deadline` is the token WF-006 `Response deadline` owns, and `scope` is
+    // what a scoping mission is called. Isolated context, so the assertion
+    // measures its own subject.
+    const bare = fixtureBrief("P10");
+    bare.need = "The project is closed and the client asks about deadline, scope and quality.";
+    bare.context = "Logistics group.";
+    bare.constraints = [];
+    const res = validateRoute(proposal("WF-010"), bare, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "naming the axes is not stating the stake").toContain("Client stakes");
+
+    const materialized = fixtureBrief("P10");
+    materialized.context = "Logistics group, delivered four months late.";
+    const matRes = validateRoute(proposal("WF-010"), materialized, FAKE_SIDECAR, MANIFESTS);
+    const matMissing = matRes.status === "PARAMS_MISSING" ? matRes.missingParams : [];
+    expect(matMissing).not.toContain("Client stakes");
+  });
+
+  it("refuses a relative date that belongs to another event, and reads a stated window", () => {
+    // Accepting "last week / yesterday" buys P13's own fill and costs a false
+    // one on P12, "contract SIGNED YESTERDAY". Measured both ways; the safe
+    // direction wins.
+    const p12 = validateRoute(proposal("WF-010"), fixtureBrief("P12"), FAKE_SIDECAR, MANIFESTS);
+    const p12Missing = p12.status === "PARAMS_MISSING" ? p12.missingParams : [];
+    expect(p12Missing, "a signature date is not the project window").toContain(
+      "Project / Incident (start/end dates)",
+    );
+
+    const dated = fixtureBrief("P10");
+    dated.context = "Logistics group, the project ran from March 2024 to January 2025.";
+    const res = validateRoute(proposal("WF-010"), dated, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing).not.toContain("Project / Incident (start/end dates)");
+  });
+
+  it("refuses a duration CLASS this card does not name, and reads the ranges it does", () => {
+    // WF-007 accepts `short|medium|long` because ITS card names those classes.
+    // This one names only the ranges, so a class word would be a new member —
+    // and the second-pass check found the ranges themselves unreadable, because
+    // `\b[<>]` can never match.
+    const klass = fixtureBrief("P13");
+    klass.context = "Credit institution, a short project.";
+    const res = validateRoute(proposal("WF-010"), klass, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "`short` is not a value of this card").toContain("Project duration");
+
+    // Seventh appearance of the anchorless-quantity family, and the only one of
+    // the ten falsifications of this lot that no DEDICATED test caught at first
+    // — the cross-vocabulary snapshot did. A family that has diverged seven
+    // times deserves to be named rather than left to a snapshot: P02 states "PI
+    // of 10 weeks" and "2-week sprints", a cadence and not a project duration.
+    const cadence = validateRoute(proposal("WF-010"), fixtureBrief("P02"), FAKE_SIDECAR, MANIFESTS);
+    const cadenceMissing = cadence.status === "PARAMS_MISSING" ? cadence.missingParams : [];
+    expect(cadenceMissing, "a sprint cadence is not a project duration").toContain(
+      "Project duration",
+    );
+
+    for (const value of ["< 3 months", "3-12 months", "> 12 months"]) {
+      const own = fixtureBrief("P13");
+      own.context = `Credit institution, ${value}.`;
+      const r = validateRoute(proposal("WF-010"), own, FAKE_SIDECAR, MANIFESTS);
+      const m = r.status === "PARAMS_MISSING" ? r.missingParams : [];
+      expect(m, `the card's own value ${value} must be readable`).not.toContain("Project duration");
+    }
+  });
+
+  it("does not let a LOGGED incident state the closeout type", () => {
+    // The card's own `Available data` line offers "logged incidents", so the
+    // evidence list would otherwise answer the closeout type — two specs of the
+    // same manifest answering each other. Found by the card-value pass, not by a
+    // fixture.
+    const brief = fixtureBrief("P10");
+    brief.need = "The project is closed and the client wants the lessons learned.";
+    brief.context = "Logistics group, logged incidents and incident logs available.";
+    brief.constraints = [];
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "an incident LOG is a data source, not a closeout type").toContain(
+      "Closeout type",
+    );
+    expect(missing, "…and it IS available data").not.toContain("Available data");
+  });
+
+  it("counts a declared ABSENCE of HR sensitivities as an answer, and silence as a gap", () => {
+    // Inherited from the WF-007 sibling it is deliberately named after: STEP-03
+    // runs perfectly well on a declared absence, so forcing the operator to
+    // invent a tension would be the defect.
+    const silent = validateRoute(proposal("WF-010"), fixtureBrief("P13"), FAKE_SIDECAR, MANIFESTS);
+    const silentMissing = silent.status === "PARAMS_MISSING" ? silent.missingParams : [];
+    expect(silentMissing).toContain("HR sensitivities");
+
+    const declared = fixtureBrief("P13");
+    declared.context += " No team tensions reported.";
+    const res = validateRoute(proposal("WF-010"), declared, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "a declared absence answers the card").not.toContain("HR sensitivities");
+  });
+
+  it("keeps `Client` out of the audience values, and reads the card's own five", () => {
+    // Every brief of the corpus names a client, so the bare card value is the
+    // one refusal of this line. The label rule still covers the card's own
+    // quick-start form.
+    const bare = fixtureBrief("P13");
+    bare.need = "The client asked for the lessons learned.";
+    bare.context = "Credit institution.";
+    bare.constraints = [];
+    const res = validateRoute(proposal("WF-010"), bare, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "`client` names the client, not the audience").toContain("Report audience");
+
+    const labelled = fixtureBrief("P13");
+    labelled.need = "The lessons learned are needed.";
+    labelled.context = "Credit institution. Report audience: Client.";
+    labelled.constraints = [];
+    const lab = validateRoute(proposal("WF-010"), labelled, FAKE_SIDECAR, MANIFESTS);
+    const labMissing = lab.status === "PARAMS_MISSING" ? lab.missingParams : [];
+    expect(labMissing, "the card's own quick-start form answers it").not.toContain(
+      "Report audience",
+    );
+  });
+});
+
+describe("WF-007 `Engagement location` — a value its card never offered", () => {
+  it("no longer reads `distributed team`, and still reads its own three values", () => {
+    // Removed 2026-08-01, found by the WF-010 analytical hardening: the WF-007
+    // card enumerates exactly [On-site / Remote / Hybrid], so `distributed team`
+    // was a new member on a closed enumeration AND borrowed from the WF-010
+    // card, where `Distribution` is a value. The identical token had already
+    // been removed from WF-009 `Location` for that written reason; this copy
+    // survived. No guard could see it — the cross-vocabulary matrix records such
+    // a cell as legitimate, and the policy table cannot pair `location` with
+    // `engagement_location`.
+    const res = validateRoute(proposal("WF-007"), fixtureBrief("P10"), FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "a distributed team is not an engagement location").toContain(
+      "Engagement location",
+    );
+
+    // Its own brief is untouched: P07 fills through "hybrid on-site engagement".
+    const p07 = validateRoute(proposal("WF-007"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
+    const p07Missing = p07.status === "PARAMS_MISSING" ? p07.missingParams : [];
+    expect(p07Missing).not.toContain("Engagement location");
   });
 });

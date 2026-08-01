@@ -107,7 +107,7 @@ Foreign fills: **32** cell(s) over 16 brief(s).
 
 ## WF-007 — 11 measurable specs × 18 foreign briefs
 
-Foreign fills: **41** cell(s) over 17 brief(s).
+Foreign fills: **40** cell(s) over 17 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
@@ -118,7 +118,7 @@ Foreign fills: **41** cell(s) over 17 brief(s).
 | P06 | WF-006 | Client (name) · Client (sector) |
 | P08 | WF-008 | Client (sector) · D1 stakeholders · Engagement type |
 | P09 | WF-009 | Client (size) · Engagement location |
-| P10 | WF-010 | Client (name) · Client (sector) · D1 stakeholders · Engagement location · Sensitivities |
+| P10 | WF-010 | Client (name) · Client (sector) · D1 stakeholders · Sensitivities |
 | P11 | WF-006 | Client (sector) · Engagement type |
 | P12 | WF-004 | Client (name) · Client (sector) · D1 stakeholders · Engagement type |
 | P13 | WF-010 | Client (name) · D1 stakeholders |
@@ -160,3 +160,15 @@ Foreign fills: **1** cell(s) over 1 brief(s).
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
 | P07 | WF-007 | Location |
+
+## WF-010 — 11 measurable specs × 17 foreign briefs
+
+Foreign fills: **6** cell(s) over 5 brief(s).
+
+| Foreign brief | Written for | Specs it fills |
+|---|---|---|
+| P02 | WF-002 | Closeout type · Report audience |
+| P05 | WF-005 | Report audience |
+| P08 | WF-008 | Report audience |
+| P09 | WF-009 | Team involved (size) |
+| P19 | WF-001 | HR sensitivities |

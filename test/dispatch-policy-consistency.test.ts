@@ -100,13 +100,31 @@ function fieldsRead(spec: ParamSpec): string[] {
  */
 const QUANTITY = /\\d\+|\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/;
 
+/**
+ * Negation guard — a spec belongs to this family when it refuses a value stated
+ * NEGATIVELY ("not an audit", "no monitored sources"), which is a policy call
+ * the cards decide one by one: WF-006 `Competition` counts "sole source" as an
+ * answer, WF-005 `Sources to prioritize` refuses "no monitored sources yet".
+ *
+ * DEFINITION, and the implementation is checked against it rather than against
+ * the syntax it happens to use: the guard must carry a NEGATION WORD. The first
+ * version tested for `(?<!` alone, which was exact only for as long as every
+ * lookbehind in the set happened to be a negation — it was, five times over,
+ * until WF-010 `closeout_type` used one for LEXICAL exclusion ("logged
+ * incidents" is a data source, not a closeout type). That would have been this
+ * marker's first false positive, in the same class as the `one-?pager` reading
+ * removed from `quantity-vocabulary` on WF-007: a table that looks
+ * authoritative is worth less than one that is right.
+ */
+const NEGATION_GUARD = /\(\?<!\\?b?\s*(not|no|without|never)\b/;
+
 function markers(spec: ParamSpec): string[] {
   const src = spec.pattern?.source ?? "";
   const out: string[] = [];
   if (spec.defaultValue !== undefined) out.push("default");
   if (spec.sanctionedUnknown !== undefined) out.push("sanctioned-unknown");
   if (spec.pattern === undefined) out.push("NO DETECTOR");
-  if (src.includes("(?<!")) out.push("negation-guard");
+  if (NEGATION_GUARD.test(src)) out.push("negation-guard");
   if (QUANTITY.test(src)) out.push("quantity-vocabulary");
   if (/\{0,\d+\}/.test(src)) out.push("adjacency-window");
   return out;

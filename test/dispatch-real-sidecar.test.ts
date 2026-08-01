@@ -11,6 +11,7 @@ import { WF006_MANIFEST } from "../src/dispatch/manifests/wf-006.js";
 import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
 import { WF008_MANIFEST } from "../src/dispatch/manifests/wf-008.js";
 import { WF009_MANIFEST } from "../src/dispatch/manifests/wf-009.js";
+import { WF010_MANIFEST } from "../src/dispatch/manifests/wf-010.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 import { HAVE_CATALOG, describeCatalogAbsent } from "./catalog-sentinel.js";
@@ -63,6 +64,7 @@ describe.skipIf(!HAVE_CATALOG)("dispatch against the real sidecar", () => {
     ["WF-007", WF007_MANIFEST],
     ["WF-008", WF008_MANIFEST],
     ["WF-009", WF009_MANIFEST],
+    ["WF-010", WF010_MANIFEST],
   ])("pins the %s manifest to the sidecar's catalog tag (drift = hard fail)", (id, manifest) => {
     const sidecar = loadSidecar(SIDECAR_PATH);
     const asset = sidecar.assets.find((a) => a.id === id && a.type === "workflow");
