@@ -7,6 +7,12 @@
 ---
 
 ## [Unreleased]
+
+_Nothing yet._
+
+---
+
+## [0.10.0] - 2026-08-02 — Dispatch V1: the ten parameter manifests, their end-of-project audit, and the defect class it left open 🔍
 > Model: Claude Opus 5
 
 ### ✨ Added
