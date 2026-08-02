@@ -88,28 +88,46 @@ export function parseRouterOutput(raw: unknown): {
  * the specification already carries.
  *
  * TWO GUARDS, both load-bearing:
- *   - CONJUNCTIONS ARE EXCLUDED BY CONSTRUCTION. The label matched is the spec's
- *     own `card`, qualifier included, so a brief writing the LINE label —
- *     "Client: Acme" — answers none of `Client (name)`, `(sector)`, `(size)`.
- *     It says which company, not which sector or size, and filling all three
- *     halves from one fact is the hollow pass splitting exists to prevent.
+ *   - A CONJUNCTION'S LINE LABEL ANSWERS ITS `(name)` HALF AND NOTHING ELSE.
+ *     "Client: Acme" says WHICH company — that IS the name half, and it is the
+ *     one fact the label designates. Sector, size, geographic footprint, Art. 9
+ *     category are ADDITIONAL facts the label does not state, so they stay
+ *     excluded by construction (their qualifier is still in the matched string).
+ *     Letting one label fill a whole family is the hollow pass that splitting
+ *     conjunctions exists to prevent — see the measurement below.
  *   - THE VALUE MUST BE AFFIRMATIVE. `affirmativeString` rejects the in-band
  *     refusals ("TBD", "to be defined", "unknown", "n/a"), so declaring a label
  *     with nothing behind it is not an answer. A card-sanctioned unknown still
  *     passes, because `sanctionedUnknown` is tested before this.
  */
 function labelDeclared(text: string, card: string): boolean {
-  // No conjunction guard is written here, and that is deliberate: the label
-  // matched is the specification's OWN `card` string, qualifier included
-  // (`Client (name)`), so a brief writing the LINE label — "Client: Acme" —
-  // matches none of the three halves. The exclusion is structural rather than
-  // conditional. A guard was drafted (`if (/\(.*\)$/.test(card)) return false`)
-  // and removed once falsification showed it changed nothing: dropping it turned
-  // no test red, because the case it claimed to stop cannot arise. A dead
-  // alternative reads as a guard being applied — the WF-007 `Sensitivities`
-  // lesson. ⚠️ If this ever matches on a BASE label instead, the guard has to
-  // come back, and the test below is what will say so.
-  const label = card.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // ⚖️ END-OF-PROJECT AUDIT, debt (c) — settled by Guy on 2026-08-02, once and
+  // for the seven manifests that carry a conjunction, never lot by lot.
+  //
+  // The rule previously matched the spec's `card` VERBATIM, qualifier included,
+  // so no conjunction half could ever be served by the label. That exclusion was
+  // deliberate and its cost had never been measured. It was, on the quick-start
+  // form each card teaches the operator: 9 of the 29 conjunction halves present
+  // in those forms came back MISSING although the operator had answered them —
+  // 31%, and SIX of the nine were `(name)` halves. A proper-noun detector cannot
+  // read a name sitting immediately after the card's own label.
+  //
+  // Three options were measured, not argued:
+  //   A, keep the verbatim match  → 9 missing, no hollow pass.
+  //   B, strip any qualifier      → 0 missing, but "Client: Acme" then answers
+  //      3/3 halves on WF-004 and 4/4 on WF-008, and "Data processed: yes"
+  //      answers all three INCLUDING the Art. 9 category. Invisible to the
+  //      corpus — all nineteen briefs are prose, none uses the label form — so
+  //      only the dedicated guard catches it.
+  //   C, strip `(name)` only      → 3 missing, and a bare label answers exactly
+  //      the name: 1/3 on WF-004, 0/3 on "Data processed: yes". CHOSEN.
+  //
+  // C is a line rather than a heuristic: the label DESIGNATES the identity, so
+  // the name half is what it states and every other half is a further fact. The
+  // three residual misses are detector questions, not label ones (`Client
+  // (geographic footprint)`, `Data processed (Art. 9 categories)`, and `Team
+  // involved (remote or on-site)`, whose comma guard was earned against P09).
+  const label = card.replace(/\s*\(name\)\s*$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const declared = new RegExp(`\\b${label}\\s*[:\u2014-]\\s*([^.;\\n]+)`, "i").exec(text);
   return declared !== null && affirmativeString(declared[1]);
 }

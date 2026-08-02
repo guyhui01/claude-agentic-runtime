@@ -1313,11 +1313,20 @@ describe("the card-taught `Label: value` form — a brief may answer by naming t
     }
   });
 
-  it("does NOT let a conjunction's line label answer any of its halves", () => {
+  it("lets a conjunction's line label answer its (name) half and NOTHING else", () => {
     // `Client (name)`, `(sector)` and `(size)` all sit on a line labelled
-    // `Client`, and "Client: Acme Corp" says which company — not which sector or
-    // which size. Accepting the line label would fill three facts from one, the
-    // hollow pass that splitting conjunctions exists to prevent.
+    // `Client`. "Client: Vantage Group" says WHICH company — that is the name
+    // half and the one fact the label designates — while sector and size are
+    // further facts it does not state. Filling a whole family from one label is
+    // the hollow pass that splitting conjunctions exists to prevent.
+    //
+    // ⚠️ THIS TEST WAS RENAMED, and the old name is the lesson. It read "does
+    // NOT let a conjunction's line label answer ANY of its halves" while only
+    // ever asserting on sector and size — it never measured the name half at
+    // all, so its title claimed a policy one third wider than its assertions.
+    // The end-of-project audit (debt (c)) settled the policy the other way for
+    // that third; the two assertions below are unchanged and still guard the
+    // part that matters, and the third is now stated instead of assumed.
     const brief = fixtureBrief("P07");
     brief.need = "Engagement signed; the consultant starts Monday on site.";
     brief.context = "Client: Vantage Group. Hybrid on-site engagement, medium duration.";
@@ -1326,6 +1335,7 @@ describe("the card-taught `Label: value` form — a brief may answer by naming t
     if (res.status !== "PARAMS_MISSING") return;
     expect(res.missingParams).toContain("Client (sector)");
     expect(res.missingParams).toContain("Client (size)");
+    expect(res.missingParams, "the label designates the identity").not.toContain("Client (name)");
   });
 
   it("leaves the card-sanctioned unknown working, which the sentinel list would reject", () => {
@@ -1646,7 +1656,7 @@ describe("WF-010 manifest — the tenth, two home briefs, and the live seed as a
     ]);
   });
 
-  it("RECORDS what the card's own quick-start form does — 10 of 12, and the two misses share one cause", () => {
+  it("RECORDS what the card's own quick-start form does — 11 of 12 since debt (c) was settled", () => {
     // A SECOND INDEPENDENT INPUT, and a probe direction never run in this
     // repository: the card teaches the operator a form (`- Label: value`), so
     // what does that form produce when it is filled and sent through the check?
@@ -1673,30 +1683,22 @@ describe("WF-010 manifest — the tenth, two home briefs, and the live seed as a
     const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
     const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
 
-    // ⚠️ THE TWO MISSES HAVE ONE CAUSE, and it is structural rather than a
-    // detector defect: the label rule matches the SPEC's `card` string,
-    // qualifier included, so a conjunction's halves are never served by the
-    // card's own BASE label ("Team involved:" answers none of its three). That
-    // exclusion was settled deliberately on 2026-07-31 — a guard was written for
-    // it and removed as a no-op, because the exclusion falls out of the string.
-    // What had never been MEASURED is its cost on the form the card teaches:
-    // the halves fall back to their prose detectors, and here two of five are
-    // not read. `Team involved (remote or on-site)` refuses "9 people,
-    // distributed, hybrid" through the comma guard earned against P09, and
-    // `Project / Incident (name)` does not read "Atlas migration" because only
-    // this card's own two nouns count — the same accepted syntactic miss as
-    // WF-004 `client_name`, in the safe direction, with the operator told
-    // exactly which half to restate.
+    // ⚖️ THIS ASSERTION MOVED FROM TWO MISSES TO ONE, and the audit is why.
+    // It used to record that a conjunction's halves are NEVER served by the
+    // card's own base label, so both `Project / Incident (name)` and `Team
+    // involved (remote or on-site)` fell back to prose detectors and neither was
+    // read. That exclusion was deliberate since 2026-07-31 but its cost had
+    // never been measured; measured across the seven manifests carrying a
+    // conjunction, it refused 9 of the 29 halves the quick-start forms answer,
+    // six of them `(name)` halves. Debt (c) settled it: the base label now
+    // answers the `(name)` half and only that one, so "Project / Incident: Atlas
+    // migration" is read here.
     //
-    // ⛔ Do NOT "fix" this by widening either detector: `migration` was removed
-    // on measurement (it read P03's "before rollout") and dropping the comma
-    // guard re-admits P09. The systemic point — conjunctions versus the label
-    // rule, across the six manifests that carry one — belongs to the
-    // end-of-project audit, not to a patch here.
-    expect(missing.sort()).toEqual([
-      "Project / Incident (name)",
-      "Team involved (remote or on-site)",
-    ]);
+    // THE REMAINING MISS IS UNCHANGED AND CORRECT. `Team involved (remote or
+    // on-site)` refuses "9 people, distributed, hybrid" through the comma guard
+    // earned against P09 — a detector question, not a label one. ⛔ Do NOT
+    // "fix" it by dropping that guard: doing so re-admits P09.
+    expect(missing.sort()).toEqual(["Team involved (remote or on-site)"]);
   });
 
   it("reads an agile team count as a SIZE — the half of debt (a) the card licenses", () => {
