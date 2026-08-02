@@ -1699,6 +1699,66 @@ describe("WF-010 manifest — the tenth, two home briefs, and the live seed as a
     ]);
   });
 
+  it("reads an agile team count as a SIZE — the half of debt (a) the card licenses", () => {
+    // END-OF-PROJECT AUDIT, debt (a): WF-001 `team_size` and this one carry the
+    // same internal name and were measured DISJOINT — WF-001 reads `squads` and
+    // not "team of eight", this one the reverse. The entry called it a coverage
+    // gap "on both sides"; re-measured at the card, IT IS ONE-SIDED, and the
+    // cards are what break the tie:
+    //
+    //   WF-001 `Team size : [Solo / 1 squad / Several SAFe teams]` is a CLOSED
+    //   enumeration. "team of eight" is not one of its values, so reading it
+    //   would invent a new member — the defect class corrected on WF-007
+    //   (`onboarding`) and WF-009 (`portage`). WF-001 is therefore NOT widened,
+    //   and the probe confirms the direction: widening it buys a foreign cell on
+    //   P09 and moves no verdict of its own.
+    //
+    //   This card's `Team involved : [Size / Distribution / Remote or on-site]`
+    //   enumerates NOTHING — `Size` is an open fact, so "3 squads" IS a size and
+    //   refusing it was the real gap. Invisible to the corpus (P10 states a
+    //   distribution, P13 no team at all, so both are correctly MISSING either
+    //   way); visible only through the form the card teaches, which is why it is
+    //   asserted here and not on a fixture.
+    //
+    // A COUNT IS REQUIRED. Bare `squads` is what WF-001 reads, because "1 squad"
+    // is literally one of its card values; on THIS line a bare squad states no
+    // size. Measured cost of the branch: foreign cells 6 → 7, the single new one
+    // being P02 ← "3 squads" — a genuine team-size statement about another
+    // card's team, the same recorded-crossing class already assigned to P09
+    // ("team of eight"), not a false fill.
+    const brief = {
+      need: "Post-mortem requested after the closeout.",
+      domain: "Management & Consulting",
+      expectedDeliverable: "Lessons-learned report and improvement plan",
+      constraints: [],
+      context: [
+        "Project / Incident: Atlas project, from March 2024 to January 2025",
+        "Closeout type: Partial failure",
+        "Project duration: 3-12 months",
+        "Team involved: 3 squads, distributed, on-site",
+        "Client stakes: Deadline",
+        "Available data: KPIs, metrics, meeting minutes, logged incidents",
+        "Report audience: Steering committee",
+        "Expected format: Detailed report",
+        "HR sensitivities: Team tensions to manage",
+      ].join(". "),
+      submittedBy: "QA Manager",
+    };
+    const res = validateRoute(proposal("WF-010"), brief, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "`3 squads` states a team size").not.toContain("Team involved (size)");
+
+    // The same string WITHOUT a count must stay missing, or the branch is
+    // reading the agile noun rather than the size it qualifies.
+    const uncounted = {
+      ...brief,
+      context: brief.context.replace("3 squads", "several squads"),
+    };
+    const res2 = validateRoute(proposal("WF-010"), uncounted, FAKE_SIDECAR, MANIFESTS);
+    const missing2 = res2.status === "PARAMS_MISSING" ? res2.missingParams : [];
+    expect(missing2, "a squad without a count states no size").toContain("Team involved (size)");
+  });
+
   it("reads a project NAME only where one is designated — not from a denial of one", () => {
     // The first draft accepted any qualifier before a project noun and filled on
     // P15, "this is ongoing operations staffing, NOT A bounded project" — a

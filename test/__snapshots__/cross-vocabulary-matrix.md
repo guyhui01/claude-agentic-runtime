@@ -163,11 +163,11 @@ Foreign fills: **1** cell(s) over 1 brief(s).
 
 ## WF-010 — 11 measurable specs × 17 foreign briefs
 
-Foreign fills: **6** cell(s) over 5 brief(s).
+Foreign fills: **7** cell(s) over 5 brief(s).
 
 | Foreign brief | Written for | Specs it fills |
 |---|---|---|
-| P02 | WF-002 | Closeout type · Report audience |
+| P02 | WF-002 | Closeout type · Report audience · Team involved (size) |
 | P05 | WF-005 | Report audience |
 | P08 | WF-008 | Report audience |
 | P09 | WF-009 | Team involved (size) |

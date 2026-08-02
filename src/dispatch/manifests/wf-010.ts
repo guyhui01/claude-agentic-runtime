@@ -206,19 +206,34 @@ export const WF010_MANIFEST: ParamManifest = {
       // name on purpose, so the two readings of the same card fact are put side
       // by side — AND THE TABLE WILL SHOW THEM DISJOINT. Measured, in both
       // directions: WF-001 reads `squads?` / `N developers` and cannot read
-      // "team of eight"; this one reads "team of eight" and "8 people" and does
-      // not read `squads`. Neither is corrected here, and the reason is that
-      // the divergence is a COVERAGE gap on both sides — the safe direction —
-      // and not a false fill: widening either changes no verdict on any brief
-      // it owns, while adding `squads` here would buy a foreign cell on P02 for
-      // nothing. Consigned to the end-of-project audit rather than fixed as a
-      // side effect of this lot.
+      // "team of eight"; this one reads "team of eight" and "8 people".
+      //
+      // ✅ SETTLED BY THE END-OF-PROJECT AUDIT (debt (a)). The entry above
+      // called the gap two-sided and symmetric. IT IS NEITHER, and the cards
+      // are what break the tie — re-read at the pin, not inferred:
+      //   · WF-001 `Team size : [Solo / 1 squad / Several SAFe teams]` is a
+      //     CLOSED enumeration. "team of eight" is not one of its values, so
+      //     reading it would invent a new member — the class corrected on
+      //     WF-007 (`onboarding`) and WF-009 (`portage`). Left untouched, and
+      //     the probe agrees: widening it buys a foreign cell on P09 and moves
+      //     no verdict of its own.
+      //   · THIS line, `Team involved : [Size / Distribution / Remote or
+      //     on-site]`, enumerates nothing. `Size` is an open fact, so "3 squads"
+      //     IS a size and refusing it was the real gap — one-sided, here.
+      // So the agile-count branch below was ADDED, with a count required (bare
+      // `squads` is what WF-001 reads, because "1 squad" is literally one of its
+      // card values; on this line a bare squad states no size). Cost measured:
+      // foreign cells 6 → 7, the single new one P02 ← "3 squads", a genuine
+      // team-size statement about another card's team — the recorded-crossing
+      // class below, not a false fill. Invisible to the corpus in both
+      // directions (P10 states a distribution, P13 no team), so the gain is
+      // asserted on the form the CARD teaches, in dispatch-validate-route.
       //
       // Fills on P09 ("platform team of eight"), a foreign brief, and on no own
       // brief: a genuine team-size statement about another card's team. That is
       // the recorded-crossing class, not a defect.
       pattern:
-        /\bteams?\b[^,.]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.]{0,12}\b\d/i,
+        /\bteams?\b[^,.]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.]{0,12}\b\d|\b\d+\s+(squads?|scrum teams?|safe teams?)\b/i,
     },
     {
       name: "team_distribution",

@@ -40,6 +40,18 @@ export const WF001_MANIFEST: ParamManifest = {
       card: "Team size",
       required: true,
       mapping: (b) => b.context,
+      // ⛔ DELIBERATELY NOT WIDENED to the WF-010 vocabulary ("team of eight",
+      // "8 people"), settled by the end-of-project audit (debt (a)) after the
+      // two specs were measured disjoint. This card line is a CLOSED
+      // enumeration — [Solo / 1 squad / Several SAFe teams] — so a headcount is
+      // not one of its values and reading it would invent a new member, the
+      // class corrected on WF-007 (`onboarding`) and WF-009 (`portage`). The
+      // probe agrees rather than merely permitting: widening buys a foreign
+      // cell (P09 ← "team of eight") and moves no verdict of this card's own.
+      // The reverse direction is NOT symmetric and was fixed there — WF-010's
+      // `Team involved [Size / …]` enumerates nothing, so "3 squads" is a size
+      // for it. `N developers|engineers|teams` stays here: it is the granularity
+      // of the listed values, not a new member.
       pattern: /\b(solo|squads?|scrum teams?|safe teams?|\d+\s+(developers?|engineers?|teams?))\b/i,
     },
     {

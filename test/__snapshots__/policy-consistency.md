@@ -197,5 +197,5 @@ itself. Read them against the manifests when they move.
 
 | Manifest | Card label | Vocabulary unique to this copy |
 |---|---|---|
-| WF-001 | Team size | `safe teams` `scrum teams` `solo` `squads` |
+| WF-001 | Team size | `solo` |
 | WF-010 | Team involved (size) | `eight` `five` `four` `nine` `people` `person` `seven` `six` `team size` `ten` `three` |
