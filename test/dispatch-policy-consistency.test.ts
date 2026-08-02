@@ -174,6 +174,14 @@ const ROLE_ALIASES: Record<string, string> = {
   expected_format: "deliverable_format",
   priority_stakes: "stakes",
   identified_stakes: "stakes",
+  // ⚠️ REDUNDANT BY CONSTRUCTION and kept on purpose, which is worth stating so
+  // nobody "discovers" it later and deletes it as dead. The prefix strip below
+  // already turns `client_stakes` into `stakes`, so this entry changes nothing
+  // TODAY — measured, not assumed. It is not a dead alternative in the sense the
+  // repository bans (a regex branch that can never fire): it PINS the role name
+  // independently of the strip rule, so narrowing `^(client|prospect|infra)_`
+  // later cannot silently split this trio back into a pair. That is a named
+  // future failure it prevents, which is the test a dead alternative fails.
   client_stakes: "stakes",
 };
 
