@@ -127,6 +127,22 @@ function labelDeclared(text: string, card: string): boolean {
   // three residual misses are detector questions, not label ones (`Client
   // (geographic footprint)`, `Data processed (Art. 9 categories)`, and `Team
   // involved (remote or on-site)`, whose comma guard was earned against P09).
+  //
+  // ⚠️ THE OPERATIVE CONDITION IS NARROWER THAN "DESIGNATES THE IDENTITY", and
+  // the analytical-hardening pass of 2026-08-02 is what forced it to be written.
+  // Stated that way, the principle is wider than this code: `Role sought
+  // [Title / Level]` (WF-009) would qualify, since a title is what that label
+  // designates — yet its half is `(title)` and stays excluded. Measured, and the
+  // measurement is the reason: "Role sought: senior" fills `role_level` and NOT
+  // `role_title`, so a bare answer to THAT label is ambiguous between its two
+  // halves. "Client: Acme Corp" cannot be a sector or a size.
+  //
+  // So the condition is not "the label designates this half" but **no sibling
+  // half can claim the same answer**. It holds for all six `(name)` halves
+  // (Client, Prospect, AI system audited, Project / Incident) and fails for
+  // `Role sought`, which is why the rule keys on `(name)` and must keep doing
+  // so. Serving `(title)` would re-open the hollow pass on the one card where a
+  // bare label answer is genuinely two-way.
   const label = card.replace(/\s*\(name\)\s*$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   // SEPARATOR: THE COLON ONLY \u2014 the exact form the card teaches (`- Label: value`).
   // The class used to be `[:\u2014-]`, and the second-pass audit of 2026-08-02 measured

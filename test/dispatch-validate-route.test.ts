@@ -1329,6 +1329,46 @@ describe("the card-taught `Label: value` form — a brief may answer by naming t
     expect(missing3, "the colon form the card teaches still answers").not.toContain("Client (name)");
   });
 
+  it("does NOT serve `Role sought (title)` — a sibling half claims the same answer", () => {
+    // ANALYTICAL-HARDENING PASS, 2026-08-02, and this test exists because the
+    // rule was RIGHT while the principle written beside it was too wide.
+    //
+    // That principle read "the label designates the identity". By it, `Role
+    // sought [Title / Level]` qualifies — a title is exactly what the label
+    // designates — yet the rule keys on `(name)` and leaves `(title)` out. That
+    // looked like an accident of naming until it was measured, and the
+    // measurement inverts it into a reason: **"Role sought: senior" fills
+    // `role_level` and not `role_title`**, so a bare answer to that label is
+    // genuinely two-way, whereas "Client: Acme Corp" can be neither a sector nor
+    // a size.
+    //
+    // The operative condition is therefore not "the label designates this half"
+    // but NO SIBLING HALF CAN CLAIM THE SAME ANSWER — true of all six `(name)`
+    // halves, false here. Serving `(title)` would re-open the hollow pass on the
+    // one card where the ambiguity is real.
+    const level = fixtureBrief("P09");
+    level.need = "Recruitment request received.";
+    level.context = "Role sought: senior";
+    const res = validateRoute(proposal("WF-009"), level, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "a level answered under the line label is not a title").toContain(
+      "Role sought (title)",
+    );
+
+    // The DISCRIMINATING half of the pair: the same answer does reach the level,
+    // so the case above measures the label rule and not an inert detector.
+    //
+    // ⚠️ HOW it reaches it, stated because the mechanism makes the finding
+    // stronger and hiding it would make the measurement look cleaner than it is:
+    // `role_level` anchors a grade word beside a role noun, and the noun it
+    // matches here is `role` — taken from the LINE LABEL itself. So the level is
+    // read out of "Role sought: senior" without any help from the label rule.
+    // Serving `(title)` on top of that would let one answer stating only a grade
+    // fill BOTH halves, which is precisely the hollow pass conjunction splitting
+    // exists to prevent. Falsified: breaking that branch turns this case red.
+    expect(missing, "…and that same answer IS the level").not.toContain("Role sought (level)");
+  });
+
   it("reads a bare card value when the brief names the parameter", () => {
     // `scoping` alone is refused on purpose — "D5 scoping deliverables" names an
     // output, not the engagement bought. The label removes the ambiguity.
