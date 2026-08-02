@@ -58,6 +58,19 @@
 >
 > What does hold from the first annotation, and is the reason to keep running the comparison: it caught a real defect in the code. The first `ART name` detector read *"the ART at Helvetia Rail"* as unnamed and would have asked the operator for a name the brief already carried. This table read it as filled, and was right — the field asks for an identifier of the train, in either word order.
 
+> **Annotation 2026-08-02 — the end-of-project audit (volet 3) ran this comparison against all ten shipped manifests, aggregated TO THE CARD LINE. This annotation records the result; the table above is not edited.**
+>
+> Method, and why it is at the line: §2 has only ever known card LINES, while the manifests carry 108 param specs, 31 of them halves of a conjunction. Comparing a must-ask column to a set of FACTS produces arithmetic rather than judgements, so each spec is aggregated to its line first (a line is missing when at least one of its facts is). **The join is measured total: 108 specs of 108 join to a line of their own card at the pinned tag `v4.2.0`, zero orphan** — which also closes the residual concern of volet 4, since a line renamed or dropped under the pin would fail that join.
+>
+> Result over the fifteen routed prompts: **27 agreements, 29 lines asked by §2 alone, 35 asked by the manifests alone** (26 distinct card lines). As a control that the method is sound before any of it was read, the P08 row reproduces exactly the six real divergences measured independently on 2026-07-31.
+>
+> **The two directions are not symmetric, and the legend above is what explains them.**
+>
+> - **§2-only (29)** is the documented class and needs nothing: §2 was computed against the coverage-matrix SKETCHES, the manifest check runs on the qualified FIXTURE briefs, which are richer. §2 asking more is the expected direction.
+> - **Manifest-only (35)** is the direction worth reading, and it is dominated by one structural cause that is stated here ONCE rather than restated on twenty specs: **`F` means "present *or directly derivable*"**. Deriving a value is exactly what a deterministic detector must never do — a detector that infers a sector from a company name is the false "filled" this whole layer is built to refuse. So every line §2 classed F-by-derivation shows up as a manifest-only divergence, correctly, and it is not a defect on either side.
+>
+> **One divergence survives that reading, and it is the only unadjudicated finding of the volet.** The legend classes `D` as a card-sanctioned unknown *or an operator-profile default*, naming three of the latter verbatim — "deliverables language, tone, proposal format". Two are honoured by the manifests (WF-001/002 `deliverables_language` carries a default; WF-005 `Tone` fills). The third, **WF-006 `Proposal format`, is `required` with no default, and it stays that way**: the argument that settled WF-005 applies unchanged — the brief carries a CLIENT, and how the PROSPECT wants to receive a proposal is not a constant of the operator's practice. The card agrees, [PDF / Oral presentation / Demo / Written Q&A] being a buyer-side choice, and an RFP mandating an oral defence is not answered by defaulting to a PDF. The reasoning is recorded on the spec itself.
+
 ## 3. Findings
 
 1. **No routed prompt fills its card from the raw ask alone (15/15 have gaps except none —

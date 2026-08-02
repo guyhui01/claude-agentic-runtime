@@ -297,6 +297,23 @@ export const WF006_MANIFEST: ParamManifest = {
       card: "Proposal format",
       required: true,
       mapping: presalesWithDeliverable,
+      // ⚖️ DIVERGES FROM §2 OF THE DRY RUN, DELIBERATELY — the only unadjudicated
+      // divergence the end-of-project audit (volet 3) found across the fifteen
+      // routed prompts, and it is settled AT THE CARD as RULE 1 requires rather
+      // than by conforming to the table.
+      //
+      // §2's legend names three operator-profile defaults verbatim: "deliverables
+      // language, tone, proposal format". The first two are honoured here —
+      // WF-001/002 `deliverables_language` carries a default, and WF-005 `Tone`
+      // fills. This third one is REFUSED, on the argument that already settled
+      // WF-005: the brief carries a CLIENT, and a proposal format is how the
+      // PROSPECT wants to receive the proposal, not a constant of the operator's
+      // practice. Its own card says so — [PDF / Oral presentation / Demo /
+      // Written Q&A] is a buyer-side choice, and an RFP that mandates an oral
+      // defence is not answered by defaulting to a PDF. A `defaultValue` here
+      // would mean "this can never be missing", which would ASSERT the
+      // prospect's preference instead of asking for it.
+      //
       // Card enumeration: PDF / Oral presentation / Demo / Written Q&A. Two
       // tokens are refused although they look like matches:
       //   - a bare `written`. This spec reads `expectedDeliverable`, and the
