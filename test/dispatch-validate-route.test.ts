@@ -1284,6 +1284,51 @@ describe("the card-taught `Label: value` form — a brief may answer by naming t
   // re-asserted here: the eight per-manifest gap tests already pin every
   // fixture's PARAMS_MISSING set, and measuring showed zero of them moves.
 
+  it("declares on a COLON only — a hyphen compound and an apposition are not answers", () => {
+    // SECOND-PASS AUDIT, 2026-08-02. The separator class was `[:—-]`, and the two
+    // dashes were measured on ordinary prose: they buy nothing and cost false
+    // FILLS, the unsafe direction.
+    //
+    // ⚠️ THE BARE HYPHEN IS THE SERIOUS ONE, because English compounds the very
+    // nouns these labels use. "a client-facing chatbot" parses as
+    // `Client` + `-` + `facing…` and answered WF-004 `Client (name)`; the brief
+    // names no client at all. And WF-009 `Location` — never a conjunction half,
+    // never touched by debt (c) — filled on "a location-based recommendation
+    // engine", which dates the defect BEFORE that decision. Debt (c) did not
+    // create the hole, it widened the exposure by making `Client` and `Prospect`
+    // active bare labels.
+    //
+    // The em-dash reads an apposition as a declaration: "the prospect — a
+    // regional insurer —" filled `Prospect (name)` while naming nobody.
+    //
+    // Invisible to the whole corpus: the nineteen briefs place no card label
+    // before a dash, so narrowing moved ZERO fixture verdict and both snapshots
+    // stayed byte-identical (measured, not predicted). Every quick-start form the
+    // catalog teaches writes the colon, so nothing legitimate is lost.
+    const compound = fixtureBrief("P07");
+    compound.need = "A client-facing chatbot rollout is planned for the retail branch.";
+    compound.context = "A client-facing chatbot rollout is planned for the retail branch.";
+    const res = validateRoute(proposal("WF-004"), compound, FAKE_SIDECAR, MANIFESTS);
+    const missing = res.status === "PARAMS_MISSING" ? res.missingParams : [];
+    expect(missing, "`client-facing` is a compound, not a declaration").toContain("Client (name)");
+
+    const apposition = fixtureBrief("P11");
+    apposition.need = "The prospect — a regional insurer — sent a formal RFP to answer.";
+    apposition.context = "The prospect — a regional insurer — sent a formal RFP to answer.";
+    const res2 = validateRoute(proposal("WF-006"), apposition, FAKE_SIDECAR, MANIFESTS);
+    const missing2 = res2.status === "PARAMS_MISSING" ? res2.missingParams : [];
+    expect(missing2, "an apposition names no one").toContain("Prospect (name)");
+
+    // CONTROL — the form the card actually teaches must still be read, or this
+    // guard has simply disabled the rule it is meant to narrow.
+    const taught = fixtureBrief("P07");
+    taught.need = "Audit engagement, executive readout expected.";
+    taught.context = "Client: Marlowe. Audit engagement, executive readout expected.";
+    const res3 = validateRoute(proposal("WF-004"), taught, FAKE_SIDECAR, MANIFESTS);
+    const missing3 = res3.status === "PARAMS_MISSING" ? res3.missingParams : [];
+    expect(missing3, "the colon form the card teaches still answers").not.toContain("Client (name)");
+  });
+
   it("reads a bare card value when the brief names the parameter", () => {
     // `scoping` alone is refused on purpose — "D5 scoping deliverables" names an
     // output, not the engagement bought. The label removes the ambiguity.

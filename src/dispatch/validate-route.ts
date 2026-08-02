@@ -128,7 +128,21 @@ function labelDeclared(text: string, card: string): boolean {
   // (geographic footprint)`, `Data processed (Art. 9 categories)`, and `Team
   // involved (remote or on-site)`, whose comma guard was earned against P09).
   const label = card.replace(/\s*\(name\)\s*$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const declared = new RegExp(`\\b${label}\\s*[:\u2014-]\\s*([^.;\\n]+)`, "i").exec(text);
+  // SEPARATOR: THE COLON ONLY \u2014 the exact form the card teaches (`- Label: value`).
+  // The class used to be `[:\u2014-]`, and the second-pass audit of 2026-08-02 measured
+  // what the two dashes buy on ordinary prose: nothing but false fills, the unsafe
+  // direction. The bare hyphen parses a compound word as a declaration \u2014 measured
+  // on the real specs, "a client-facing chatbot" filled `client_name` as
+  // `Client: facing\u2026` and "location-based recommendations" filled WF-009
+  // `location`, the latter proving the defect predates debt (c) (that label was
+  // never a conjunction half). The em-dash reads an apposition as an answer \u2014
+  // "the prospect \u2014 a regional insurer \u2014" filled `prospect_name` while naming no
+  // one. Debt (c) did not create the hole; it widened the exposure by making the
+  // highest-frequency English compounds (`client-`, `prospect-`) active labels.
+  // Invisible to every fixture: the nineteen briefs are prose and place no card
+  // label before a dash, so narrowing moves zero corpus verdict (measured, both
+  // snapshots byte-identical) and every quick-start probe writes the colon.
+  const declared = new RegExp(`\\b${label}\\s*:\\s*([^.;\\n]+)`, "i").exec(text);
   return declared !== null && affirmativeString(declared[1]);
 }
 
