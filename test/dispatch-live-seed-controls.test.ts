@@ -249,23 +249,25 @@ describe("live-seed controls — an independent source, not a verdict", () => {
     expect(render()).toMatchFileSnapshot("./__snapshots__/live-seed-controls.md");
   });
 
-  it("GUARDS THE GUARD — every seed string is still present in its harness", () => {
+  it("GUARDS THE GUARD — every seed string is still in its harness, WHOLE", () => {
     // The values above are COPIES. The day a harness seed changes and this copy
     // does not, the control silently stops being independent and starts measuring
     // a fiction. This is the failure mode of a copied corpus, and it is the only
     // hard assertion in the file.
     //
-    // ⚠️ WHAT THIS GUARD DOES NOT MEASURE, written down because it was paid for.
-    // It checks that each stored string is PRESENT in the harness, never that it
-    // is the WHOLE value — so a TRUNCATED copy passes silently. That happened
-    // while this file was being written: three seeds were shortened moving from a
-    // scratch probe into the versioned instrument, one of them cut mid-sentence,
-    // and WF-008 read 8/19 instead of 10/19 with no assertion objecting. It was
-    // caught by comparing against the scratch measurement, which is not a
-    // mechanism anyone gets later. Closing it properly means extracting the seed
-    // from the harness rather than copying it — a parser this file deliberately
-    // does not build. Until then: WHEN EDITING A SEED, RE-READ IT WHOLE FROM ITS
-    // HARNESS, and treat any movement in the snapshot as suspect until explained.
+    // ⚠️ THE VALUE MUST BE WHOLE, NOT MERELY PRESENT — and that distinction was
+    // paid for in this very file. A first version asserted presence alone, so a
+    // TRUNCATED copy passed silently: moving three seeds from a scratch probe
+    // into this instrument shortened them, one cut mid-sentence, and WF-008 read
+    // 8/19 instead of 10/19 with nothing objecting. It surfaced only by comparing
+    // against the scratch measurement, which is not a mechanism a later reader
+    // gets.
+    //
+    // The fix is one character, and the reasoning that first refused it ("this
+    // would need a parser") was a rationalisation. Once the concatenation seams
+    // are closed above, a COMPLETE literal is followed by its closing quote and a
+    // truncated prefix is followed by more text — so appending `"` to the needle
+    // turns presence into completeness with no parsing at all.
     for (const [id, s] of Object.entries(SEEDS)) {
       const raw = readFileSync(fileURLToPath(new URL(`./${s.harness}`, import.meta.url)), "utf8");
       // ⚠️ THE SEAMS MUST BE CLOSED FIRST, and this guard found that out by
@@ -277,9 +279,10 @@ describe("live-seed controls — an independent source, not a verdict", () => {
       // transformation: it reconstructs exactly what the harness passes.
       const harness = raw.replace(/"\s*\+\s*"/g, "");
       for (const value of [...s.need, ...s.constraints, ...s.context]) {
-        expect(harness, `${id}: the live seed no longer carries ${JSON.stringify(value)}`).toContain(
-          value,
-        );
+        expect(
+          harness,
+          `${id}: the live seed no longer carries ${JSON.stringify(value)} WHOLE (changed, or copied truncated)`,
+        ).toContain(`${value}"`);
       }
     }
   });
