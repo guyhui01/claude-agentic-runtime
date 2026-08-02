@@ -129,6 +129,14 @@ itself. Read them against the manifests when they move.
 | WF-004 | Constraints | — |
 | WF-006 | Constraints | `air` `cloud` `cloud de confiance` `data host` `data residency` `europe` `france` `gapped` `hds` `health` `hosted` `hosted in` `hosting` `ise` `ises` `only` `prem` `private cloud` `public` `region` `secnumcloud` `sovereign cloud` `the` |
 
+### role `deliverable_format` — WF-005, WF-006, WF-010
+
+| Manifest | Card label | Vocabulary unique to this copy |
+|---|---|---|
+| WF-005 | Target format | `digest` `flash` `internal note` `linkedin posts` `monthly` `strategic note` `synthesis` `weekly` |
+| WF-006 | Proposal format | `board` `comex` `committee` `defence` `defense` `demo` `document` `expected` `jury` `live` `nstration` `on-site` `oral` `panel` `pdf` `pitch` `pitch deck` `planned` `presentation` `presentation to the` `q&a` `requested` `required` `responses` `session` `slide deck` `written q&a` |
+| WF-010 | Expected format | — |
+
 ### role `deliverables_language` — WF-001, WF-002
 
 | Manifest | Card label | Vocabulary unique to this copy |
@@ -192,6 +200,14 @@ itself. Read them against the manifests when they move.
 |---|---|---|
 | WF-004 | Stakeholders | `business units` `readout` `sponsor` |
 | WF-007 | D1 stakeholders | `direct` `line` `managers` `reporting` |
+
+### role `stakes` — WF-004, WF-007, WF-010
+
+| Manifest | Card label | Vocabulary unique to this copy |
+|---|---|---|
+| WF-004 | Priority stakes | `ai act` `attrition` `competitiv` `compliance` `cost savings` `efficienc` `gap` `gdpr` `market share` `productivity` `regulator` `return on investment` `roi` `skills` `talent` `upskilling` |
+| WF-007 | Identified stakes | `ational` `business` `challenges` `drivers` `organi` `political` `risks` `stakes` `technical` |
+| WF-010 | Client stakes | `behind schedule` `budget` `changes` `cost` `creep` `days` `deadlines` `defects` `drift` `gaps` `late` `missed` `months` `out of scope` `over budget` `overran` `overrun` `overruns` `problems` `qualit` `schedule` `scope` `slipp` `the` `weeks` |
 
 ### role `team_size` — WF-001, WF-010
 

@@ -289,13 +289,25 @@ export const WF007_MANIFEST: ParamManifest = {
       card: "Identified stakes",
       required: true,
       mapping: engagement,
-      // DELIBERATELY NOT PAIRED with WF-004 `priority_stakes`, and the different
-      // name is the statement. That card asks WHICH business stakes are the
-      // priority (Productivity / Compliance / ROI / Competitiveness / HR); this
-      // one asks the NATURE of the stakes (Business / Technical / Organizational
-      // / Political), where "Business" is a value rather than the frame. Two
-      // different questions under one English word, so a shared detector would
-      // be wrong for both.
+      // DIVERGES from WF-004 `priority_stakes` and WF-010 `client_stakes`, and
+      // the divergence is correct: that card asks WHICH business stakes are the
+      // priority (Productivity / Compliance / ROI / Competitiveness / HR), WF-010
+      // which project stake was hit (Budget overrun / Deadline / Quality /
+      // Scope), and this one the NATURE of the stakes (Business / Technical /
+      // Organizational / Political), where "Business" is a value rather than the
+      // frame. Three questions under one English word, so a shared detector
+      // would be wrong for all three.
+      //
+      // ⚠️ THIS COMMENT IS NOW THE CARRIER OF THAT DECISION. It previously read
+      // "deliberately NOT PAIRED, and the different name is the statement" —
+      // i.e. the record was the ABSENCE of a row in the policy table, since that
+      // table pairs by name. The end-of-project audit (debt (b)) reversed it:
+      // recording a decision as something invisible means nobody re-examines it,
+      // which is the exact blind spot the table exists to close and which its own
+      // header admits. The three are now aliased onto one role and DISPLAYED
+      // side by side with disjoint vocabularies. Reading that row as a defect to
+      // "harmonise" is the mistake — the card enumerations are disjoint, so the
+      // detectors must be. Nothing about the pairing shares a detector.
       //
       // Every value is an adjective that qualifies almost anything, so none
       // counts bare — the stake vocabulary must sit beside it.

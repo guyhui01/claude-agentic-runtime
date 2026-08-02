@@ -136,8 +136,46 @@ function markers(spec: ParamSpec): string[] {
  * the same fact under two card vocabularies.
  */
 function role(name: string): string {
-  return name.replace(/^(client|prospect|infra)_/, "");
+  return ROLE_ALIASES[name] ?? name.replace(/^(client|prospect|infra)_/, "");
 }
+
+/**
+ * Specs that carry the SAME role under names sharing no strippable prefix.
+ *
+ * END-OF-PROJECT AUDIT, debt (b). The prefix strip above pairs `client_x` with
+ * `prospect_x`, and nothing else — so six specs that plainly play one role each
+ * sat in the table as six singletons, and section 3 skips singletons. The table
+ * cannot see a divergence it cannot pair, which its own header says, and that
+ * blind spot is what this map closes.
+ *
+ * ⛔ NOT solved by a broader strip rule, and this was the first thing tried.
+ * Stripping any leading qualifier collapses `team_size` onto `client_size` —
+ * a team headcount and a company size are different facts — so the table would
+ * start reporting a divergence that is not one. The file's own history says a
+ * table that raises false divergences gets ignored, which is worse than no
+ * table. Pairing is therefore a JUDGEMENT, listed one spec at a time and
+ * defended here, never inferred from the shape of a name.
+ *
+ * Both groups are the same question asked by three cards with three different
+ * enumerations — which is precisely the case the table exists to expose, since
+ * differing card values are a legitimate reason to diverge and an illegitimate
+ * one is indistinguishable until the two are put side by side:
+ *   · deliverable_format — "in what shape is the deliverable expected":
+ *     WF-005 [Weekly flash / Monthly synthesis / LinkedIn post / Strategic
+ *     note], WF-006 [PDF / Oral presentation / Demo / Written Q&A], WF-010
+ *     [Detailed report / 1-page summary / Presentation].
+ *   · stakes — "what is at stake": WF-004 [Productivity / Compliance / ROI /
+ *     Competitiveness / HR], WF-007 [Business / Technical / Organizational /
+ *     Political], WF-010 [Budget overrun / Deadline / Quality / Scope].
+ */
+const ROLE_ALIASES: Record<string, string> = {
+  target_format: "deliverable_format",
+  proposal_format: "deliverable_format",
+  expected_format: "deliverable_format",
+  priority_stakes: "stakes",
+  identified_stakes: "stakes",
+  client_stakes: "stakes",
+};
 
 /**
  * The literal VOCABULARY a detector accepts, for a set difference between
