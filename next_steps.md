@@ -7,6 +7,23 @@
 
 ---
 
+## ⛔ PRIORITÉ INTER-CHANTIERS — décision de Guy, 2026-08-04
+
+> **Ce repo est le PREMIER des trois.** Ordre imposé :
+> **(1) `claude-agentic-runtime` → (2) `guyhui-showcase` → (3) RAWLY.**
+>
+> **Motif** : la prochaine unité ci-dessous — *la classe de démenti* — **bloque une
+> chaîne**. Tant qu'elle est ouverte : pas de release runtime (elle figerait un
+> `[Unreleased]` annonçant un audit clos), donc pas de run live de dispatch (il
+> graverait une preuve périmée), donc pas de montée en gamme de la preuve sur la
+> vitrine. Les lots RAWLY, eux, n'ont **aucune dépendance en aval**.
+>
+> ⚠️ **Le défaut est LATENT, PAS ACTIF** — aucun verdict n'est faux aujourd'hui.
+> C'est un **chemin critique**, pas une urgence : ne pas se raconter le contraire
+> pour se donner de l'élan.
+
+---
+
 ## ▶ RESUME HERE — paste-ready restart prompt
 
 ```
