@@ -45,8 +45,14 @@ const DENIAL_TOKEN =
   /\b(no|not|never|without|neither|nor|none|rather than|ruled out|declined|rejected|paused)\b/gi;
 
 /**
- * ⚠️ THESE TWO MUST STAY LABELLED FOR WHAT THEY ARE. `SHIPPED` mirrors the rule
- * in `validate-route.ts`; `FIRST_DESIGN` is the variant this pass was built to
+ * ⚠️ THESE TWO MUST STAY LABELLED FOR WHAT THEY ARE, and `SHIPPED` names the
+ * CLAUSE SPLIT ONLY — not the shipped guard. The prototype below still carries
+ * the narrow token list, ignores `absenceIsAnswer` and never exercises the label
+ * route, so its verdicts are those of the FIRST design with a corrected split.
+ * Read **V0** for what the shipped code does; it measures `paramFilled` against
+ * itself and cannot drift. Sections V1–V9 are attack surface, kept because each
+ * broke a claim, not because any of them describes the current rule.
+ * `FIRST_DESIGN` is the variant this pass was built to
  * attack — no comma boundary, and `yet` counted as a coordinating conjunction.
  * Both of those were wrong, and the second was invisible until a denial written
  * as "has YET to be put in production" had its token cut in half by the split.
