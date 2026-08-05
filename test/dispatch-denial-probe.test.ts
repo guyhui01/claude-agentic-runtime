@@ -192,6 +192,18 @@ const OVER_REACH: Array<[string, string, string]> = [
   ["WF-010", "closeout_type", "The review covers a partial failure, absent any HR angle."],
   ["WF-004", "client_ai_maturity", "Far from a rumour, the client is advanced in AI maturity."],
   ["WF-004", "client_name", "Client: Northwind, ruled out last week."],
+  // ⚠️ THE `absenceIsAnswer` CLASS, which the suite could not see. Three specs
+  // declared it because tests turned red; TWO MORE were found only by the
+  // pre-push hardening pass, and both had been refusing a legitimate answer:
+  //   · WF-006 `Competition` — its fixture says "a sole source situation",
+  //     which carries no denial token and cleared the guard by accident of
+  //     vocabulary, so the same fact written as a negation was refused;
+  //   · WF-009 `Anti-fraud required` — its detector carries an explicit
+  //     `no (background|reference) checks?` branch, and the guard was
+  //     cancelling the very alternative the spec had written.
+  // Both lines below fill BECAUSE of the opt-out: remove the flag and they close.
+  ["WF-006", "competition", "There is no competition on this deal."],
+  ["WF-009", "anti_fraud_required", "No background check is required for this hire."],
 ];
 
 function render(): string {

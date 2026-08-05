@@ -225,6 +225,13 @@ export const WF006_MANIFEST: ParamManifest = {
     {
       name: "competition",
       card: "Competition",
+      // WHETHER, not WHICH — declared to the denial guard (2026-08-05). Found by
+      // the pre-push hardening pass, and the fixture is exactly why it was not
+      // found earlier: it says "a sole source situation", which carries no
+      // denial token and so cleared the guard by accident of vocabulary. An
+      // operator writing the same fact as "there is no competition on this
+      // deal" was being REFUSED — measured, and it filled before the guard.
+      absenceIsAnswer: true,
       required: true,
       mapping: presales,
       // Card enumeration: Firms competing / Sole source. A negation IS a value

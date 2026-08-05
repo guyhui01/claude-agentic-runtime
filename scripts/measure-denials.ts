@@ -49,6 +49,19 @@ const DENIALS: Array<[string, string, string]> = [
   ["WF-009", "role_title", "No data engineer role is open at the moment."],
   ["WF-009", "contract_type", "No permanent contract is offered for this mission."],
   ["WF-010", "closeout_type", "This is not a partial failure and not an incident."],
+  // ⚠️ THE FOUR LINES BELOW ARE WHAT MAKES THE WIDENED VOCABULARY A GUARDED
+  // POLICY RATHER THAN A DECLARED ONE. Without them, removing `lacks?`,
+  // `absent`, `yet to be` or `\w+n't` from the token list turns NO test red:
+  // the over-reach control would keep filling, which is what it is built to do.
+  // A rule nothing can falsify reads as protection being applied.
+  ["WF-004", "client_ai_maturity", "The client isn't advanced in AI maturity."],
+  ["WF-006", "selection_criteria", "We lack any selection criteria on price or expertise."],
+  ["WF-008", "ai_system_status", "The scoring model has yet to be put in production."],
+  ["WF-007", "identified_stakes", "The engagement is absent any identified business stakes."],
+  // The LABEL route, which the first design left unguarded on the strength of a
+  // corpus that contained no `Label: value` form at all. Its counterpart in the
+  // over-reach control is the same label answered with a name and a caveat.
+  ["WF-004", "client_name", "Client: no name has been given."],
 ];
 
 const OVER_REACH: Array<[string, string, string]> = [
@@ -60,6 +73,22 @@ const OVER_REACH: Array<[string, string, string]> = [
   ["WF-008", "ai_system_status", "No incident so far; the scoring model is in production."],
   ["WF-009", "role_level", "No agency is involved; we are hiring a senior engineer directly."],
   ["WF-010", "closeout_type", "No blame culture here — this is a partial failure to review."],
+  ["WF-008", "ai_system_status", "The scoring model is in production despite a lack of monitoring."],
+  ["WF-010", "closeout_type", "The review covers a partial failure, absent any HR angle."],
+  ["WF-004", "client_ai_maturity", "Far from a rumour, the client is advanced in AI maturity."],
+  ["WF-004", "client_name", "Client: Northwind, ruled out last week."],
+  // ⚠️ THE `absenceIsAnswer` CLASS, which the suite could not see. Three specs
+  // declared it because tests turned red; TWO MORE were found only by the
+  // pre-push hardening pass, and both had been refusing a legitimate answer:
+  //   · WF-006 `Competition` — its fixture says "a sole source situation",
+  //     which carries no denial token and cleared the guard by accident of
+  //     vocabulary, so the same fact written as a negation was refused;
+  //   · WF-009 `Anti-fraud required` — its detector carries an explicit
+  //     `no (background|reference) checks?` branch, and the guard was
+  //     cancelling the very alternative the spec had written.
+  // Both lines below fill BECAUSE of the opt-out: remove the flag and they close.
+  ["WF-006", "competition", "There is no competition on this deal."],
+  ["WF-009", "anti_fraud_required", "No background check is required for this hire."],
 ];
 
 /**
@@ -220,6 +249,39 @@ function report(title: string, corpus: Array<[string, string, string]>, mustFill
 report("CORPUS 1 — DENIALS (every line must end up refused)", DENIALS, false);
 report("CORPUS 2 — OVER-REACH CONTROL (every line must keep filling)", OVER_REACH, true);
 report("CORPUS 3 — COST OF ADMITTING POSTPOSED DENIALS (must keep filling)", POSTPOSED_COST, true);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BEFORE / AFTER — the only honest way to say "N denials closed".
+//
+// ⚠️ "15 of 17 closed" is NOT readable from the snapshot: it says how many fill
+// TODAY, and five of the seventeen lines were added WITH the guard, so they were
+// never measured without it. The pre-guard verdict is reproduced exactly rather
+// than approximated: `absenceIsAnswer` routes a spec down the ungated path, so a
+// clone carrying it IS the old `paramFilled`. That doubles as a check that the
+// opt-out really reproduces the previous behaviour instead of merely resembling
+// it — if the two ever diverge, this table is where it shows.
+console.log(`\n${"=".repeat(78)}\nBEFORE / AFTER — what the guard actually moved\n${"=".repeat(78)}`);
+for (const [label, corpus, wanted] of [
+  ["denials (want: closed)", DENIALS, false],
+  ["over-reach (want: still filling)", OVER_REACH, true],
+] as const) {
+  let before = 0;
+  let after = 0;
+  let regressed = 0;
+  for (const [wf, name, text] of corpus) {
+    const s = spec(wf, name);
+    const b = brief(text);
+    const pre = paramFilled(b, { ...s, absenceIsAnswer: true });
+    const post = paramFilled(b, s);
+    if (pre) before++;
+    if (post) after++;
+    if (pre !== post && post === wanted) regressed++;
+    if (pre === post && post !== wanted) {
+      console.log(`  UNMOVED (${post ? "fills" : "refused"}) — ${wf}/${name}: ${text}`);
+    }
+  }
+  console.log(`  ${label}: filled BEFORE ${before}/${corpus.length} → AFTER ${after}/${corpus.length}`);
+}
 
 console.log(`\n${"=".repeat(78)}\nSUMMARY\n${"=".repeat(78)}`);
 for (const [label, corpus] of [

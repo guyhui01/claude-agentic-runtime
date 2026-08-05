@@ -245,6 +245,13 @@ export const WF009_MANIFEST: ParamManifest = {
       // explicit negation is a value, the WF-006 `Competition` treatment rather
       // than the WF-005 `Sources to prioritize` refusal. "No background check
       // required" answers the card; silence does not.
+      //
+      // Declared to the denial guard (2026-08-05). This spec is the clearest of
+      // the five: its detector carries an explicit `no (background|reference)
+      // checks?` alternative, so the guard was cancelling a branch the spec had
+      // deliberately written — the denial token sits INSIDE the very match it
+      // was meant to license. Measured before the fix, not inferred.
+      absenceIsAnswer: true,
       pattern:
         /\bverify\b[^.]{0,32}\b(diplomas?|degrees?|linkedin|references?)\b|\b(background|reference|diploma|identity) checks?\b|\banti[- ]fraud\b|\bno (background|reference) checks?\b/i,
     },

@@ -59,8 +59,10 @@ is repaired the control measures one line fewer than it lists. See the test file
 | WF-010 | `closeout_type` | FILL | The review covers a partial failure, absent any HR angle. |
 | WF-004 | `client_ai_maturity` | FILL | Far from a rumour, the client is advanced in AI maturity. |
 | WF-004 | `client_name` | FILL | Client: Northwind, ruled out last week. |
+| WF-006 | `competition` | FILL | There is no competition on this deal. |
+| WF-009 | `anti_fraud_required` | FILL | No background check is required for this hire. |
 
-**12 of 12 over-reach sentences fill today.**
+**14 of 14 over-reach sentences fill today.**
 
 ## 3. Corpus denial tokens — why no current verdict is wrong
 

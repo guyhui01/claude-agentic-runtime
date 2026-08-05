@@ -124,8 +124,34 @@ const specs = Object.entries(DEFAULT_MANIFESTS).flatMap(([wf, m]) =>
 
 const line = (t: string): void => console.log(`\n${"=".repeat(78)}\n${t}\n${"=".repeat(78)}`);
 
+// ─────────────────────────────────────────────────────────────── V0
+//
+// ⚠️ V1 BELOW PROTOTYPES the rule and is therefore only as true as the prototype.
+// V0 measures the SHIPPED code against itself: `absenceIsAnswer` routes a spec
+// down the ungated path, so a clone carrying it reproduces the pre-guard
+// `paramFilled` exactly. This is the non-regression claim, and it must be read
+// instead of V1 whenever the two disagree.
+line("V0 — SHIPPED GUARD vs PRE-GUARD, on every brief × every spec");
+let shippedMoved = 0;
+let shippedCells = 0;
+for (const { id, expected, brief } of briefs) {
+  for (const { wf, spec } of specs) {
+    const pre = paramFilled(brief, { ...spec, absenceIsAnswer: true });
+    const post = paramFilled(brief, spec);
+    if (pre) shippedCells++;
+    if (pre === post) continue;
+    shippedMoved++;
+    console.log(
+      `  ${id} (${wf === expected ? "OWN" : "foreign"} ${wf}) ${spec.name}: ${pre ? "FILL" : "missing"} → ${post ? "FILL" : "MISSING"}`,
+    );
+  }
+}
+console.log(
+  `  ${shippedMoved} verdict(s) moved by the SHIPPED guard over ${shippedCells} previously-filled cells.`,
+);
+
 // ─────────────────────────────────────────────────────────────── V1
-line("V1 — VERDICTS MOVED ON THE REAL CORPUS (the requirement: zero)");
+line("V1 — VERDICTS MOVED ON THE REAL CORPUS (prototype — see V0 for the shipped rule)");
 let cells = 0;
 let moved = 0;
 const movedRows: string[] = [];
