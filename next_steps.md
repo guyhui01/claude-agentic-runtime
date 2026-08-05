@@ -7,20 +7,31 @@
 
 ---
 
-## ⛔ PRIORITÉ INTER-CHANTIERS — décision de Guy, 2026-08-04
+## ⏸ PRIORITÉ INTER-CHANTIERS — MISE À JOUR 2026-08-05 : le chantier actif est `guyhui-showcase`
 
-> **Ce repo est le PREMIER des trois.** Ordre imposé :
-> **(1) `claude-agentic-runtime` → (2) `guyhui-showcase` → (3) RAWLY.**
+> **Ce repo N'EST PLUS le premier.** Nouvel ordre : **(1) `guyhui-showcase` →
+> (2) `claude-agentic-runtime` (run live) → (3) RAWLY.**
 >
-> **Motif** : la prochaine unité ci-dessous — *la classe de démenti* — **bloque une
-> chaîne**. Tant qu'elle est ouverte : pas de release runtime (elle figerait un
-> `[Unreleased]` annonçant un audit clos), donc pas de run live de dispatch (il
-> graverait une preuve périmée), donc pas de montée en gamme de la preuve sur la
-> vitrine. Les lots RAWLY, eux, n'ont **aucune dépendance en aval**.
+> **Pourquoi l'ordre s'est inversé — le motif d'origine est ÉTEINT, pas contredit.**
+> La priorité du 2026-08-04 tenait à une chaîne bloquée par *la classe de démenti* :
+> pas de release, donc rien de nouveau à surfacer. **Elle est fermée et `v0.11.0`
+> est publiée** ⟹ le runtime a livré ce que la vitrine attendait, y compris les deux
+> commits de sondes de seeds que seule l'absence de version publiée tenait hors du
+> site.
 >
-> ⚠️ **Le défaut est LATENT, PAS ACTIF** — aucun verdict n'est faux aujourd'hui.
-> C'est un **chemin critique**, pas une urgence : ne pas se raconter le contraire
-> pour se donner de l'élan.
+> **Ce qui départage maintenant** : le seul défaut **factuel** ouvert est côté
+> vitrine — elle affiche `v0.10.0`, faux depuis le 2026-08-05. Ce qui reste ici est
+> une **montée en gamme de la preuve** (le run live), pas une correction : le
+> drill-down de la vitrine dit déjà noir sur blanc qu'elle est prouvée par le
+> registre et ses tests, **pas** par des runs facturés.
+>
+> ⚠️ **Ne pas se raconter d'urgence dans l'autre sens non plus** : la vitrine
+> périmée d'une version est un écart mineur et visible, pas un incident.
+>
+> ▫ **Bloc d'origine du 2026-08-04, conservé pour son raisonnement** : la chaîne
+> qu'il décrit (release → run live → preuve vitrine) reste exacte ; c'est son
+> premier maillon qui est désormais franchi. Les lots RAWLY n'ont toujours
+> **aucune dépendance en aval**.
 
 ---
 
@@ -185,7 +196,15 @@ Then FIND THE SINGLE LIVE `▶▶ NEXT UNIT` MARKER in this file and work from i
   ✅ **RELEASE `v0.11.0` FAITE 2026-08-05 — « A denial is not an answer ».** Tag annoté + GitHub Release **non-draft, non-prerelease, `latest` confirmé par l'API** (`releases/latest` → `v0.11.0`), CI verte sur le commit de release `6326a4f`, `[Unreleased]` remis à vide. ▫ **Dette du CHANGELOG repliée dans le même lot** : onze versions publiées ne portaient **qu'une seule** link ref ; toutes rétablies, et `0.1.0` reste **sans lien** parce qu'elle n'a jamais été taguée (vérifié par `git tag`, pas déduit de la liste des titres) — un lien cassé aurait été pire que l'absence.
   - ⟹ **Les deux commits de sondes de seeds (`f42b8ab`, `27f85c8`) sont désormais DANS une version publiée** : le seul motif qui les écartait de la vitrine le 2026-08-03 tombe. Ils portent le résultat le plus vendeur du chantier (41 specs sur 78 se remplissent ; contrôle « nearly powerless » sur WF-001/002/003).
 
-  ▶▶ **NEXT UNIT — TRANCHER LE RUN LIVE, PUIS LA VITRINE. Deux voies, et le choix appartient à Guy parce qu'il engage une porte facturée.**
+  ⏸ **CE REPO N'EST PLUS LE CHANTIER ACTIF — décision de Guy, 2026-08-05 : le chantier passe à `guyhui-showcase`.** Motif : la release `v0.11.0` ayant été publiée, le **seul défaut FACTUEL ouvert est côté vitrine** (le site affiche encore `v0.10.0`, faux depuis ce jour) tandis que ce qui reste ici est une **montée en gamme de la preuve**, pas la correction d'un défaut. ⚠️ **L'argument des « deux passes de surfaçage » a été pesé puis ÉCARTÉ** : la 2ᵉ passe serait ciblée (insérer une trace), alors que subordonner la vitrine à une décision facturée laisse une information fausse en ligne pour une durée indéterminée. **Ne pas re-plaider ; l'unité ci-dessous reste la prochaine DE CE REPO, elle n'est pas la prochaine SESSION.**
+
+  ▶▶ **NEXT UNIT DE CE REPO — LE RUN LIVE DE DISPATCH. Porte facturée : il ne se lance QUE sur ordre explicite de Guy, et sur abonnement OAuth — jamais de clé API, quelle que soit la commodité.**
+  - ⚠️ **DIMENSIONNEMENT VÉRIFIÉ À LA SOURCE LE 2026-08-05, et il corrige une lecture trop rapide : le harnais de la BOUCLE n'existe que pour P01/WF-001.** `test/dispatch-pilot-p01-live.test.ts` fait exactement ce qu'on veut (phase 1 : brief non amendé ⟹ `PARAMS_MISSING` live ; phase 2 : brief amendé ⟹ `ROUTED` + plan verbatim ; **stop avant le go/no-go humain par construction**) — mais **sur P01 seulement**. `test/wf-004-run-live.test.ts` existe aussi et **n'est PAS ce qu'il faut** : c'est le run d'une **spine**, pas une boucle de dispatch. ⟹ l'unité consiste à **décliner le patron P01 sur un second brief**, pas à partir de zéro ni à réutiliser tel quel.
+  - **Gate d'exécution** : `LIVE_RUN=1 LIVE_MODEL=<id complet> npx vitest run <fichier>` ; sans `LIVE_RUN`, la suite normale saute ces fichiers (c'est ce que montrent les 3 skips « billed, observed »).
+  - **Ce que le run prouve exactement** : que le mécanisme **généralise au-delà du pilote** — la trace de 2026-07-19 montre `team_size`, un identifiant snake_case, alors que le refus porte désormais les **libellés de carte**. **PAS** « les dix prouvés live » : c'est **un seul chemin de code**, pas dix. Ne pas laisser la formule enfler à l'écriture.
+  - **Choix du brief** : un workflow **≠ WF-001**, de préférence un dont le refus nomme un libellé parlant (p. ex. WF-004 `Engagement duration`). À trancher sur les fixtures existantes plutôt qu'en écrivant un brief neuf.
+  - ▫ **Aval** : la mise à jour de la vitrine est portée par CE repo ([[feedback-tache-amont-porte-maj-aval]]) — donc **une seule** passe vitrine ensuite, qui surface `v0.11.0` + les sondes de seeds + la trace.
+  - ▫ **[HISTORIQUE] Les deux voies telles qu'elles étaient posées avant l'arbitrage :**
   - **Voie A — le run live d'abord** (cadrage du 2026-08-03, étape (3), inchangé) : **UNE** boucle de dispatch sur un workflow **≠ WF-001**, pour que `PARAMS_MISSING` porte un libellé de carte que la trace de 2026-07-19 ne montre pas. Ce qu'il prouve exactement : que le mécanisme **généralise au-delà du pilote** — **PAS** « les dix prouvés live ». Puis **une seule** passe vitrine qui surface la version ET la trace.
   - **Voie B — la vitrine directement** : elle reste honnête sans le run (son drill-down dit noir sur blanc « *proven by the registry and its test suite, not by ten billed runs* »). Le run live est une **montée en gamme de la preuve, pas la correction d'un défaut** — ne pas se raconter une urgence.
   - ⚠️ **Le coût de l'ordre inverse est le seul argument dur** : ouvrir la vitrine avant le run live impose **deux** passes de surfaçage au lieu d'une.
