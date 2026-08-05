@@ -7,6 +7,12 @@
 ---
 
 ## [Unreleased]
+
+_Nothing yet._
+
+---
+
+## [0.11.0] - 2026-08-05 — A denial is not an answer: the param check stops reading negations as values 🚫
 > Model: Claude Opus 5
 
 ### 🐛 Fixed
@@ -326,5 +332,19 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.9.1...v0.10.0
+[0.9.1]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/guyhui01/claude-agentic-runtime/releases/tag/v0.2.0
+
+<!-- 0.1.0 carries no link: it was never tagged. Verified against `git tag`
+     rather than assumed from the heading list — the earliest tag is v0.2.0. -->
+
