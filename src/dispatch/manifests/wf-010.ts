@@ -434,7 +434,12 @@ export const WF010_MANIFEST: ParamManifest = {
       // AN EXPLICIT DECLARATION OF ABSENCE COUNTS AS A VALUE ("no team
       // tensions"), silence does not — inherited from the WF-007 sibling, and
       // for its reason: STEP-03 runs perfectly well on a declared absence, so
-      // forcing the operator to invent one would be the defect.
+      // forcing the operator to invent one would be the defect. Declared to the
+      // denial guard (2026-08-05) through `absenceIsAnswer`, exactly as the
+      // sibling does — the pairing the policy table already asserts must hold
+      // for this flag too, or the two cards would answer the same question in
+      // opposite directions while each stayed green on its own fixture.
+      absenceIsAnswer: true,
       //
       // ⛔ `post-incident` is a value of the WF-007 card and is deliberately NOT
       // read here: on THIS card an incident is a `Closeout type`, and reading it

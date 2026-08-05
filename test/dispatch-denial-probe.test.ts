@@ -5,7 +5,45 @@ import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief, ParamSpec } from "../src/dispatch/types.js";
 
 /**
- * DENIAL PROBE — a frozen record of a MEASURED, UNFIXED defect class.
+ * DENIAL PROBE — the record of a measured defect class, now GUARDED.
+ *
+ * ⚠️ STATUS CHANGED 2026-08-05. The guard shipped (`validate-route.ts`), and
+ * this file's three corpora became its regression floor: eight of the ten
+ * denials close, the over-reach control keeps filling, and TWO denials remain
+ * open BY DECISION rather than by omission — see "WHAT THE GUARD DOES NOT
+ * CLOSE" below. The instrument-before-the-guard framing that follows is kept
+ * because it is what made the design measurable; it is history, not status.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * WHAT THE MEASUREMENT CHANGED IN THE DESIGN — three claims of the first
+ * proposal were wrong, and each was wrong because the corpus that "confirmed"
+ * it could not express its counter-example:
+ *
+ *  1. "The guard belongs at the `pattern` route only." FALSE. No probe sentence
+ *     used the `Label: value` form, so the label route was never exercised;
+ *     re-measured on the `(name)` halves, "Client: no name has been given"
+ *     FILLED. The label route now carries its own form of the rule — a declared
+ *     value that OPENS with a denial is a refusal to answer, while one that
+ *     contains a denial further along ("Client: Northwind, ruled out last week")
+ *     is an answer with a caveat.
+ *  2. "The comma is not a clause boundary — zero divergence over 2052 cells."
+ *     The measurement was empty: neither corpus places a negation ahead of an
+ *     enumeration. The AMENDED briefs the suite builds do, and one negation then
+ *     governed three later values.
+ *  3. "The scope is the lever." It is not — the VOCABULARY is. The twelve
+ *     sentences below were written with the tokens this file's own list
+ *     contained, a positive control closed on itself; measured against ordinary
+ *     English negation it missed six forms of eight.
+ *
+ * A CLASS THE GUARD MUST NOT TOUCH, discovered by the suite turning red on
+ * arrival: on some cards a denial IS the answer ("no personal data is
+ * processed"), because the card asks WHETHER and not WHICH. Three shipped specs
+ * assert it, each argued from its own card, and refusing them would leave the
+ * operator in a return loop they cannot exit — a worse defect than the one the
+ * guard fixes. Those specs declare `absenceIsAnswer` and opt out of both routes.
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * HISTORICAL FRAMING — a frozen record of a MEASURED, UNFIXED defect class.
  *
  * `paramFilled` has no general notion that a DENIAL IS NOT AN ANSWER. A sentence
  * denying its own subject while naming a card value nearby fills the spec: "No
@@ -72,8 +110,25 @@ function spec(wf: string, name: string): ParamSpec {
 
 /**
  * CORPUS 1 — DENIALS. Each sentence denies its own subject while naming a card
- * value nearby. Every one MUST be refused once the guard exists; today ten of
- * twelve fill.
+ * value nearby. Ten of twelve filled before the guard; two still do.
+ *
+ * ⚠️ WHAT THE GUARD DOES NOT CLOSE, and why each is a decision rather than an
+ * omission. Both were predicted from the measurement and then confirmed by
+ * running the rule, not discovered afterwards:
+ *
+ *   · WF-003 "AWS was ruled out" — the denial FOLLOWS the value. Closing it
+ *     means admitting postposed participles as clause-wide denials, and that was
+ *     priced: it gains this one line and costs three false MISSING on legitimate
+ *     prose ("We standardised on AWS after Azure was ruled out", "in production
+ *     although the pilot was paused"). ⚠️ Both pans of that scale are empty on
+ *     the real corpus — zero of nineteen briefs carry any postposed participle —
+ *     so this is an argued judgement, NOT a measurement, and it is written that
+ *     way on purpose.
+ *   · WF-004 "beginner is a guess" — no denial sits in the matched value's
+ *     clause under ANY of the three splittings tested. The negation governs a
+ *     different phrase, a clause earlier. Refusing it would mean understanding
+ *     "is a guess", which is out of reach of a deterministic detector; the
+ *     sentence is structurally of the same shape as the over-reach control.
  */
 const DENIALS: Array<[string, string, string]> = [
   ["WF-003", "cloud_provider", "No cloud provider has been chosen; AWS was ruled out."],
@@ -88,6 +143,19 @@ const DENIALS: Array<[string, string, string]> = [
   ["WF-009", "role_title", "No data engineer role is open at the moment."],
   ["WF-009", "contract_type", "No permanent contract is offered for this mission."],
   ["WF-010", "closeout_type", "This is not a partial failure and not an incident."],
+  // ⚠️ THE FOUR LINES BELOW ARE WHAT MAKES THE WIDENED VOCABULARY A GUARDED
+  // POLICY RATHER THAN A DECLARED ONE. Without them, removing `lacks?`,
+  // `absent`, `yet to be` or `\w+n't` from the token list turns NO test red:
+  // the over-reach control would keep filling, which is what it is built to do.
+  // A rule nothing can falsify reads as protection being applied.
+  ["WF-004", "client_ai_maturity", "The client isn't advanced in AI maturity."],
+  ["WF-006", "selection_criteria", "We lack any selection criteria on price or expertise."],
+  ["WF-008", "ai_system_status", "The scoring model has yet to be put in production."],
+  ["WF-007", "identified_stakes", "The engagement is absent any identified business stakes."],
+  // The LABEL route, which the first design left unguarded on the strength of a
+  // corpus that contained no `Label: value` form at all. Its counterpart in the
+  // over-reach control is the same label answered with a name and a caveat.
+  ["WF-004", "client_name", "Client: no name has been given."],
 ];
 
 /**
@@ -97,18 +165,19 @@ const DENIALS: Array<[string, string, string]> = [
  * without it the guard is unboundable: naming a risk without naming the
  * measurement that retires it is how a degraded solution gets proposed.
  *
- * ⚠️ ONE LINE IS ALREADY REFUSED, AND IT IS NOT THE GUARD WORKING. A control
- * corpus whose lines are refused for unrelated reasons is false comfort, so the
- * reason is recorded here rather than left to be re-diagnosed. WF-005 `audience`
- * refuses "the audience is our LinkedIn following" while ACCEPTING "there is no
- * LinkedIn audience to address yet" — the two verdicts are inverted, and the
- * cause is word ORDER, not denial: the detector wants its value adjacent to the
- * audience noun, and three words of separation defeat it. Found by this control
- * on its first read, which is what a control is for. ⛔ Deliberately NOT fixed
- * here: it is a detector question for the cold unit, and widening it in the same
- * breath as building the instrument is the exact motion that failed twice on
- * 2026-08-02. It means the over-reach corpus currently measures 7 lines, not 8 —
- * that line cannot detect an over-broad guard until it is repaired.
+ * ✅ THE LINE THAT WAS REFUSED FOR AN UNRELATED REASON IS REPAIRED (2026-08-05),
+ * so the control measures all of its lines. WF-005 `audience` used to refuse
+ * "the audience is our LinkedIn following" while ACCEPTING "there is no LinkedIn
+ * audience to address yet" — inverted verdicts, caused by word ORDER and not by
+ * denial. This control found it on its first read, which is what a control is
+ * for, and the reverse-order branch it earned is argued on the spec itself.
+ *
+ * ⚠️ THE LAST THREE LINES EXERCISE THE WIDENED VOCABULARY, and without them it
+ * would be installed with its cost invisible. `lack`, `absent` and `far from`
+ * are ordinary affirmative English as often as they are denials, so each line
+ * places one where it does NOT govern the value: two after the match (a denial
+ * does not reach backwards) and one before a comma (the boundary whose absence
+ * turned an enumeration into one long denial).
  */
 const OVER_REACH: Array<[string, string, string]> = [
   ["WF-003", "cloud_provider", "GDPR applies, no exceptions; the stack runs on AWS."],
@@ -119,6 +188,10 @@ const OVER_REACH: Array<[string, string, string]> = [
   ["WF-008", "ai_system_status", "No incident so far; the scoring model is in production."],
   ["WF-009", "role_level", "No agency is involved; we are hiring a senior engineer directly."],
   ["WF-010", "closeout_type", "No blame culture here — this is a partial failure to review."],
+  ["WF-008", "ai_system_status", "The scoring model is in production despite a lack of monitoring."],
+  ["WF-010", "closeout_type", "The review covers a partial failure, absent any HR angle."],
+  ["WF-004", "client_ai_maturity", "Far from a rumour, the client is advanced in AI maturity."],
+  ["WF-004", "client_name", "Client: Northwind, ruled out last week."],
 ];
 
 function render(): string {

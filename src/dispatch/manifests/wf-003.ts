@@ -99,7 +99,11 @@ export const WF003_MANIFEST: ParamManifest = {
       required: true,
       mapping: technical,
       // A negative answer is an answer: "no personal data is processed" states
-      // the fact and satisfies the card line.
+      // the fact and satisfies the card line. Declared to the denial guard
+      // (2026-08-05) rather than left implicit — the guard would otherwise read
+      // that sentence as a refusal to answer and return the operator to a loop
+      // they cannot exit, there being no other way to state the absence.
+      absenceIsAnswer: true,
       pattern: /\bpersonal data\b|\bpii\b|\bpersonally identifiable\b|\bsensitive data\b/i,
     },
     {

@@ -7,8 +7,22 @@
 ---
 
 ## [Unreleased]
+> Model: Claude Opus 5
 
-_Nothing yet._
+### 🐛 Fixed
+- **A denial is no longer read as an answer.** `paramFilled` had no general notion that a sentence denying its own subject is not a value: "No cloud provider has been chosen; AWS was ruled out" answered WF-003 `Cloud provider`, and ten of twelve probe sentences filled across eight manifests. The failure direction was the unsafe one — `paramsChecked: true` on a brief that denies the fact. A denial now governs a card value when both sit in the same **clause** and the denial does not follow the value; fifteen of seventeen probe denials close, the twelve-line over-reach control keeps filling, and **zero verdict moves on the nineteen routed briefs**.
+- **The label route carries the rule too.** A declared value that OPENS with a denial ("`Client: no name has been given`") is a refusal to answer, while one that merely contains a denial further along ("`Client: Northwind, ruled out last week`") is an answer with a caveat. `affirmativeString` only ever caught the bare sentinels, being anchored at `^`.
+- **WF-005 `Audience` had two inverted verdicts.** It refused "the audience is our LinkedIn following" while accepting "there is no LinkedIn audience to address yet" — word order, not denial. A reverse-order branch repairs it; measured at **zero foreign fills**, so the cross-vocabulary matrix does not move.
+
+### ✨ Added
+- **`ParamSpec.absenceIsAnswer`** — the opt-out for the specs whose card asks WHETHER rather than WHICH, where "no personal data is processed" *is* the answer. Three shipped specs (WF-003 `GDPR constraints (personal data)`, WF-007 `Sensitivities`, WF-010 `HR sensitivities`) already asserted that behaviour, each argued from its own card: refusing them would leave the operator in a return loop they cannot exit, a worse defect than the one the guard fixes. Declared per spec, never inferred.
+- **Two versioned instruments** — `npm run measure:denials` (why a sentence fills: matched substring, route, owning clause, denial position) and `npm run verify:denials` (prototypes the rule to attack a policy before it reaches `src/`). Their predecessors lived in a scratchpad and died with the session.
+- **Live-seed controls for the seven manifests that had none**, plus the closure of a truncation hole in the seed drift guard, which asserted presence and so passed a shortened copy (commits `f42b8ab`, `27f85c8`, previously undocumented here).
+
+### 📝 Notes
+- **Two denials stay open by decision, not omission**, and both are written into the probe. "AWS was ruled out" puts its denial *after* the value: closing it means admitting postposed participles, which gains one line and costs three false MISSING on legitimate prose — an argued judgement, **not a measurement**, since zero of nineteen briefs carry any such participle. "beginner is a guess" has no denial in its matched clause under any splitting tested; refusing it would require understanding the phrase.
+- **The nineteen fixtures are not the repository's corpus.** The verification pass reported zero verdicts moved and the suite then turned five tests red, because the suite also builds AMENDED briefs that live only inside the test file. That gap is what surfaced both the `absenceIsAnswer` class and the comma boundary, without which one negation governed a whole enumeration.
+- Falsified through `scripts/falsify.sh`: **seven cases, seven red, zero green**.
 
 ---
 

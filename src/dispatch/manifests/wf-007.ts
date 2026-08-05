@@ -337,6 +337,14 @@ export const WF007_MANIFEST: ParamManifest = {
       // perfectly well on a declared absence of sensitivities; forcing the
       // operator to invent one, or leaving them in a return loop they cannot
       // exit, would be the defect.
+      //
+      // ⚠️ That policy is now DECLARED to the denial guard (2026-08-05) instead
+      // of resting on the detector happening to match. The guard reads "no
+      // particular sensitivities reported" as a denial governing the very word
+      // the detector needs, and would close this line — which is why the flag
+      // is the spec's own statement of its card's question (WHETHER, not WHICH)
+      // rather than a list of exceptions kept in the guard.
+      absenceIsAnswer: true,
       pattern:
         /\brestructuring\b|\bredundanc\w*\b|\blay-?offs?\b|\bsocial (context|climate|tension\w*|unrest)\b|\bworks council\b|\bunion\w*\b|\bstrike\b|\bpost-?incident\b|\bpolitically (tense|sensitive|charged)\b|\bmerger\b|\bacquisition\b|\bsensitivit\w*\b/i,
     },

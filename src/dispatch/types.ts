@@ -102,6 +102,22 @@ export interface ParamSpec {
   /** Card-sanctioned honest unknown ("Not disclosed", "to be defined") — accepted as filled. */
   sanctionedUnknown?: RegExp;
   /**
+   * The card asks WHETHER, not WHICH — so a denial is an ANSWER and the denial
+   * guard must not apply. Distinct from `sanctionedUnknown`, which admits an
+   * honest non-answer ("Not disclosed"): here "no personal data is processed"
+   * is the substance of the reply, and the run step consumes it as such.
+   *
+   * ⚠️ Declared per spec, never inferred, and the reason it exists is a defect
+   * the denial guard caused on arrival: three shipped specs assert exactly this
+   * behaviour, each argued from its own card ("stating NO is stating it",
+   * "STEP-03 runs perfectly well on a declared absence"). Refusing them would
+   * leave the operator in a return loop they cannot exit — a worse defect than
+   * the one the guard fixes. The opposite policy is equally card-driven: WF-005
+   * `Sources to prioritize` REFUSES "no monitored sources", because STEP-01
+   * cannot run on an absence.
+   */
+  absenceIsAnswer?: boolean;
+  /**
    * The parameter can never be missing — an operator-profile default, or a
    * value an upstream invariant (intake) already guarantees. Declaring it is
    * what distinguishes a deliberately non-discriminating spec from a forgotten

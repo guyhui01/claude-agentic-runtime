@@ -97,8 +97,19 @@ export const WF005_MANIFEST: ParamManifest = {
       // Card enumeration: Public LinkedIn / Client newsletter / Personal network
       // / Internal use. Audience-side phrasing only — `LinkedIn` counts when it
       // names who reads, not when it names a format or a source.
+      //
+      // ⚠️ REVERSE-ORDER BRANCH ADDED 2026-08-05, and the defect it repairs was
+      // found by the denial probe's own OVER-REACH control on its first read —
+      // which is what a control is for. This detector refused "the audience is
+      // our LinkedIn following" while ACCEPTING "there is no LinkedIn audience
+      // to address yet": its two verdicts were inverted, and the cause was word
+      // ORDER, not denial. It wanted the value adjacent to the audience noun in
+      // one direction only. The window excludes `,` and `;` rather than `.`
+      // alone: this manifest's own `Horizon` line earned the anchoring rule, and
+      // a window that crosses a clause boundary is what let WF-009 `role_level`
+      // pair a role in one clause with a level in another.
       pattern:
-        /\bpublic LinkedIn\b|\bLinkedIn audience\b|\bclient newsletter\b|\bnewsletter\b|\bpersonal network\b|\binternal use\b|\btarget audience\b/i,
+        /\bpublic LinkedIn\b|\bLinkedIn audience\b|\bclient newsletter\b|\bnewsletter\b|\bpersonal network\b|\binternal use\b|\btarget audience\b|\baudience\b[^.,;]{0,24}\bLinkedIn\b/i,
     },
     {
       name: "tone",

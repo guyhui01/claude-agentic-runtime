@@ -16,18 +16,23 @@ Every line must read `refused` once the guard exists.
 |---|---|---|---|
 | WF-003 | `cloud_provider` | **FILL** | No cloud provider has been chosen; AWS was ruled out. |
 | WF-004 | `client_ai_maturity` | **FILL** | The client has no AI maturity assessment; beginner is a guess. |
-| WF-005 | `audience` | **FILL** | There is no LinkedIn audience to address yet. |
+| WF-005 | `audience` | refused | There is no LinkedIn audience to address yet. |
 | WF-005 | `tone` | refused | No tone has been agreed; a neutral register was rejected. |
-| WF-006 | `selection_criteria` | **FILL** | No selection criteria on price or expertise were shared. |
-| WF-007 | `identified_stakes` | **FILL** | No business stakes have been identified so far. |
-| WF-008 | `ai_system_status` | **FILL** | The system is not in production and no pilot is planned. |
-| WF-009 | `role_level` | **FILL** | No senior role has been opened for this team. |
-| WF-009 | `role_level` | **FILL** | The role is not yet defined; senior hires are paused. |
+| WF-006 | `selection_criteria` | refused | No selection criteria on price or expertise were shared. |
+| WF-007 | `identified_stakes` | refused | No business stakes have been identified so far. |
+| WF-008 | `ai_system_status` | refused | The system is not in production and no pilot is planned. |
+| WF-009 | `role_level` | refused | No senior role has been opened for this team. |
+| WF-009 | `role_level` | refused | The role is not yet defined; senior hires are paused. |
 | WF-009 | `role_title` | refused | No data engineer role is open at the moment. |
-| WF-009 | `contract_type` | **FILL** | No permanent contract is offered for this mission. |
-| WF-010 | `closeout_type` | **FILL** | This is not a partial failure and not an incident. |
+| WF-009 | `contract_type` | refused | No permanent contract is offered for this mission. |
+| WF-010 | `closeout_type` | refused | This is not a partial failure and not an incident. |
+| WF-004 | `client_ai_maturity` | refused | The client isn't advanced in AI maturity. |
+| WF-006 | `selection_criteria` | refused | We lack any selection criteria on price or expertise. |
+| WF-008 | `ai_system_status` | refused | The scoring model has yet to be put in production. |
+| WF-007 | `identified_stakes` | refused | The engagement is absent any identified business stakes. |
+| WF-004 | `client_name` | refused | Client: no name has been given. |
 
-**10 of 12 denials fill today.**
+**2 of 17 denials fill today.**
 
 ## 2. Over-reach control — a denial token that governs something else
 
@@ -44,14 +49,18 @@ is repaired the control measures one line fewer than it lists. See the test file
 |---|---|---|---|
 | WF-003 | `cloud_provider` | FILL | GDPR applies, no exceptions; the stack runs on AWS. |
 | WF-004 | `client_ai_maturity` | FILL | No budget was agreed, but the client is advanced in AI maturity. |
-| WF-005 | `audience` | **refused** | No press release is planned; the audience is our LinkedIn following. |
+| WF-005 | `audience` | FILL | No press release is planned; the audience is our LinkedIn following. |
 | WF-006 | `selection_criteria` | FILL | No RFP was issued; the selection criteria are price and expertise. |
 | WF-007 | `identified_stakes` | FILL | No timeline yet; the business stakes are identified and documented. |
 | WF-008 | `ai_system_status` | FILL | No incident so far; the scoring model is in production. |
 | WF-009 | `role_level` | FILL | No agency is involved; we are hiring a senior engineer directly. |
 | WF-010 | `closeout_type` | FILL | No blame culture here — this is a partial failure to review. |
+| WF-008 | `ai_system_status` | FILL | The scoring model is in production despite a lack of monitoring. |
+| WF-010 | `closeout_type` | FILL | The review covers a partial failure, absent any HR angle. |
+| WF-004 | `client_ai_maturity` | FILL | Far from a rumour, the client is advanced in AI maturity. |
+| WF-004 | `client_name` | FILL | Client: Northwind, ruled out last week. |
 
-**7 of 8 over-reach sentences fill today.**
+**12 of 12 over-reach sentences fill today.**
 
 ## 3. Corpus denial tokens — why no current verdict is wrong
 

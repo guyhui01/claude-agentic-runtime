@@ -23,7 +23,7 @@ itself. Read them against the manifests when they move.
 |---|---|
 | (all specs, 10 manifests) | 108 |
 | `NO DETECTOR` | 7 |
-| `adjacency-window` | 44 |
+| `adjacency-window` | 45 |
 | `default` | 7 |
 | `negation-guard` | 5 |
 | `quantity-vocabulary` | 22 |
@@ -67,6 +67,7 @@ itself. Read them against the manifests when they move.
 | WF-004 | `client_ai_maturity` | adjacency-window |
 | WF-004 | `constraints` | default · NO DETECTOR |
 | WF-005 | `intelligence_scope` | adjacency-window |
+| WF-005 | `audience` | adjacency-window |
 | WF-005 | `horizon` | quantity-vocabulary · adjacency-window |
 | WF-005 | `priority_sources` | negation-guard |
 | WF-006 | `prospect_name` | adjacency-window |

@@ -100,7 +100,137 @@ export function parseRouterOutput(raw: unknown): {
  *     with nothing behind it is not an answer. A card-sanctioned unknown still
  *     passes, because `sanctionedUnknown` is tested before this.
  */
-function labelDeclared(text: string, card: string): boolean {
+/**
+ * A DENIAL IS NOT AN ANSWER — measured 2026-08-02, guarded 2026-08-05.
+ *
+ * `paramFilled` used to accept any sentence that named a card value, denial
+ * included: "No cloud provider has been chosen; AWS was ruled out" answered
+ * WF-003 `Cloud provider`. Ten of twelve probe sentences filled, across eight
+ * manifests, and the failure direction is the UNSAFE one — `paramsChecked:
+ * true` on a brief that denies the fact.
+ *
+ * SCOPE, written before the detector and unchanged by it (the definition lives
+ * in `test/dispatch-denial-probe.test.ts`, which is its home):
+ *
+ *   A denial GOVERNS a card value when a denial token and that value sit in the
+ *   same CLAUSE and the denial does not come after it.
+ *
+ * The clause — not the sentence — is what makes the rule decidable without
+ * parsing meaning, and the choice is measured rather than argued: scoping to
+ * the sentence would refuse "No budget was agreed, BUT the client is advanced
+ * in AI maturity" and "No blame culture here — this is a partial failure",
+ * two legitimate answers.
+ *
+ * ⚠️ THE COMMA IS A BOUNDARY, and the first design dropped it on a measurement
+ * that was empty. Zero divergence over 2052 corpus cells and seventeen probe
+ * sentences said only that neither corpus places a negation ahead of an
+ * enumeration. The AMENDED briefs the suite builds do, and they are not in
+ * either corpus: "…with a budget NOT disclosed, three other firms bidding,
+ * award criteria weighting price and expertise…" made one negation govern three
+ * later values, and "with NO monitored sources yet, with positioning on large
+ * accounts as the growth focus" closed `Opportunity focus`. Without the comma
+ * this rule reads an operator's list as one long denial.
+ *
+ * ⚠️ THE VOCABULARY IS THE LEVER, NOT THE SCOPE, and that inverted the first
+ * design. The probe's twelve sentences were written with the tokens the probe's
+ * own list contains — a positive control closed on itself. Measured against
+ * ordinary English negation, that list missed SIX forms of eight (`isn't`,
+ * `doesn't`, `lack`, `yet to be`, `absent`, `failed to`, `far from`). The list
+ * below catches eight of eight and moves ZERO verdict on the nineteen briefs.
+ */
+const DENIAL_WORDS =
+  "no longer|no|not|never|without|neither|nor|none|rather than|ruled out|declined|" +
+  "rejected|paused|lacks?|lacking|absent|unable to|fails? to|failed to|far from|yet to be|\\w+n't";
+
+const DENIAL_TOKEN = new RegExp(`\\b(?:${DENIAL_WORDS})\\b`, "gi");
+
+/**
+ * Opening denial of a DECLARED VALUE — the label route's own form of the rule.
+ *
+ * `labelDeclared` was left unguarded in the first design, on the evidence that
+ * no probe sentence filled through it. That evidence was void: no probe
+ * sentence used the `Label: value` form at all, so the route was never
+ * exercised. Re-measured on the `(name)` halves, whose detector cannot fire on
+ * a value: "Client: no name has been given" FILLED. `affirmativeString` only
+ * catches the bare sentinels (`none`, `n/a`) because it is anchored at `^`.
+ *
+ * The clause rule does not transpose here — the whole capture IS the value, so
+ * "inside the match" would refuse "Prospect: Kestrel Mutual, not a client",
+ * where the name is genuinely given. What transposes is the ANCHOR: a declared
+ * value that OPENS with a denial is a refusal to answer, and one that merely
+ * contains a denial further along is an answer with a caveat.
+ */
+const OPENING_DENIAL = new RegExp(`^\\s*(?:${DENIAL_WORDS})\\b`, "i");
+
+/** Clause spans of `text`, in order. Boundaries: `. , ; — |` newline, and coordinating conjunctions. */
+function clauses(text: string): Array<{ start: number; end: number }> {
+  // ⛔ `yet` IS NOT A BOUNDARY HERE, though it is a coordinating conjunction.
+  // It collides with the denial vocabulary: "has YET TO BE put in production"
+  // was split between "has" and "to be put in production", cutting the denial
+  // token in half and leaving the matched clause innocent. Measured — that
+  // sentence filled while every sibling closed. Its adversative use ("tired,
+  // yet he continued") is rare in brief prose; its adverbial use inside a
+  // denial is not, and the boundary list must lose the argument.
+  const breaks = /[.,;—|\n]|\s+(?:and|but|or|nor|so)\s+/g;
+  const spans: Array<{ start: number; end: number }> = [];
+  let cursor = 0;
+  let brk: RegExpExecArray | null;
+  while ((brk = breaks.exec(text)) !== null) {
+    spans.push({ start: cursor, end: brk.index });
+    cursor = brk.index + brk[0].length;
+  }
+  spans.push({ start: cursor, end: text.length });
+  return spans;
+}
+
+/**
+ * `true` when a denial governs the region `[start, end)`.
+ *
+ * A match that STRADDLES a clause boundary is governed as soon as ANY clause it
+ * occupies denies it — measured on WF-009 `role_level`, whose adjacency window
+ * pairs "The role is not yet defined" with "senior hires are paused" ACROSS the
+ * semicolon. ⚠️ The root cause is wider and is deliberately not fixed here: all
+ * 90 adjacency windows across the ten manifests are `[^.]{0,N}` and admit a
+ * semicolon. Tightening them to `[^.;]{0,N}` is a separate lot whose cost is
+ * unmeasured; this rule closes the case without touching them.
+ */
+function denialGoverns(text: string, start: number, end: number): boolean {
+  for (const span of clauses(text)) {
+    if (start >= span.end || end <= span.start) continue;
+    const tokens = new RegExp(DENIAL_TOKEN.source, "gi");
+    const segment = text.slice(span.start, span.end);
+    let hit: RegExpExecArray | null;
+    while ((hit = tokens.exec(segment)) !== null) {
+      if (span.start + hit.index < end) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * `true` when at least ONE occurrence of `pattern` is not governed by a denial.
+ *
+ * Every occurrence, never the first: each mapping concatenates `need`,
+ * `context` and `constraints`, so one field can deny a fact another states, and
+ * the operator HAS given the information in that case. ⚠️ Fields are joined by
+ * a BARE SPACE, so a field boundary is a clause boundary only when the text
+ * happens to end in punctuation. All nineteen briefs do; that is a property of
+ * the fixtures, not a guarantee about operator prose.
+ */
+function patternAnswers(text: string, pattern: RegExp): boolean {
+  const scan = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
+  let hit: RegExpExecArray | null;
+  while ((hit = scan.exec(text)) !== null) {
+    if (hit[0].length === 0) {
+      scan.lastIndex++;
+      continue;
+    }
+    if (!denialGoverns(text, hit.index, hit.index + hit[0].length)) return true;
+  }
+  return false;
+}
+
+function declaredValue(text: string, card: string): string | undefined {
   // ⚖️ END-OF-PROJECT AUDIT, debt (c) — settled by Guy on 2026-08-02, once and
   // for the seven manifests that carry a conjunction, never lot by lot.
   //
@@ -159,7 +289,19 @@ function labelDeclared(text: string, card: string): boolean {
   // label before a dash, so narrowing moves zero corpus verdict (measured, both
   // snapshots byte-identical) and every quick-start probe writes the colon.
   const declared = new RegExp(`\\b${label}\\s*:\\s*([^.;\\n]+)`, "i").exec(text);
-  return declared !== null && affirmativeString(declared[1]);
+  const value = declared?.[1];
+  return value !== undefined && affirmativeString(value) ? value : undefined;
+}
+
+/** The declared value answers the label — no denial rule. Reserved for `absenceIsAnswer` specs. */
+function labelDeclaredRaw(text: string, card: string): boolean {
+  return declaredValue(text, card) !== undefined;
+}
+
+/** The default: a declared value that OPENS with a denial is a refusal to answer, not an answer. */
+function labelDeclared(text: string, card: string): boolean {
+  const value = declaredValue(text, card);
+  return value !== undefined && !OPENING_DENIAL.test(value);
 }
 
 export function paramFilled(
@@ -169,7 +311,17 @@ export function paramFilled(
   if (spec.defaultValue !== undefined) return true;
   const text = spec.mapping(brief);
   if (spec.sanctionedUnknown?.test(text)) return true;
-  if (spec.pattern?.test(text) === true) return true;
+  // A card-sanctioned unknown is tested FIRST and stays outside the denial rule:
+  // it is an admitted non-answer the card itself licenses, not a denial to catch.
+  // `absenceIsAnswer` opts a spec out of the denial rule entirely: its card asks
+  // WHETHER, so "no personal data is processed" is the answer, not a refusal to
+  // give one. Both routes are exempted — a declared "Sensitivities: none
+  // reported" is the same answer written in the card's own form.
+  if (spec.absenceIsAnswer === true) {
+    if (spec.pattern?.test(text) === true) return true;
+    return labelDeclaredRaw(text, spec.card);
+  }
+  if (spec.pattern !== undefined && patternAnswers(text, spec.pattern)) return true;
   return labelDeclared(text, spec.card);
 }
 
