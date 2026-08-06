@@ -9,7 +9,30 @@
 ## [Unreleased]
 > Model: Claude Opus 5
 
+### ⬆️ Dependencies
+
+- **`GHSA-frvp-7c67-39w9` closed — `@hono/node-server` `1.19.15` → `2.1.0`** (advisory
+  threshold `2.0.5`). Path traversal in `serve-static` on **Windows** via an encoded
+  backslash, reachable only through a static-file mount; this repository declares no MCP
+  server, serves no static files, and runs on macOS, so nothing here reached the vulnerable
+  path — it is fixed anyway rather than argued away. The package is transitive at three
+  levels (`@anthropic-ai/claude-agent-sdk` → `@modelcontextprotocol/sdk` → `@hono/node-server`)
+  and `@modelcontextprotocol/sdk@1.29.0` pinned it to `^1.19.9`, which no in-range update could
+  escape. Resolved by two `overrides`: `@modelcontextprotocol/sdk` to `^1.30.0` — the release
+  that widens its own constraint to `^1.19.9 || ^2.0.5` — and `@hono/node-server` to `^2.0.5`,
+  so the override **honours** the parent's declared range instead of violating it. The SDK also
+  moves `0.3.220` → `0.3.223`, inside its declared `^0.3.215`. `npm audit`: **0
+  vulnerabilities**; `tsc --noEmit` clean; suite **398 passed**, the 12 skipped files being the
+  billed live runs, gated as always and not enabled for this check.
+
 ### 📝 Documentation
+
+- **The opt-out class ships five specs, not three.** The denial-probe header still read
+  *"Three shipped specs assert it"* in the present tense: three were surfaced by the suite
+  turning red, and the pre-push hardening pass found two more, so `absenceIsAnswer: true` is
+  declared in five manifests today (wf-003, wf-006, wf-007, wf-009, wf-010). Comment only —
+  the snapshot is byte-identical after a re-run, which is what proves the text does not feed
+  the generated record. The two sibling comments were already correct and left alone.
 
 - **Two linked snapshots stated a status their own body contradicted.** `denial-probe.md` was still titled *"a frozen record of an UNFIXED defect class"* and claimed *"it fixes nothing… the guard can later be written"*, while the same file measured `2 of 17 denials fill today` and the guard had shipped in `0.11.0`; its over-reach section still warned that WF-005 `audience` had its two verdicts inverted, repaired on 2026-08-05. `live-seed-controls.md` claimed the seeds were written *"weeks before any parameter check"* — measured at source, the WF-005 seed predates the first param manifest by **six days** (2026-07-13 vs 2026-07-19), so the quantifier is dropped rather than re-estimated. Fixed in the generators and regenerated; a header ages independently of its body and **no test can see it**.
 - **A published share no longer omits its population.** The corpus section of `denial-probe.md` read `7 of 20 briefs` while the loop skips P18, which carries no brief at all: the denominator is now the nineteen briefs actually probed (fifteen routed, four `NO_MATCH`), and the count is derived from the loop instead of `DISPATCH_FIXTURES.length`.
