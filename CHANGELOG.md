@@ -7,8 +7,12 @@
 ---
 
 ## [Unreleased]
+> Model: Claude Opus 5
 
-_Nothing yet._
+### 📝 Documentation
+
+- **Two linked snapshots stated a status their own body contradicted.** `denial-probe.md` was still titled *"a frozen record of an UNFIXED defect class"* and claimed *"it fixes nothing… the guard can later be written"*, while the same file measured `2 of 17 denials fill today` and the guard had shipped in `0.11.0`; its over-reach section still warned that WF-005 `audience` had its two verdicts inverted, repaired on 2026-08-05. `live-seed-controls.md` claimed the seeds were written *"weeks before any parameter check"* — measured at source, the WF-005 seed predates the first param manifest by **six days** (2026-07-13 vs 2026-07-19), so the quantifier is dropped rather than re-estimated. Fixed in the generators and regenerated; a header ages independently of its body and **no test can see it**.
+- **A published share no longer omits its population.** The corpus section of `denial-probe.md` read `7 of 20 briefs` while the loop skips P18, which carries no brief at all: the denominator is now the nineteen briefs actually probed (fifteen routed, four `NO_MATCH`), and the count is derived from the loop instead of `DISPATCH_FIXTURES.length`.
 
 ---
 
