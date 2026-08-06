@@ -37,8 +37,9 @@ import type { NeedBrief, ParamSpec } from "../src/dispatch/types.js";
  *
  * A CLASS THE GUARD MUST NOT TOUCH, discovered by the suite turning red on
  * arrival: on some cards a denial IS the answer ("no personal data is
- * processed"), because the card asks WHETHER and not WHICH. Three shipped specs
- * assert it, each argued from its own card, and refusing them would leave the
+ * processed"), because the card asks WHETHER and not WHICH. Five shipped specs
+ * assert it, each argued from its own card: three surfaced by the suite, two
+ * more only by the pre-push hardening pass. Refusing them would leave the
  * operator in a return loop they cannot exit — a worse defect than the one the
  * guard fixes. Those specs declare `absenceIsAnswer` and opt out of both routes.
  * ─────────────────────────────────────────────────────────────────────────────
