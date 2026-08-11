@@ -33,13 +33,13 @@ const AGENT: Asset = {
   path: "agents/core.md",
   title: "Core",
   description: "d",
-  catalogVersion: "v4.2.0",
-  source: { file: "agents/core.md", catalogTag: "v4.2.0" },
+  catalogVersion: "v4.3.0",
+  source: { file: "agents/core.md", catalogTag: "v4.3.0" },
 };
 
 const TEN_WF_SIDECAR: Sidecar = {
   schemaVersion: "1.0",
-  catalog: { name: "claude-agents", version: "v4.2.0" },
+  catalog: { name: "claude-agents", version: "v4.3.0" },
   generatedAt: "2026-07-19T00:00:00Z",
   assets: [
     AGENT,
@@ -50,8 +50,8 @@ const TEN_WF_SIDECAR: Sidecar = {
         path: `workflows/${id}.md`,
         title,
         description,
-        catalogVersion: "v4.2.0",
-        source: { file: `workflows/${id}.md`, catalogTag: "v4.2.0" },
+        catalogVersion: "v4.3.0",
+        source: { file: `workflows/${id}.md`, catalogTag: "v4.3.0" },
         dependsOn: ["AGENT-CORE"],
       }),
     ),

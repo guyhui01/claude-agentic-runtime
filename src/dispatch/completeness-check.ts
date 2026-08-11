@@ -27,7 +27,7 @@ export const NEED_MIN_WORDS = 15;
 /**
  * State markers a qualified `need` must carry — the "where does the client
  * stand" signal routing discriminates on. Derived from the arrow-shaped
- * sidecar descriptions of catalog v4.2.0 (each entry mirrors one or more
+ * sidecar descriptions of catalog v4.3.0 (each entry mirrors one or more
  * workflow preconditions); versioned here, extended when the catalog grows.
  * The check is presence-only: ANY marker qualifies — matching a marker does
  * NOT route (routing is the router's job, downstream).

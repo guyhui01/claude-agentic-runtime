@@ -2,7 +2,7 @@
  * WF-005 "Strategic Intelligence & Growth" parameter manifest.
  *
  * Derived from the card's `INTELLIGENCE CONTEXT` block
- * (`claude-agents/workflows/WF-005-veille-growth.md`), pinned to catalog v4.2.0 —
+ * (`claude-agents/workflows/WF-005-veille-growth.md`), pinned to catalog v4.3.0 —
  * the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  *
  * Seven card lines, seven specifications: RULE 2 finds no conjunction here. The
@@ -57,7 +57,7 @@ const intelligence = (b: NeedBrief): string =>
 
 export const WF005_MANIFEST: ParamManifest = {
   workflow: "WF-005",
-  catalogTag: "v4.2.0",
+  catalogTag: "v4.3.0",
   params: [
     {
       name: "target_format",

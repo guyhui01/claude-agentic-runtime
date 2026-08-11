@@ -2,7 +2,7 @@
  * WF-008 "AI Act / GDPR Compliance Audit" parameter manifest.
  *
  * Derived from the card's `COMPLIANCE AUDIT CONTEXT` block (path read from the
- * sidecar, never guessed), pinned to catalog v4.2.0 — the real-sidecar test
+ * sidecar, never guessed), pinned to catalog v4.3.0 — the real-sidecar test
  * hard-fails on tag drift, forcing a re-derive.
  *
  * ELEVEN CARD LINES BECOME NINETEEN SPECIFICATIONS, the largest manifest of the
@@ -48,7 +48,7 @@ const audit = (b: NeedBrief): string =>
 
 export const WF008_MANIFEST: ParamManifest = {
   workflow: "WF-008",
-  catalogTag: "v4.2.0",
+  catalogTag: "v4.3.0",
   params: [
     // --- Client [Name / Sector / Size / Geographic footprint] ----------------
     {

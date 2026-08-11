@@ -38,7 +38,7 @@ import type { Sidecar } from "../src/sidecar/types.js";
 /** Minimal sidecar exposing every registered manifest as a resolvable route. */
 const PROBE_SIDECAR: Sidecar = {
   schemaVersion: "1.0",
-  catalog: { name: "claude-agents", version: "v4.2.0" },
+  catalog: { name: "claude-agents", version: "v4.3.0" },
   generatedAt: "2026-07-29T00:00:00Z",
   assets: Object.keys(DEFAULT_MANIFESTS).map((id) => ({
     id,
@@ -46,8 +46,8 @@ const PROBE_SIDECAR: Sidecar = {
     path: `workflows/${id}.md`,
     title: id,
     description: "cross-vocabulary probe",
-    catalogVersion: "v4.2.0",
-    source: { file: `workflows/${id}.md`, catalogTag: "v4.2.0" },
+    catalogVersion: "v4.3.0",
+    source: { file: `workflows/${id}.md`, catalogTag: "v4.3.0" },
   })),
 };
 

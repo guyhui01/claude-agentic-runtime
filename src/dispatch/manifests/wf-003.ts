@@ -3,7 +3,7 @@
  *
  * Derived from the card's `TECHNICAL CONTEXT` block
  * (`claude-agents/workflows/WF-003-lancement-app-ia.md`), pinned to catalog
- * v4.2.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
+ * v4.3.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  *
  * Easier to detect than WF-002: seven of the eight lines carry an explicit
  * enumeration, so the patterns are the card's own families rather than a
@@ -35,7 +35,7 @@ const technical = (b: NeedBrief): string =>
 
 export const WF003_MANIFEST: ParamManifest = {
   workflow: "WF-003",
-  catalogTag: "v4.2.0",
+  catalogTag: "v4.3.0",
   params: [
     {
       name: "ai_app_type",

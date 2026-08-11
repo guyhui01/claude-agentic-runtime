@@ -4,7 +4,7 @@
  *
  * Derived from the card's `CLIENT CONTEXT` block
  * (`claude-agents/workflows/WF-001-cadrage-produit-ia.md`), pinned to catalog
- * v4.2.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
+ * v4.3.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  *
  * The `pattern` detectors are V0-pilot pragmatic: they recognize the card's
  * enum families in free brief text (deterministic substring/regex, no LLM).
@@ -17,7 +17,7 @@ import type { ParamManifest } from "../types.js";
 
 export const WF001_MANIFEST: ParamManifest = {
   workflow: "WF-001",
-  catalogTag: "v4.2.0",
+  catalogTag: "v4.3.0",
   params: [
     {
       name: "sector",

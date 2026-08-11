@@ -3,7 +3,7 @@
  *
  * Derived from the card's `PRE-SALES CONTEXT` block
  * (`claude-agents/workflows/WF-006-avant-vente-proposition-commerciale.md`),
- * pinned to catalog v4.2.0 — the real-sidecar test hard-fails on tag drift.
+ * pinned to catalog v4.3.0 — the real-sidecar test hard-fails on tag drift.
  *
  * ELEVEN card lines, FOURTEEN specifications. `Prospect [Name / Sector / Size /
  * AI maturity]` is a RULE 2 conjunction, and the split is not an interpretation:
@@ -73,7 +73,7 @@ const presalesWithDeliverable = (b: NeedBrief): string =>
 
 export const WF006_MANIFEST: ParamManifest = {
   workflow: "WF-006",
-  catalogTag: "v4.2.0",
+  catalogTag: "v4.3.0",
   params: [
     {
       name: "prospect_name",
