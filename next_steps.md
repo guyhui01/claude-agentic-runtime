@@ -17,10 +17,13 @@
 > priorité **n'existe plus** — le bloc ci-dessous est conservé pour son raisonnement, il n'est
 > plus une désignation valide.
 >
-> **Ce qui a changé de l'autre côté** : ce repo accumule **12 commits depuis `v0.11.0`**, dont
-> **deux advisories fermées** (`GHSA-frvp-7c67-39w9`, `GHSA-2v37-7h3g-55p8`) et le re-pin du
-> catalogue sur `v4.3.0`. `[Unreleased]` est rédigé et à jour au 2026-08-12. Ce n'est plus un
-> reliquat documentaire mais une **release de sécurité en attente**.
+> **Ce qui a changé de l'autre côté** : les 12 commits accumulés depuis `v0.11.0` — dont **deux
+> advisories fermées** (`GHSA-frvp-7c67-39w9`, `GHSA-2v37-7h3g-55p8`) et le re-pin du catalogue
+> sur `v4.3.0` — sont **RELEASÉS le 2026-08-12 en `v0.12.0`** (tag + GitHub Release `Latest`,
+> CI verte). ⟹ **La vitrine a désormais un retard de version À NOUVEAU FACTUEL** : elle affiche
+> `v0.11.0`, et c'est le même type de défaut que celui qui lui donnait la priorité le
+> 2026-08-05. La passe vitrine a maintenant trois choses à surfacer, pas une : la version, les
+> deux advisories, et le re-pin.
 >
 > ⛔ **Ne pas déduire un nouvel ordre de ces deux faits — c'est une décision de Guy**, et un
 > tracker qui l'invente reproduit exactement le défaut que ce bloc vient de subir. Ce qui est
@@ -210,6 +213,8 @@ Then FIND THE SINGLE LIVE `▶▶ NEXT UNIT` MARKER in this file and work from i
   - ▫ **Dette OUVERTE, délibérément non repliée** : **les 90 fenêtres d'adjacence des dix manifests sont `[^.]{0,N}` et autorisent toutes le `;`**, donc n'importe laquelle peut apparier deux clauses (mesuré sur WF-009 `role_level`). La règle « une clause traversée qui nie suffit » ferme le cas **sans y toucher**. Les resserrer en `[^.;]{0,N}` est un lot séparé dont le coût n'est **pas** mesuré — ne pas l'ouvrir au fil de l'eau.
   - ▫ **Deux limites ÉCRITES, pas des oublis** : « AWS was ruled out » (démenti postposé — le fermer coûte 3 faux MISSING pour 1 gain ; ⚠️ **jugement argumenté, PAS une mesure** : 0 des 19 briefs ne porte de participe postposé, les deux plateaux sont vides) et « beginner is a guess » (aucun démenti dans la clause du match, sous aucun découpage testé).
   - ▫ **Instruments versionnés** : `npm run measure:denials` (pourquoi une phrase remplit : sous-chaîne, route, clause propriétaire, position du démenti) et `npm run verify:denials` (prototype la règle pour l'attaquer avant `src/`). Le second **porte l'aveu de son propre angle mort** dans son en-tête. ⚠️ Son `SHIPPED` doit rester aligné sur `validate-route.ts` — un prototype qui dérive décrit un check qui n'est pas celui qui tourne.
+
+  ✅ **RELEASE `v0.12.0` FAITE 2026-08-12 — « Two advisories closed, and the catalog pin catches up ».** Tag annoté + GitHub Release **non-draft, non-prerelease, `Latest` confirmé par l'API**, CI verte sur le commit de release `3ce4e7c` (les 3 jobs, dont `real-sidecar`), `[Unreleased]` remis à `_Nothing yet._`. Contenu : les deux advisories (`GHSA-2v37-7h3g-55p8` nanoid dev-only, `GHSA-frvp-7c67-39w9` hono), le re-pin du catalogue sur `v4.3.0`, et les surfaces liées rendues cohérentes. ▫ **Le lot a failli partir SANS entrée de CHANGELOG** : trois changements avaient été poussés sans y figurer, alors que le commit juste avant portait la sienne — le CHANGELOG documentait donc une advisory transitive fermée et pas l'autre, à six jours d'écart. **C'est Guy qui l'a vu**, pas mon process ([[feedback-corriger-dette-avant-livraison]]). ▫ Version bumpée dans `package.json` **et dans les deux champs du lock** (`version` + `packages[""]`) — la dérive exacte contre laquelle le catalogue a dû poser un garde après que cinq de ses tags soient sortis avec un lock périmé.
 
   ✅ **RELEASE `v0.11.0` FAITE 2026-08-05 — « A denial is not an answer ».** Tag annoté + GitHub Release **non-draft, non-prerelease, `latest` confirmé par l'API** (`releases/latest` → `v0.11.0`), CI verte sur le commit de release `6326a4f`, `[Unreleased]` remis à vide. ▫ **Dette du CHANGELOG repliée dans le même lot** : onze versions publiées ne portaient **qu'une seule** link ref ; toutes rétablies, et `0.1.0` reste **sans lien** parce qu'elle n'a jamais été taguée (vérifié par `git tag`, pas déduit de la liste des titres) — un lien cassé aurait été pire que l'absence.
   - ⟹ **Les deux commits de sondes de seeds (`f42b8ab`, `27f85c8`) sont désormais DANS une version publiée** : le seul motif qui les écartait de la vitrine le 2026-08-03 tombe. Ils portent le résultat le plus vendeur du chantier (41 specs sur 78 se remplissent ; contrôle « nearly powerless » sur WF-001/002/003).
