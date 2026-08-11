@@ -7,6 +7,12 @@
 ---
 
 ## [Unreleased]
+
+_Nothing yet._
+
+---
+
+## [0.12.0] - 2026-08-12 — Two advisories closed, the catalog pin caught up, and the linked documents stop contradicting where they are read 🔗
 > Model: Claude Opus 5
 
 ### 🔄 Changed
@@ -407,7 +413,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.9.1...v0.10.0
 [0.9.1]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.9.0...v0.9.1
