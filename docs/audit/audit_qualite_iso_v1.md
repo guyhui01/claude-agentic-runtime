@@ -36,6 +36,14 @@
 | Repo cleanliness | `git ls-files \| grep DS_Store` | no tracked `.DS_Store`; `.gitignore:34` covers it |
 | License | `LICENSE`, `package.json:6`, `README.md:66` | **MIT** © 2026 Guy HUI-BON-HOA |
 
+> **Annotation 2026-08-12 — the `npm audit` row above is a 2026-06-11 reading and is left exactly as it stands.** It was correct on that date. Per the frozen-finding rule, this table records what was measured then, not what holds today; the verdict is annotated, never rewritten.
+>
+> **Measured on 2026-08-12**: one **high**-severity advisory, `GHSA-2v37-7h3g-55p8` (`nanoid` < 3.3.17), reached through `vitest → vite → postcss → nanoid`. **Development-only**, confirmed at two independent points: the lockfile entry carries `dev: true`, and `npm audit --omit=dev` returns **0 vulnerabilities** for the production tree.
+>
+> **Remediated the same day**: `nanoid` 3.3.16 → **3.3.18**. The **parent's declared range** decided the remedy — `postcss@8.5.25` requires `nanoid: "^3.3.16"`, so the fix lands *inside* that range and needs no `overrides`; `postcss` itself does not move. This is the **opposite case** to `@hono/node-server` (`GHSA-frvp-7c67-39w9`), where the fix was a **major** jump outside the range pinned by `@modelcontextprotocol/sdk`, and forcing it was refused. After remediation: `npm audit` → **0 vulnerabilities**, `npm ci` clean, strict typecheck OK, suite **398 passed / 23 skipped**.
+>
+> ⚠️ **Unexplained fact, recorded rather than resolved**: this advisory is reported by `npm audit` but appears in **no Dependabot alert** — the repository's alert list holds 18 entries, all `fixed`, none for `nanoid`. Why the two sources disagree is not established here, and is deliberately not guessed at.
+
 ---
 
 ## 2. Data axis — ISO/IEC 25012:2008
