@@ -7,7 +7,25 @@
 
 ---
 
-## ⏸ PRIORITÉ INTER-CHANTIERS — MISE À JOUR 2026-08-05 : le chantier actif est `guyhui-showcase`
+## ⏸ PRIORITÉ INTER-CHANTIERS — ⚠️ MISE À JOUR 2026-08-12 : le motif du 2026-08-05 est ÉTEINT, la priorité est à RE-TRANCHER
+
+> **⚠️ LIRE CECI AVANT LE BLOC DU 2026-08-05 CI-DESSOUS, qui argumente sur une prémisse
+> désormais FAUSSE.** Ce bloc désignait `guyhui-showcase` comme chantier actif au motif que
+> « le seul défaut **factuel** ouvert est côté vitrine — elle affiche `v0.10.0` ». **Mesuré le
+> 2026-08-12 : la vitrine affiche `v0.11.0`** (`docs/stack/agentic_runtime/index.md`), et Guy
+> a re-cliqué et validé les deux liens de snapshots le même jour. Le défaut qui fondait cette
+> priorité **n'existe plus** — le bloc ci-dessous est conservé pour son raisonnement, il n'est
+> plus une désignation valide.
+>
+> **Ce qui a changé de l'autre côté** : ce repo accumule **12 commits depuis `v0.11.0`**, dont
+> **deux advisories fermées** (`GHSA-frvp-7c67-39w9`, `GHSA-2v37-7h3g-55p8`) et le re-pin du
+> catalogue sur `v4.3.0`. `[Unreleased]` est rédigé et à jour au 2026-08-12. Ce n'est plus un
+> reliquat documentaire mais une **release de sécurité en attente**.
+>
+> ⛔ **Ne pas déduire un nouvel ordre de ces deux faits — c'est une décision de Guy**, et un
+> tracker qui l'invente reproduit exactement le défaut que ce bloc vient de subir. Ce qui est
+> établi : l'argument « la vitrine d'abord » est éteint ; ce qui ne l'est pas : ce qui passe
+> devant.
 
 > **Ce repo N'EST PLUS le premier.** Nouvel ordre : **(1) `guyhui-showcase` →
 > (2) `claude-agentic-runtime` (run live) → (3) RAWLY.**

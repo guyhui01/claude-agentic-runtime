@@ -9,7 +9,40 @@
 ## [Unreleased]
 > Model: Claude Opus 5
 
+### 🔄 Changed
+
+- **The ten parameter manifests now pin catalog `v4.3.0`** (previously `v4.2.0`). Drift against
+  a newer catalog release is answered at session start by design (ADR-0002), but it also turned
+  the real-sidecar guard **red on any working copy** whose `claude-agents` checkout sat newer
+  than the pin — ten failing assertions locally against the very suite CI reports green, since
+  CI clones the catalog *at the pinned tag*. The re-derivation risk that normally makes a
+  re-pin expensive was **measured to be nil before anything was edited**: the `workflows/` card
+  directory is byte-identical between the two tags, the sidecar assets are strictly identical
+  once the two version fields are neutralised (85 assets, none added, none removed, every
+  `source.file` unchanged), and `v4.3.0` is a catalog **tooling** release (empty-corpus guards,
+  a generation floor, a lockfile version check) that touches no card. This is therefore a
+  rename of the pin, not a re-derivation: 69 occurrences across 17 files, 69 insertions and 69
+  deletions, no line added or removed. **Sorted rather than swept**: the five `docs/discovery/`
+  documents and this CHANGELOG keep their `v4.2.0`, where it is a dated statement and not a
+  live pin, and the 56 `v4.1.0` occurrences are synthetic sidecar fixtures unrelated to the
+  pin. The drift guard was falsified **after** the change — pinning wf-002 to a non-existent
+  `v9.9.9` turns exactly one test red, the WF-002 real-sidecar assertion — so it still measures
+  its subject.
+
 ### ⬆️ Dependencies
+
+- **`GHSA-2v37-7h3g-55p8` closed — `nanoid` `3.3.16` → `3.3.18`** (advisory threshold
+  `3.3.17`). Custom generators can loop indefinitely when `size` is zero. Reached through
+  `vitest → vite → postcss → nanoid` and **development-only**, confirmed at two independent
+  points: the lockfile entry carries `dev: true`, and `npm audit --omit=dev` reports zero
+  vulnerabilities for the production tree. The **parent's declared range decided the remedy**,
+  which is exactly what separates this case from `GHSA-frvp-7c67-39w9` below: `postcss@8.5.25`
+  requires `nanoid: "^3.3.16"`, so the fix lands *inside* that range — a plain `npm audit fix`,
+  no `overrides`, no `--force`, and `postcss` itself does not move. `npm audit`: **0
+  vulnerabilities**; `npm ci` clean; `tsc --noEmit` clean; suite **398 passed / 23 skipped**.
+  ⚠️ Recorded rather than explained: this advisory is reported by `npm audit` and appears in
+  **no** Dependabot alert (18 entries, all `fixed`, none for `nanoid`), so the two sources are
+  not interchangeable and both are worth running.
 
 - **`GHSA-frvp-7c67-39w9` closed — `@hono/node-server` `1.19.15` → `2.1.0`** (advisory
   threshold `2.0.5`). Path traversal in `serve-static` on **Windows** via an encoded
@@ -26,6 +59,21 @@
   billed live runs, gated as always and not enabled for this check.
 
 ### 📝 Documentation
+
+- **The two ISO reservations now read as closed where they are actually read.** The showcase
+  audits page states them as *"conforming, with a reservation — since fixed"* and links straight
+  to `docs/audit/audit_qualite_iso_v1.md`; the file carried that closure **155 lines further
+  down**, in its §7 annotation, so a reader following the link landed on an executive summary
+  showing two open reservations with nothing beside them saying otherwise. Same defect class as
+  the snapshot headers fixed on 2026-08-06: a linked artifact is a public reading surface, and
+  the reader starts at the top. Both verdicts are left exactly as found, the wording is the
+  showcase's own rather than a term invented here, each marker links to the §7 evidence naming
+  the remediation commit and release, and a note under the table states that these are later
+  annotations — so the frozen-finding rule stays legible: annotate, never rewrite. Verified
+  before annotating, rather than taken from the annotation itself: P1 and P2 are genuinely
+  closed, the "5 schema + 2 integrity" formula being corrected at source in
+  `schema/sidecar.schema.json` and the obsolete "spine WF-001→003" naming absent from
+  `docs/ARCHITECTURE.md`.
 
 - **The opt-out class ships five specs, not three.** The denial-probe header still read
   *"Three shipped specs assert it"* in the present tense: three were surfaced by the suite
