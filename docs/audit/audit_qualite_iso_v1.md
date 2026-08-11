@@ -15,10 +15,12 @@
 
 | Axis | Standard | Verdict | Main reservation |
 |---|---|---|---|
-| **Data** | ISO/IEC 25012:2008 | 🟡 **Conforming with reservation** | The 7 characteristics are really encoded and executable, but the **documented "5 schema + 2 integrity" decomposition is inexact** (compliance omitted; accuracy/accessibility split). |
-| **Architecture** | ISO/IEC/IEEE 42010:2022 | 🟡 **Conforming with reservation** | Stakeholders / concerns / viewpoints complete, but one viewpoint cites an **obsolete naming** ("spine WF-001→003"). |
+| **Data** | ISO/IEC 25012:2008 | 🟡 **Conforming with reservation** — *since fixed* ([P1, §7](#7-prioritized-remediation-plan)) | The 7 characteristics are really encoded and executable, but the **documented "5 schema + 2 integrity" decomposition is inexact** (compliance omitted; accuracy/accessibility split). |
+| **Architecture** | ISO/IEC/IEEE 42010:2022 | 🟡 **Conforming with reservation** — *since fixed* ([P2, §7](#7-prioritized-remediation-plan)) | Stakeholders / concerns / viewpoints complete, but one viewpoint cites an **obsolete naming** ("spine WF-001→003"). |
 | **Software / runtime** | ISO/IEC 25010 | 🟢 **Conforming** | Reliability (fail-closed), maintainability (strict types, 111 tests), security (anti-traversal, read-only, key guard) demonstrated. Observability note (live run captured in `/tmp`, not versioned). |
 | **AI governance** | ISO/IEC 42001:2023 | 🟢 **Conforming** | Invariants traced (ADR-0001/0004/0005), explicit honesty about guarantees. AI risk analysis only implicit (see ISO 23894, deferred). |
+
+> ⤵ The *since fixed* markers are **later annotations**, added so this table cannot be read as an open reservation. The verdicts themselves are the 2026-06-11 findings and are **not** rewritten — closure evidence, commit and release are in [§7](#7-prioritized-remediation-plan).
 
 **Overall verdict**: a **solid and defensible** foundation. No major non-conformance. The reservations are **documentary/factual** (consistency of the statements), not design flaws. The remediation plan (§7) is mostly "wording fixes" + 2 deferred-standard triggers to record.
 
