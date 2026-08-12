@@ -233,7 +233,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // brief: a genuine team-size statement about another card's team. That is
       // the recorded-crossing class, not a defect.
       pattern:
-        /\bteams?\b[^,.]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.;]{0,12}\b\d|\b\d+\s+(squads?|scrum teams?|safe teams?)\b/i,
+        /\bteams?\b[^,.;]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.;]{0,12}\b\d|\b\d+\s+(squads?|scrum teams?|safe teams?)\b/i,
     },
     {
       name: "team_distribution",
@@ -287,7 +287,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // 2026-07-31). The other two halves fill. Recorded by the quick-start
       // test; dropping the guard re-admits P09 and is not the answer.
       pattern:
-        /\bteams?\b[^,.]{0,20}\b(remote(ly)?|on-?site|hybrid)\b|\b(remote(ly)?|on-?site|hybrid)\b[^,.]{0,12}\bteams?\b|\bworks? from home\b/i,
+        /\bteams?\b[^,.;]{0,20}\b(remote(ly)?|on-?site|hybrid)\b|\b(remote(ly)?|on-?site|hybrid)\b[^,.;]{0,12}\bteams?\b|\bworks? from home\b/i,
     },
     {
       name: "client_stakes",

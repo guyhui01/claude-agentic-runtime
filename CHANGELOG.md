@@ -11,12 +11,21 @@
 
 ### 🐛 Fixed
 
-- **Adjacency windows no longer pair two facts a `;` has separated.** All **87** windows across
-  the nine manifests that carry one move from `[^.]{0,N}` to `[^.;]{0,N}`. A semicolon ends a
-  clause, so tokens on either side of it are separate statements; a window spanning one reports a
-  fact the sentence never makes, and the failure direction is the unsafe one — `paramsChecked:
-  true` on a brief that does not answer the card line. ⚠️ **The tracker said "90 windows": there
-  are 87**, re-derived rather than copied.
+- **Adjacency windows no longer pair two facts a `;` has separated.** A semicolon ends a clause,
+  so tokens on either side of it are separate statements; a window spanning one reports a fact the
+  sentence never makes, and the failure direction is the unsafe one — `paramsChecked: true` on a
+  brief that does not answer the card line. After this lot, **no window in any manifest admits a
+  `;`**, verified by an inventory over every window shape rather than over one of them.
+  ▫ ⚠️ **The count, and two wrong numbers before the right one.** The tracker carried "90". A
+  first re-derivation here answered **87** and was itself wrong: it grepped a single shape,
+  `[^.]{0,N}`. The full inventory is **91** — 87 `[^.;]`, plus three `[^,.]{0,N}` in wf-010 that
+  exclude the comma but **not** the semicolon and so carried the same defect, plus one `[^.,;]`
+  already correct. The three were tightened to `[^,.;]` in this same lot, keeping their
+  deliberate comma exclusion instead of flattening it.
+  ▫ ⚠️ **The probe could not have found those three**, and reported zero after the main fix: the
+  specs concerned produce no injectable match on the corpus, which is precisely the population
+  limit written in its header. A **form** inventory found them; **behaviour** measurement could
+  not. Recorded in the probe itself — neither method absorbs the other.
   ▫ **Measured before and after.** The probe shipped alongside recorded **11** windows crossing an
   injected `;` over 9 specs and 7 manifests; it now records **0**, denominator unchanged at 103,
   no row added. The cost was known in advance to be nil — **zero of the 269 real matches** on the
@@ -26,7 +35,7 @@
   property on injected semicolons: WF-009 `role_level` now refuses *"the budget is
   senior-approved; we still need to hire a developer"* while still filling *"we are hiring a
   senior MLOps engineer"* — the control that makes the guard discriminate rather than merely
-  strict. Falsified both ways; the tightening applies to all 87 rather than the 9 proven ones, so
+  strict. Falsified both ways; the tightening applies to all 91 rather than the 9 proven ones, so
   it does not create the inter-manifest divergence the policy-consistency table exists to catch.
   ▫ ⚠️ **One green falsification recorded as a finding**: excluding the comma as well survives the
   whole suite, so the `;`-but-not-`,` line is **argued, not measured**. Written into the probe's

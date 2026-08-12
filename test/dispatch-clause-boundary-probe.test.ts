@@ -28,6 +28,14 @@
  *     brief is invisible here. Every count is a FLOOR, never a total
  *     (`feedback-aucun-nombre-sans-sa-population`).
  *
+ *     ⚠️ THIS LIMIT BIT ON THE VERY LOT THAT SHIPPED THE PROBE, which is why it
+ *     is stated first. Three windows in wf-010 were written `[^,.]{0,N}` — they
+ *     exclude the comma but NOT the semicolon, so they carried the same defect —
+ *     and this probe reported ZERO after the main fix, because those specs
+ *     produce no injectable match on the corpus. A FORM inventory over the regex
+ *     sources found them; behaviour measurement could not. Neither method
+ *     absorbs the other: grep the shapes AND probe the behaviour.
+ *
  * (b) IT MEASURES A PROPERTY, NOT A FREQUENCY. The injection lands at the middle
  *     space of the match, which often falls INSIDE a noun phrase — `three-month;
  *     engagement`, `EU; only`. No real writer produces those. So a row proves
