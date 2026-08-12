@@ -162,7 +162,7 @@ export const WF004_MANIFEST: ParamManifest = {
       // them included, the pre-sales brief missed only because its gap measured
       // 25 characters against a 24-character window — luck, not design.
       pattern:
-        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.]{0,24}\b(engagement|mission|assignment|contract|intervention)\b|\b(engagement|mission|assignment|contract|intervention)\b[^.]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
+        /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.;]{0,24}\b(engagement|mission|assignment|contract|intervention)\b|\b(engagement|mission|assignment|contract|intervention)\b[^.;]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
     },
     {
       name: "stakeholders",
@@ -202,7 +202,7 @@ export const WF004_MANIFEST: ParamManifest = {
       // says "AI maturity audit", which is what is being BOUGHT, not where the
       // client stands.
       pattern:
-        /\b(beginner|novice|experimenter|experimenting)\b|\badvanced\b[^.]{0,20}\b(maturity|ai adoption)\b|\b(maturity|ai adoption)\b[^.]{0,20}\badvanced\b/i,
+        /\b(beginner|novice|experimenter|experimenting)\b|\badvanced\b[^.;]{0,20}\b(maturity|ai adoption)\b|\b(maturity|ai adoption)\b[^.;]{0,20}\badvanced\b/i,
     },
     {
       name: "priority_stakes",

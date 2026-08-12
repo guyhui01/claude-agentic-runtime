@@ -43,6 +43,16 @@
  * move, instead of leaving nine specs diverging from the other seventy-eight
  * (`feedback-coherence-inter-artefacts-invisible-aux-tests`).
  *
+ * ⚠️ OPEN FINDING, recorded because a green falsification is a result and not a
+ * pass. Excluding the COMMA as well (`[^.;,]`) on WF-009 `role_level` survives
+ * the whole suite: nothing measures whether a comma must stay traversable for
+ * that spec. The `;`-but-not-`,` line is therefore ARGUED, not measured — a
+ * comma separates examples (the WF-001 `constraints` and WF-006 `Known risks`
+ * precedents), a semicolon separates clauses. No guard is added for it here: on
+ * this corpus no `role_level` match contains a comma, so a test would assert
+ * against an empty case and prove only its own non-vacuity. Whoever tightens
+ * further must first produce the brief that makes the difference visible.
+ *
  * Frozen as a SNAPSHOT rather than a red assertion: a permanent red masks real
  * regressions. Read the diff, never regenerate it reflexively.
  */
@@ -149,5 +159,27 @@ describe("clause-boundary probe — windows that pair across a `;`", () => {
     out.push("");
 
     await expect(out.join("\n")).toMatchFileSnapshot("./__snapshots__/clause-boundary.md");
+  });
+
+  /**
+   * The REALISTIC case, hard-asserted because the snapshot above cannot carry it:
+   * the snapshot measures a structural property on injected semicolons, while
+   * these two sentences are ones a person would actually write. Both name a
+   * level word and a role word on OPPOSITE sides of a `;`, and neither states
+   * the level of the role sought — the unsafe direction.
+   *
+   * The third case is the control that makes this discriminate rather than
+   * merely strict: the legitimate sentence must still fill. A guard that closed
+   * both would be a regression wearing the costume of a fix.
+   */
+  it("refuses a level and a role separated by a `;`, and still fills the legitimate one", async () => {
+    const { WF009_MANIFEST } = await import("../src/dispatch/manifests/wf-009.js");
+    const spec = WF009_MANIFEST.params.find((p) => p.name === "role_level");
+    expect(spec?.pattern, "role_level must carry a detector").toBeDefined();
+    const re = spec!.pattern!;
+
+    expect(re.test("the budget is senior-approved; we still need to hire a developer")).toBe(false);
+    expect(re.test("our lead investor signed; the position is a data analyst")).toBe(false);
+    expect(re.test("we are hiring a senior MLOps engineer")).toBe(true);
   });
 });

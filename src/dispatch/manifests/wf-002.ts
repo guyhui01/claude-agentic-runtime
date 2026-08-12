@@ -59,7 +59,7 @@ export const WF002_MANIFEST: ParamManifest = {
       // Either the PI stated in weeks/months, or the sprint decomposition the
       // card gives as its alternative form ("4 sprints of 2 weeks").
       pattern:
-        /\bPI\b[^.]{0,40}\b\d+\s*-?\s*(weeks?|months?)\b|\b\d+\s*-?\s*(weeks?|months?)\b[^.]{0,40}\bPI\b|\b\d+\s+sprints?\s+of\s+\d+\b/i,
+        /\bPI\b[^.;]{0,40}\b\d+\s*-?\s*(weeks?|months?)\b|\b\d+\s*-?\s*(weeks?|months?)\b[^.;]{0,40}\bPI\b|\b\d+\s+sprints?\s+of\s+\d+\b/i,
     },
     {
       name: "current_pi",
@@ -75,7 +75,7 @@ export const WF002_MANIFEST: ParamManifest = {
       card: "ART capacity",
       required: true,
       mapping: situation,
-      pattern: /\b\d+\s*(story points?|velocity)\b|\bcapacity\b[^.]{0,30}\b\d+/i,
+      pattern: /\b\d+\s*(story points?|velocity)\b|\bcapacity\b[^.;]{0,30}\b\d+/i,
     },
     {
       name: "dependencies",

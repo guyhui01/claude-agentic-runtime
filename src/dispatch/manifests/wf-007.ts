@@ -136,7 +136,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // probe. The negation guard is carried over from that same spec: a brief
       // saying "not an audit" must not be read as stating one.
       pattern:
-        /(?<!\bnot )(?<!\bnot an )(?<!\bno )(?:\baudits?\b|\bAMS\b|\bapplication (maintenance|management) services?\b|\b(scoping|build|consulting|training) (engagement|mission|assignment|phase|contract)\b|\b(engagement|mission|assignment)\b[^.]{0,20}\b(scoping|build|consulting|training) (phase|work|stream)\b|\btraining (plan|programme|program)\b)/i,
+        /(?<!\bnot )(?<!\bnot an )(?<!\bno )(?:\baudits?\b|\bAMS\b|\bapplication (maintenance|management) services?\b|\b(scoping|build|consulting|training) (engagement|mission|assignment|phase|contract)\b|\b(engagement|mission|assignment)\b[^.;]{0,20}\b(scoping|build|consulting|training) (phase|work|stream)\b|\btraining (plan|programme|program)\b)/i,
     },
     {
       name: "engagement_duration",
@@ -187,7 +187,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // needed — `duration` is the field noun that makes it unambiguous, and the
       // window is 16 rather than 24.
       pattern:
-        /\b(short|medium|long)([-\s]term)?\b[^.]{0,16}\b(engagement|mission|assignment|duration|contract|intervention)\b|\bduration\b[^.]{0,16}\b(short|medium|long)([-\s]term)?\b|\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.]{0,24}\b(engagement|mission|assignment|contract|intervention)\b|\b(engagement|mission|assignment|contract|intervention)\b[^.]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
+        /\b(short|medium|long)([-\s]term)?\b[^.;]{0,16}\b(engagement|mission|assignment|duration|contract|intervention)\b|\bduration\b[^.;]{0,16}\b(short|medium|long)([-\s]term)?\b|\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b[^.;]{0,24}\b(engagement|mission|assignment|contract|intervention)\b|\b(engagement|mission|assignment|contract|intervention)\b[^.;]{0,24}\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[-\s](day|week|month|quarter|year)s?\b/i,
     },
     {
       name: "stakeholders",
@@ -312,7 +312,7 @@ export const WF007_MANIFEST: ParamManifest = {
       // Every value is an adjective that qualifies almost anything, so none
       // counts bare — the stake vocabulary must sit beside it.
       pattern:
-        /\b(business|technical|organi[sz]ational|political)\b[^.]{0,24}\b(stakes?|challenges?|issues?|risks?|drivers?)\b|\b(stakes?|challenges?|issues?|risks?|drivers?)\b[^.]{0,24}\b(business|technical|organi[sz]ational|political)\b/i,
+        /\b(business|technical|organi[sz]ational|political)\b[^.;]{0,24}\b(stakes?|challenges?|issues?|risks?|drivers?)\b|\b(stakes?|challenges?|issues?|risks?|drivers?)\b[^.;]{0,24}\b(business|technical|organi[sz]ational|political)\b/i,
     },
     {
       name: "sensitivities",

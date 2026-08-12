@@ -132,7 +132,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // list at all. A card that names no values needs a detector that
       // recognises maturity statements generically.
       pattern:
-        /\b(beginner|novice|experimenter|experimenting)\b|\b(advanced|mature)\b[^.]{0,20}\b(maturity|ai adoption|ai practice)\b|\b(maturity|ai adoption|ai practice)\b[^.]{0,20}\b(advanced|mature|beginner|low|high)\b|\bno prior (AI|machine[-\s]learning)\b|\bfirst AI (project|initiative)\b|\b(several|multiple) models in production\b/i,
+        /\b(beginner|novice|experimenter|experimenting)\b|\b(advanced|mature)\b[^.;]{0,20}\b(maturity|ai adoption|ai practice)\b|\b(maturity|ai adoption|ai practice)\b[^.;]{0,20}\b(advanced|mature|beginner|low|high)\b|\bno prior (AI|machine[-\s]learning)\b|\bfirst AI (project|initiative)\b|\b(several|multiple) models in production\b/i,
     },
     {
       name: "request_type",
@@ -184,12 +184,12 @@ export const WF006_MANIFEST: ParamManifest = {
       // P11 asks "what an AI scoping mission with us WOULD COST": a request for
       // a price is not a stated budget, and it correctly does not fill.
       pattern:
-        /\b(budget|envelope|price range|ceiling|spend|willing to spend|funding)\b[^.]{0,32}(?:[€$£]\s?\d|\d[\d ,.]*\s?(?:k€|k\b|K\b|M\b|m€|euros?|dollars?|pounds?|EUR|USD|GBP|thousand|million))|(?:[€$£]\s?\d|\d[\d ,.]*\s?(?:k€|k\b|K\b|M\b|m€|euros?|dollars?|EUR|USD|GBP|thousand|million))[^.]{0,32}\b(budget|envelope|price range|ceiling|spend|funding)\b/i,
+        /\b(budget|envelope|price range|ceiling|spend|willing to spend|funding)\b[^.;]{0,32}(?:[€$£]\s?\d|\d[\d ,.]*\s?(?:k€|k\b|K\b|M\b|m€|euros?|dollars?|pounds?|EUR|USD|GBP|thousand|million))|(?:[€$£]\s?\d|\d[\d ,.]*\s?(?:k€|k\b|K\b|M\b|m€|euros?|dollars?|EUR|USD|GBP|thousand|million))[^.;]{0,32}\b(budget|envelope|price range|ceiling|spend|funding)\b/i,
       // The card's own honest unknown. It must be ACCEPTED, not rejected: the
       // field-class policy of the dry-run distinguishes a card-sanctioned
       // "Not disclosed" from the negative sentinels intake refuses.
       sanctionedUnknown:
-        /\bbudget\b[^.]{0,32}\b(not disclosed|undisclosed|not shared|not communicated|not stated|confidential)\b|\b(not disclosed|undisclosed|not shared|confidential)\b[^.]{0,24}\bbudget\b/i,
+        /\bbudget\b[^.;]{0,32}\b(not disclosed|undisclosed|not shared|not communicated|not stated|confidential)\b|\b(not disclosed|undisclosed|not shared|confidential)\b[^.;]{0,24}\bbudget\b/i,
     },
     {
       name: "response_deadline",
@@ -220,7 +220,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // `PARAMS_MISSING` names "Response deadline", which designates the word
       // to add.
       pattern:
-        /\b(response|submission|reply|bid|RFP|proposal)\b[^.]{0,32}\b(due|deadline|closes?|closing|expected by)\b|\b(due|deadline|closes?|closing date|submission date)\b[^.]{0,32}\b(response|submission|reply|bid|RFP)\b|\b\d{4}-\d{2}-\d{2}\b/i,
+        /\b(response|submission|reply|bid|RFP|proposal)\b[^.;]{0,32}\b(due|deadline|closes?|closing|expected by)\b|\b(due|deadline|closes?|closing date|submission date)\b[^.;]{0,32}\b(response|submission|reply|bid|RFP)\b|\b\d{4}-\d{2}-\d{2}\b/i,
     },
     {
       name: "competition",
@@ -240,7 +240,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // card asks: WF-005 asks WHICH sources, this asks WHETHER there is
       // competition.
       pattern:
-        /\bsole[-\s]source(d|ing)?\b|\bno (other )?(competitors?|competing (firms?|bidders?)|bidders?|competition)\b|\bwithout competition\b|\bexclusive (negotiation|discussion)s?\b|\bcompeting (firms?|bidders?|vendors?|consultancies)\b|\bcompetitors? (identified|named|known|shortlisted)\b|\bagainst\s+(\d+|two|three|four|five|several)\s+(other\s+)?(firms?|bidders?|vendors?|consultancies)\b|\b(\d+|two|three|four|five|several)\s+(other\s+)?(firms?|bidders?|vendors?|consultancies)\b[^.]{0,24}\b(compet\w+|bidding|shortlist\w*|in the running)\b/i,
+        /\bsole[-\s]source(d|ing)?\b|\bno (other )?(competitors?|competing (firms?|bidders?)|bidders?|competition)\b|\bwithout competition\b|\bexclusive (negotiation|discussion)s?\b|\bcompeting (firms?|bidders?|vendors?|consultancies)\b|\bcompetitors? (identified|named|known|shortlisted)\b|\bagainst\s+(\d+|two|three|four|five|several)\s+(other\s+)?(firms?|bidders?|vendors?|consultancies)\b|\b(\d+|two|three|four|five|several)\s+(other\s+)?(firms?|bidders?|vendors?|consultancies)\b[^.;]{0,24}\b(compet\w+|bidding|shortlist\w*|in the running)\b/i,
     },
     {
       name: "decision_makers",
@@ -270,7 +270,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // does. Two questions, two inputs. It is the ONLY cell where the two
       // disagree across both WF-006 briefs.
       pattern:
-        /\b(CIO|CDO|CTO|CEO|COO|CFO|CISO|CHRO)\b|\bexecutive sponsor\b|\bsteering committee\b|\bcomex\b|\bbuying (committee|centre|center)\b|\b(procurement|purchasing|business|IT|finance|legal|technical)[-\s](led|driven|owned)\b|\b(procurement|purchasing|business unit|IT department|finance department)\b[^.]{0,28}\b(decides|decision|sign[-\s]?off|signs off|approval|approves|owns|evaluat\w+)\b|\bdecision[-\s]makers?\b[^.]{0,28}\b(identified|named|are|is|include)\b|\bdecision path\b/i,
+        /\b(CIO|CDO|CTO|CEO|COO|CFO|CISO|CHRO)\b|\bexecutive sponsor\b|\bsteering committee\b|\bcomex\b|\bbuying (committee|centre|center)\b|\b(procurement|purchasing|business|IT|finance|legal|technical)[-\s](led|driven|owned)\b|\b(procurement|purchasing|business unit|IT department|finance department)\b[^.;]{0,28}\b(decides|decision|sign[-\s]?off|signs off|approval|approves|owns|evaluat\w+)\b|\bdecision[-\s]makers?\b[^.;]{0,28}\b(identified|named|are|is|include)\b|\bdecision path\b/i,
     },
     {
       name: "selection_criteria",
@@ -284,7 +284,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // the manifest (see the header note); the strictness here is what keeps a
       // spec with no textual consumer from becoming a free pass.
       pattern:
-        /\b(selection|award|evaluation|scoring)\s+(criteri(a|on)|grid|matrix|framework)\b|\bcriteri(a|on)\b[^.]{0,32}\b(price|cost|expertise|references?|deadline|CSR|ESG|RSE)\b|\b(price|cost|expertise|references?|deadline|CSR|ESG)\b[^.]{0,32}\b(weighted|weighting|criteri(a|on)|scored on|graded on)\b|\b(selected|awarded|evaluated|judged)\s+on\b/i,
+        /\b(selection|award|evaluation|scoring)\s+(criteri(a|on)|grid|matrix|framework)\b|\bcriteri(a|on)\b[^.;]{0,32}\b(price|cost|expertise|references?|deadline|CSR|ESG|RSE)\b|\b(price|cost|expertise|references?|deadline|CSR|ESG)\b[^.;]{0,32}\b(weighted|weighting|criteri(a|on)|scored on|graded on)\b|\b(selected|awarded|evaluated|judged)\s+on\b/i,
     },
     {
       name: "infra_constraints",
@@ -331,7 +331,7 @@ export const WF006_MANIFEST: ParamManifest = {
       //     proposal for a scoping mission", which names the DELIVERABLE, not
       //     the format it is delivered in.
       pattern:
-        /\bPDF\b|\boral (presentation|defence|defense|pitch|session)\b|\bpitch deck\b|\bslide deck\b|\bpresentation to the (committee|board|jury|panel|comex)\b|\b(live |on-site )?demo(nstration)?\b[^.]{0,24}\b(expected|required|requested|session|planned)\b|\bwritten Q&A\b|\bQ&A (document|responses?|round)\b/i,
+        /\bPDF\b|\boral (presentation|defence|defense|pitch|session)\b|\bpitch deck\b|\bslide deck\b|\bpresentation to the (committee|board|jury|panel|comex)\b|\b(live |on-site )?demo(nstration)?\b[^.;]{0,24}\b(expected|required|requested|session|planned)\b|\bwritten Q&A\b|\bQ&A (document|responses?|round)\b/i,
     },
     {
       name: "known_risks",
@@ -344,7 +344,7 @@ export const WF006_MANIFEST: ParamManifest = {
       // enough — every brief carries risk implicitly, and the card asks which
       // ones are KNOWN.
       pattern:
-        /\b(aggressive competition|floor price|price war|price pressure|hidden requirements|undisclosed requirements|incumbent (supplier|vendor|provider)|unrealistic deadline|scope creep|thin margin)\b|\b(known|identified|anticipated|main|principal)\s+risks?\b|\brisks?\b[^.]{0,24}\b(identified|known|mapped|flagged|anticipated)\b/i,
+        /\b(aggressive competition|floor price|price war|price pressure|hidden requirements|undisclosed requirements|incumbent (supplier|vendor|provider)|unrealistic deadline|scope creep|thin margin)\b|\b(known|identified|anticipated|main|principal)\s+risks?\b|\brisks?\b[^.;]{0,24}\b(identified|known|mapped|flagged|anticipated)\b/i,
     },
   ],
 };

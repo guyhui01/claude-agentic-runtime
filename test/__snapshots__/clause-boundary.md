@@ -17,19 +17,8 @@ case is proven by hand in the test header. Both readings call for the same fix, 
 tightening changes no verdict: zero of the real matches crosses a `;` today.
 
 - matches with an injectable space: **103**
-- windows still filling across the injected `;`: **11**
-- distinct specs affected: **9**
+- windows still filling across the injected `;`: **0**
+- distinct specs affected: **0**
 
 | Workflow | Spec | Brief | Matched across the `;` |
 |---|---|---|---|
-| WF-002 | `pi_duration` | P02 | `2-week sprints,; PI` |
-| WF-004 | `engagement_duration` | P04 | `three-month; engagement` |
-| WF-006 | `response_deadline` | P06 | `response is; due` |
-| WF-007 | `engagement_duration` | P04 | `three-month; engagement` |
-| WF-007 | `engagement_duration` | P07 | `medium; duration` |
-| WF-008 | `geography` | P08 | `EU; only` |
-| WF-008 | `geography` | P20 | `EU; processing` |
-| WF-009 | `role_level` | P09 | `senior MLOps; engineer` |
-| WF-009 | `role_title` | P09 | `hiring need for a; senior MLOps engineer` |
-| WF-009 | `urgency` | P09 | `start within; the quarter` |
-| WF-010 | `project_duration` | P10 | `10-month; project` |

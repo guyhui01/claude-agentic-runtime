@@ -87,7 +87,7 @@ export const WF005_MANIFEST: ParamManifest = {
       // proposed WF-005, so it never claimed to validate the route.
       // A bare `\bAI\b` is excluded: it appears in nearly every catalog brief.
       pattern:
-        /\bgen(erative )?ai\b|\bLLMs?\b|\bAI market\b|\bmarket moves\b|\bAI consulting\b|\b(job|hiring|talent) market\b|\btech(nology)? stack watch\b|\btooling landscape\b|\b(regulator\w*|AI Act)\b[^.]{0,30}\b(watch|monitoring|tracking|developments|landscape|news)\b|\b(watch|monitor\w*|track\w*|intelligence)\b[^.]{0,30}\b(regulator\w*|AI Act)\b/i,
+        /\bgen(erative )?ai\b|\bLLMs?\b|\bAI market\b|\bmarket moves\b|\bAI consulting\b|\b(job|hiring|talent) market\b|\btech(nology)? stack watch\b|\btooling landscape\b|\b(regulator\w*|AI Act)\b[^.;]{0,30}\b(watch|monitoring|tracking|developments|landscape|news)\b|\b(watch|monitor\w*|track\w*|intelligence)\b[^.;]{0,30}\b(regulator\w*|AI Act)\b/i,
     },
     {
       name: "audience",
@@ -144,7 +144,7 @@ export const WF005_MANIFEST: ParamManifest = {
       // That is the safe direction, and `PARAMS_MISSING` names the card label,
       // so the message designates the word to add.
       pattern:
-        /\b(\d+|three|six|twelve|eighteen|twenty-four)[-\s](month|year)s?\b[^.]{0,24}\b(horizon|outlook|view|forward look)\b|\b(horizon|outlook|forward view)\b[^.]{0,24}\b(\d+|three|six|twelve|eighteen)[-\s](month|year)s?\b|\b(short|medium|long)[-\s]term\b[^.]{0,16}\b(horizon|outlook|view|focus)\b|\b(horizon|outlook|forward view)\b[^.]{0,24}\b(short|medium|long)[-\s]term\b/i,
+        /\b(\d+|three|six|twelve|eighteen|twenty-four)[-\s](month|year)s?\b[^.;]{0,24}\b(horizon|outlook|view|forward look)\b|\b(horizon|outlook|forward view)\b[^.;]{0,24}\b(\d+|three|six|twelve|eighteen)[-\s](month|year)s?\b|\b(short|medium|long)[-\s]term\b[^.;]{0,16}\b(horizon|outlook|view|focus)\b|\b(horizon|outlook|forward view)\b[^.;]{0,24}\b(short|medium|long)[-\s]term\b/i,
     },
     {
       name: "priority_sources",

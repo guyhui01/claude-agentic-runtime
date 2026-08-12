@@ -128,7 +128,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // in". A building is not a geographic footprint. The territory word is now
       // required, which is what the card's fact actually is.
       pattern:
-        /\b(operat(es|ing|ions)|presence|present|subsidiar\w+|offices?|sites?|entities|footprint|headquarter\w*)\b[^.]{0,24}\b(\d+\s*countries|countries|markets|europe|emea|worldwide|globally|internationally)\b|\b\d+\s*countries\b|\bpan-?european\b/i,
+        /\b(operat(es|ing|ions)|presence|present|subsidiar\w+|offices?|sites?|entities|footprint|headquarter\w*)\b[^.;]{0,24}\b(\d+\s*countries|countries|markets|europe|emea|worldwide|globally|internationally)\b|\b\d+\s*countries\b|\bpan-?european\b/i,
     },
     // --- AI system audited [Name / Use case / Prod or project status] --------
     {
@@ -161,7 +161,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // and not what an audited system does. `diagnostic` now counts only beside
       // a system word; `diagnosis` stays bare, being medical by itself.
       pattern:
-        /\b(triage|scoring|screening|classification|recommendation|ranking|moderation|underwriting|forecast\w*|summari[sz]ation|routing)\b|\bdiagnosis\b|\bdiagnostic\b[^.]{0,16}\b(model|system|tool|algorithm|aid|support)\b|\bfraud detection\b|\bcredit decision\w*\b|\bused (to|for)\b[^.]{0,24}\b(decide|score|classify|rank|recommend|detect|assess)\b/i,
+        /\b(triage|scoring|screening|classification|recommendation|ranking|moderation|underwriting|forecast\w*|summari[sz]ation|routing)\b|\bdiagnosis\b|\bdiagnostic\b[^.;]{0,16}\b(model|system|tool|algorithm|aid|support)\b|\bfraud detection\b|\bcredit decision\w*\b|\bused (to|for)\b[^.;]{0,24}\b(decide|score|classify|rank|recommend|detect|assess)\b/i,
     },
     {
       name: "ai_system_status",
@@ -176,7 +176,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // deployment status. `pilot` and `poc` now count only beside a system word;
       // `prototype` stays bare, naming a system by itself.
       pattern:
-        /\b(?:live |already )?in production\b|\bproduction[- ]deployed\b|\bdeployed (to|in) production\b|\bprototype\b|\b(pilot|poc|proof of concept)\b[^.]{0,20}\b(system|model|chatbot|deployment|phase|running|live)\b|\b(system|model|chatbot)\b[^.]{0,20}\b(pilot|poc)\b|\bpre-?production\b|\bproject (stage|phase)\b|\bnot yet (deployed|live)\b/i,
+        /\b(?:live |already )?in production\b|\bproduction[- ]deployed\b|\bdeployed (to|in) production\b|\bprototype\b|\b(pilot|poc|proof of concept)\b[^.;]{0,20}\b(system|model|chatbot|deployment|phase|running|live)\b|\b(system|model|chatbot)\b[^.;]{0,20}\b(pilot|poc)\b|\bpre-?production\b|\bproject (stage|phase)\b|\bnot yet (deployed|live)\b/i,
     },
     // --- Audit origin -------------------------------------------------------
     {
@@ -200,7 +200,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // the post-mortem one, where no audit vocabulary sits beside it, so this
       // lights no foreign cell.
       pattern:
-        /\b(preventive|proactive|pre-?emptive)\b[^.]{0,24}\b(audit|review|check|assessment)\b|\b(audit|review|assessment)\b[^.]{0,24}\b(preventive|proactive)\b|\b(CNIL|AI Office|supervisory authority|regulator|DPA)\b[^.]{0,24}\b(inspection|audit|request|enquiry|investigation|notice)\b|\bdue diligence\b|\bpost-?incident\b|\b(data )?breach\b|\bincident\b[^.]{0,24}\b(audit|review|triggered)\b|\b(audit|review|assessment)\b[^.]{0,24}\b(incident|breach)\b/i,
+        /\b(preventive|proactive|pre-?emptive)\b[^.;]{0,24}\b(audit|review|check|assessment)\b|\b(audit|review|assessment)\b[^.;]{0,24}\b(preventive|proactive)\b|\b(CNIL|AI Office|supervisory authority|regulator|DPA)\b[^.;]{0,24}\b(inspection|audit|request|enquiry|investigation|notice)\b|\bdue diligence\b|\bpost-?incident\b|\b(data )?breach\b|\bincident\b[^.;]{0,24}\b(audit|review|triggered)\b|\b(audit|review|assessment)\b[^.;]{0,24}\b(incident|breach)\b/i,
     },
     // --- Suspected AI Act tier ----------------------------------------------
     {
@@ -214,7 +214,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // about the tier is returned. Stricter than §2, and deliberately.
       pattern: /\b(unacceptable|high[-\s]risk|limited risk|minimal risk)\b|\bannex III\b/i,
       sanctionedUnknown:
-        /\btier\b[^.]{0,32}\b(to be (confirmed|determined|assessed)|to confirm|unknown|tbd|not yet (qualified|assessed))\b|\b(to be (confirmed|determined)|to confirm|tbd)\b[^.]{0,32}\btier\b/i,
+        /\btier\b[^.;]{0,32}\b(to be (confirmed|determined|assessed)|to confirm|unknown|tbd|not yet (qualified|assessed))\b|\b(to be (confirmed|determined)|to confirm|tbd)\b[^.;]{0,32}\btier\b/i,
     },
     // --- Data processed [Personal / Sensitive / Art. 9] ---------------------
     {
@@ -269,7 +269,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // Quantity family, fifth appearance of the same policy: the number is
       // never accepted bare, it must sit against what it counts.
       pattern:
-        /\b\d[\d,. ]*\s*(k|m|million|thousand)?\s*(individuals|persons|people|patients|customers|users|data subjects|employees|claimants|records)\b|\b(individuals|persons|people|patients|customers|users|data subjects|records)\b[^.]{0,20}\b\d[\d,. ]*\s*(k|m|million|thousand)?\b/i,
+        /\b\d[\d,. ]*\s*(k|m|million|thousand)?\s*(individuals|persons|people|patients|customers|users|data subjects|employees|claimants|records)\b|\b(individuals|persons|people|patients|customers|users|data subjects|records)\b[^.;]{0,20}\b\d[\d,. ]*\s*(k|m|million|thousand)?\b/i,
     },
     {
       name: "volume_training_data",
@@ -277,7 +277,7 @@ export const WF008_MANIFEST: ParamManifest = {
       required: true,
       mapping: audit,
       pattern:
-        /\b\d[\d,. ]*\s*(GB|TB|MB|rows|samples|examples|images|documents|tokens)\b|\btraining (data|set|corpus)\b[^.]{0,24}\b\d[\d,. ]*\b|\b\d[\d,. ]*\b[^.]{0,20}\btraining (data|examples|samples)\b/i,
+        /\b\d[\d,. ]*\s*(GB|TB|MB|rows|samples|examples|images|documents|tokens)\b|\btraining (data|set|corpus)\b[^.;]{0,24}\b\d[\d,. ]*\b|\b\d[\d,. ]*\b[^.;]{0,20}\btraining (data|examples|samples)\b/i,
     },
     // --- Geography ----------------------------------------------------------
     {
@@ -294,7 +294,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // the word order of its own card line, and found the same way, by testing
       // each card value against the detector that claims to read it.
       pattern:
-        /\bEU[- ]only\b|\bEU\b[^.]{0,20}\b(only|processing|processed|hosted|hosting|residency|based|region)\b|\b(transfers?|transferred|transferring)\b[^.]{0,24}\b(outside|third countr\w+|US|non-?EU|abroad)\b|\bdata residency\b|\bcross[- ]border transfers?\b|\boutside (?:the )?EU\b|\bextraterritorial\b/i,
+        /\bEU[- ]only\b|\bEU\b[^.;]{0,20}\b(only|processing|processed|hosted|hosting|residency|based|region)\b|\b(transfers?|transferred|transferring)\b[^.;]{0,24}\b(outside|third countr\w+|US|non-?EU|abroad)\b|\bdata residency\b|\bcross[- ]border transfers?\b|\boutside (?:the )?EU\b|\bextraterritorial\b/i,
     },
     // --- AI model -----------------------------------------------------------
     {
@@ -342,7 +342,7 @@ export const WF008_MANIFEST: ParamManifest = {
       // lot). `deadline` and `timeline` say that time exists; only compliance
       // vocabulary says WHAT must be compliant by when.
       pattern:
-        /\b(urgent|immediate|asap)\b[^.]{0,24}\b(compliance|remediat\w+|conformity|to comply|AI Act|GDPR)\b|\b(compliance|remediat\w+|conformity|to comply|AI Act|GDPR)\b[^.]{0,24}\b(urgent|immediate|asap)\b|\b(\d+|one|two|three|six|nine|twelve)[-\s](week|month|year)s?\b[^.]{0,24}\b(compliance|remediat\w+|to comply|conformity)\b|\b(compliance|remediat\w+|to comply|conformity)\b[^.]{0,24}\b(\d+|one|two|three|six|nine|twelve)[-\s](week|month|year)s?\b/i,
+        /\b(urgent|immediate|asap)\b[^.;]{0,24}\b(compliance|remediat\w+|conformity|to comply|AI Act|GDPR)\b|\b(compliance|remediat\w+|conformity|to comply|AI Act|GDPR)\b[^.;]{0,24}\b(urgent|immediate|asap)\b|\b(\d+|one|two|three|six|nine|twelve)[-\s](week|month|year)s?\b[^.;]{0,24}\b(compliance|remediat\w+|to comply|conformity)\b|\b(compliance|remediat\w+|to comply|conformity)\b[^.;]{0,24}\b(\d+|one|two|three|six|nine|twelve)[-\s](week|month|year)s?\b/i,
     },
     // --- Expected deliverables ----------------------------------------------
     {

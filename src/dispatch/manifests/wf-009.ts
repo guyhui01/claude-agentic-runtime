@@ -65,7 +65,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // it counts only where someone is being sought. Same call as `role_level`
       // just below, and measured the same way, before any test existed.
       pattern:
-        /\b(hiring|recruit\w*|seeking|looking for|vacancy|opening|role|position|candidate|job description|headcount)\b[^.]{0,32}\b(engineers?|developers?|architects?|data scientists?|analysts?|SRE|devops|product owner|scrum master|tech lead|CTO|CDO)\b|\b(engineers?|developers?|architects?|data scientists?|analysts?|SRE|devops|product owner|scrum master|tech lead|CTO|CDO)\b[^.]{0,32}\b(hiring|recruit\w*|vacancy|opening|position|candidate|job description)\b/i,
+        /\b(hiring|recruit\w*|seeking|looking for|vacancy|opening|role|position|candidate|job description|headcount)\b[^.;]{0,32}\b(engineers?|developers?|architects?|data scientists?|analysts?|SRE|devops|product owner|scrum master|tech lead|CTO|CDO)\b|\b(engineers?|developers?|architects?|data scientists?|analysts?|SRE|devops|product owner|scrum master|tech lead|CTO|CDO)\b[^.;]{0,32}\b(hiring|recruit\w*|vacancy|opening|position|candidate|job description)\b/i,
     },
     {
       name: "role_level",
@@ -90,7 +90,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // of HR"), the field deliberately mapped nowhere because routing must be
       // invariant to who submits.
       pattern:
-        /\b(junior|senior|lead|principal|staff|director)\b[^.]{0,28}\b(engineers?|developers?|architects?|scientists?|analysts?|managers?|role|profile|position|hire|candidate)\b|\b(engineers?|developers?|architects?|scientists?|analysts?|role|profile|position|hire|candidate)\b[^.]{0,28}\b(junior|senior|lead|principal|staff|director)\b/i,
+        /\b(junior|senior|lead|principal|staff|director)\b[^.;]{0,28}\b(engineers?|developers?|architects?|scientists?|analysts?|managers?|role|profile|position|hire|candidate)\b|\b(engineers?|developers?|architects?|scientists?|analysts?|role|profile|position|hire|candidate)\b[^.;]{0,28}\b(junior|senior|lead|principal|staff|director)\b/i,
     },
     {
       name: "contract_type",
@@ -122,7 +122,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // deadline. Anchored on the hiring verbs it fills on P09 alone — "start
       // within the quarter" — and on zero foreign brief.
       pattern:
-        /\b(immediate(ly)?|asap|urgent)\b[^.]{0,24}\b(hire|hiring|start|onboard|fill|recruit\w*)\b|\b(hire|hiring|start|onboard|fill|recruit\w*)\b[^.]{0,24}\b(immediate(ly)?|asap|urgent)\b|\b(start|hire|onboard|join|fill)\w*\b[^.]{0,20}\b(within|in|by)\b[^.]{0,12}\b(\d+\s*(week|month)s?|one month|three months|the quarter|the month)\b/i,
+        /\b(immediate(ly)?|asap|urgent)\b[^.;]{0,24}\b(hire|hiring|start|onboard|fill|recruit\w*)\b|\b(hire|hiring|start|onboard|fill|recruit\w*)\b[^.;]{0,24}\b(immediate(ly)?|asap|urgent)\b|\b(start|hire|onboard|join|fill)\w*\b[^.;]{0,20}\b(within|in|by)\b[^.;]{0,12}\b(\d+\s*(week|month)s?|one month|three months|the quarter|the month)\b/i,
     },
     {
       name: "location",
@@ -155,7 +155,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // specifications would answer each other. With the marker, P09 reports
       // this missing, which is also what §2 says.
       pattern:
-        /\b(must[- ]have|must have|non[- ]negotiable|required|requirement|mandatory|expertise in|proficien\w+ in|strong experience)\b[^.]{0,32}\b(skills?|experience|stack|technolog\w+|python|java|kubernetes|mlflow|engineer\w*)\b|\b(skills?|experience|technolog\w+)\b[^.]{0,24}\b(must[- ]have|non[- ]negotiable|mandatory|required)\b/i,
+        /\b(must[- ]have|must have|non[- ]negotiable|required|requirement|mandatory|expertise in|proficien\w+ in|strong experience)\b[^.;]{0,32}\b(skills?|experience|stack|technolog\w+|python|java|kubernetes|mlflow|engineer\w*)\b|\b(skills?|experience|technolog\w+)\b[^.;]{0,24}\b(must[- ]have|non[- ]negotiable|mandatory|required)\b/i,
     },
     {
       name: "nice_to_have_skills",
@@ -202,9 +202,9 @@ export const WF009_MANIFEST: ParamManifest = {
       // the range is, so this is reported missing where §2 counts the line
       // covered — deliberately.
       pattern:
-        /[€$£]\s?\d[\d,. ]*\s*[kK]?\b|\b\d+\s*[kK]\s*(€|EUR|\$|USD)\b|\b(salary|day rate|package|compensation)\b[^.]{0,24}\b\d/i,
+        /[€$£]\s?\d[\d,. ]*\s*[kK]?\b|\b\d+\s*[kK]\s*(€|EUR|\$|USD)\b|\b(salary|day rate|package|compensation)\b[^.;]{0,24}\b\d/i,
       sanctionedUnknown:
-        /\b(salary|day rate|package|compensation|budget)\b[^.]{0,32}\bto be (defined|determined|discussed|confirmed)\b|\bto be (defined|determined|discussed)\b[^.]{0,24}\b(salary|day rate|package|compensation)\b/i,
+        /\b(salary|day rate|package|compensation|budget)\b[^.;]{0,32}\bto be (defined|determined|discussed|confirmed)\b|\bto be (defined|determined|discussed)\b[^.;]{0,24}\b(salary|day rate|package|compensation)\b/i,
     },
     {
       name: "team_context",
@@ -221,7 +221,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // `Team` lesson. A team SIZE or a NAMED stack is what answers the card;
       // anchored, it fills on P09 alone.
       pattern:
-        /\bteams?\b[^.]{0,20}\b(of \d+|of (three|four|five|six|seven|eight|nine|ten)|size)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\s+teams?\b|\b(tech(nology)?|technical) stack\b|\b(python|typescript|java|kubernetes|mlflow|docker|terraform|spark|kafka)\b[^.]{0,20}\bstack\b|\bteam culture\b/i,
+        /\bteams?\b[^.;]{0,20}\b(of \d+|of (three|four|five|six|seven|eight|nine|ten)|size)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\s+teams?\b|\b(tech(nology)?|technical) stack\b|\b(python|typescript|java|kubernetes|mlflow|docker|terraform|spark|kafka)\b[^.;]{0,20}\bstack\b|\bteam culture\b/i,
     },
     {
       name: "assessment_methods",
@@ -253,7 +253,7 @@ export const WF009_MANIFEST: ParamManifest = {
       // was meant to license. Measured before the fix, not inferred.
       absenceIsAnswer: true,
       pattern:
-        /\bverify\b[^.]{0,32}\b(diplomas?|degrees?|linkedin|references?)\b|\b(background|reference|diploma|identity) checks?\b|\banti[- ]fraud\b|\bno (background|reference) checks?\b/i,
+        /\bverify\b[^.;]{0,32}\b(diplomas?|degrees?|linkedin|references?)\b|\b(background|reference|diploma|identity) checks?\b|\banti[- ]fraud\b|\bno (background|reference) checks?\b/i,
     },
   ],
 };

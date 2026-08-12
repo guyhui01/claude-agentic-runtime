@@ -132,14 +132,14 @@ export const WF003_MANIFEST: ParamManifest = {
       // policy as WF-004 `Engagement duration` and WF-005 `Horizon` — a quantity
       // counts only next to what qualifies it.
       pattern:
-        /(monthly|per month|a month|\/\s?mo)[^.]{0,40}([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))|([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))[^.]{0,40}(monthly|per month|a month|\/\s?mo)/i,
+        /(monthly|per month|a month|\/\s?mo)[^.;]{0,40}([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))|([€$£]\s?\d|\b\d+\s*(k\b|€|eur|usd|dollars?|euros?))[^.;]{0,40}(monthly|per month|a month|\/\s?mo)/i,
     },
     {
       name: "target_sla",
       card: "Target SLA",
       required: true,
       mapping: technical,
-      pattern: /\b\d+(\.\d+)?\s*%|<\s*\d+\s*(ms|s|sec|seconds?)\b|\bsla\b[^.]{0,30}\d|\blatency\b[^.]{0,30}\d/i,
+      pattern: /\b\d+(\.\d+)?\s*%|<\s*\d+\s*(ms|s|sec|seconds?)\b|\bsla\b[^.;]{0,30}\d|\blatency\b[^.;]{0,30}\d/i,
     },
   ],
 };

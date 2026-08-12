@@ -99,7 +99,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // rollout". Safe direction, and `PARAMS_MISSING` names the half to
       // restate. See the quick-start test, which records the behaviour.
       pattern:
-        /(?<!\bnot )(?<!\bnot a )\b[a-z][a-z-]{2,}\s+project\b|\bincidents?\b[^.]{0,40}\b(the|a)\s+[a-z][a-z-]{2,}(-[a-z]+)?\s+(model|system|platform|service|chatbot|pipeline|application)\b/i,
+        /(?<!\bnot )(?<!\bnot a )\b[a-z][a-z-]{2,}\s+project\b|\bincidents?\b[^.;]{0,40}\b(the|a)\s+[a-z][a-z-]{2,}(-[a-z]+)?\s+(model|system|platform|service|chatbot|pipeline|application)\b/i,
     },
     {
       name: "project_incident_dates",
@@ -127,7 +127,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // facilities move. Anchored on project/incident/closure vocabulary, or
       // stated as a two-sided window, it fills on none of the twenty.
       pattern:
-        /\bfrom\b[^.]{0,20}\bto\b[^.]{0,24}\b(20\d\d|january|february|march|april|may|june|july|august|september|october|november|december)\b|\bbetween\b[^.]{0,24}\band\b[^.]{0,24}\b20\d\d\b|\b(projects?|incidents?|closed|closure|ran|started|launched|kicked off|went live)\b[^.]{0,24}\b(in|on|since|until|from)\b[^.]{0,12}\b(20\d\d|january|february|march|april|may|june|july|august|september|october|november|december)\b|\b\d{4}-\d{2}-\d{2}\b/i,
+        /\bfrom\b[^.;]{0,20}\bto\b[^.;]{0,24}\b(20\d\d|january|february|march|april|may|june|july|august|september|october|november|december)\b|\bbetween\b[^.;]{0,24}\band\b[^.;]{0,24}\b20\d\d\b|\b(projects?|incidents?|closed|closure|ran|started|launched|kicked off|went live)\b[^.;]{0,24}\b(in|on|since|until|from)\b[^.;]{0,12}\b(20\d\d|january|february|march|april|may|june|july|august|september|october|november|december)\b|\b\d{4}-\d{2}-\d{2}\b/i,
     },
     {
       name: "closeout_type",
@@ -195,7 +195,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // boundary changes no verdict on the twenty briefs, it only lets the card
       // be answered in its own words.
       pattern:
-        /\b\d+[- ](month|week|year)s?\b[^.]{0,16}\b(projects?|programmes?|closure|post-?mortem)\b|\b(projects?|programmes?)\b[^.]{0,16}\b\d+[- ](month|week|year)s?\b|\b\d+\s?-\s?\d+\s+months?\b|[<>]\s?\d+\s+months?\b|\b(project )?duration\b[^.]{0,16}\b\d/i,
+        /\b\d+[- ](month|week|year)s?\b[^.;]{0,16}\b(projects?|programmes?|closure|post-?mortem)\b|\b(projects?|programmes?)\b[^.;]{0,16}\b\d+[- ](month|week|year)s?\b|\b\d+\s?-\s?\d+\s+months?\b|[<>]\s?\d+\s+months?\b|\b(project )?duration\b[^.;]{0,16}\b\d/i,
     },
     {
       name: "team_size",
@@ -233,7 +233,7 @@ export const WF010_MANIFEST: ParamManifest = {
       // brief: a genuine team-size statement about another card's team. That is
       // the recorded-crossing class, not a defect.
       pattern:
-        /\bteams?\b[^,.]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.]{0,12}\b\d|\b\d+\s+(squads?|scrum teams?|safe teams?)\b/i,
+        /\bteams?\b[^,.]{0,12}\bof (\d+|three|four|five|six|seven|eight|nine|ten)\b|\b(\d+|three|four|five|six|seven|eight|nine|ten)[- ](person|people|engineers?|developers?)\b|\bteam size\b[^.;]{0,12}\b\d|\b\d+\s+(squads?|scrum teams?|safe teams?)\b/i,
     },
     {
       name: "team_distribution",
