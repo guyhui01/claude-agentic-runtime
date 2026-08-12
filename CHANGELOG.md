@@ -9,7 +9,40 @@
 ## [Unreleased]
 > Model: Claude Opus 5
 
+### 🐛 Fixed
+
+- **Adjacency windows no longer pair two facts a `;` has separated.** All **87** windows across
+  the nine manifests that carry one move from `[^.]{0,N}` to `[^.;]{0,N}`. A semicolon ends a
+  clause, so tokens on either side of it are separate statements; a window spanning one reports a
+  fact the sentence never makes, and the failure direction is the unsafe one — `paramsChecked:
+  true` on a brief that does not answer the card line. ⚠️ **The tracker said "90 windows": there
+  are 87**, re-derived rather than copied.
+  ▫ **Measured before and after.** The probe shipped alongside recorded **11** windows crossing an
+  injected `;` over 9 specs and 7 manifests; it now records **0**, denominator unchanged at 103,
+  no row added. The cost was known in advance to be nil — **zero of the 269 real matches** on the
+  twenty briefs crossed a `;` — and the suite confirmed it: the tightening turned exactly one test
+  red, the probe's own snapshot, with 399 others green and no other snapshot moving.
+  ▫ **The realistic case is hard-asserted**, because the snapshot only measures a structural
+  property on injected semicolons: WF-009 `role_level` now refuses *"the budget is
+  senior-approved; we still need to hire a developer"* while still filling *"we are hiring a
+  senior MLOps engineer"* — the control that makes the guard discriminate rather than merely
+  strict. Falsified both ways; the tightening applies to all 87 rather than the 9 proven ones, so
+  it does not create the inter-manifest divergence the policy-consistency table exists to catch.
+  ▫ ⚠️ **One green falsification recorded as a finding**: excluding the comma as well survives the
+  whole suite, so the `;`-but-not-`,` line is **argued, not measured**. Written into the probe's
+  header rather than guarded, since no `role_level` match on this corpus contains a comma.
+
 ### ✨ Added
+
+- **A clause-boundary probe, shipped BEFORE the fix it measures**
+  (`test/dispatch-clause-boundary-probe.test.ts` + `__snapshots__/clause-boundary.md`), snapshot
+  committed **as found** so the fix shows its rows closing in a diff. Its corpus is **derived, not
+  written**: every match a detector really makes on a real brief has a `;` injected into that
+  match, and the same pattern is re-run. A first pass used eight invented sentences, found the
+  defect on one spec and missed eight — it measured the author, not the code. Both limits are
+  written into the file and the snapshot: only specs that already fill can be probed, so the
+  counts are a floor; and the injection often lands inside a noun phrase, so a row proves the
+  window *would* cross a `;`, not that a realistic brief triggers it.
 
 - **The dispatch loop is proven live beyond the pilot — `P04`, on WF-004** (billed run
   2026-08-12, `LIVE_MODEL=claude-opus-4-8`, 2 router calls, 16.2 s, subscription OAuth).
