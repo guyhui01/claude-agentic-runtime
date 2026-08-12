@@ -23,7 +23,7 @@ import type { NeedBrief } from "../types.js";
 import type { ParamManifest } from "../types.js";
 
 /** The two free-text fields an ART context is described in. */
-const situation = (b: NeedBrief): string => `${b.need} ${b.context}`;
+const situation = (b: NeedBrief): string => `${b.need}; ${b.context}`;
 
 export const WF002_MANIFEST: ParamManifest = {
   workflow: "WF-002",
@@ -82,7 +82,7 @@ export const WF002_MANIFEST: ParamManifest = {
       card: "Dependencies",
       required: true,
       // Dependencies surface as often in the constraint list as in the prose.
-      mapping: (b) => `${situation(b)} ${b.constraints.join("; ")}`,
+      mapping: (b) => `${situation(b)}; ${b.constraints.join("; ")}`,
       // Card vocabulary verbatim: "other ARTs, external systems, vendors".
       pattern:
         /\bdepend\w+\b|\bother arts?\b|\bexternal (system|team|partner|dependenc)\w*\b|\bvendors?\b|\bsuppliers?\b|\bthird[-\s]party\b/i,

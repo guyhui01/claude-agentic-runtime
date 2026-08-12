@@ -31,7 +31,7 @@ export const WF001_MANIFEST: ParamManifest = {
       name: "product_type",
       card: "Product type",
       required: true,
-      mapping: (b) => `${b.context} ${b.need}`,
+      mapping: (b) => `${b.context}; ${b.need}`,
       pattern:
         /\b(ai (app\w*|assistant|product)|b2b portal|cms|internal (workflow|tool)|chatbot|copilot)\b/i,
     },

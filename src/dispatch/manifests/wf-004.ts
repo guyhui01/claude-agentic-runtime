@@ -40,7 +40,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
 
 /** Commercial facts land in the constraint list as readily as in the prose. */
 const engagement = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 export const WF004_MANIFEST: ParamManifest = {
   workflow: "WF-004",

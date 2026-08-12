@@ -57,7 +57,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
 
 /** Commercial facts land in the constraint list as readily as in the prose. */
 const presales = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 /**
  * `Proposal format` is the one spec whose fact can sit in `expectedDeliverable`
@@ -69,7 +69,7 @@ const presales = (b: NeedBrief): string =>
  * detector and could not be a `defaultValue`.
  */
 const presalesWithDeliverable = (b: NeedBrief): string =>
-  `${presales(b)} ${b.expectedDeliverable}`;
+  `${presales(b)}; ${b.expectedDeliverable}`;
 
 export const WF006_MANIFEST: ParamManifest = {
   workflow: "WF-006",

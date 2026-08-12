@@ -180,6 +180,41 @@ describe("clause-boundary probe — windows that pair across a `;`", () => {
    * merely strict: the legitimate sentence must still fill. A guard that closed
    * both would be a regression wearing the costume of a fix.
    */
+  /**
+   * FIELD boundaries, which are stronger than clause boundaries and were the
+   * looser of the two. A mapping concatenates `need`, `context` and the joined
+   * `constraints`; until this lot they were glued with a BARE SPACE, so the only
+   * thing stopping a window from pairing the tail of one field with the head of
+   * the next was that every brief in the corpus happens to end its fields with a
+   * period. Protection by punctuation of the data, not by the code.
+   *
+   * Measured when it was still open: dropping the final period of P02's context
+   * made WF-008 `compliance_deadline` match `"10 weeks compliance"` — `10 weeks`
+   * from the context, `compliance` from the constraints. A real false fill, one
+   * missing period away.
+   *
+   * The junctions are now explicit, and this test is what keeps them so: strip
+   * every field-final period and NO verdict may move. It fails the day someone
+   * re-glues two fields with a space.
+   */
+  it("pairs nothing across a FIELD boundary, even with the final periods stripped", () => {
+    const moved: string[] = [];
+    for (const fx of DISPATCH_FIXTURES) {
+      if (!fx.brief) continue;
+      const stripped = { ...fx.brief, context: fx.brief.context.replace(/\.$/, "") };
+      for (const [wf, manifest] of Object.entries(DEFAULT_MANIFESTS)) {
+        for (const spec of manifest.params) {
+          if (!spec.pattern) continue;
+          const fresh = () => new RegExp(spec.pattern!.source, spec.pattern!.flags.replace("g", ""));
+          const a = fresh().exec(String(spec.mapping(fx.brief) ?? ""));
+          const b = fresh().exec(String(spec.mapping(stripped) ?? ""));
+          if ((a ? a[0] : null) !== (b ? b[0] : null)) moved.push(`${wf}.${spec.name}@${fx.id}`);
+        }
+      }
+    }
+    expect(moved, "a field-final period must not be load-bearing").toEqual([]);
+  });
+
   it("refuses a level and a role separated by a `;`, and still fills the legitimate one", async () => {
     const { WF009_MANIFEST } = await import("../src/dispatch/manifests/wf-009.js");
     const spec = WF009_MANIFEST.params.find((p) => p.name === "role_level");

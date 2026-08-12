@@ -44,7 +44,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
 
 /** Compliance facts land in the constraint list as readily as in the prose. */
 const audit = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 export const WF008_MANIFEST: ParamManifest = {
   workflow: "WF-008",

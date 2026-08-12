@@ -31,7 +31,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
 
 /** Technical facts land in the constraint list as readily as in the prose. */
 const technical = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 export const WF003_MANIFEST: ParamManifest = {
   workflow: "WF-003",

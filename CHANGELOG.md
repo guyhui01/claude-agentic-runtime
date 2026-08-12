@@ -22,6 +22,17 @@
   exclude the comma but **not** the semicolon and so carried the same defect, plus one `[^.,;]`
   already correct. The three were tightened to `[^,.;]` in this same lot, keeping their
   deliberate comma exclusion instead of flattening it.
+  ▫ **FIELD boundaries were the looser of the two, and are now explicit.** A mapping concatenates
+  `need`, `context` and the joined `constraints`; they were glued with a **bare space**, so the
+  only thing stopping a window from pairing the tail of one field with the head of the next was
+  that every brief in the corpus happens to end its fields with a period — protection by the
+  punctuation of the data, not by the code. Measured while still open: dropping the final period
+  of P02's `context` made WF-008 `compliance_deadline` match `"10 weeks compliance"` — `10 weeks`
+  from the context, `compliance` from the constraints. **A real false fill, one missing period
+  away.** All **20** junctions are now `; ` rather than a space, across ordinary and composed
+  mappings alike, and a test strips every field-final period and asserts that no verdict moves.
+  Cost measured before the change over 1919 spec/brief pairs: **zero verdict changes**. Falsified:
+  re-gluing one junction with a space turns that test red.
   ▫ ⚠️ **The probe could not have found those three**, and reported zero after the main fix: the
   specs concerned produce no injectable match on the corpus, which is precisely the population
   limit written in its header. A **form** inventory found them; **behaviour** measurement could

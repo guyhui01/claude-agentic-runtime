@@ -47,7 +47,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
 
 /** Recruitment facts land in the constraint list as readily as in the prose. */
 const recruitment = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 export const WF009_MANIFEST: ParamManifest = {
   workflow: "WF-009",

@@ -53,7 +53,7 @@ import type { NeedBrief, ParamManifest } from "../types.js";
  * widens in the false-"filled" direction for a gain no brief here needs.
  */
 const intelligence = (b: NeedBrief): string =>
-  `${b.need} ${b.context} ${b.constraints.join("; ")}`;
+  `${b.need}; ${b.context}; ${b.constraints.join("; ")}`;
 
 export const WF005_MANIFEST: ParamManifest = {
   workflow: "WF-005",
