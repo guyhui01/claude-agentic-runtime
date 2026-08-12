@@ -12,7 +12,7 @@ import { WF007_MANIFEST } from "../src/dispatch/manifests/wf-007.js";
 import { WF008_MANIFEST } from "../src/dispatch/manifests/wf-008.js";
 import { WF009_MANIFEST } from "../src/dispatch/manifests/wf-009.js";
 import { WF010_MANIFEST } from "../src/dispatch/manifests/wf-010.js";
-import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
+import { DISPATCH_FIXTURES, P04_UNAMENDED } from "./fixtures/dispatch-briefs.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 
@@ -2046,5 +2046,29 @@ describe("WF-007 `Engagement location` — a value its card never offered", () =
     const p07 = validateRoute(proposal("WF-007"), fixtureBrief("P07"), FAKE_SIDECAR, MANIFESTS);
     const p07Missing = p07.status === "PARAMS_MISSING" ? p07.missingParams : [];
     expect(p07Missing).not.toContain("Engagement location");
+  });
+});
+
+/**
+ * The `P04_UNAMENDED` FIXTURE — the brief the billed live harness consumes.
+ *
+ * ⛔ This does NOT re-assert the refusal itself. The WF-004 block above already
+ * pins `[Client AI maturity, Engagement duration]` (on a brief built inline)
+ * and already pins the amended fixture routing with `paramsChecked: true`.
+ * Duplicating either would be machinery this repo has repeatedly refused.
+ *
+ * What is genuinely unguarded without this test: the exported fixture itself.
+ * `P04_UNAMENDED` is read by `dispatch-p04-live.test.ts`, which is skipped
+ * unless `LIVE_RUN=1` — so if the fixture drifted, the only thing that would
+ * notice is a BILLED run. This test is the free guard on a paid path: it fails
+ * offline the day the fixture stops producing the refusal the live trace and
+ * the CHANGELOG both quote.
+ */
+describe("P04_UNAMENDED — the fixture behind the billed live loop", () => {
+  it("still produces the refusal the versioned live trace quotes", () => {
+    const res = validateRoute(proposal("WF-004"), P04_UNAMENDED, FAKE_SIDECAR, MANIFESTS);
+    expect(res.status).toBe("PARAMS_MISSING");
+    if (res.status !== "PARAMS_MISSING") return;
+    expect([...res.missingParams].sort()).toEqual(["Client AI maturity", "Engagement duration"]);
   });
 });

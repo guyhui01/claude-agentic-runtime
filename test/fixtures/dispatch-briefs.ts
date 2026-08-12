@@ -275,3 +275,36 @@ export const P01_UNAMENDED: NeedBrief = {
   context: "Mid-size European insurer, claims department of 40 adjusters, no imposed stack.",
   submittedBy: "Lead UX Designer",
 };
+
+/**
+ * P04 BEFORE amendment — the SECOND return-loop probe, on a workflow that is
+ * NOT the pilot. Same qualified brief as fixture P04 minus two facts the
+ * operator collects on the return loop, both removed from `context`: the
+ * engagement window and the client's AI maturity. `need` is unchanged, so the
+ * brief passes intake and the gap surfaces at the per-param manifest check —
+ * fixture P04 above IS the amended version.
+ *
+ * WHY THIS BRIEF AND NOT ANOTHER — and what does NOT justify it.
+ *
+ * The one thing a second billed loop buys is that the workflow is **not the
+ * pilot**: it shows the dispatch loop generalises past the single case already
+ * proven live. That is a change in the CLASS of evidence, not in its volume.
+ * It remains ONE code path, not ten.
+ *
+ * ⚠️ What does NOT justify it, measured rather than assumed: the card-label
+ * refusal. The 2026-07-19 pilot trace returned `[team_size, project_method,
+ * level_of_detail]` because `validate-route` mapped `p.name` back then; it maps
+ * `p.card` today (`validate-route.ts`), so **re-running P01 unchanged would
+ * already return `[Team size, Project method, Level of detail]`**. Verified
+ * offline against the shipped code before spending anything. The labels are an
+ * effect visible on any run, not a reason to pay for this one — an earlier
+ * draft of this comment claimed otherwise and was wrong.
+ */
+export const P04_UNAMENDED: NeedBrief = {
+  need: "Engagement signed with Marlowe Foods for an AI maturity audit and a transformation roadmap, including upskilling of their staff on generative AI.",
+  domain: "Management & Consulting",
+  expectedDeliverable: "Maturity audit, AI strategy roadmap and training plan",
+  constraints: ["executive readout expected", "GDPR on customer data"],
+  context: "Food-industry mid-cap, CDO sponsor.",
+  submittedBy: "Chief Data Officer",
+};

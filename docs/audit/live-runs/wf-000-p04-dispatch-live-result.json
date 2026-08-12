@@ -1,0 +1,55 @@
+{
+  "ranAt": "2026-08-12T11:03:23.186Z",
+  "phases": [
+    {
+      "phase": "unamended (return loop)",
+      "expected": "PARAMS_MISSING [Engagement duration, Client AI maturity] — predicted offline",
+      "brief": {
+        "need": "Engagement signed with Marlowe Foods for an AI maturity audit and a transformation roadmap, including upskilling of their staff on generative AI.",
+        "domain": "Management & Consulting",
+        "expectedDeliverable": "Maturity audit, AI strategy roadmap and training plan",
+        "constraints": [
+          "executive readout expected",
+          "GDPR on customer data"
+        ],
+        "context": "Food-industry mid-cap, CDO sponsor.",
+        "submittedBy": "Chief Data Officer"
+      },
+      "outcome": {
+        "status": "PARAMS_MISSING",
+        "route": "WF-004",
+        "missingParams": [
+          "Engagement duration",
+          "Client AI maturity"
+        ]
+      }
+    },
+    {
+      "phase": "amended (fixture P04)",
+      "expected": "ROUTED WF-004, paramsChecked true, plan attached",
+      "brief": {
+        "need": "Engagement signed with Marlowe Foods for an AI maturity audit and a transformation roadmap, including upskilling of their staff on generative AI.",
+        "domain": "Management & Consulting",
+        "expectedDeliverable": "Maturity audit, AI strategy roadmap and training plan",
+        "constraints": [
+          "executive readout expected",
+          "GDPR on customer data"
+        ],
+        "context": "Food-industry mid-cap, beginner AI maturity, CDO sponsor, three-month engagement window.",
+        "submittedBy": "Chief Data Officer"
+      },
+      "outcome": {
+        "status": "ROUTED",
+        "route": "WF-004",
+        "rationale": "Current state \"engagement signed\" with deliverable of maturity audit, strategy roadmap and training plan for executives matches WF-004's signed → maturity audit → strategy → training plan → executive deliverables arrow.",
+        "paramsChecked": true,
+        "plan": {
+          "workflow": "WF-004",
+          "title": "AI Consulting Engagement",
+          "durationEstimate": "60-90 min",
+          "recommendedModel": "claude-opus-4-8"
+        }
+      }
+    }
+  ]
+}

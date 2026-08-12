@@ -7,8 +7,43 @@
 ---
 
 ## [Unreleased]
+> Model: Claude Opus 5
 
-_Nothing yet._
+### ✨ Added
+
+- **The dispatch loop is proven live beyond the pilot — `P04`, on WF-004** (billed run
+  2026-08-12, `LIVE_MODEL=claude-opus-4-8`, 2 router calls, 16.2 s, subscription OAuth).
+  The unamended brief passes intake, the router picks **WF-004**, and the loop returns
+  **`PARAMS_MISSING [Engagement duration, Client AI maturity]`**; the amended fixture then
+  returns **`ROUTED`, `paramsChecked: true`** with the execution plan attached, stopping before
+  the human go/no-go by construction. Trace versioned at
+  `docs/audit/live-runs/wf-000-p04-dispatch-live-result.json`.
+  **What it proves, and only this: the mechanism generalises past WF-001.** It is ONE additional
+  code path — not "the ten proven live" — and it says nothing about the other nine manifests.
+- **The refusal was predicted OFFLINE before anything was spent.** The parameter check calls no
+  LLM, so its outcome is knowable for free.
+  ▫ **What was genuinely open is NARROWER than first stated, and the correction comes from this
+  repo's own evidence.** The live router-accuracy run of 2026-07-19
+  (`wf-000-router-live-result.json`, 19/20) **already** carried P04 and **already** routed it to
+  WF-004 live — with `paramsChecked: false`, because WF-004 had no manifest yet. So "does a real
+  router pick WF-004" was answered three weeks ago. What this run adds is the **complete return
+  loop on a non-pilot workflow with a registered manifest**: a live refusal naming card labels,
+  the operator's amendment, then `ROUTED` with `paramsChecked: true`. Narrower, and still the
+  thing that was missing.
+  ▫ **Credit where it is due: that refusal was ALREADY pinned** by the WF-004 block of
+  `dispatch-validate-route.test.ts`, on a brief built inline. What this lot adds is one guard on
+  something genuinely unguarded — the exported `P04_UNAMENDED` fixture, which only the
+  `LIVE_RUN=1` harness reads, so a drift in it would have been caught by a **billed** run and
+  nothing else. Two further assertions were written, found to duplicate the existing block, and
+  **removed before commit** rather than kept for appearances. The surviving guard is exact-set
+  rather than superset, and was falsified: restoring the removed engagement window turns it red,
+  and only it.
+  ⚠️ **Correction of an earlier claim in this repo's own framing**: the card-label refusal is
+  **not** what the second run buys. `validate-route` maps `p.card` today, so re-running the pilot
+  unchanged would already return `[Team size, Project method, Level of detail]` instead of the
+  snake_case set in the 2026-07-19 trace. Measured against the shipped code rather than assumed;
+  the labels are an effect visible on any run, and the workflow being different is the only thing
+  the cost bought.
 
 ---
 
