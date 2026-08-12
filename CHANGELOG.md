@@ -7,6 +7,12 @@
 ---
 
 ## [Unreleased]
+
+_Nothing yet._
+
+---
+
+## [0.13.0] - 2026-08-12 — Clause and field boundaries close, and the dispatch loop is proven past the pilot 🔗
 > Model: Claude Opus 5
 
 ### 🐛 Fixed
@@ -501,7 +507,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.9.1...v0.10.0
