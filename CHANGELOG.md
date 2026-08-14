@@ -8,7 +8,20 @@
 
 ## [Unreleased]
 
-_Nothing yet._
+> Model: Claude Opus 4.8.
+
+### ✨ Added
+
+- **ADR-0008 — the dispatch gate routes or refuses.** The WF-000 dispatch layer,
+  designed in July 2026, had driven the runtime since without a decision record
+  (the ADR log stopped at 0007, of June 2026). It is now written down: every
+  validated brief is either **routed to exactly one catalog workflow** or
+  **explicitly refused** — `REJECT_INCOMPLETE` / `NO_MATCH` / `PARAMS_MISSING` —
+  and **nothing executes on an unrouted or under-qualified brief**. Recorded
+  retrospectively (decision locked with the product owner 2026-07-18, written
+  2026-08-14) with an honest-record note, the real rejected alternatives
+  (mandatory explicit selection; LLM chooses freely with no guard) and its
+  consequences. See `docs/adr/0008-dispatch-gate-route-or-refuse.md`.
 
 ---
 
