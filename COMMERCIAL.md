@@ -31,6 +31,6 @@ switch** to an open-source license: the commercial-use restriction is
 
 To obtain a commercial license or discuss a specific arrangement:
 
-**Guy HUI-BON-HOA** — guy.hui@proton.me
+**Guy HUI-BON-HOA** — guyhui@proton.me
 
 Please include: your organization, the intended use case, and the deployment volume / scope.
