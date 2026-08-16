@@ -22,6 +22,16 @@
   2026-08-14) with an honest-record note, the real rejected alternatives
   (mandatory explicit selection; LLM chooses freely with no guard) and its
   consequences. See `docs/adr/0008-dispatch-gate-route-or-refuse.md`.
+- **ADR-0009 — open-core boundary.** Fixes, before a private repo exists, what
+  stays public under PolyForm Noncommercial (catalog, the `src/dispatch/`
+  route-or-refuse method, the spines-as-demo, and the live traces — the proof
+  funnel) versus what a future **private control plane** owns (policies /
+  permissions / RBAC, cost metering, a persisted audit store, and a hardened
+  eval engine grown from the public `src/eval/` seed). Privatize by **building
+  the paid layer above**, never by hiding the current runtime; the trigger is a
+  paying customer running `policy → approval → execution → evaluation → audit`
+  in BYO-key. Rejected alternatives recorded (privatize the engine now; MIT it
+  forever; build a full SaaS up front). See `docs/adr/0009-open-core-boundary.md`.
 
 ---
 
