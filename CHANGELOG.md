@@ -32,6 +32,25 @@
   paying customer running `policy → approval → execution → evaluation → audit`
   in BYO-key. Rejected alternatives recorded (privatize the engine now; MIT it
   forever; build a full SaaS up front). See `docs/adr/0009-open-core-boundary.md`.
+- **ADR-0010 — the output schema owns structure; eval criteria own DoD semantics
+  and are the audit record.** Drawn from the WF-001 discrimination audit: where the
+  handoff schema and an eval criterion enforce the same property, do not dedupe by
+  deletion. The schema owns structure (shape/types/presence, the agent + handoff
+  contract); the criteria own DoD semantics and the `GateReport` compliance trace.
+  A count bound is a DoD judgement owned by the criterion, with the schema copy a
+  shaping hint referencing the same named constant (DRY *and* defense in depth); one
+  DoD point per criterion. See `docs/adr/0010-schema-owns-structure-criteria-own-dod.md`.
+
+### 🐛 Fixed
+
+- **WF-001 STEP-03: an empty-string User-Story priority no longer passes the gate.**
+  `po-us-champs-requis` tested `priorite !== undefined`, weaker than the schema's
+  `priorite:string`, so `priorite: ""` cleared both the eval gate and the handoff —
+  the one real hole the WF-001 discrimination audit found. Now `nonEmptyString`.
+  Same lot (ADR-0010): the STEP-03 count bounds are single-sourced as named constants
+  shared by the schema and the criteria, and `qa-given-when-then` now checks
+  well-formedness only (existence stays owned by `qa-gherkin-non-vide`), so an empty
+  gherkin reports the one DoD point missed instead of two.
 
 ### 🧪 Tests
 

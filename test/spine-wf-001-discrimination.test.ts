@@ -58,9 +58,11 @@ import realTrace from "../docs/audit/live-runs/wf-001-live-result.json" with { t
  *       output already declares min/max, enforced at the handoff.
  *  F3 — MIXED criteria: `ba-perimetre-in-out` (`in` non-empty is UNIQUE, `out`-is-array
  *       is redundant-schema) and `po-us-champs-requis` (statement/dod non-empty are
- *       UNIQUE, estimation:number and priorite-presence are redundant-schema; note
- *       `priorite !== undefined` is even WEAKER than the schema's `priorite:string`,
- *       so it accepts null/0/"").
+ *       UNIQUE, estimation:number and priorite-presence are redundant-schema).
+ *       ✅ The one real HOLE this audit found is now CLOSED (ADR-0010): `priorite`
+ *       used `!== undefined`, weaker than the schema's `priorite:string`, so an EMPTY
+ *       string passed both gates; it is now `nonEmptyString`. Witness `us.priorite:''`
+ *       records the closed hole.
  *  F4 — DoD coverage gaps vs the card (WF-001 v1.2), all defensible: STEP-01 asks
  *       stakeholders "with roles" but only non-emptiness is gated; STEP-03 "backlog
  *       ordered by value/risk" is not gated; STEP-04 "for each selected US" per-US
@@ -122,6 +124,7 @@ const AUDIT: Entry[] = [
       { clause: "us.statement:''", bad: brokenUS({ statement: "" }) },
       { clause: "us.dod:''", bad: brokenUS({ dod: "" }) },
       { clause: "us.priorite:undefined", bad: brokenUS({ priorite: undefined }) },
+      { clause: "us.priorite:'' (hole closed, ADR-0010)", bad: brokenUS({ priorite: "" }) },
       { clause: "us.estimation:'3'", bad: brokenUS({ estimation: "3" }) },
     ],
   },

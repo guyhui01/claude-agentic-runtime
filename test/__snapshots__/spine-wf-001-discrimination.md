@@ -19,7 +19,7 @@ later, with a different failure `kind`.
 | `po-backlog-8-15` | REDUNDANT | failed | handoff (output schema) |
 | `po-us-champs-requis` | UNIQUE | completed | — (nothing: real hole) |
 | `po-epics-3-5` | REDUNDANT | failed | handoff (output schema) |
-| `qa-gherkin-non-vide` | REDUNDANT | failed | eval-gate (sibling) |
+| `qa-gherkin-non-vide` | REDUNDANT | failed | handoff (output schema) |
 | `qa-given-when-then` | UNIQUE | completed | — (nothing: real hole) |
 | `qa-plan-test-present` | UNIQUE | completed | — (nothing: real hole) |
 
@@ -38,6 +38,7 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `po-us-champs-requis` | us.statement:'' | yes |
 | `po-us-champs-requis` | us.dod:'' | yes |
 | `po-us-champs-requis` | us.priorite:undefined | yes |
+| `po-us-champs-requis` | us.priorite:'' (hole closed, ADR-0010) | yes |
 | `po-us-champs-requis` | us.estimation:'3' | yes |
 | `po-epics-3-5` | epics:2 (below) | yes |
 | `po-epics-3-5` | epics:6 (above) | yes |

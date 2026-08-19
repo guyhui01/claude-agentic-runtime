@@ -42,6 +42,18 @@ import {
 } from "./spine-helpers.js";
 
 // =============================================================================
+// DoD BOUNDS — single source of truth (ADR-0010).
+// A count bound (8-15 US, 3-5 epics) is a DoD judgement OWNED by the eval
+// criterion; the manifest output schema references the SAME constant purely to
+// SHAPE the agent (structured output). One constant, referenced by both layers,
+// so the two can never drift apart while keeping defense in depth.
+// =============================================================================
+const BACKLOG_MIN = 8;
+const BACKLOG_MAX = 15;
+const EPICS_MIN = 3;
+const EPICS_MAX = 5;
+
+// =============================================================================
 // CRITERIA — one per DoD requirement, traced to WF-001 (v1.2)
 // =============================================================================
 
@@ -92,7 +104,7 @@ const STEP03_CRITERIA: Criterion[] = [
     id: "po-backlog-8-15",
     description: "STEP-03: backlog of 8 to 15 User Stories",
     severity: "blocking",
-    check: (o) => arrayLenBetween(asRecord(o)["backlog"], 8, 15),
+    check: (o) => arrayLenBetween(asRecord(o)["backlog"], BACKLOG_MIN, BACKLOG_MAX),
   },
   {
     id: "po-us-champs-requis",
@@ -106,7 +118,7 @@ const STEP03_CRITERIA: Criterion[] = [
         const u = asRecord(us);
         return (
           nonEmptyString(u["statement"]) &&
-          u["priorite"] !== undefined &&
+          nonEmptyString(u["priorite"]) &&
           typeof u["estimation"] === "number" &&
           nonEmptyString(u["dod"])
         );
@@ -117,7 +129,7 @@ const STEP03_CRITERIA: Criterion[] = [
     id: "po-epics-3-5",
     description: "STEP-03: 3 to 5 grouping epics",
     severity: "blocking",
-    check: (o) => arrayLenBetween(asRecord(o)["epics"], 3, 5),
+    check: (o) => arrayLenBetween(asRecord(o)["epics"], EPICS_MIN, EPICS_MAX),
   },
   {
     id: "po-us-format-invest",
@@ -152,11 +164,14 @@ const STEP04_CRITERIA: Criterion[] = [
   {
     id: "qa-given-when-then",
     description:
-      "STEP-04: each scenario carries given + when + then (non-empty)",
+      "STEP-04: each scenario carries given + when + then (non-empty). WELL-FORMEDNESS only — "
+      + "existence of at least one scenario is owned by `qa-gherkin-non-vide` (ADR-0010: one "
+      + "DoD point per criterion, so the gate report attributes the right miss). Vacuously true "
+      + "on an empty array; a non-array is malformed and fails.",
     severity: "blocking",
     check: (o) => {
       const scenarios = asRecord(o)["gherkin"];
-      if (!nonEmptyArray(scenarios)) return false;
+      if (!Array.isArray(scenarios)) return false;
       return scenarios.every((sc) => {
         const s = asRecord(sc);
         return (
@@ -249,9 +264,9 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
             estimation: num,
             dod: str,
           }),
-          { min: 8, max: 15 },
+          { min: BACKLOG_MIN, max: BACKLOG_MAX },
         ),
-        epics: arrOf(undefined, { min: 3, max: 5 }),
+        epics: arrOf(undefined, { min: EPICS_MIN, max: EPICS_MAX }),
       }),
       criteriaIds: STEP03_CRITERIA.map((c) => c.id),
     },
