@@ -1,45 +1,19 @@
 import { describe, it, expect } from "vitest";
-import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
-import { loadSpine, ManifestValidationError, type AgentResolver } from "../src/manifest/load-manifest.js";
+import { loadSpine, ManifestValidationError } from "../src/manifest/load-manifest.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
-import type { StepRunner } from "../src/orchestrator/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 import {
   WF_002_DELIVERY_MANIFEST,
   WF_002_DELIVERY_CRITERIA,
   buildWf002DeliveryRegistry,
 } from "../src/spines/wf-002-delivery.js";
+import {
+  wf002InterimSidecar as sidecar,
+  wf002ResolveAgent as resolveAgent,
+  mockRunner,
+} from "./fixtures/wf-002-spine.js";
 
 /** Hermetic tests for the REAL WF-002 spine (SAFe Delivery), mocked runner. */
-
-function agentAsset(id: string) {
-  return {
-    id,
-    type: "agent" as const,
-    path: `${id}.md`,
-    title: id,
-    description: `Agent ${id}.`,
-    catalogVersion: "v3.25.0",
-    source: { file: `${id}.md`, catalogTag: "v3.25.0" },
-  };
-}
-const sidecar: Sidecar = {
-  schemaVersion: "1.0.0",
-  catalog: { name: "claude-agents", version: "v3.25.0" },
-  generatedAt: "2026-06-03T14:00:00Z",
-  assets: [
-    agentAsset("AGENT-PRODUCT-MANAGER-SAFE"),
-    agentAsset("AGENT-RELEASE-TRAIN-ENGINEER"),
-    agentAsset("AGENT-PO-SAFE"),
-    agentAsset("AGENT-SCRUM-MASTER"),
-    agentAsset("AGENT-CHEF-PROJET-IA"),
-  ],
-};
-const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
-  description: asset.description,
-  prompt: `stub:${asset.id}`,
-  tools: [],
-});
 
 const backlog = Array.from({ length: 6 }, (_, i) => ({ statement: `US ${i + 1}`, wsjf: 10 - i }));
 const happyOutputs: Record<string, unknown> = {
@@ -68,8 +42,6 @@ const happyOutputs: Record<string, unknown> = {
     evm: { cpi: 1.02, spi: 0.98 },
   },
 };
-const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
-  async ({ stepId }) => ({ output: outputs[stepId] });
 
 describe("WF-002 spine — loading and execution (mocked runner)", () => {
   it("assembles the backbone STEP-01→02→03→04→06 with provenance and criteria", () => {

@@ -67,6 +67,23 @@
   both directions. Findings F1–F5 (including three DoD-coverage gaps vs the card) are
   recorded for a later lot, not acted on here. See
   `test/spine-wf-001-discrimination.test.ts`.
+- **WF-002 eval-gate discrimination audit — second spine, same two axes.** The
+  schema/criterion split is **re-measured here, not assumed from WF-001**: of the
+  **10 blocking criteria, 4 are load-bearing** (`pm-vision-board-present`,
+  `sm-sprint-goal-unique`, `cp-note-codir-presente` — emptiness the schema's
+  `type:string` cannot express; and `rte-vote-confiance-seuil`, whose **≥3.5
+  threshold** lives only in the criterion) **and 6 are redundant with the output
+  schema** (the count bounds, the field types and the required-key presence, all
+  enforced at the handoff by ajv2020 strict — verified at source that
+  `validateHandoff` validates `producer.output` at every step, terminal included via
+  `terminalSink`). The positive pole is anchored on the committed real WF-002 live
+  trace, and every guard was falsified in both directions. Findings recorded, not
+  acted on here: **F1** — `cp-dashboard-avancement-risques` tests `!== undefined`, so
+  `avancement:""`/`risques:[]` pass both the criterion and the schema (the exact
+  shape of the WF-001 F3 hole ADR-0010 closed); **F2** the five schema-redundant
+  criteria; **F3** the advisory near-vacuous array-presence checks. The spine sidecar
+  and mock runner were extracted to `test/fixtures/wf-002-spine.ts` (shared with the
+  hermetic test, DRY). See `test/spine-wf-002-discrimination.test.ts`.
 
 ---
 
