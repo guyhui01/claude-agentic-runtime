@@ -1,81 +1,26 @@
 import { describe, it, expect } from "vitest";
-import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
-import { loadSpine, ManifestValidationError, type AgentResolver } from "../src/manifest/load-manifest.js";
+import { loadSpine, ManifestValidationError } from "../src/manifest/load-manifest.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
-import type { StepRunner } from "../src/orchestrator/types.js";
-import type { Sidecar } from "../src/sidecar/types.js";
 import {
   WF_001_CADRAGE_MANIFEST,
   WF_001_CADRAGE_CRITERIA,
   buildWf001CadrageRegistry,
 } from "../src/spines/wf-001-cadrage.js";
+import type { Sidecar } from "../src/sidecar/types.js";
+import {
+  wf001InterimSidecar as sidecar,
+  wf001ResolveAgent as resolveAgent,
+  mockRunner,
+} from "./fixtures/wf-001-spine.js";
+import { wf001HappyBacklog as happyBacklog, wf001HappyOutputs as happyOutputs } from "./fixtures/wf-001-outputs.js";
 
 /**
  * Hermetic tests for the REAL WF-001 spine (§2.4-B.3, offline prep).
  * Validate that the manifest sourced from the real workflow assembles and that the
  * real gates (DoD) block/let through as expected — mocked runner, zero network.
+ * Interim sidecar / resolver / runner + DoD-compliant outputs come from the shared
+ * fixtures (`fixtures/wf-001-spine.ts`, `fixtures/wf-001-outputs.ts`).
  */
-
-// --- Interim sidecar: the 3 WF-001 backbone agents --------------------------
-// (In prod §2.4-B.3, this sidecar comes from claude-agents via the §2.3 generator.)
-function agentAsset(id: string, title: string) {
-  return {
-    id,
-    type: "agent" as const,
-    path: `${id}.md`,
-    title,
-    description: `Agent ${title}.`,
-    catalogVersion: "v3.25.0",
-    source: { file: `${id}.md`, catalogTag: "v3.25.0" },
-  };
-}
-const sidecar: Sidecar = {
-  schemaVersion: "1.0.0",
-  catalog: { name: "claude-agents", version: "v3.25.0" },
-  generatedAt: "2026-06-03T14:00:00Z",
-  assets: [
-    agentAsset("AGENT-BUSINESS-ANALYST", "Business Analyst"),
-    agentAsset("AGENT-PO-SCRUM", "Product Owner Scrum"),
-    agentAsset("AGENT-QA-AGILE", "QA Agile"),
-  ],
-};
-
-// Mock resolver: the prose→AgentDefinition mapping is covered by sdk-adapter.test.ts.
-const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
-  description: asset.description,
-  prompt: `stub-prompt:${asset.id}`,
-  tools: [],
-});
-
-// --- DoD-compliant step outputs ---------------------------------------------
-const happyBacklog = Array.from({ length: 8 }, (_, i) => ({
-  statement: `As a user I want feature ${i + 1} so that I save time`,
-  priorite: "must",
-  estimation: 3,
-  dod: "Tested and validated in UAT",
-}));
-const happyOutputs: Record<string, unknown> = {
-  "STEP-01": {
-    besoins: ["Reduce processing time"],
-    partiesPrenantes: [{ nom: "Business", role: "sponsor" }],
-    perimetre: { in: ["authentication"], out: ["billing"] },
-    questionsOuvertes: [],
-  },
-  "STEP-03": {
-    backlog: happyBacklog,
-    epics: ["Auth", "Search", "Reporting"],
-  },
-  "STEP-04": {
-    gherkin: [
-      { given: "a logged-in user", when: "they search", then: "they see the results", type: "nominal" },
-      { given: "an invalid term", when: "they search", then: "an error message is shown", type: "error" },
-      { given: "0 results", when: "they search", then: "an empty state is shown", type: "boundary" },
-    ],
-    planTest: "Sprint 1: smoke tests + 3 priority scenarios",
-  },
-};
-const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
-  async ({ stepId }) => ({ output: outputs[stepId] });
 
 // --- Tests ------------------------------------------------------------------
 
