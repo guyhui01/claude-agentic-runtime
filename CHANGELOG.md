@@ -33,6 +33,22 @@
   in BYO-key. Rejected alternatives recorded (privatize the engine now; MIT it
   forever; build a full SaaS up front). See `docs/adr/0009-open-core-boundary.md`.
 
+### 🧪 Tests
+
+- **WF-001 eval-gate discrimination audit — the eval counterpart of the dispatch
+  probes, and a prototype for the nine other spines.** It measures, without fixing
+  anything, whether each `check:` reddens when it should (no `/.+/`) AND whether it
+  is the sole runtime gate or merely doubles the manifest output schema. Runtime
+  order is runner → eval gate (criteria) → handoff (schema), so a criterion whose
+  clause the schema also enforces is caught one step later even if removed; measured
+  by removal, **6 of the 9 blocking criteria are load-bearing (the emptiness checks
+  JSON Schema cannot express) and 3 are redundant** (`po-backlog-8-15`,
+  `po-epics-3-5` with the schema; `qa-gherkin-non-vide` with a sibling). The positive
+  pole is anchored on the committed real live trace, and every guard was falsified in
+  both directions. Findings F1–F5 (including three DoD-coverage gaps vs the card) are
+  recorded for a later lot, not acted on here. See
+  `test/spine-wf-001-discrimination.test.ts`.
+
 ---
 
 ## [0.13.0] - 2026-08-12 — Clause and field boundaries close, and the dispatch loop is proven past the pilot 🔗
