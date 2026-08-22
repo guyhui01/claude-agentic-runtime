@@ -1,47 +1,19 @@
 import { describe, it, expect } from "vitest";
-import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
-import { loadSpine, ManifestValidationError, type AgentResolver } from "../src/manifest/load-manifest.js";
+import { loadSpine, ManifestValidationError } from "../src/manifest/load-manifest.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
-import type { StepRunner } from "../src/orchestrator/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 import {
   WF_003_LANCEMENT_MANIFEST,
   WF_003_LANCEMENT_CRITERIA,
   buildWf003LancementRegistry,
 } from "../src/spines/wf-003-lancement.js";
+import {
+  wf003InterimSidecar as sidecar,
+  wf003ResolveAgent as resolveAgent,
+  mockRunner,
+} from "./fixtures/wf-003-spine.js";
 
 /** Hermetic tests for the REAL WF-003 spine (AI App Launch), mocked runner. */
-
-function agentAsset(id: string) {
-  return {
-    id,
-    type: "agent" as const,
-    path: `${id}.md`,
-    title: id,
-    description: `Agent ${id}.`,
-    catalogVersion: "v3.25.0",
-    source: { file: `${id}.md`, catalogTag: "v3.25.0" },
-  };
-}
-const sidecar: Sidecar = {
-  schemaVersion: "1.0.0",
-  catalog: { name: "claude-agents", version: "v3.25.0" },
-  generatedAt: "2026-06-03T14:00:00Z",
-  assets: [
-    agentAsset("AGENT-FINANCIAL-ANALYST"),
-    agentAsset("AGENT-PROMPT-ENGINEER"),
-    agentAsset("AGENT-AI-ARCHITECT"),
-    agentAsset("AGENT-DEV-PYTHON-IA"),
-    agentAsset("AGENT-QA-AGILE"),
-    agentAsset("AGENT-DEVOPS-CLOUD"),
-    agentAsset("AGENT-SECURITE-IA"),
-  ],
-};
-const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
-  description: asset.description,
-  prompt: `stub:${asset.id}`,
-  tools: [],
-});
 
 const goldenDataset = Array.from({ length: 25 }, (_, i) => ({ id: i, expected: "ok" }));
 const owasp = Array.from({ length: 10 }, (_, i) => ({ category: `LLM${String(i + 1).padStart(2, "0")}`, status: "pass" }));
@@ -86,8 +58,6 @@ const happyOutputs: Record<string, unknown> = {
     planRemediation: [{ vuln: "LLM01", action: "input validation" }],
   },
 };
-const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
-  async ({ stepId }) => ({ output: outputs[stepId] });
 
 describe("WF-003 spine — loading and execution (mocked runner)", () => {
   it("assembles the 7-step backbone STEP-00→06 with provenance and criteria", () => {

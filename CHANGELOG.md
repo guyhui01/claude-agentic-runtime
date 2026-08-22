@@ -84,6 +84,30 @@
   criteria; **F3** the advisory near-vacuous array-presence checks. The spine sidecar
   and mock runner were extracted to `test/fixtures/wf-002-spine.ts` (shared with the
   hermetic test, DRY). See `test/spine-wf-002-discrimination.test.ts`.
+- **WF-003 eval-gate discrimination audit — third spine (18 blocking criteria), same
+  two axes.** The schema/criterion split is **re-measured, not assumed**, and it moves
+  again: of the **18 blocking criteria, 12 are load-bearing and 6 are redundant with
+  the output schema**. The 12 unique are the properties JSON Schema cannot express —
+  non-emptiness of a string (`fa-business-case-present`, `pe-system-prompt-present`,
+  `ai-diagramme-c4`, `ai-choix-stack-llm`, `dev-code-present`, `ops-pipeline-present`,
+  `ops-dockerfile-present`), an exact value (`fa-decision-go` = « Go »,
+  `sec-zero-critical` = 0), and a numeric threshold (`dev-coverage-min-80`,
+  `qa-taux-reussite-90`, `sec-high-sous-2`); the 6 redundant double an array bound or a
+  field type enforced at the handoff (`fa-tco-3ans`, `pe-baseline-min-8`,
+  `ai-adr-non-vide`, `qa-gherkin-non-vide`, `qa-evals-golden-20-50`,
+  `sec-owasp-llm-10`). The positive pole is anchored on the committed real WF-003 live
+  trace, and the load-bearing guard was falsified in both directions. Findings recorded
+  against card v1.2 (pinned tag v4.3.0), not acted on here: **F1** content-blind checks
+  (`sec-owasp-llm-10` counts 10 entries without verifying they are LLM01–LLM10;
+  advisory array-presence passes on `[]`); **F2** the six schema-redundant criteria;
+  **F3** DoD boundary/semantics divergences (`dev-coverage-min-80` is `≥ 80` where the
+  card says `> 80` strict; `sec-high-sous-2` counts all High where the card says
+  non-residual; STEP-04's "0 Critical bug on nominal" half of the pass condition is
+  ungated); **F4** DoD coverage gaps (few-shot/RAG prompts, integration plan, stack
+  beyond `llm`, `.env.example`, Gherkin case typing, docker-compose/monitoring, go-live
+  checklist). The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-003-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-003-discrimination.test.ts`.
 
 ---
 
