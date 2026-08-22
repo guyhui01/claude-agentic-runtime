@@ -167,6 +167,22 @@
   appendices). The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-006-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-006-discrimination.test.ts`.
+- **WF-007 eval-gate discrimination audit — seventh spine (10 blocking criteria), same
+  two axes.** The schema/criterion split is **re-measured, not assumed**: of the **10
+  blocking criteria, 5 are load-bearing and 5 are redundant** with the output schema. The
+  5 unique are the non-empty STRING checks the schema types as `string` but cannot demand
+  non-empty (`ba-client-context` and the four STEP-05 deliverables — D1 kit, intro email,
+  report template, D5 scoping note); the 5 redundant double an array `min` enforced at the
+  handoff. The positive pole is anchored on the committed real WF-007 live trace, and the
+  load-bearing guard was falsified in both directions. Findings recorded against card v1.0
+  (pinned tag v4.3.0), not acted on here: **F1** content-blindness (`red-d1-kit` accepts
+  any non-empty string, not a real kit); **F2** the five schema-redundant criteria; **F3**
+  a POSITIVE — this spine applies the WF-005 hardening (schema `min` pinned to the relaxed
+  floor, no `maxItems`), so it does NOT repeat the WF-004/006 F3 defect; **F4** DoD
+  coverage gaps (logistics, D1 questions, kickoff risks, org chart, glossary, grey areas,
+  D1 posture, quick wins). The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-007-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-007-discrimination.test.ts`.
 
 ---
 
