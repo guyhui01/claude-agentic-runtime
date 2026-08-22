@@ -65,6 +65,28 @@ export function nonEmptyString(v: unknown): v is string {
   return typeof v === "string" && v.trim().length > 0;
 }
 
+/**
+ * `true` if every wanted case type appears in `v[].{key}` — case- and
+ * whitespace-insensitive.
+ *
+ * SINGLE SOURCE for the "scenario coverage beyond the nominal" DoD line, which several
+ * cards state identically (WF-001 STEP-04, WF-003 STEP-04: "nominal + error + boundary").
+ * Two spines previously hand-rolled it and DIVERGED — one advisory, one blocking, with
+ * an exact-literal `Set.has` that a card-conformant `"Nominal"` or `" error "` failed.
+ * The comparison is normalized here so the vocabulary is enforced by the output schema's
+ * `enum`, not by the criterion guessing the agent's casing.
+ */
+export function coversCaseTypes(v: unknown, key: string, wanted: string[]): boolean {
+  if (!Array.isArray(v)) return false;
+  const seen = new Set(
+    v
+      .map((item) => asRecord(item)[key])
+      .filter((t): t is string => typeof t === "string")
+      .map((t) => t.trim().toLowerCase()),
+  );
+  return wanted.every((w) => seen.has(w.trim().toLowerCase()));
+}
+
 export function isNumber(v: unknown): v is number {
   return typeof v === "number" && Number.isFinite(v);
 }

@@ -471,13 +471,18 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
           { min: 1 },
         ),
         fraudReport: { type: "string", description: "CV fraud / fake-profile detection report." },
-        // Blocking rh-shortlist-validated (gateway) floor ≥ 3; schema communicates the 3-5 ideal.
+        // Blocking rh-shortlist-validated (gateway) floor ≥ 3 — the schema `min` IS that gate
+        // floor, so it stays. The `max: 5` was dropped 2026-08-23 (audit finding F-C): it was
+        // the last surviving upper bound of the F3 fix and contradicted its own rationale
+        // ("the ideal is never hard-gated at the handoff" — comexDeck's identical "10-15" max
+        // was dropped). The 3-5 ideal is carried by the advisory `rh-shortlist-3-5`, so a
+        // 6-candidate shortlist of genuinely qualified profiles no longer hard-fails.
         shortlist: arrOf(
           objSchema([], {
             candidate: { type: "string", description: "Shortlisted candidate (anonymized)." },
             justification: { type: "string", description: "Why shortlisted." },
           }),
-          { min: 3, max: 5 },
+          { min: 3 },
         ),
         // Advisory nudge rh-comparison-table.
         comparisonTable: { type: "array", description: "Candidate comparison table (skills × criteria)." },

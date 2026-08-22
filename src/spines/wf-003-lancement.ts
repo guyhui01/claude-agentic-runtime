@@ -31,6 +31,7 @@ import {
   nonEmptyString,
   isNumber,
   numberAtLeast,
+  coversCaseTypes,
 } from "./spine-helpers.js";
 
 // =============================================================================
@@ -171,16 +172,16 @@ const STEP04_CRITERIA: Criterion[] = [
   },
   {
     id: "qa-gherkin-3-types",
-    // Card DoD: "Gherkin BDD scenarios for nominal + boundary + error cases". The schema
-    // types each item's `type` as an optional string, so it CANNOT require the three
-    // distinct case types — this criterion does (audit finding F4, gated 2026-08-23).
+    // Card DoD (output_attendu): "Gherkin BDD scenarios for nominal + boundary + error cases".
+    // ADVISORY, deliberately — matching the sibling WF-001 `qa-cas-erreur-et-limite`, which
+    // resolves the SAME card sentence. It is an `output_attendu` line, not a
+    // `condition_passage` (WF-003's is "≥ 90% + 0 Critical bug on nominal"), so it must not
+    // halt a valid-but-minimal QA deliverable. Was briefly blocking (2026-08-23) — an
+    // independent audit caught the cross-spine policy inversion; corrected the same day.
+    // Shared `coversCaseTypes` + the schema `enum` on `type` keep the two spines aligned.
     description: "STEP-04: Gherkin scenarios cover the three case types (nominal / boundary / error)",
-    severity: "blocking",
-    check: (o) => {
-      const g = asRecord(o)["gherkin"];
-      const types = new Set((Array.isArray(g) ? g : []).map((it) => asRecord(it)["type"]));
-      return ["nominal", "boundary", "error"].every((t) => types.has(t));
-    },
+    severity: "advisory",
+    check: (o) => coversCaseTypes(asRecord(o)["gherkin"], "type", ["nominal", "boundary", "error"]),
   },
   {
     id: "qa-taux-reussite-90",
@@ -386,7 +387,14 @@ export const WF_003_LANCEMENT_MANIFEST: SpineManifest = {
             given: { type: "string" },
             when: { type: "string" },
             then: { type: "string" },
-            type: { type: "string", description: "nominal | error | boundary" },
+            // `enum` (not just a description): the vocabulary the advisory
+            // `qa-gherkin-3-types` reads is enforced by the schema, so the criterion never
+            // has to guess the agent's casing or synonyms (audit finding F-B).
+            type: {
+              type: "string",
+              enum: ["nominal", "error", "boundary"],
+              description: "nominal | error | boundary",
+            },
           }),
           { min: 1 },
         ),

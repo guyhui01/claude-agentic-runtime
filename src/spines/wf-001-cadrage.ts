@@ -39,6 +39,7 @@ import {
   nonEmptyArray,
   arrayLenBetween,
   nonEmptyString,
+  coversCaseTypes,
 } from "./spine-helpers.js";
 
 // =============================================================================
@@ -193,12 +194,10 @@ const STEP04_CRITERIA: Criterion[] = [
     description:
       "STEP-04: coverage beyond the nominal — at least one `error` case and one `boundary` case",
     severity: "advisory",
-    check: (o) => {
-      const scenarios = asRecord(o)["gherkin"];
-      if (!Array.isArray(scenarios)) return false;
-      const types = new Set(scenarios.map((sc) => asRecord(sc)["type"]));
-      return types.has("error") && types.has("boundary");
-    },
+    // Shared `coversCaseTypes` (single source with WF-003's `qa-gherkin-3-types`, which
+    // resolves the same card sentence): normalized comparison, so a card-conformant
+    // "Error" / " boundary " no longer reads as missing coverage (audit finding F-B).
+    check: (o) => coversCaseTypes(asRecord(o)["gherkin"], "type", ["error", "boundary"]),
   },
 ];
 
@@ -288,8 +287,12 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
             given: str,
             when: str,
             then: str,
+            // `enum` (not just a description): the vocabulary `qa-cas-erreur-et-limite`
+            // reads is enforced by the schema, so the criterion never guesses the agent's
+            // casing or synonyms (audit finding F-B; same shape as WF-003 STEP-04).
             type: {
               type: "string",
+              enum: ["nominal", "error", "boundary"],
               description: "nominal | error | boundary",
             },
           }),

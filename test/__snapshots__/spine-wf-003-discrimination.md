@@ -23,8 +23,7 @@ later, with a different failure `kind`.
 | `ai-choix-stack-llm` | UNIQUE | completed | — (nothing: real hole) |
 | `dev-code-present` | UNIQUE | completed | — (nothing: real hole) |
 | `dev-coverage-min-80` | UNIQUE | completed | — (nothing: real hole) |
-| `qa-gherkin-non-vide` | REDUNDANT | failed | eval-gate (sibling) |
-| `qa-gherkin-3-types` | UNIQUE | completed | — (nothing: real hole) |
+| `qa-gherkin-non-vide` | REDUNDANT | failed | handoff (output schema) |
 | `qa-taux-reussite-90` | UNIQUE | completed | — (nothing: real hole) |
 | `qa-evals-golden-20-50` | REDUNDANT | failed | handoff (output schema) |
 | `ops-pipeline-present` | UNIQUE | completed | — (nothing: real hole) |
@@ -52,7 +51,6 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `dev-coverage-min-80` | coverage:80 (not > 80 — strict boundary, the F3(a) fix) | yes |
 | `dev-coverage-min-80` | coverage:'85' (non-number) | yes |
 | `qa-gherkin-non-vide` | gherkin:[] (below min 1) | yes |
-| `qa-gherkin-3-types` | gherkin missing the 'error' type (only nominal+boundary — schema types `type` as any string) | yes |
 | `qa-taux-reussite-90` | tauxReussite:89 (below 90) | yes |
 | `qa-taux-reussite-90` | tauxReussite:'94' (non-number) | yes |
 | `qa-evals-golden-20-50` | goldenDataset:19 (below 20) | yes |
@@ -64,4 +62,4 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `sec-high-sous-2` | high:2 (not < 2) | yes |
 | `sec-high-sous-2` | high:'1' (non-number) | yes |
 
-**13 of 19 blocking criteria are UNIQUE (sole gate); 6 are REDUNDANT.**
+**12 of 18 blocking criteria are UNIQUE (sole gate); 6 are REDUNDANT.**

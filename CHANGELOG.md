@@ -12,16 +12,35 @@
 
 ### ✨ Added
 
-- **WF-003 now gates the three Gherkin case types (audit finding F4, STEP-04).** The card DoD
-  asks for "Gherkin BDD scenarios for nominal + boundary + error cases", but the output schema
-  types each scenario's `type` as an optional string and so cannot require the three distinct
-  types — only non-emptiness was gated. New blocking criterion `qa-gherkin-3-types` requires all
-  three; measured UNIQUE (removal lets a 2-type output through) with the committed live trace as
-  the positive pole (it already carries all three) and the happy fixtures enriched to match. This
-  is the one F4 coverage gap gate-able now on an existing field the frozen billed trace already
-  satisfies; the rest of F4/F3(c)/F5 stays ungated by decision (conditional or non-deterministic
-  DoD lines, or gaps that would need a new output field the frozen traces lack — see the tracker
-  triage). Suite 630 passed / 24 skipped, strict typecheck green.
+- **Gherkin case-type coverage is now single-sourced and schema-enforced across WF-001 and
+  WF-003.** Both cards state the same DoD line ("nominal + error + boundary" scenarios) and both
+  spines checked it — with two hand-rolled implementations that had DIVERGED. They now share one
+  helper, `coversCaseTypes` (`src/spines/spine-helpers.ts`), and both output schemas carry an
+  `enum` on the scenario `type` (verified load-bearing: an out-of-vocabulary `"edge case"` is
+  rejected at the handoff). WF-003 gains the advisory `qa-gherkin-3-types`; WF-001's
+  `qa-cas-erreur-et-limite` keeps its severity and drops its brittle exact-literal `Set.has`.
+  The comparison is now case- and whitespace-insensitive, so a card-conformant `"Nominal"` or
+  `" ERROR "` no longer reads as missing coverage.
+
+### 🐛 Fixed
+
+- **A blocking gate that inverted policy against a sibling spine is corrected before it could
+  halt a valid run (independent audit findings F-A/F-B).** `qa-gherkin-3-types` shipped earlier
+  the same day as **blocking**, while the sibling WF-001 resolves the *same card sentence* as
+  **advisory** — two spines answering one DoD line in opposite directions, each green on its own
+  fixture. The line also lives in `output_attendu`, not in `condition_passage` (WF-003's is
+  "≥ 90% + 0 Critical bug on nominal"), so gating it created a new false-halt for a
+  valid-but-minimal QA deliverable — the exact failure class the concurrent F3 fix was removing.
+  It is now advisory, aligned with WF-001, and the shared helper + schema `enum` make the policy
+  single-sourced so the two cannot diverge silently again. Verified by effect: a WF-003 run whose
+  scenarios are nominal + boundary only now completes (the advisory warns) instead of halting.
+- **WF-009 `shortlist` no longer hard-caps at 5 (audit finding F-C).** It was the last surviving
+  `maxItems` of the F3 "relaxed floor" fix and contradicted that fix's own rationale — the
+  identical "10-15" upper bound on `comexDeck`/`pitchDeck` had been dropped for exactly this
+  reason. The `min: 3` stays (it *is* the `rh-shortlist-validated` gate floor); the 3-5 ideal is
+  carried by the advisory `rh-shortlist-3-5`. Verified by effect: a shortlist of 6 genuinely
+  qualified candidates now clears the handoff instead of hard-failing.
+  Suite 629 passed / 24 skipped, strict typecheck green.
 
 ## [0.15.0] - 2026-08-22 — The relaxed floor is real again: modest-but-valid runs clear the handoff, the coverage gate matches the card, and the catalog pin catches up 🔧
 
