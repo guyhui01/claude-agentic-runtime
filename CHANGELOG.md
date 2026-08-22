@@ -147,6 +147,26 @@
   note, quote of the week). The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-005-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-005-discrimination.test.ts`.
+- **WF-006 eval-gate discrimination audit — sixth spine (16 blocking criteria), same two
+  axes.** The schema/criterion split is **re-measured, not assumed**, and moves again: of
+  the **16 blocking criteria, 8 are load-bearing and 8 are redundant** with the output
+  schema. The unique contributions the schema cannot express: the **GO/NO-GO gateway**
+  (`presales-go`, a value-equality gate — removal lets a "NO-GO" run to completion, a real
+  no-bid hole), the per-KEY non-emptiness of the BANT sheet (`presales-bant`), a numeric
+  RANGE (`presales-win-probability` 0–100), the two `stack.llm`/diagram/schedule and the
+  two STEP-07 non-empty strings. The 8 redundant double an all-keys-present object, an
+  array `min` or a field type enforced at the handoff. The positive pole is anchored on
+  the committed real WF-006 live trace, and the load-bearing guard was falsified in both
+  directions. Findings recorded against card v1.0 (pinned tag v4.3.0), not acted on here:
+  **F1** content-blindness (`red-proposal` accepts any non-empty string, not a 20-40 page
+  proposal); **F2** the eight schema-redundant criteria; **F3** the WF-004-style "relaxed
+  floor defeated by the schema" recurs (WF-005 fixed it, WF-006 v1.0 did not) —
+  `fin-scenarios` is a non-empty floor but the schema pins `commercialScenarios` to
+  `min 3`, so a 1-2 scenario run is hard-failed at the handoff; **F4** DoD coverage gaps
+  (risk mapping, sponsor path, NFR, make-vs-buy, op-cost, prospect ROI, anticipated Q&A,
+  appendices). The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-006-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-006-discrimination.test.ts`.
 
 ---
 
