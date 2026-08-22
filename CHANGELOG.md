@@ -6,7 +6,7 @@
 
 ---
 
-## [Unreleased]
+## [0.16.0] - 2026-08-23 — A fix from an audit, reverted by the next one: a case variant costs a warning again, the reference floor matches the card, and four claims stop overstating 🔁
 
 > Model: Claude Opus 4.8, then Claude Opus 5 (the 2026-08-23 audit round and its fixes).
 
