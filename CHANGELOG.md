@@ -108,6 +108,24 @@
   checklist). The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-003-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-003-discrimination.test.ts`.
+- **WF-004 eval-gate discrimination audit — fourth spine (15 blocking criteria), same
+  two axes.** The schema/criterion split is **re-measured, not assumed**, and moves
+  again: of the **15 blocking criteria, 6 are load-bearing and 9 are redundant with the
+  output schema**. The 6 unique are the properties JSON Schema cannot express — a
+  non-empty string (`fa-roi-summary`, `cdo-governance`, `cm-comms-plan`,
+  `red-exec-summary`, `red-full-report`) and a numeric RANGE (`consultant-maturity-score`
+  1–10); the 9 redundant double an all-keys-present object or an array bound enforced at
+  the handoff. The positive pole is anchored on the committed real WF-004 live trace, and
+  the load-bearing guard was falsified in both directions. Findings recorded against card
+  v1.1 (pinned tag v4.3.0), not acted on here: **F1** content-blind array-presence
+  advisories; **F2** the nine schema-redundant criteria; **F3** the "relaxed BLOCKING
+  floor + advisory at the exact spec" design is defeated by the schema, which uses
+  `{ min: <ideal> }` (useCases 5, adkar 3, catalog 4, deck 10) and so hard-gates the
+  ideal at the handoff — the relaxed floor can never fire; **F4** DoD coverage gaps
+  (maturity per-dimension, sector benchmark, target data architecture, AI champions
+  network, technical appendices). The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-004-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-004-discrimination.test.ts`.
 
 ---
 
