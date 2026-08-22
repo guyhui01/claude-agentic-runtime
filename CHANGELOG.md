@@ -23,6 +23,18 @@
   their own id, description and severity. A stronger claim ("the two can no longer diverge")
   stood here until 2026-08-23 and was not true.
 
+- **A regression guard so the reverted `enum` cannot come back unnoticed**
+  (`test/gherkin-case-type-vocabulary.test.ts`, 10 cases across both spines). It pins the
+  contract in one sentence — *an unexpected case type costs an advisory warning, never the
+  run* — and asserts BOTH halves by effect, not by shape: a case or whitespace variant
+  completes AND satisfies the criterion (no false warning), while an out-of-vocabulary drift
+  completes AND leaves the criterion unsatisfied (so the criterion is not a `/.+/` that
+  passes on anything). A structural case also asserts the absence of the `enum` itself.
+  Audited by removal, the way the discrimination battery audits a gate: re-introducing the
+  `enum` on WF-001 alone reddens 4 of the 10 cases — the three effect cases and the
+  structural one — and leaves WF-003's six green, so the guard discriminates per spine and is
+  not vacuous.
+
 ### 🐛 Fixed
 
 - **A blocking gate that inverted policy against a sibling spine is corrected before it could
