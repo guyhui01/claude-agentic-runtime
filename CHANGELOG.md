@@ -126,6 +126,27 @@
   network, technical appendices). The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-004-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-004-discrimination.test.ts`.
+- **WF-005 eval-gate discrimination audit — fifth spine (7 blocking criteria), same two
+  axes.** The schema/criterion split is **re-measured, not assumed**, and moves again: of
+  the **7 blocking criteria, 3 are load-bearing and 4 are redundant** with the output
+  schema. The unique contribution here is two PER-ITEM content checks
+  (`veille-highlights-ranked`, `growth-topics-actionable`): the schema types the item
+  fields as `string` but cannot demand they be NON-EMPTY, so a list of hollow items
+  passes the schema and only the criterion catches it; plus `red-synthesis`
+  (non-empty string). The four redundant are the array floors, one of which
+  (`growth-topics-floor`) is measured caught by a **sibling** criterion rather than the
+  schema — the matrix distinguishes the two. The positive pole is anchored on the
+  committed real WF-005 live trace, and the load-bearing guard was falsified in both
+  directions. Findings recorded against card v1.1 (pinned tag v4.3.0), not acted on here:
+  **F1** partial content-blindness (the per-item checks verify non-emptiness, not domain —
+  any `impact` string passes, not just High/Medium/Low); **F2** the four schema-redundant
+  floors; **F3** a POSITIVE CONTRAST with WF-004 F3 — this spine's author pinned the schema
+  `min` to the relaxed FLOOR (not the advisory ideal) and dropped `maxItems`, so a
+  modest-but-valid run is not hard-failed and the ideal stays advisory-only as intended;
+  **F4** DoD coverage gaps (qualified engagement opportunities, hashtags/timing, internal
+  note, quote of the week). The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-005-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-005-discrimination.test.ts`.
 
 ---
 
