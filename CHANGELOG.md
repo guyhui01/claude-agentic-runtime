@@ -204,6 +204,27 @@
   (penalties, gaps, controls plan, correction plan, AI Act lead, adoption KPIs, reservations,
   roadmap). The spine sidecar and mock runner were extracted to `test/fixtures/wf-008-spine.ts`
   (shared with the hermetic test, DRY). See `test/spine-wf-008-discrimination.test.ts`.
+- **WF-009 eval-gate discrimination audit — ninth spine (16 blocking criteria), same two
+  axes.** The schema/criterion split is **re-measured, not assumed**: of the **16 blocking
+  criteria, 9 are load-bearing and 7 are redundant** with the output schema. WF-009 carries
+  TWO HARDENED decision gates the schema cannot express, both measured UNIQUE and each
+  hardened after the first live run caught a hollow pass: `rh-shortlist-validated`
+  (`countAffirmativeField(shortlist,"candidate") >= 3` — 3 placeholder rows pass the schema's
+  `min 3` but the gate counts REAL candidates) and `sel-candidate-selected`
+  (`affirmativeString(selectedCandidate)` — rejects the honest in-band refusal "None — no
+  candidate can be selected" that `nonEmptyString` accepted). **Both poles are anchored on
+  real data**: the positive pole on the committed completed trace, and a REAL negative pole
+  on the committed gate-halt trace (`wf-009-live-result-gate-halt.json`, status "failed" at
+  STEP-04 on `rh-shortlist-validated`) — the two traces together prove the gate discriminates.
+  The load-bearing guard was falsified in both directions (including a hardened gateway).
+  Findings recorded against card v1.0 (pinned tag v4.3.0), not acted on here: **F1**
+  content-blindness (the two gates are the exception — they harden against exactly a hollow
+  pass); **F2** the seven schema-redundant criteria; **F3** the WF-004/006-style "relaxed
+  floor defeated by the schema" recurs on STEP-02A (`assessmentGrid` schema `min 6`,
+  `interviewQuestions` `min 10` = the advisory ideals, so the ≥ 3 floors never fire); **F4**
+  DoD coverage gaps. The spine sidecar and mock runner were extracted to
+  `test/fixtures/wf-009-spine.ts` (shared with the hermetic test, DRY). See
+  `test/spine-wf-009-discrimination.test.ts`.
 
 ---
 
