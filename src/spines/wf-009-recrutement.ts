@@ -246,15 +246,19 @@ const STEP05_CRITERIA: Criterion[] = [
   },
   {
     id: "sel-references",
-    description: "STEP-05: reference-check result present (non-empty)",
+    description: "STEP-05: reference-check result, 2 references minimum (card floor)",
     severity: "blocking",
-    check: (o) => nonEmptyArray(asRecord(o)["referenceChecks"]),
+    check: (o) => minArrayLen(asRecord(o)["referenceChecks"], 2),
   },
   {
     id: "sel-references-2plus",
-    description: "STEP-05: 2-3 reference checks (ideal ≥ 2)",
+    description: "STEP-05: 2-3 reference checks (card ideal)",
     severity: "advisory",
-    check: (o) => minArrayLen(asRecord(o)["referenceChecks"], 2),
+    // Carries the UPPER half of the card's "2-3" only: the floor of 2 is now the blocking
+    // `sel-references`, so a `minArrayLen(..., 2)` here could no longer redden — a dead
+    // criterion. `arrayLenBetween` keeps it falsifiable (4 reference checks warn), the same
+    // shape as `tech-grid-6-10` and `tech-questions-10-15` above.
+    check: (o) => arrayLenBetween(asRecord(o)["referenceChecks"], 2, 3),
   },
   {
     id: "sel-candidate-selected",
@@ -504,14 +508,19 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
             }),
             { min: 1 },
           ),
-          // Blocking floor ≥ 1 (`sel-references`). F3 fix 2026-08-22: schema min = the FLOOR (1),
-          // no maxItems — the 2-3 ideal stays advisory `sel-references-2plus` (WF-005 pattern).
+          // Blocking floor ≥ 2 (`sel-references`), no maxItems. The F3 fix lowered this to 1
+          // on 2026-08-22 and went one step too far: STEP-05 `output_attendu` reads
+          // "Reference-check result (2-3 references MINIMUM)" — the only lowered count in the
+          // catalog whose card carries the word "minimum" (measured at v4.4.0: 1 occurrence in
+          // the whole card). WF-009 has no `condition_passage` at all, so "it is only
+          // output_attendu" cannot demote it without gutting every blocking criterion of this
+          // spine. Restored to 2 on 2026-08-23 (audit finding F-D).
           referenceChecks: arrOf(
             objSchema([], {
               candidate: { type: "string", description: "Candidate the reference concerns." },
               outcome: { type: "string", description: "Reference-check outcome." },
             }),
-            { min: 1 },
+            { min: 2 },
           ),
           // Blocking sel-candidate-selected (gateway): a named selected candidate.
           selectedCandidate: { type: "string", description: "The selected candidate (anonymized)." },

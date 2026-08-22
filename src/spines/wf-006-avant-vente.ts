@@ -487,8 +487,12 @@ export const WF_006_AVANT_VENTE_MANIFEST: SpineManifest = {
         },
         proposal: { type: "string", description: "Complete commercial proposal (20-40 pages)." },
         // Advisory nudges red-anticipated-qa / red-pitch-deck (10-15 slides). F3 fix 2026-08-22:
-        // pitchDeck (advisory, optional) is no longer hard-gated at the handoff — min = 1, no max;
-        // the 10-15 ideal stays advisory `red-pitch-deck`.
+        // pitchDeck (advisory, optional): the 10-15 ideal is advisory `red-pitch-deck` and the
+        // `maxItems` is gone. ⚠ `min: 1` is NOT "no longer hard-gated" — an explicit `[]` still
+        // fails at the ajv handoff, while OMITTING the key completes. That asymmetry is the
+        // repo-wide idiom, not a local defect: measured 2026-08-23, 32 of the 35 fields carrying
+        // a `min` are optional. Left as-is deliberately — changing this one field alone would
+        // make it the exception among 32. Recorded as a class in next_steps.md.
         anticipatedQa: { type: "array", description: "Anticipated Q&A with prepared answers." },
         pitchDeck: arrOf(
           objSchema([], { title: { type: "string", description: "Slide title." } }),

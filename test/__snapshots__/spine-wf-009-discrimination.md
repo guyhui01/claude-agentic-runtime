@@ -49,7 +49,8 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `rh-shortlist-validated` | 2 real + 1 placeholder (count 2 < 3) | yes |
 | `sel-hr-report` | hrInterviewReport:'' | yes |
 | `sel-tech-grid` | techGridPerCandidate:[] (below min 1) | yes |
-| `sel-references` | referenceChecks:[] (below schema min 1) | yes |
+| `sel-references` | referenceChecks:[] (below schema min 2) | yes |
+| `sel-references` | referenceChecks:1 (above the old floor of 1, below the card's 2) | yes |
 | `sel-candidate-selected` | selectedCandidate:'None — no candidate can be selected' (negative sentinel) | yes |
 | `sel-candidate-selected` | selectedCandidate:'' | yes |
 | `sel-recommendation` | recommendation:'' | yes |

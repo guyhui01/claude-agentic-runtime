@@ -287,12 +287,16 @@ export const WF_001_CADRAGE_MANIFEST: SpineManifest = {
             given: str,
             when: str,
             then: str,
-            // `enum` (not just a description): the vocabulary `qa-cas-erreur-et-limite`
-            // reads is enforced by the schema, so the criterion never guesses the agent's
-            // casing or synonyms (audit finding F-B; same shape as WF-003 STEP-04).
+            // Plain string, NOT a schema `enum` — the WF-006 `verdictCode` idiom: the
+            // advisory `qa-cas-erreur-et-limite` NORMALIZES what it reads, so a case or
+            // whitespace variant still satisfies it, and an out-of-vocabulary type costs an
+            // advisory warning instead of killing the run at the ajv handoff. An `enum` was
+            // tried on 2026-08-23 (audit finding F-B) and reverted the same day: measured,
+            // it turned `"Nominal"` — and the `nominal/erreur/limite` drift the 2026-06-09
+            // live run actually produced — into `failed`/`kind:"handoff"`. The description
+            // carries the constraint to the agent.
             type: {
               type: "string",
-              enum: ["nominal", "error", "boundary"],
               description: "nominal | error | boundary",
             },
           }),

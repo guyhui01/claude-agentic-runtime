@@ -69,6 +69,17 @@ import haltTrace from "../docs/audit/live-runs/wf-009-live-result-gate-halt.json
  *       advisory (`tech-grid-6-10`, `tech-questions-10-15`, `sel-references-2plus`), matching
  *       WF-005/007/010. `shortlist` is deliberately unchanged: its `min 3` is the real gate
  *       floor (`rh-shortlist-validated` needs ≥ 3 REAL) and its `max 5` is the card's "3-5".
+ *       ⤷ CORRECTED 2026-08-23 on two counts, after an independent audit re-read the card:
+ *         (a) `referenceChecks` is back to a floor of 2 — STEP-05 `output_attendu` reads
+ *             "2-3 references MINIMUM", the only lowered count in the catalog whose card says
+ *             "minimum", and WF-009 has no `condition_passage` to demote it against. The
+ *             advisory `sel-references-2plus` now carries the UPPER half only
+ *             (`arrayLenBetween(2, 3)`), because a `≥ 2` advisory under a `≥ 2` gate is dead.
+ *         (b) `shortlist`'s `max 5` was REMOVED (finding F-C): it was the last surviving
+ *             `maxItems` of this very fix and contradicted its own rationale. The sentence
+ *             above is kept as the dated record of what was measured then.
+ *       The other two lowered counts stand: "6-10" and "10-15" are RANGES, not minima
+ *       (measured at v4.4.0 — "minimum" occurs exactly once in the whole WF-009 card).
  *  F4 — DoD coverage gaps (card lines with no blocking criterion): STEP-01 culture fit / work
  *       env; STEP-02A benchmark / exercise; STEP-03 agency brief / InMail / reply email;
  *       STEP-04 comparison table; STEP-05 references count (2-3 ideal is advisory); STEP-06
@@ -143,7 +154,16 @@ const AUDIT: Entry[] = [
   // STEP-05 — RH-IA + CONSULTANT-IA (+ the hardened selection gateway)
   { id: "sel-hr-report", klass: "unique", witnesses: [{ clause: "hrInterviewReport:''", bad: withStep("STEP-05", { hrInterviewReport: "" }) }] },
   { id: "sel-tech-grid", klass: "redundant", witnesses: [{ clause: "techGridPerCandidate:[] (below min 1)", bad: withStep("STEP-05", { techGridPerCandidate: [] }) }] },
-  { id: "sel-references", klass: "redundant", witnesses: [{ clause: "referenceChecks:[] (below schema min 1)", bad: withStep("STEP-05", { referenceChecks: [] }) }] },
+  {
+    id: "sel-references", klass: "redundant",
+    witnesses: [
+      { clause: "referenceChecks:[] (below schema min 2)", bad: withStep("STEP-05", { referenceChecks: [] }) },
+      // Discriminates the 2026-08-23 floor restoration specifically: ONE reference cleared
+      // the 2026-08-22 floor of 1 and must now redden. Without this witness the whole change
+      // is invisible to the suite (an `[]` witness reddens under either floor).
+      { clause: "referenceChecks:1 (above the old floor of 1, below the card's 2)", bad: withStep("STEP-05", { referenceChecks: [{ candidate: "CAND-01", outcome: "single reference" }] }) },
+    ],
+  },
   {
     id: "sel-candidate-selected", klass: "unique",
     witnesses: [

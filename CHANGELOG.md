@@ -8,39 +8,74 @@
 
 ## [Unreleased]
 
-> Model: Claude Opus 4.8.
+> Model: Claude Opus 4.8, then Claude Opus 5 (the 2026-08-23 audit round and its fixes).
 
 ### ✨ Added
 
-- **Gherkin case-type coverage is now single-sourced and schema-enforced across WF-001 and
-  WF-003.** Both cards state the same DoD line ("nominal + error + boundary" scenarios) and both
-  spines checked it — with two hand-rolled implementations that had DIVERGED. They now share one
-  helper, `coversCaseTypes` (`src/spines/spine-helpers.ts`), and both output schemas carry an
-  `enum` on the scenario `type` (verified load-bearing: an out-of-vocabulary `"edge case"` is
-  rejected at the handoff). WF-003 gains the advisory `qa-gherkin-3-types`; WF-001's
-  `qa-cas-erreur-et-limite` keeps its severity and drops its brittle exact-literal `Set.has`.
-  The comparison is now case- and whitespace-insensitive, so a card-conformant `"Nominal"` or
-  `" ERROR "` no longer reads as missing coverage.
+- **The Gherkin case-type check is shared by WF-001 and WF-003 through one normalized
+  helper.** Both cards state the same DoD line ("nominal + error + boundary" scenarios) and
+  both spines checked it — with two hand-rolled implementations that had DIVERGED. They now
+  call one helper, `coversCaseTypes` (`src/spines/spine-helpers.ts`), whose comparison is
+  case- and whitespace-insensitive, so a card-conformant `"Nominal"` or `" ERROR "` no longer
+  reads as missing coverage. ⚠ Scope, stated precisely: the helper single-sources the
+  COMPARISON MECHANICS, not the policy — the two call sites still ask for different sets
+  (WF-001 `["error", "boundary"]`, WF-003 `["nominal", "boundary", "error"]`) and still carry
+  their own id, description and severity. A stronger claim ("the two can no longer diverge")
+  stood here until 2026-08-23 and was not true.
 
 ### 🐛 Fixed
 
 - **A blocking gate that inverted policy against a sibling spine is corrected before it could
-  halt a valid run (independent audit findings F-A/F-B).** `qa-gherkin-3-types` shipped earlier
-  the same day as **blocking**, while the sibling WF-001 resolves the *same card sentence* as
-  **advisory** — two spines answering one DoD line in opposite directions, each green on its own
-  fixture. The line also lives in `output_attendu`, not in `condition_passage` (WF-003's is
-  "≥ 90% + 0 Critical bug on nominal"), so gating it created a new false-halt for a
-  valid-but-minimal QA deliverable — the exact failure class the concurrent F3 fix was removing.
-  It is now advisory, aligned with WF-001, and the shared helper + schema `enum` make the policy
-  single-sourced so the two cannot diverge silently again. Verified by effect: a WF-003 run whose
-  scenarios are nominal + boundary only now completes (the advisory warns) instead of halting.
-- **WF-009 `shortlist` no longer hard-caps at 5 (audit finding F-C).** It was the last surviving
-  `maxItems` of the F3 "relaxed floor" fix and contradicted that fix's own rationale — the
-  identical "10-15" upper bound on `comexDeck`/`pitchDeck` had been dropped for exactly this
-  reason. The `min: 3` stays (it *is* the `rh-shortlist-validated` gate floor); the 3-5 ideal is
-  carried by the advisory `rh-shortlist-3-5`. Verified by effect: a shortlist of 6 genuinely
-  qualified candidates now clears the handoff instead of hard-failing.
-  Suite 629 passed / 24 skipped, strict typecheck green.
+  halt a valid run (independent audit finding F-A).** `qa-gherkin-3-types` shipped earlier the
+  same day as **blocking**, while the sibling WF-001 resolves the *same card sentence* as
+  **advisory** — two spines answering one DoD line in opposite directions, each green on its
+  own fixture. The line also lives in `output_attendu`, not in `condition_passage`, so gating
+  it created a new false-halt for a valid-but-minimal QA deliverable — the exact failure class
+  the concurrent F3 fix was removing. It is now advisory, aligned with WF-001. Verified by
+  effect: a WF-003 run whose scenarios are nominal + boundary only completes (the advisory
+  warns) instead of halting.
+- **The schema `enum` shipped alongside that fix is REVERTED — it was a net regression
+  (second audit round, Opus 5).** To stop the check from keying on unconstrained literals
+  (finding F-B), an `enum: ["nominal", "error", "boundary"]` had been added to `gherkin[].type`
+  in both spines. Measured end-to-end before and after: it turned a case variant into a dead
+  run. `"Nominal"/"Error"/"Boundary"` → `failed`, `kind:"handoff"` on BOTH spines; padded
+  values → the same; and `nominal/erreur/limite` — the French vocabulary the 2026-06-09 live
+  WF-001 run actually produced — → the same. All six now complete. Two things made the `enum`
+  wrong beyond the measurement: `wf-006-avant-vente.ts` already decided this exact question the
+  other way in writing ("Kept a plain string (not a schema `enum`) on purpose: the gate
+  NORMALIZES it (WF-001 lesson) … rather than failing earlier at ajv handoff validation"), and
+  the commit's own falsification proof — *"an out-of-vocabulary `edge case` is rejected at the
+  handoff"* — WAS the harm, not evidence against it. The normalized helper stays and is now
+  the only thing reading that field; measured, it absorbs case and whitespace variants
+  silently and still reddens the advisory on a genuine out-of-vocabulary drift.
+- **WF-009 `shortlist` no longer hard-caps at 5 (audit finding F-C).** It was the last
+  surviving `maxItems` of the F3 "relaxed floor" fix and contradicted that fix's own rationale
+  — the identical "10-15" upper bound on `comexDeck`/`pitchDeck` had been dropped for exactly
+  this reason. The `min: 3` stays (it *is* the `rh-shortlist-validated` gate floor); the 3-5
+  ideal is carried by the advisory `rh-shortlist-3-5`. Verified by effect: a shortlist of 6
+  genuinely qualified candidates now clears the handoff instead of hard-failing.
+- **WF-009 `referenceChecks` is back to a floor of 2 — the F3 fix had lowered it one step too
+  far (finding F-D, settled).** STEP-05 `output_attendu` reads *"Reference-check result (2-3
+  references **minimum**)"*: measured at catalog v4.4.0, that is the only lowered count in the
+  whole card carrying the word "minimum" (1 occurrence in the file). The usual mitigation does
+  not apply here — **WF-009 declares no `condition_passage` at all**, so every one of its
+  blocking criteria derives from `output_attendu`; demoting this one on that ground would gut
+  the spine. Both the schema `min` and the blocking `sel-references` now require 2. The frozen
+  live trace carries 3, so the restored floor needs no billed re-run to stay honest. The other
+  two lowered counts stand: "6-10" and "10-15" are RANGES, not minima.
+- **The advisory that would have gone dead is repointed.** With the blocking floor back at 2,
+  `sel-references-2plus` (`minArrayLen(…, 2)`) could no longer redden. It now carries the
+  UPPER half of the card's "2-3" (`arrayLenBetween(2, 3)`), the same shape as its neighbours
+  `tech-grid-6-10` and `tech-questions-10-15`, and its removal witness in the discrimination
+  audit is now DISCRIMINATING: a single reference check (which cleared the 2026-08-22 floor of
+  1) reddens, where an empty array would have reddened under either floor.
+- **Four claims that the code did not support are corrected** — three in this changelog and in
+  `next_steps.md` (the "can no longer diverge" scope above; a triage line still reading
+  "`qa-gherkin-3-types` GATED … +1 blocking → 13/6" for a criterion that is advisory and no
+  longer in the audit table), one stale note in `test/spine-wf-009-discrimination.test.ts`
+  (asserting a `max 5` removed the same day), and one code comment in `wf-006-avant-vente.ts`
+  claiming `pitchDeck` is "no longer hard-gated at the handoff" while its `min: 1` still fails
+  an explicit `[]`.
 
 ## [0.15.0] - 2026-08-22 — The relaxed floor is real again: modest-but-valid runs clear the handoff, the coverage gate matches the card, and the catalog pin catches up 🔧
 

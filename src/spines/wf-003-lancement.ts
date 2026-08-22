@@ -387,12 +387,11 @@ export const WF_003_LANCEMENT_MANIFEST: SpineManifest = {
             given: { type: "string" },
             when: { type: "string" },
             then: { type: "string" },
-            // `enum` (not just a description): the vocabulary the advisory
-            // `qa-gherkin-3-types` reads is enforced by the schema, so the criterion never
-            // has to guess the agent's casing or synonyms (audit finding F-B).
+            // Plain string, NOT a schema `enum` — same reversal as WF-001 STEP-04 (see the
+            // comment there): the advisory `qa-gherkin-3-types` normalizes what it reads, and
+            // an unexpected type must cost a warning, not a `failed`/`kind:"handoff"`.
             type: {
               type: "string",
-              enum: ["nominal", "error", "boundary"],
               description: "nominal | error | boundary",
             },
           }),
