@@ -39,18 +39,18 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `consultant-maturity-score` | maturityScore:11 (above 10) | yes |
 | `consultant-maturity-score` | maturityScore:'6' (non-number) | yes |
 | `consultant-swot` | swot missing `risks` | yes |
-| `consultant-usecases-floor` | useCases:2 (below floor 3 AND schema min 5) | yes |
+| `consultant-usecases-floor` | useCases:2 (below floor 3 AND schema min 3) | yes |
 | `fa-business-cases` | businessCases:[] (below min 1) | yes |
 | `fa-roi-summary` | roiSummary:'' | yes |
 | `fa-prioritization` | prioritization:[] (below min 1) | yes |
 | `cdo-roadmap-horizons` | roadmap missing `later` | yes |
 | `cdo-okrs` | okrs:[] (below min 1) | yes |
 | `cdo-governance` | governance:'' | yes |
-| `cm-adkar` | adkarPlan:[] (below schema min 3) | yes |
+| `cm-adkar` | adkarPlan:[] (below schema min 1) | yes |
 | `cm-comms-plan` | commsPlan:'' | yes |
-| `form-catalog` | trainingCatalog:[] (below schema min 4) | yes |
+| `form-catalog` | trainingCatalog:[] (below schema min 1) | yes |
 | `red-exec-summary` | execSummary:'' | yes |
 | `red-full-report` | fullReport:'' | yes |
-| `red-comex-deck` | comexDeck:[] (below min 10) | yes |
+| `red-comex-deck` | comexDeck:[] (below min 1) | yes |
 
 **6 of 15 blocking criteria are UNIQUE (sole gate); 9 are REDUNDANT.**

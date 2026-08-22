@@ -58,14 +58,14 @@ import realTrace from "../docs/audit/live-runs/wf-004-live-result.json" with { t
  *       `fa-business-cases`, `fa-prioritization`, `cdo-roadmap-horizons`, `cdo-okrs`,
  *       `cm-adkar`, `form-catalog`, `red-comex-deck`. The output schema declares the
  *       all-keys-present objects and the array bounds they check, enforced at the handoff.
- *  F3 — the "relaxed BLOCKING floor + ADVISORY at the exact spec" design (spine header) is
- *       DEFEATED by the schema. The schema uses `{ min: <ideal> }` (useCases min 5, adkar
- *       min 3, trainingCatalog min 4, comexDeck min 10), so the handoff ENFORCES the ideal:
- *       the relaxed floor (`consultant-usecases-floor` ≥ 3, `cm-adkar`/`form-catalog`/
- *       `red-comex-deck` non-empty) can never fire — anything below the floor is already
- *       below the schema min — and the "advisory at the exact spec" is in fact hard-gated
- *       at the handoff. If the relaxed-floor intent is real, the schema mins are the lever,
- *       not the criteria. Recorded, not acted on.
+ *  F3 — ✅ FIXED 2026-08-22. The "relaxed BLOCKING floor + ADVISORY at the exact spec" design
+ *       was DEFEATED by the schema pinning `{ min: <ideal> }` (useCases 5, adkar 3, catalog 4,
+ *       comexDeck 10), so the handoff hard-enforced the ideal and the relaxed floor could never
+ *       fire. Now the schema `min` = the FLOOR (useCases 3, adkar/catalog/comexDeck 1) with NO
+ *       `maxItems`, matching the WF-005/007/010 pattern: a modest-but-valid run passes the
+ *       handoff and the ideal stays advisory (`consultant-usecases-top5`, `cm-adkar-populations`,
+ *       `form-4-levels`, `red-deck-10-15`). The floor criteria remain REDUNDANT with the
+ *       floor-level schema min (F2) — the correct, harmless kind of redundancy.
  *  F4 — DoD coverage gaps (card output_attendu lines with no criterion): STEP-01 maturity
  *       "per dimension" and the sector benchmark (conditional); STEP-03 target data
  *       architecture (conditional); STEP-04 AI champions network; STEP-07 technical
@@ -116,7 +116,7 @@ const AUDIT: Entry[] = [
     ],
   },
   { id: "consultant-swot", klass: "redundant", witnesses: [{ clause: "swot missing `risks`", bad: withStep("STEP-01", { swot: swotNoRisks }) }] },
-  { id: "consultant-usecases-floor", klass: "redundant", witnesses: [{ clause: "useCases:2 (below floor 3 AND schema min 5)", bad: withStep("STEP-01", { useCases: useCasesTwo }) }] },
+  { id: "consultant-usecases-floor", klass: "redundant", witnesses: [{ clause: "useCases:2 (below floor 3 AND schema min 3)", bad: withStep("STEP-01", { useCases: useCasesTwo }) }] },
   // STEP-02 — FINANCIAL-ANALYST
   { id: "fa-business-cases", klass: "redundant", witnesses: [{ clause: "businessCases:[] (below min 1)", bad: withStep("STEP-02", { businessCases: [] }) }] },
   { id: "fa-roi-summary", klass: "unique", witnesses: [{ clause: "roiSummary:''", bad: withStep("STEP-02", { roiSummary: "" }) }] },
@@ -126,14 +126,14 @@ const AUDIT: Entry[] = [
   { id: "cdo-okrs", klass: "redundant", witnesses: [{ clause: "okrs:[] (below min 1)", bad: withStep("STEP-03", { okrs: [] }) }] },
   { id: "cdo-governance", klass: "unique", witnesses: [{ clause: "governance:''", bad: withStep("STEP-03", { governance: "" }) }] },
   // STEP-04 — CHANGE-MANAGER
-  { id: "cm-adkar", klass: "redundant", witnesses: [{ clause: "adkarPlan:[] (below schema min 3)", bad: withStep("STEP-04", { adkarPlan: [] }) }] },
+  { id: "cm-adkar", klass: "redundant", witnesses: [{ clause: "adkarPlan:[] (below schema min 1)", bad: withStep("STEP-04", { adkarPlan: [] }) }] },
   { id: "cm-comms-plan", klass: "unique", witnesses: [{ clause: "commsPlan:''", bad: withStep("STEP-04", { commsPlan: "" }) }] },
   // STEP-05 — FORMATEUR-IA
-  { id: "form-catalog", klass: "redundant", witnesses: [{ clause: "trainingCatalog:[] (below schema min 4)", bad: withStep("STEP-05", { trainingCatalog: [] }) }] },
+  { id: "form-catalog", klass: "redundant", witnesses: [{ clause: "trainingCatalog:[] (below schema min 1)", bad: withStep("STEP-05", { trainingCatalog: [] }) }] },
   // STEP-07 — REDACTEUR-IA
   { id: "red-exec-summary", klass: "unique", witnesses: [{ clause: "execSummary:''", bad: withStep("STEP-07", { execSummary: "" }) }] },
   { id: "red-full-report", klass: "unique", witnesses: [{ clause: "fullReport:''", bad: withStep("STEP-07", { fullReport: "" }) }] },
-  { id: "red-comex-deck", klass: "redundant", witnesses: [{ clause: "comexDeck:[] (below min 10)", bad: withStep("STEP-07", { comexDeck: [] }) }] },
+  { id: "red-comex-deck", klass: "redundant", witnesses: [{ clause: "comexDeck:[] (below min 1)", bad: withStep("STEP-07", { comexDeck: [] }) }] },
 ];
 
 // --- Removal machinery: rebuild the spine WITHOUT one criterion -------------

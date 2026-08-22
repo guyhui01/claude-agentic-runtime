@@ -27,8 +27,12 @@
  * Numeric DoD counts from the workflow ("6-10 grid criteria", "10-15 interview
  * questions", "shortlist of 3-5", "2-3 references") are split: a relaxed BLOCKING floor
  * (a meaningful deliverable must exist) plus an ADVISORY criterion at the exact spec
- * number (the full ideal). The JSON schema still communicates the ideal count to the
- * agent so its output aligns with both.
+ * number (the full ideal). **Live-run hardening (F3 fix 2026-08-22, WF-005 lesson):** the
+ * ajv-strict output schema pins `assessmentGrid`/`interviewQuestions`/`referenceChecks` to
+ * their BLOCKING FLOOR (no `maxItems`); the ideal count is carried by the advisory criteria
+ * + descriptions, never hard-gated. `shortlist` is the exception — its `min 3` is the real
+ * gate floor (`rh-shortlist-validated` needs ≥ 3 REAL candidates) and its `max 5` is the
+ * card's explicit "3-5" upper, so it keeps both.
  *
  * `assetId` values expected as "agent" assets in the pinned catalog's sidecar.
  */
@@ -404,22 +408,24 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
         candidatePool: candidatePoolSchema,
       }),
       output: objSchema(["assessmentGrid", "interviewQuestions", "candidatePool"], {
-        // Blocking floor ≥ 3; the schema communicates the 6-10 ideal (advisory).
+        // Blocking floor ≥ 3 (`tech-grid-floor`). F3 fix 2026-08-22: schema min = the FLOOR (3),
+        // no maxItems — the 6-10 ideal stays advisory `tech-grid-6-10` (WF-005/007/010 pattern).
         assessmentGrid: arrOf(
           objSchema([], {
             criterion: { type: "string", description: "Assessed technical criterion." },
             weight: { type: "string", description: "Relative weight / importance." },
             scale: { type: "string", description: "1-5 rating scale anchor." },
           }),
-          { min: 6, max: 10 },
+          { min: 3 },
         ),
-        // Blocking floor ≥ 3; the schema communicates the 10-15 ideal (advisory).
+        // Blocking floor ≥ 3 (`tech-questions-floor`). F3 fix 2026-08-22: schema min = the FLOOR (3),
+        // no maxItems — the 10-15 ideal stays advisory `tech-questions-10-15` (WF-005 pattern).
         interviewQuestions: arrOf(
           objSchema([], {
             question: { type: "string", description: "Calibrated tech interview question." },
             level: { type: "string", description: "junior | senior | lead" },
           }),
-          { min: 10, max: 15 },
+          { min: 3 },
         ),
         // Advisory nudges: optional practical exercise + market benchmark.
         practicalExercise: { type: "string", description: "Optional practical exercise / mini technical case." },
@@ -493,13 +499,14 @@ export const WF_009_RECRUTEMENT_MANIFEST: SpineManifest = {
             }),
             { min: 1 },
           ),
-          // Blocking floor ≥ 1; schema communicates the 2-3 ideal (advisory).
+          // Blocking floor ≥ 1 (`sel-references`). F3 fix 2026-08-22: schema min = the FLOOR (1),
+          // no maxItems — the 2-3 ideal stays advisory `sel-references-2plus` (WF-005 pattern).
           referenceChecks: arrOf(
             objSchema([], {
               candidate: { type: "string", description: "Candidate the reference concerns." },
               outcome: { type: "string", description: "Reference-check outcome." },
             }),
-            { min: 2, max: 3 },
+            { min: 1 },
           ),
           // Blocking sel-candidate-selected (gateway): a named selected candidate.
           selectedCandidate: { type: "string", description: "The selected candidate (anonymized)." },

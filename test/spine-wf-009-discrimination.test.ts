@@ -62,12 +62,13 @@ import haltTrace from "../docs/audit/live-runs/wf-009-live-result-gate-halt.json
  *       exactly the hardening against a hollow pass). Same family as WF-003–008 F1.
  *  F2 — REDUNDANT-with-schema (7 criteria): `ba-moscow`, `ba-must-nonempty`, `tech-grid-floor`,
  *       `tech-questions-floor`, `rh-scored-cvs`, `sel-tech-grid`, `sel-references`.
- *  F3 — the WF-004/006-style "relaxed floor defeated by the schema" RECURS on STEP-02A: the
- *       schema pins `assessmentGrid` to `min 6` and `interviewQuestions` to `min 10` (= the
- *       advisory ideals), so the blocking floors (`tech-grid-floor` ≥ 3, `tech-questions-floor`
- *       ≥ 3) can never fire — anything below the floor is already below the schema min. WF-009
- *       v1.0 did NOT apply the WF-005/007 hardening on STEP-02A (it did drop `maxItems`
- *       nowhere — shortlist/refs keep max). Recorded, not acted on.
+ *  F3 — ✅ FIXED 2026-08-22 (the WF-004/006-style "relaxed floor defeated by the schema" that
+ *       recurred on STEP-02A + STEP-05). `assessmentGrid` min lowered 6 → 3, `interviewQuestions`
+ *       10 → 3 (their `tech-grid-floor`/`tech-questions-floor` = 3), and `referenceChecks`
+ *       2 → 1 (its `sel-references` floor), all with `maxItems` dropped — the ideals stay
+ *       advisory (`tech-grid-6-10`, `tech-questions-10-15`, `sel-references-2plus`), matching
+ *       WF-005/007/010. `shortlist` is deliberately unchanged: its `min 3` is the real gate
+ *       floor (`rh-shortlist-validated` needs ≥ 3 REAL) and its `max 5` is the card's "3-5".
  *  F4 — DoD coverage gaps (card lines with no blocking criterion): STEP-01 culture fit / work
  *       env; STEP-02A benchmark / exercise; STEP-03 agency brief / InMail / reply email;
  *       STEP-04 comparison table; STEP-05 references count (2-3 ideal is advisory); STEP-06
@@ -125,8 +126,8 @@ const AUDIT: Entry[] = [
   { id: "ba-moscow", klass: "redundant", witnesses: [{ clause: "moscow missing `wont`", bad: withStep("STEP-01", { moscow: moscowNoWont }) }] },
   { id: "ba-must-nonempty", klass: "redundant", witnesses: [{ clause: "moscow.must:[] (below min 1)", bad: withStep("STEP-01", { moscow: moscowEmptyMust }) }] },
   // STEP-02A — CONSULTANT-IA
-  { id: "tech-grid-floor", klass: "redundant", witnesses: [{ clause: "assessmentGrid:2 (below floor 3 AND schema min 6)", bad: withStep("STEP-02A", { assessmentGrid: gridTwo }) }] },
-  { id: "tech-questions-floor", klass: "redundant", witnesses: [{ clause: "interviewQuestions:2 (below floor 3 AND schema min 10)", bad: withStep("STEP-02A", { interviewQuestions: questionsTwo }) }] },
+  { id: "tech-grid-floor", klass: "redundant", witnesses: [{ clause: "assessmentGrid:2 (below floor 3 AND schema min 3)", bad: withStep("STEP-02A", { assessmentGrid: gridTwo }) }] },
+  { id: "tech-questions-floor", klass: "redundant", witnesses: [{ clause: "interviewQuestions:2 (below floor 3 AND schema min 3)", bad: withStep("STEP-02A", { interviewQuestions: questionsTwo }) }] },
   // STEP-03 — REDACTEUR-IA
   { id: "red-job-ad", klass: "unique", witnesses: [{ clause: "jobAd:''", bad: withStep("STEP-03", { jobAd: "" }) }] },
   // STEP-04 — RH-IA (+ the hardened shortlist gateway)
@@ -142,7 +143,7 @@ const AUDIT: Entry[] = [
   // STEP-05 — RH-IA + CONSULTANT-IA (+ the hardened selection gateway)
   { id: "sel-hr-report", klass: "unique", witnesses: [{ clause: "hrInterviewReport:''", bad: withStep("STEP-05", { hrInterviewReport: "" }) }] },
   { id: "sel-tech-grid", klass: "redundant", witnesses: [{ clause: "techGridPerCandidate:[] (below min 1)", bad: withStep("STEP-05", { techGridPerCandidate: [] }) }] },
-  { id: "sel-references", klass: "redundant", witnesses: [{ clause: "referenceChecks:[] (below schema min 2)", bad: withStep("STEP-05", { referenceChecks: [] }) }] },
+  { id: "sel-references", klass: "redundant", witnesses: [{ clause: "referenceChecks:[] (below schema min 1)", bad: withStep("STEP-05", { referenceChecks: [] }) }] },
   {
     id: "sel-candidate-selected", klass: "unique",
     witnesses: [

@@ -62,8 +62,9 @@ import realTrace from "../docs/audit/live-runs/wf-003-live-result.json" with { t
  *       `sec-owasp-llm-10`. The manifest output already declares the type / array bounds
  *       they check, enforced at the handoff. Defense-in-depth vs DRY is a PO call.
  *  F3 — DoD boundary / semantics divergences from the card:
- *       (a) `dev-coverage-min-80` tests `≥ 80`; the card DoD says "coverage > 80%" (STRICT)
- *           — `coverage = 80` passes the criterion but not the card.
+ *       (a) ✅ FIXED 2026-08-22 — `dev-coverage-min-80` now tests strict `> 80` to match the
+ *           card DoD "coverage > 80%" (it used to be `≥ 80`, so `coverage = 80` wrongly passed).
+ *           Boundary witness `coverage:80` added below.
  *       (b) `sec-high-sous-2` counts ALL High; the card says "< 2 NON-RESIDUAL High" —
  *           stricter than the DoD (fail-safe direction), recorded not aligned.
  *       (c) STEP-04 condition_passage is "≥ 90% + 0 Critical bug on nominal cases"; only
@@ -133,6 +134,7 @@ const AUDIT: Entry[] = [
     id: "dev-coverage-min-80", klass: "unique",
     witnesses: [
       { clause: "coverage:79 (below 80)", bad: withStep("STEP-03", { testsUnitaires: { coverage: 79 } }) },
+      { clause: "coverage:80 (not > 80 — strict boundary, the F3(a) fix)", bad: withStep("STEP-03", { testsUnitaires: { coverage: 80 } }) },
       { clause: "coverage:'85' (non-number)", bad: withStep("STEP-03", { testsUnitaires: { coverage: "85" } }) },
     ],
   },

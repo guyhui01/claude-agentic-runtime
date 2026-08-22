@@ -10,6 +10,28 @@
 
 > Model: Claude Opus 4.8.
 
+### 🐛 Fixed
+
+- **The "relaxed floor" gate is real again: the output schema no longer hard-enforces the
+  ideal count the criteria only advise (findings F3/F3a from the discrimination audits).**
+  Several spines documented a "relaxed BLOCKING floor + ADVISORY at the exact spec" design
+  but set the ajv-strict output-schema `minItems` to the *ideal*, so the handoff rejected any
+  modest-but-valid run below the ideal and the relaxed floor could never fire — the exact
+  defeat WF-005/007/010 avoid. Aligned the schema `min` to the FLOOR and dropped the
+  `maxItems`, so the ideal stays advisory-only (verified: a WF-004 run with 3 use cases / 1
+  ADKAR population / 1 training track / 1 slide now completes where it used to hard-fail):
+  **WF-004** `useCases` 5→3, `adkarPlan` 3→1, `trainingCatalog` 4→1, `comexDeck` 10/15→1;
+  **WF-006** `commercialScenarios` 3→1, `pitchDeck` 10/15→1; **WF-009** `assessmentGrid` 6→3,
+  `interviewQuestions` 10→3, `referenceChecks` 2→1. (WF-009 `shortlist` is deliberately kept
+  at `min 3 / max 5` — its `min` is the real gate floor of `rh-shortlist-validated` and its
+  `max` is the card's explicit "3-5".) **WF-003** `dev-coverage-min-80` now tests a strict
+  `> 80` to match the card DoD "coverage > 80%" (it was `≥ 80`, so `coverage = 80` wrongly
+  passed both the eval gate and the handoff). The floor criteria stay in place as the
+  documented audit record (ADR-0010); each discrimination test carries the updated F3 note
+  and a boundary witness. Deliberately NOT touched (recorded, not defects): the
+  schema-redundant criteria (F2, ADR-0010), the fail-safe stricter-than-card checks, and the
+  content-blind prose checks a deterministic gate cannot judge.
+
 ### 🔄 Changed
 
 - **The ten dispatch manifests re-pinned to catalog `v4.4.0` (from `v4.3.0`).** A pure

@@ -18,8 +18,10 @@
  * Numeric DoD counts from the workflow ("Top 5 use cases", "4 training levels", the
  * three ADKAR populations, "10-15 slides") are split: a relaxed BLOCKING floor (a
  * meaningful deliverable must exist) plus an ADVISORY criterion at the exact spec
- * number (the full ideal). The JSON schema still communicates the ideal count to the
- * agent so its output aligns with both.
+ * number (the full ideal). **Live-run hardening (F3 fix 2026-08-22, WF-005 lesson):** the
+ * output JSON schema is ajv-strict-validated at the handoff, so its numeric bounds are
+ * pinned to the BLOCKING FLOOR (no `maxItems`); the ideal count is carried by the advisory
+ * criteria + the field descriptions, never hard-gated at the handoff.
  *
  * `assetId` values expected as "agent" assets in the pinned catalog's sidecar.
  */
@@ -317,14 +319,15 @@ export const WF_004_CONSEIL_MANIFEST: SpineManifest = {
           opportunities: arr,
           risks: arr,
         }),
-        // Blocking floor ≥ 3; the schema communicates the « Top 5 » ideal (advisory).
+        // Blocking floor ≥ 3 (F3 fix 2026-08-22: schema min = the FLOOR, not the « Top 5 »
+        // ideal — the ideal stays advisory `consultant-usecases-top5`; WF-005/007/010 pattern).
         useCases: arrOf(
           objSchema([], {
             name: { type: "string", description: "AI use case." },
             value: { type: "string", description: "Business value (e.g. High/Medium/Low)." },
             effort: { type: "string", description: "Implementation effort." },
           }),
-          { min: 5 },
+          { min: 3 },
         ),
         // Advisory nudge consultant-recommendations (3-5 actions).
         recommendations: arrOf(undefined, { min: 3 }),
@@ -377,7 +380,8 @@ export const WF_004_CONSEIL_MANIFEST: SpineManifest = {
       assetId: "AGENT-CHANGE-MANAGER",
       input: objSchema(["roadmap"], { roadmap: obj }),
       output: objSchema(["adkarPlan", "commsPlan"], {
-        // Blocking cm-adkar; the schema communicates the 3-population ideal (advisory).
+        // Blocking cm-adkar (floor: non-empty). F3 fix 2026-08-22: schema min = the FLOOR (1),
+        // not the 3-population ideal — the ideal stays advisory `cm-adkar-populations`.
         adkarPlan: arrOf(
           objSchema([], {
             population: { type: "string", description: "executive committee | managers | operational" },
@@ -387,7 +391,7 @@ export const WF_004_CONSEIL_MANIFEST: SpineManifest = {
             ability: { type: "string" },
             reinforcement: { type: "string" },
           }),
-          { min: 3 },
+          { min: 1 },
         ),
         commsPlan: { type: "string", description: "12-month communication plan." },
         // Advisory nudges cm-resistance / cm-adoption-kpis.
@@ -401,14 +405,15 @@ export const WF_004_CONSEIL_MANIFEST: SpineManifest = {
       assetId: "AGENT-FORMATEUR-IA",
       input: objSchema(["adkarPlan"], { adkarPlan: arr }),
       output: objSchema(["trainingCatalog"], {
-        // Blocking form-catalog; the schema communicates the 4-level ideal (advisory).
+        // Blocking form-catalog (floor: non-empty). F3 fix 2026-08-22: schema min = the FLOOR (1),
+        // not the 4-level ideal — the ideal stays advisory `form-4-levels`.
         trainingCatalog: arrOf(
           objSchema([], {
             profile: { type: "string", description: "executive committee | managers | users | tech" },
             level: { type: "string", description: "Training level (1 of 4)." },
             format: { type: "string", description: "in-person | e-learning | workshop" },
           }),
-          { min: 4 },
+          { min: 1 },
         ),
         // Advisory nudges form-quick-wins / form-eval-plan.
         quickWins: { type: "array", description: "Training quick wins (2-4 weeks)." },
@@ -423,12 +428,13 @@ export const WF_004_CONSEIL_MANIFEST: SpineManifest = {
       output: objSchema(["execSummary", "fullReport", "comexDeck"], {
         execSummary: { type: "string", description: "Executive summary (1 page): context/stakes/recommendations/ROI." },
         fullReport: { type: "string", description: "Full consulting report (15-30 pages)." },
-        // Blocking red-comex-deck; the schema communicates the 10-15 slide range (advisory).
+        // Blocking red-comex-deck (floor: non-empty). F3 fix 2026-08-22: schema min = the FLOOR (1)
+        // and NO maxItems — the 10-15 ideal stays advisory `red-deck-10-15` (WF-005/007/010 pattern).
         comexDeck: arrOf(
           objSchema([], {
             title: { type: "string", description: "Slide title." },
           }),
-          { min: 10, max: 15 },
+          { min: 1 },
         ),
       }),
       criteriaIds: STEP07_CRITERIA.map((c) => c.id),

@@ -40,8 +40,8 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `ba-need-sheet` | needSheet:'' | yes |
 | `ba-moscow` | moscow missing `wont` | yes |
 | `ba-must-nonempty` | moscow.must:[] (below min 1) | yes |
-| `tech-grid-floor` | assessmentGrid:2 (below floor 3 AND schema min 6) | yes |
-| `tech-questions-floor` | interviewQuestions:2 (below floor 3 AND schema min 10) | yes |
+| `tech-grid-floor` | assessmentGrid:2 (below floor 3 AND schema min 3) | yes |
+| `tech-questions-floor` | interviewQuestions:2 (below floor 3 AND schema min 3) | yes |
 | `red-job-ad` | jobAd:'' | yes |
 | `rh-scored-cvs` | scoredCvs:[] (below min 1) | yes |
 | `rh-fraud-report` | fraudReport:'' | yes |
@@ -49,7 +49,7 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `rh-shortlist-validated` | 2 real + 1 placeholder (count 2 < 3) | yes |
 | `sel-hr-report` | hrInterviewReport:'' | yes |
 | `sel-tech-grid` | techGridPerCandidate:[] (below min 1) | yes |
-| `sel-references` | referenceChecks:[] (below schema min 2) | yes |
+| `sel-references` | referenceChecks:[] (below schema min 1) | yes |
 | `sel-candidate-selected` | selectedCandidate:'None — no candidate can be selected' (negative sentinel) | yes |
 | `sel-candidate-selected` | selectedCandidate:'' | yes |
 | `sel-recommendation` | recommendation:'' | yes |

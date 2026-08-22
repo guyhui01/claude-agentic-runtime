@@ -53,7 +53,7 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `pm-person-days` | personDays:[] (below min 1) | yes |
 | `fin-costing-grid` | costingGrid:[] (below min 1) | yes |
 | `fin-price` | sellingPrice:'250k' (non-number) | yes |
-| `fin-scenarios` | commercialScenarios:[] (below schema min 3) | yes |
+| `fin-scenarios` | commercialScenarios:[] (below schema min 1) | yes |
 | `red-exec-summary` | execSummary:'' | yes |
 | `red-proposal` | proposal:'' | yes |
 

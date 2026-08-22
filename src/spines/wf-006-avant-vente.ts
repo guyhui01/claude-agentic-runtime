@@ -18,8 +18,10 @@
  * criteria, no LLM-as-judge — the agent emits the verdict, a rule enforces it).
  *
  * Numeric DoD counts (4 commercial scenarios, 10-15 pitch slides) are split into a
- * relaxed BLOCKING floor + an ADVISORY at the exact spec number; the JSON schema
- * communicates the ideal to the agent so its output aligns with both.
+ * relaxed BLOCKING floor + an ADVISORY at the exact spec number. **Live-run hardening (F3
+ * fix 2026-08-22, WF-005 lesson):** the ajv-strict output schema pins its numeric bounds to
+ * the BLOCKING FLOOR (no `maxItems`); the ideal count is carried by the advisory criteria +
+ * the field descriptions, never hard-gated at the handoff.
  *
  * `assetId` values expected as "agent" assets in the pinned catalog's sidecar.
  */
@@ -459,13 +461,14 @@ export const WF_006_AVANT_VENTE_MANIFEST: SpineManifest = {
           { min: 1 },
         ),
         sellingPrice: { type: "number", description: "Proposed selling price (quantified)." },
-        // Blocking fin-scenarios; the schema communicates the 4-scenario ideal (advisory).
+        // Blocking fin-scenarios (floor: non-empty). F3 fix 2026-08-22: schema min = the FLOOR (1),
+        // not the 3-scenario ideal — the ideal stays advisory `fin-scenarios-full` (WF-005 pattern).
         commercialScenarios: arrOf(
           objSchema([], {
             type: { type: "string", description: "fixed price | T&M | outcome | hybrid." },
             price: { type: "number", description: "Scenario price." },
           }),
-          { min: 3 },
+          { min: 1 },
         ),
         // Advisory nudge fin-prospect-roi.
         prospectRoi: { type: "string", description: "Estimated prospect ROI." },
@@ -483,11 +486,13 @@ export const WF_006_AVANT_VENTE_MANIFEST: SpineManifest = {
           description: "1-page executive summary (context/value/price/schedule).",
         },
         proposal: { type: "string", description: "Complete commercial proposal (20-40 pages)." },
-        // Advisory nudges red-anticipated-qa / red-pitch-deck (10-15 slides).
+        // Advisory nudges red-anticipated-qa / red-pitch-deck (10-15 slides). F3 fix 2026-08-22:
+        // pitchDeck (advisory, optional) is no longer hard-gated at the handoff — min = 1, no max;
+        // the 10-15 ideal stays advisory `red-pitch-deck`.
         anticipatedQa: { type: "array", description: "Anticipated Q&A with prepared answers." },
         pitchDeck: arrOf(
           objSchema([], { title: { type: "string", description: "Slide title." } }),
-          { min: 10, max: 15 },
+          { min: 1 },
         ),
       }),
       criteriaIds: STEP07_CRITERIA.map((c) => c.id),

@@ -59,12 +59,12 @@ import realTrace from "../docs/audit/live-runs/wf-006-live-result.json" with { t
  *       `ba-requirements-moscow`, `pm-wbs`, `pm-person-days`, `fin-costing-grid`,
  *       `fin-price`, `fin-scenarios` — the output schema declares the all-keys-present
  *       objects, the array `min` or the field types they check, enforced at the handoff.
- *  F3 — the WF-004-style "relaxed floor defeated by the schema" recurs here (WF-005 fixed
- *       it, WF-006 v1.0 did not): `fin-scenarios` is a non-empty floor but the schema pins
- *       `commercialScenarios` to `min 3` (= the advisory ideal `fin-scenarios-full`), so a
- *       1-2 scenario run is hard-failed at the handoff, not by the relaxed gate. The
- *       advisory `red-pitch-deck` (min 10) is likewise hard-gated by the schema's
- *       `min 10 / max 10-15` on `pitchDeck`. Recorded, not acted on.
+ *  F3 — ✅ FIXED 2026-08-22 (the WF-004-style "relaxed floor defeated by the schema" that
+ *       recurred here). `commercialScenarios` schema `min` lowered 3 → 1 (the `fin-scenarios`
+ *       floor), and `pitchDeck` lowered `min 10/max 15` → `min 1` (no max) — the 3-scenario and
+ *       10-15-slide ideals stay advisory (`fin-scenarios-full`, `red-pitch-deck`), matching the
+ *       WF-005/007/010 pattern. A modest-but-valid run now passes the handoff; the floor criteria
+ *       remain REDUNDANT with the floor-level schema min (F2).
  *  F4 — DoD coverage gaps (card output_attendu lines with no blocking criterion): STEP-01
  *       risk mapping + sponsor path (advisory); STEP-02 NFR + assumptions (advisory);
  *       STEP-03A make-vs-buy + op-cost + risks (advisory); STEP-04 workload + assumptions
@@ -143,7 +143,7 @@ const AUDIT: Entry[] = [
   // STEP-05 — FINANCIAL-ANALYST
   { id: "fin-costing-grid", klass: "redundant", witnesses: [{ clause: "costingGrid:[] (below min 1)", bad: withStep("STEP-05", { costingGrid: [] }) }] },
   { id: "fin-price", klass: "redundant", witnesses: [{ clause: "sellingPrice:'250k' (non-number)", bad: withStep("STEP-05", { sellingPrice: "250k" }) }] },
-  { id: "fin-scenarios", klass: "redundant", witnesses: [{ clause: "commercialScenarios:[] (below schema min 3)", bad: withStep("STEP-05", { commercialScenarios: [] }) }] },
+  { id: "fin-scenarios", klass: "redundant", witnesses: [{ clause: "commercialScenarios:[] (below schema min 1)", bad: withStep("STEP-05", { commercialScenarios: [] }) }] },
   // STEP-07 — REDACTEUR-IA
   { id: "red-exec-summary", klass: "unique", witnesses: [{ clause: "execSummary:''", bad: withStep("STEP-07", { execSummary: "" }) }] },
   { id: "red-proposal", klass: "unique", witnesses: [{ clause: "proposal:''", bad: withStep("STEP-07", { proposal: "" }) }] },

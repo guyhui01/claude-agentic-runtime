@@ -48,6 +48,7 @@ Each clause below, mutated alone on the DoD-happy output, reddens its criterion.
 | `ai-choix-stack-llm` | choixStack.llm:'' | yes |
 | `dev-code-present` | code:'' | yes |
 | `dev-coverage-min-80` | coverage:79 (below 80) | yes |
+| `dev-coverage-min-80` | coverage:80 (not > 80 — strict boundary, the F3(a) fix) | yes |
 | `dev-coverage-min-80` | coverage:'85' (non-number) | yes |
 | `qa-gherkin-non-vide` | gherkin:[] (below min 1) | yes |
 | `qa-taux-reussite-90` | tauxReussite:89 (below 90) | yes |

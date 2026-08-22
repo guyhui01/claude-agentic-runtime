@@ -140,9 +140,14 @@ const STEP03_CRITERIA: Criterion[] = [
   },
   {
     id: "dev-coverage-min-80",
-    description: "STEP-03: unit tests with coverage ≥ 80%",
+    // Card DoD is "coverage > 80%" (STRICT): coverage = 80 does NOT meet it. Uses a
+    // strict `> 80`, not `numberAtLeast(...,80)` — the F3(a) boundary the WF-003 audit found.
+    description: "STEP-03: unit tests with coverage > 80% (strict, per the card DoD)",
     severity: "blocking",
-    check: (o) => numberAtLeast(asRecord(asRecord(o)["testsUnitaires"])["coverage"], 80),
+    check: (o) => {
+      const v = asRecord(asRecord(o)["testsUnitaires"])["coverage"];
+      return isNumber(v) && v > 80;
+    },
   },
   {
     id: "dev-readme-present",
@@ -350,7 +355,7 @@ export const WF_003_LANCEMENT_MANIFEST: SpineManifest = {
         code: { type: "string", description: "Source code produced." },
         // Blocking dev-coverage-min-80: coverage ≥ 80%.
         testsUnitaires: objSchema(["coverage"], {
-          coverage: { type: "number", description: "Test coverage in %; ≥ 80 required." },
+          coverage: { type: "number", description: "Test coverage in %; > 80 required (strict)." },
         }),
         // Advisory nudge dev-readme-present.
         readme: { type: "string", description: "Technical installation README." },
