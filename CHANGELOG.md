@@ -183,6 +183,27 @@
   D1 posture, quick wins). The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-007-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-007-discrimination.test.ts`.
+- **WF-008 eval-gate discrimination audit — eighth and LARGEST spine (22 blocking
+  criteria), same two axes.** The schema/criterion split is **re-measured, not assumed**:
+  of the **22 blocking criteria, 14 are load-bearing and 8 are redundant** with the output
+  schema. WF-008 is the richest spine of the battery: it carries TWO value-equality gates
+  the schema cannot express, both measured UNIQUE — removing either opens a real compliance
+  hole: `jur-tier-not-unacceptable` (STEP-01, tier ≠ "Unacceptable" — removal lets an
+  unacceptable AI system run the full audit to a cleared verdict) and `audit-verdict-cleared`
+  (STEP-06C, the independent counter-review clearance gate — removal lets a "returned" audit
+  proceed to the final report). **The positive pole is ADAPTED, not copied**: the committed
+  WF-008 live trace is a fail-closed HALT (status "failed" at STEP-06C on a real "returned"
+  verdict), so the 16 STEP-01..06 criteria are the positive pole on the real outputs, and
+  `audit-verdict-cleared` failing on the real STEP-06C output is a REAL negative pole for the
+  gate (stronger anti-circularity than a hand-built one); STEP-07's positive pole is the
+  DoD-happy fixture. The load-bearing guard was falsified in both directions (including a
+  gateway). Findings recorded against card v1.0 (pinned tag v4.3.0), not acted on here:
+  **F1** content-blindness (`sec-owasp-llm-10` counts 10 without verifying LLM01–LLM10);
+  **F2** the eight schema-redundant criteria; **F3** no relaxed-floor defeat here (the two
+  counted criteria are DoD hard counts, schema min = criterion); **F4** DoD coverage gaps
+  (penalties, gaps, controls plan, correction plan, AI Act lead, adoption KPIs, reservations,
+  roadmap). The spine sidecar and mock runner were extracted to `test/fixtures/wf-008-spine.ts`
+  (shared with the hermetic test, DRY). See `test/spine-wf-008-discrimination.test.ts`.
 
 ---
 

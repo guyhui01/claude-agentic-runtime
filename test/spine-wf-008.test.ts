@@ -1,8 +1,6 @@
 import { describe, it, expect } from "vitest";
-import type { AgentDefinition } from "@anthropic-ai/claude-agent-sdk";
-import { loadSpine, ManifestValidationError, type AgentResolver } from "../src/manifest/load-manifest.js";
+import { loadSpine, ManifestValidationError } from "../src/manifest/load-manifest.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
-import type { StepRunner } from "../src/orchestrator/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 import {
   WF_008_AUDIT_MANIFEST,
@@ -10,43 +8,13 @@ import {
   buildWf008AuditRegistry,
 } from "../src/spines/wf-008-audit.js";
 import { wf008HappyOutputs } from "./fixtures/wf-008-outputs.js";
+import {
+  wf008InterimSidecar as sidecar,
+  wf008ResolveAgent as resolveAgent,
+  mockRunner,
+} from "./fixtures/wf-008-spine.js";
 
 /** Hermetic tests for the REAL WF-008 spine (AI Act / GDPR Compliance Audit), mocked runner. */
-
-function agentAsset(id: string) {
-  return {
-    id,
-    type: "agent" as const,
-    path: `${id}.md`,
-    title: id,
-    description: `Agent ${id}.`,
-    catalogVersion: "v4.1.0",
-    source: { file: `${id}.md`, catalogTag: "v4.1.0" },
-  };
-}
-const sidecar: Sidecar = {
-  schemaVersion: "1.0.0",
-  catalog: { name: "claude-agents", version: "v4.1.0" },
-  generatedAt: "2026-07-10T14:00:00Z",
-  assets: [
-    agentAsset("AGENT-JURIDIQUE-IA"),
-    agentAsset("AGENT-AI-ARCHITECT"),
-    agentAsset("AGENT-SECURITE-IA"),
-    agentAsset("AGENT-DATA-ENGINEER"),
-    agentAsset("AGENT-CDO-DIRECTEUR-IA"),
-    agentAsset("AGENT-CHANGE-MANAGER"),
-    agentAsset("AGENT-AUDIT-METHODO-IA"),
-    agentAsset("AGENT-REDACTEUR-IA"),
-  ],
-};
-const resolveAgent: AgentResolver = (asset): AgentDefinition => ({
-  description: asset.description,
-  prompt: `stub:${asset.id}`,
-  tools: [],
-});
-
-const mockRunner = (outputs: Record<string, unknown>): StepRunner =>
-  async ({ stepId }) => ({ output: outputs[stepId] });
 
 describe("WF-008 spine — loading and execution (mocked runner)", () => {
   it("assembles the 8-step backbone STEP-01→06C→07 with provenance and criteria", () => {
