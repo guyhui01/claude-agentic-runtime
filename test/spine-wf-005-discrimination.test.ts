@@ -50,7 +50,7 @@ import realTrace from "../docs/audit/live-runs/wf-005-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.1 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — partial content-blindness. The per-item checks verify NON-EMPTINESS, not domain:
  *       `veille-highlights-ranked` accepts any non-empty `impact` string ("banana"), not
  *       just High/Medium/Low; the `nonEmptyArray` floors and `Array.isArray` advisories

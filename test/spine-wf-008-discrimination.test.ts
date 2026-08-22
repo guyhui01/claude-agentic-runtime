@@ -51,7 +51,7 @@ import realTrace from "../docs/audit/live-runs/wf-008-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.0 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blindness. `sec-owasp-llm-10` counts 10 entries without verifying they are
  *       the distinct LLM01–LLM10 categories; the many `nonEmptyString` checks verify
  *       presence, not that the report content matches the DoD. Same family as WF-003–007 F1.

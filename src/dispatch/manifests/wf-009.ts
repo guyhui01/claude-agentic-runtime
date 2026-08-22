@@ -2,7 +2,7 @@
  * WF-009 "IT / AI Recruitment" parameter manifest.
  *
  * Derived from the card's `RECRUITMENT CONTEXT` block (path read from the
- * sidecar, never guessed), pinned to catalog v4.3.0 — the real-sidecar test
+ * sidecar, never guessed), pinned to catalog v4.4.0 — the real-sidecar test
  * hard-fails on tag drift, forcing a re-derive.
  *
  * Ten card lines become ELEVEN specifications. This card carries no
@@ -51,7 +51,7 @@ const recruitment = (b: NeedBrief): string =>
 
 export const WF009_MANIFEST: ParamManifest = {
   workflow: "WF-009",
-  catalogTag: "v4.3.0",
+  catalogTag: "v4.4.0",
   params: [
     {
       name: "role_title",

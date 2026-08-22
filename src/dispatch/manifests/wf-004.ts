@@ -3,7 +3,7 @@
  *
  * Derived from the card's `ENGAGEMENT CONTEXT` block
  * (`claude-agents/workflows/WF-004-mission-conseil-ia.md`), pinned to catalog
- * v4.3.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
+ * v4.4.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  *
  * The hardest card so far, and not for its length: WF-002 and WF-003 describe
  * technical objects whose vocabulary is unmistakable (an ART, a vector store),
@@ -44,7 +44,7 @@ const engagement = (b: NeedBrief): string =>
 
 export const WF004_MANIFEST: ParamManifest = {
   workflow: "WF-004",
-  catalogTag: "v4.3.0",
+  catalogTag: "v4.4.0",
   params: [
     {
       name: "client_name",

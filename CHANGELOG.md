@@ -8,6 +8,22 @@
 
 ## [Unreleased]
 
+> Model: Claude Opus 4.8.
+
+### 🔄 Changed
+
+- **The ten dispatch manifests re-pinned to catalog `v4.4.0` (from `v4.3.0`).** A pure
+  label bump, proven before editing: a full `diff -rq` of the two catalog checkouts shows
+  the workflow cards, agents, skills and params are **byte-identical** and the sidecar
+  carries the **same 85 assets** — the only substantive change in `v4.4.0` is the catalog's
+  own CI schema-drift check, nothing the runtime consumes. Edited the ten manifests' functional
+  `catalogTag` (the only pin coupled to the real sidecar via `dispatch-real-sidecar.test.ts`),
+  the hermetic dispatch test stubs, `completeness-check.ts`, and the discrimination-audit
+  headers' pin note. Because the sibling `claude-agents` checkout is already on `v4.4.0`, the
+  **default local suite is now green (628 passed / 24 skipped) with no `CATALOG_ROOT`
+  override** — the recurring 10-test tag-drift is resolved. Freshness debt per ADR-0002, not
+  a failure; strict typecheck green.
+
 ## [0.14.0] - 2026-08-22 — The eval gates are measured spine by spine: load-bearing criteria told from schema echoes, and one empty-value hole closed 🔬
 
 > Model: Claude Opus 4.8.

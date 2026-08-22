@@ -56,7 +56,7 @@ import haltTrace from "../docs/audit/live-runs/wf-009-live-result-gate-halt.json
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.0 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blindness (the many `nonEmptyString`/`nonEmptyArray` checks verify presence,
  *       not that the content matches the DoD). The two gates are NOT content-blind (they are
  *       exactly the hardening against a hollow pass). Same family as WF-003–008 F1.

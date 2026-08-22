@@ -47,7 +47,7 @@ import realTrace from "../docs/audit/live-runs/wf-007-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.0 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blindness. The `nonEmptyArray` / `nonEmptyString` blocking checks verify
  *       presence, not that the content matches the DoD (e.g. `red-d1-kit` accepts any
  *       non-empty string, not a real kit with plan + sheet + questions). Same family as

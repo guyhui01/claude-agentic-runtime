@@ -3,7 +3,7 @@
  *
  * Derived from the card's `ENGAGEMENT CONTEXT` block
  * (`claude-agents/workflows/WF-007-onboarding-mission-j1.md`), pinned to catalog
- * v4.3.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
+ * v4.4.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  * Nine card lines, ELEVEN specifications: `Client [Name / Sector / Size]` is the
  * one conjunction here (RULE 2), split so `PARAMS_MISSING` names the half that
  * is missing rather than a line the operator has half-answered.
@@ -69,7 +69,7 @@ const engagement = (b: NeedBrief): string =>
 
 export const WF007_MANIFEST: ParamManifest = {
   workflow: "WF-007",
-  catalogTag: "v4.3.0",
+  catalogTag: "v4.4.0",
   params: [
     // The three `client_*` detectors are IDENTICAL to their WF-004 siblings, and
     // that is a decision rather than a copy-paste. Both cards carry the same

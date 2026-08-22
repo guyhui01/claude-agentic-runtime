@@ -7,7 +7,7 @@
  *
  * Derived from the card's `ART CONTEXT` block
  * (`claude-agents/workflows/WF-002-delivery-safe.md`, v1.1), pinned to catalog
- * v4.3.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
+ * v4.4.0 — the real-sidecar test hard-fails on tag drift, forcing a re-derive.
  *
  * Detector policy (settled once for all nine, see `next_steps.md`):
  *   - every `required` spec carries a `pattern` built from the CARD's own
@@ -27,7 +27,7 @@ const situation = (b: NeedBrief): string => `${b.need}; ${b.context}`;
 
 export const WF002_MANIFEST: ParamManifest = {
   workflow: "WF-002",
-  catalogTag: "v4.3.0",
+  catalogTag: "v4.4.0",
   params: [
     {
       name: "art_name",

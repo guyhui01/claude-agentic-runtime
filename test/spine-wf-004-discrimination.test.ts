@@ -49,7 +49,7 @@ import realTrace from "../docs/audit/live-runs/wf-004-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.1 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blind checks. The `Array.isArray(...)` advisories (`cm-adoption-kpis`,
  *       `form-quick-wins`) pass on `[]`; the `nonEmptyArray` / `nonEmptyString` blocking
  *       checks verify presence, not that the content matches the DoD. Same shape as WF-003

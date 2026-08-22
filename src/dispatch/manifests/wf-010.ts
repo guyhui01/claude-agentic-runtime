@@ -3,7 +3,7 @@
  * TENTH and last of the set.
  *
  * Derived from the card's `POST-MORTEM CONTEXT` block (path read from the
- * sidecar, never guessed), pinned to catalog v4.3.0 — the real-sidecar test
+ * sidecar, never guessed), pinned to catalog v4.4.0 — the real-sidecar test
  * hard-fails on tag drift, forcing a re-derive.
  *
  * Nine card lines become TWELVE specifications, through two conjunctions whose
@@ -54,7 +54,7 @@ const postMortem = (b: NeedBrief): string =>
 
 export const WF010_MANIFEST: ParamManifest = {
   workflow: "WF-010",
-  catalogTag: "v4.3.0",
+  catalogTag: "v4.4.0",
   params: [
     {
       name: "project_incident_name",

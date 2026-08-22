@@ -52,7 +52,7 @@ import realTrace from "../docs/audit/live-runs/wf-003-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.2 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blind checks. `sec-owasp-llm-10` is `minArrayLen(...,10)`: it counts 10
  *       entries but does NOT verify they are the 10 distinct OWASP categories LLM01–LLM10
  *       (10 duplicates pass). Advisory `ai-checklist-risques` and `sec-plan-remediation`

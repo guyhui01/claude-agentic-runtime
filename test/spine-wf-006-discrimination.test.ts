@@ -50,7 +50,7 @@ import realTrace from "../docs/audit/live-runs/wf-006-live-result.json" with { t
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * FINDINGS RECORDED FOR A LATER LOT (not fixed here) — measured against card v1.0 at
- * the pinned tag v4.3.0:
+ * the pinned tag v4.4.0:
  *  F1 — content-blindness. The `nonEmptyArray` / `Array.isArray` checks verify presence,
  *       not content (`red-proposal` accepts any non-empty string, not a 20-40 page
  *       proposal); `presales-bant`/`presales-win-probability`/`presales-go` are the genuine
