@@ -8,6 +8,8 @@
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-08-22 — The relaxed floor is real again: modest-but-valid runs clear the handoff, the coverage gate matches the card, and the catalog pin catches up 🔧
+
 > Model: Claude Opus 4.8.
 
 ### 🐛 Fixed
@@ -783,7 +785,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...v0.12.0
