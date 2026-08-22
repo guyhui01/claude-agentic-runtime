@@ -225,6 +225,26 @@
   DoD coverage gaps. The spine sidecar and mock runner were extracted to
   `test/fixtures/wf-009-spine.ts` (shared with the hermetic test, DRY). See
   `test/spine-wf-009-discrimination.test.ts`.
+- **WF-010 eval-gate discrimination audit — TENTH and last spine (10 blocking criteria),
+  completing the battery.** The schema/criterion split is **re-measured, not assumed**: of
+  the **10 blocking criteria, 5 are load-bearing and 5 are redundant** with the output
+  schema. A plain linear spine (no gateway): the 5 unique are the non-empty STRING checks
+  the schema types as `string` but cannot demand non-empty (`qa-quality-review`,
+  `cm-team-review`, and the three STEP-06 deliverables); the 5 redundant double the array
+  `min 1`. The positive pole is anchored on the committed completed live trace (its 4
+  backbone traces cover all 10 blocking), and the load-bearing guard was falsified in both
+  directions. Findings recorded against card v1.0 (pinned tag v4.3.0), not acted on here:
+  **F1** content-blindness (`red-report` accepts any non-empty string, not a 10-20 page
+  report); **F2** the five schema-redundant criteria; **F3** a POSITIVE — this spine applies
+  the WF-005 hardening (schema `min` pinned to the relaxed floor, no `maxItems`), so it does
+  NOT repeat the WF-004/006/009 F3 defect; **F4** DoD coverage gaps. The spine sidecar and
+  mock runner were extracted to `test/fixtures/wf-010-spine.ts` (shared with the hermetic
+  test, DRY). See `test/spine-wf-010-discrimination.test.ts`.
+  **ÉTAPE ① is now COMPLETE — all 10 spines carry an eval-gate discrimination audit** (the
+  eval counterpart of the dispatch cross-vocabulary / denial probes). Across the battery the
+  load-bearing/redundant split was measured, never assumed, and moved every time (unique
+  counts 6·4·12·6·3·8·5·14·9·5). The recorded findings F1–F4 per spine are the input to a
+  later, separate à-la-carte hardening lot.
 
 ---
 
