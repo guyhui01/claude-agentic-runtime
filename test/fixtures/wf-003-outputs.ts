@@ -40,7 +40,11 @@ export const wf003HappyOutputs: Record<string, unknown> = {
     readme: "## Installation\npip install -r requirements.txt",
   },
   "STEP-04": {
-    gherkin: [{ given: "g", when: "w", then: "t", type: "nominal" }],
+    gherkin: [
+      { given: "valid query", when: "asked", then: "grounded answer", type: "nominal" },
+      { given: "empty query", when: "asked", then: "safe refusal", type: "boundary" },
+      { given: "malformed query", when: "asked", then: "handled error", type: "error" },
+    ],
     tauxReussite: 94,
     evalsLLM: { goldenDataset, faithfulness: 0.91 },
     planTest: "Manual + automated functional test plan.",

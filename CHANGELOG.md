@@ -8,6 +8,21 @@
 
 ## [Unreleased]
 
+> Model: Claude Opus 4.8.
+
+### ✨ Added
+
+- **WF-003 now gates the three Gherkin case types (audit finding F4, STEP-04).** The card DoD
+  asks for "Gherkin BDD scenarios for nominal + boundary + error cases", but the output schema
+  types each scenario's `type` as an optional string and so cannot require the three distinct
+  types — only non-emptiness was gated. New blocking criterion `qa-gherkin-3-types` requires all
+  three; measured UNIQUE (removal lets a 2-type output through) with the committed live trace as
+  the positive pole (it already carries all three) and the happy fixtures enriched to match. This
+  is the one F4 coverage gap gate-able now on an existing field the frozen billed trace already
+  satisfies; the rest of F4/F3(c)/F5 stays ungated by decision (conditional or non-deterministic
+  DoD lines, or gaps that would need a new output field the frozen traces lack — see the tracker
+  triage). Suite 630 passed / 24 skipped, strict typecheck green.
+
 ## [0.15.0] - 2026-08-22 — The relaxed floor is real again: modest-but-valid runs clear the handoff, the coverage gate matches the card, and the catalog pin catches up 🔧
 
 > Model: Claude Opus 4.8.

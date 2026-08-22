@@ -22,7 +22,8 @@ import realTrace from "../docs/audit/live-runs/wf-003-live-result.json" with { t
  * WF-001 prototype and WF-002 (`spine-wf-00{1,2}-discrimination.test.ts`). Same two
  * axes; the schema/criterion split is RE-MEASURED here, never assumed from a prior
  * spine — and it MOVES again: WF-001 = 6/9 redundant, WF-002 = 6/10 (4 unique), and
- * WF-003 (18 blocking) is measured at 12 UNIQUE / 6 REDUNDANT below.
+ * WF-003 (19 blocking) is measured at 13 UNIQUE / 6 REDUNDANT below (18/12/6 before the
+ * F4 gherkin-3-types criterion was gated 2026-08-23).
  *
  * ⛔ THIS FILE FIXES NOTHING, by design (denial-probe precedent). It MEASURES and
  * GUARDS; every finding below is recorded for a later, separate lot. Widening a
@@ -71,10 +72,11 @@ import realTrace from "../docs/audit/live-runs/wf-003-live-result.json" with { t
  *           the ≥ 90% half is gated (`qa-taux-reussite-90`), the "0 Critical bug" half is not.
  *  F4 — DoD coverage gaps (card output_attendu lines with no criterion): STEP-01 few-shot/
  *       RAG prompts; STEP-02 integration plan + stack beyond `llm` (VectorDB/API/Frontend);
- *       STEP-03 `.env.example`; STEP-04 Gherkin nominal/boundary/error typing (only
- *       non-emptiness gated); STEP-05 docker-compose + monitoring; STEP-06 go-live checklist.
- *       Each defensible today (no current verdict is wrong); triage à la carte with WF-001
- *       F4/F5 and WF-002 F1–F3.
+ *       STEP-03 `.env.example`; STEP-05 docker-compose + monitoring; STEP-06 go-live checklist.
+ *       ✅ STEP-04 Gherkin nominal/boundary/error typing is now GATED (`qa-gherkin-3-types`,
+ *       2026-08-23) — the one F4 item gate-able on an existing field the live trace carries.
+ *       The rest stay ungated by decision (conditional / non-deterministic / would need a new
+ *       output field a frozen billed trace lacks — see the tracker's F4/F3(c)/F5 triage).
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -140,6 +142,10 @@ const AUDIT: Entry[] = [
   },
   // STEP-04 — QA-AGILE
   { id: "qa-gherkin-non-vide", klass: "redundant", witnesses: [{ clause: "gherkin:[] (below min 1)", bad: withStep("STEP-04", { gherkin: [] }) }] },
+  {
+    id: "qa-gherkin-3-types", klass: "unique",
+    witnesses: [{ clause: "gherkin missing the 'error' type (only nominal+boundary — schema types `type` as any string)", bad: withStep("STEP-04", { gherkin: [{ given: "g", when: "w", then: "t", type: "nominal" }, { given: "g", when: "w", then: "t", type: "boundary" }] }) }],
+  },
   {
     id: "qa-taux-reussite-90", klass: "unique",
     witnesses: [

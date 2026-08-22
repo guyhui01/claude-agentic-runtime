@@ -170,6 +170,19 @@ const STEP04_CRITERIA: Criterion[] = [
     check: (o) => nonEmptyArray(asRecord(o)["gherkin"]),
   },
   {
+    id: "qa-gherkin-3-types",
+    // Card DoD: "Gherkin BDD scenarios for nominal + boundary + error cases". The schema
+    // types each item's `type` as an optional string, so it CANNOT require the three
+    // distinct case types — this criterion does (audit finding F4, gated 2026-08-23).
+    description: "STEP-04: Gherkin scenarios cover the three case types (nominal / boundary / error)",
+    severity: "blocking",
+    check: (o) => {
+      const g = asRecord(o)["gherkin"];
+      const types = new Set((Array.isArray(g) ? g : []).map((it) => asRecord(it)["type"]));
+      return ["nominal", "boundary", "error"].every((t) => types.has(t));
+    },
+  },
+  {
     id: "qa-taux-reussite-90",
     description: "STEP-04: passing condition — pass rate ≥ 90%",
     severity: "blocking",
