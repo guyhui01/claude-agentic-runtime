@@ -8,6 +8,8 @@
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-08-22 — The eval gates are measured spine by spine: load-bearing criteria told from schema echoes, and one empty-value hole closed 🔬
+
 > Model: Claude Opus 4.8.
 
 ### ✨ Added
@@ -743,7 +745,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.10.0...v0.11.0
