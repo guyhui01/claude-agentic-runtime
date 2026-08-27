@@ -6,6 +6,14 @@
 
 ---
 
+## [Unreleased]
+
+> Model: Claude Opus 4.8.
+
+### 🔧 Changed
+
+- **ADR-0009 (open-core boundary) — trimmed the go-to-market posture details from its prose; the decision is unchanged.** The record is public (public repo, PolyForm Noncommercial) and the showcase now links it, so three internal-reasoning admissions were removed as more disclosure than the positioning needs: the "solo freelance (portage salarial)" framing, the "clean-room reimplementation remains possible / ~400 lines of `validate-route.ts`" self-assessment of the code moat, and the "resourcing mismatch for a solo freelance / funded-startup backlog" framing of the rejected SaaS alternative. Kept intact: the open-core boundary itself, the Decision, the PolyForm-reserves-commerce reasoning, the future control-plane scope, and the privatization trigger. Net −3 lines.
+
 ## [0.16.0] - 2026-08-23 — A fix from an audit, reverted by the next one: a case variant costs a warning again, the reference floor matches the card, and four claims stop overstating 🔁
 
 > Model: Claude Opus 4.8, then Claude Opus 5 (the 2026-08-23 audit round and its fixes).

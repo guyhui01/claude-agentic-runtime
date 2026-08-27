@@ -34,9 +34,8 @@ Verified facts that constrain the answer (measured 2026-08-16, at source):
   `docs/audit/live-runs/` are the proof artifacts.
 - **The design of the gate is already disclosed** publicly (ADR-0008). A method that is published
   cannot be un-published; privatizing the code that implements it protects little.
-- **The author is a solo freelance (portage salarial)**; inference for any commercial run is
-  **BYO-key** (the customer's own model credentials), never author-hosted resale of tokens
-  (see the model-agnostic / BYO-key constraint, and CLAUDE.md's subscription-OAuth-only rule for
+- **Commercial runs are BYO-key** (the customer's own model credentials), never author-hosted
+  token resale — a model-agnostic constraint (and CLAUDE.md's subscription-OAuth-only rule for
   the author's own runs).
 
 The tempting-but-wrong move is to privatize the current runtime engine to "protect the moat."
@@ -90,9 +89,8 @@ audit trail`. Before that threshold, locking anything only costs visibility.
 
 - **The boundary must be enforced by discipline** until the private repo exists; there is no
   mechanical guard today. This ADR is that guard, in prose.
-- **PolyForm does not protect the architecture or ideas**, only commercial use of the code. A
-  clean-room reimplementation of the gate remains possible; the durable moat is the expertise-as-
-  criteria and the proof, not the ~400 lines of `validate-route.ts`.
+- **PolyForm reserves commercial use of the code, not the architecture or ideas.** The durable
+  differentiation is the expertise encoded as auditable criteria and the live-trace proof.
 - **BYO-key narrows the addressable model** (customers must hold their own credentials) but keeps
   the author out of token resale and its thin margins and ToS exposure.
 
@@ -107,10 +105,9 @@ audit trail`. Before that threshold, locking anything only costs visibility.
   reserve, irrevocably for any published version (cf. the claude-projects MIT→PolyForm episode,
   where the already-published MIT versions stayed irrevocable). The noncommercial license is the
   cheaper, stronger moat.
-- **(c) Build a full multi-tenant SaaS platform up front** ("Figma for AI workflows"). Rejected as
-  a resourcing mismatch for a solo freelance: it is a funded-startup backlog. The realistic path is
-  consulting-led (the catalog as reusable IP), with the private control plane grown only as paying
-  engagements justify it.
+- **(c) Build a full multi-tenant SaaS platform up front** ("Figma for AI workflows"). Rejected:
+  the realistic path is consulting-led (the catalog as reusable IP), with the private control plane
+  grown only as paying engagements justify it — not a platform built ahead of demand.
 
 ## Related
 
