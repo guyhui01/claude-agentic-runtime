@@ -7,40 +7,40 @@
 
 ---
 
-## ▶ RECO 2026-08-30 — ULTRAREVIEW CIBLÉ DU CŒUR EVAL + SPINES (à décider par Guy)
+## ✅ 2026-08-30 — REVIEW CIBLÉE CŒUR EVAL + SPINES : FAITE (0 bug de correction, 1 trou latent fermé)
 
-> **Origine : session showcase du 2026-08-30**, observation cross-repo — **pas encore une unité
-> validée**, à arbitrer par Guy à l'ouverture. **Ne PAS lancer d'ultrareview sans cible** :
-> `main` est propre (dernier tag `v0.16.0`, 6 commits après = maintenance : 2 bumps Dependabot,
-> trim ADR-0009, correctifs de spines), donc `/code-review ultra` **sans arg ne review rien** =
-> dépense cloud gâchée. L'ultra (facturé, multi-agent) ne vaut le coup **que** pointé sur un diff
-> réel OU sur la zone qui a churné.
+> **Exécutée le 2026-08-30, en passe manuelle (main agent), PAS en ultra.** ⚠️ **Correction d'une
+> erreur mécanique consignée d'abord ici :** `/code-review ultra` **n'accepte PAS de chemin** — seulement
+> un n° de PR, un nom de branche, ou rien (= branche courante). L'invocation initiale
+> `/code-review ultra src/eval` était impossible (refus outil : *« src/eval is not a branch »*). Pour
+> cibler un répertoire, c'est le `/code-review` **non-ultra** qui prend un chemin :
+> `` /code-review max src/eval ``. L'ultra (cloud, facturé) ne review qu'un **diff de branche/PR entier**,
+> jamais un chemin — inadapté à une zone churné déjà sur `main`. *(Le run forké `/code-review max src/eval`
+> a d'ailleurs avorté à 0 appel d'outil ; la review a été refaite en direct.)*
 >
-> **Zone chaude = les commits fix-revert-refix de `v0.16.0`** (« a fix from an audit, reverted by
-> the next one », « correct four false claims », enum reverté, WF-009 reference floor). Cible, du
-> plus critique au périphérique :
-> - **P1 — le gate (« refuse to guess » incarné, ~183 LoC)** : `src/eval/eval-gate.ts`,
->   `src/eval/criteria-registry.ts`, `src/eval/types.ts`.
-> - **P2 — politique case-type mono-sourcée (ce qui a churné)** : `src/spines/spine-helpers.ts` ;
->   spines corrigés en `v0.16.0` : `wf-001-cadrage.ts`, `wf-003-lancement.ts`, `wf-006-avant-vente.ts`,
->   `wf-009-recrutement.ts` ; `schema/sidecar.schema.json` (l'enum reverté).
-> - **P3 — gardes de discrimination** : `test/spine-wf-003-discrimination.test.ts`,
->   `test/spine-wf-009-discrimination.test.ts`, `test/gherkin-case-type-vocabulary.test.ts`.
+> **Verdict — aucun bug de correction dans le cœur eval ni dans `spine-helpers.ts` :**
+> - **P1 cœur eval** (`eval-gate.ts` · `criteria-registry.ts` · `types.ts`, 183 LoC) : doctrine
+>   fail-closed tenue (exception → `passed=false` ; `check(o) === true` ; verdict `fail` dès 1 critère
+>   `blocking` ; registry rejette doublons + agrège les `id` manquants). L'hypothèse « le gate laisse
+>   passer `returned`/`NO_MATCH`/`PARAMS_MISSING` » **ne s'applique pas** : ce sont des concepts de la
+>   couche **dispatch**, l'eval-gate ne produit que `pass`/`fail` sur l'output d'un step.
+> - **P2 `spine-helpers.ts`** : politique case-type **réellement mono-sourcée** — `coversCaseTypes`
+>   défini une fois (WF-001/WF-003 y routent, wanted-sets différents PAR CARTE, logique commune) ;
+>   `NEGATIVE_SENTINEL` bien ancré (`^\s*(…)\b` : `nonexistent`/`nullable`/`unknowns` non faux-flaggés,
+>   pas de ReDoS) ; `affirmativeString`/`countAffirmativeField` uniques (WF-009). Aucune divergence
+>   `spine-helpers` ↔ spines par-WF.
 >
-> **Invocation (sur ce repo) :**
+> **1 trou latent trouvé ET fermé dans le même lot** (dette non propagée) : `runEvalGate("x", [], out)`
+> renvoie `pass` vacuous (`[].some` = false) — un step qui **oublie** ses critères passait en silence,
+> exactement le fail-open que la brique existe pour empêcher. Mesuré : 52/52 steps portent déjà ≥1
+> critère, donc c'est un **invariant**, pas un design assumé. Garde `NO_CRITERIA` ajouté à la **frontière
+> de résolution** (`src/manifest/load-manifest.ts`, frère de `EMPTY_SPINE`) — PAS dans `runEvalGate`
+> (dont le contrat « never throws » reste intact). + test `NO_CRITERIA` (`test/manifest.test.ts`) + fix
+> du nom de variable trompeur `sansCriteres`→`sansCriteresSucces` (`test/eval-gate.test.ts`, il testait
+> un champ advisory vide, pas une liste vide). **Suite 641/24 · typecheck strict OK · npm audit 0.**
 >
-> ```text
-> cd /Users/guyhui/CLAUDE/claude-agentic-runtime
-> /code-review ultra src/eval
-> # puis, si la valeur le justifie : /code-review ultra src/spines/spine-helpers.ts
-> ```
->
-> **Focus à donner à la review :** le gate peut-il laisser passer un `returned` / `NO_MATCH` /
-> `PARAMS_MISSING` comme un succès ? La politique case-type est-elle vraiment mono-sourcée (pas de
-> divergence `spine-helpers` ↔ spines par-WF) ? L'enum du schéma et les gardes de discrimination
-> sont-ils cohérents après le revert de `v0.16.0` ? — c'est la classe de bug que le churn signale.
->
-> ⚠️ Ultrareview = **déclenché par Guy, facturé** ; je ne peux pas le lancer moi-même.
+> ▫ **Reliquat non urgent** : `coversCaseTypes(v, key, [])` = `true` vacuous (même famille), mais aucun
+> caller ne passe un wanted vide — non atteignable, laissé tel quel.
 
 ---
 
