@@ -7,6 +7,17 @@
 
 ---
 
+## ✅ 2026-08-30 — RELEASE `v0.17.0` PUBLIÉE (garde NO_CRITERIA + trim ADR-0009)
+
+> **Tag `v0.17.0` + GitHub Release `Latest`, poussés le 2026-08-30.** Replie l'`[Unreleased]`
+> (fix `NO_CRITERIA` fail-closed de la review ci-dessous + trim prose ADR-0009) dans une version
+> taguée, et répare une dette de liens du CHANGELOG au passage (lien `[0.16.0]` manquant ;
+> `[Unreleased]` re-basé sur `v0.16.0`, périmé depuis la release 0.16.0). Commit `116c62c`.
+> **`origin/main == HEAD` · suite 641/24 · typecheck strict OK · npm audit 0 · `[Unreleased]` vide.**
+> Le **verdict de review** reste dans le bloc ci-dessous (conclusion d'audit, pas un changelog).
+
+---
+
 ## ✅ 2026-08-30 — REVIEW CIBLÉE CŒUR EVAL + SPINES : FAITE (0 bug de correction, 1 trou latent fermé)
 
 > **Exécutée le 2026-08-30, en passe manuelle (main agent), PAS en ultra.** ⚠️ **Correction d'une
