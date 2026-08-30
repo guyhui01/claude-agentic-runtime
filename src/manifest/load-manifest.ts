@@ -6,7 +6,8 @@
  * Fail-closed cross-checks (core of ADR-0007 — guarantees SSOT consistency):
  *   1. uniqueness of the manifest `stepId` values;
  *   2. each `assetId` exists in the sidecar AND is of type "agent";
- *   3. each `criteriaId` resolves in the registry;
+ *   3. each step declares ≥1 `criteriaId`, each resolving in the registry
+ *      (an empty criteria list makes the eval gate pass vacuously — refused here);
  *   4. the agent builds (injected resolver — §2.4-A adapter in prod).
  * All issues are aggregated before throwing (complete audit evidence).
  *
@@ -115,13 +116,23 @@ export function loadSpine(
       }
     }
 
-    // 3. criteria resolved in the registry.
+    // 3. criteria resolved in the registry — and at least one declared. The gate
+    //    verdict is vacuously "pass" over an empty criteria list (`[].some` is
+    //    false); a step that forgets its DoD must fail LOUDLY here at load, not
+    //    silently at the gate (fail-closed, sibling of EMPTY_SPINE above).
     const criteria: Criterion[] = [];
     const missing: string[] = [];
     for (const cid of step.criteriaIds) {
       const c = registry.get(cid);
       if (c === undefined) missing.push(cid);
       else criteria.push(c);
+    }
+    if (step.criteriaIds.length === 0) {
+      issues.push({
+        stepId,
+        code: "NO_CRITERIA",
+        message: `step "${stepId}": no eval criteria declared — a step needs at least one (an empty gate passes vacuously)`,
+      });
     }
     if (missing.length > 0) {
       issues.push({
@@ -132,7 +143,7 @@ export function loadSpine(
     }
 
     // Assemble the step only if it is sound (otherwise we'll throw anyway).
-    if (asset !== undefined && asset.type === "agent" && agent !== undefined && missing.length === 0) {
+    if (asset !== undefined && asset.type === "agent" && agent !== undefined && missing.length === 0 && step.criteriaIds.length > 0) {
       steps.push({
         provenance: { stepId, assetId, catalogTag: asset.source.catalogTag },
         agent,

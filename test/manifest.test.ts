@@ -129,6 +129,19 @@ describe("loadSpine — fail-closed cross-checks", () => {
     }
   });
 
+  it("NO_CRITERIA: a step with an empty criteriaIds is refused (empty gate passes vacuously)", () => {
+    const m = clone(validManifest);
+    m.steps[1]!.criteriaIds = [];
+    try {
+      loadSpine(m, sidecar, freshRegistry(), resolveAgent);
+      expect.unreachable();
+    } catch (e) {
+      expect(e).toBeInstanceOf(ManifestValidationError);
+      const issues = (e as ManifestValidationError).issues;
+      expect(issues.some((i) => i.code === "NO_CRITERIA" && i.stepId === "WF-002")).toBe(true);
+    }
+  });
+
   it("DUPLICATE_STEP_ID: stepId repeated", () => {
     const m = clone(validManifest);
     m.steps[1]!.stepId = "WF-001";

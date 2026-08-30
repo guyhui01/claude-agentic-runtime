@@ -63,8 +63,8 @@ describe("runEvalGate — always produces evidence", () => {
   });
 
   it("an advisory failure does NOT fail the gate (pass verdict, trace kept)", () => {
-    const sansCriteres = { ...livrableConforme, criteresSucces: [] };
-    const report = runEvalGate("WF-001", cadrageDoD, sansCriteres);
+    const sansCriteresSucces = { ...livrableConforme, criteresSucces: [] };
+    const report = runEvalGate("WF-001", cadrageDoD, sansCriteresSucces);
     expect(report.verdict).toBe("pass");
     const advisory = report.results.find(
       (r) => r.id === "criteres-succes-mesurables",
