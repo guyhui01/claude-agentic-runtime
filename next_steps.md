@@ -7,6 +7,43 @@
 
 ---
 
+## ▶ RECO 2026-08-30 — ULTRAREVIEW CIBLÉ DU CŒUR EVAL + SPINES (à décider par Guy)
+
+> **Origine : session showcase du 2026-08-30**, observation cross-repo — **pas encore une unité
+> validée**, à arbitrer par Guy à l'ouverture. **Ne PAS lancer d'ultrareview sans cible** :
+> `main` est propre (dernier tag `v0.16.0`, 6 commits après = maintenance : 2 bumps Dependabot,
+> trim ADR-0009, correctifs de spines), donc `/code-review ultra` **sans arg ne review rien** =
+> dépense cloud gâchée. L'ultra (facturé, multi-agent) ne vaut le coup **que** pointé sur un diff
+> réel OU sur la zone qui a churné.
+>
+> **Zone chaude = les commits fix-revert-refix de `v0.16.0`** (« a fix from an audit, reverted by
+> the next one », « correct four false claims », enum reverté, WF-009 reference floor). Cible, du
+> plus critique au périphérique :
+> - **P1 — le gate (« refuse to guess » incarné, ~183 LoC)** : `src/eval/eval-gate.ts`,
+>   `src/eval/criteria-registry.ts`, `src/eval/types.ts`.
+> - **P2 — politique case-type mono-sourcée (ce qui a churné)** : `src/spines/spine-helpers.ts` ;
+>   spines corrigés en `v0.16.0` : `wf-001-cadrage.ts`, `wf-003-lancement.ts`, `wf-006-avant-vente.ts`,
+>   `wf-009-recrutement.ts` ; `schema/sidecar.schema.json` (l'enum reverté).
+> - **P3 — gardes de discrimination** : `test/spine-wf-003-discrimination.test.ts`,
+>   `test/spine-wf-009-discrimination.test.ts`, `test/gherkin-case-type-vocabulary.test.ts`.
+>
+> **Invocation (sur ce repo) :**
+>
+> ```text
+> cd /Users/guyhui/CLAUDE/claude-agentic-runtime
+> /code-review ultra src/eval
+> # puis, si la valeur le justifie : /code-review ultra src/spines/spine-helpers.ts
+> ```
+>
+> **Focus à donner à la review :** le gate peut-il laisser passer un `returned` / `NO_MATCH` /
+> `PARAMS_MISSING` comme un succès ? La politique case-type est-elle vraiment mono-sourcée (pas de
+> divergence `spine-helpers` ↔ spines par-WF) ? L'enum du schéma et les gardes de discrimination
+> sont-ils cohérents après le revert de `v0.16.0` ? — c'est la classe de bug que le churn signale.
+>
+> ⚠️ Ultrareview = **déclenché par Guy, facturé** ; je ne peux pas le lancer moi-même.
+
+---
+
 ## ⏸ PRIORITÉ INTER-CHANTIERS — ⛔ ANNULÉE PAR GUY LE 2026-08-16
 
 > **⛔ ANNULÉE — 2026-08-16.** Guy a annulé la question de priorité inter-chantiers. Ce repo
