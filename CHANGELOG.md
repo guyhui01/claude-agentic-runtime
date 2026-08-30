@@ -6,13 +6,17 @@
 
 ---
 
-## [Unreleased]
+## [0.17.0] - 2026-08-30 — A step that forgets its eval criteria is refused at the boundary, not passed in silence 🔒
 
 > Model: Claude Opus 4.8.
 
 ### 🔧 Changed
 
 - **ADR-0009 (open-core boundary) — trimmed the go-to-market posture details from its prose; the decision is unchanged.** The record is public (public repo, PolyForm Noncommercial) and the showcase now links it, so three internal-reasoning admissions were removed as more disclosure than the positioning needs: the "solo freelance (portage salarial)" framing, the "clean-room reimplementation remains possible / ~400 lines of `validate-route.ts`" self-assessment of the code moat, and the "resourcing mismatch for a solo freelance / funded-startup backlog" framing of the rejected SaaS alternative. Kept intact: the open-core boundary itself, the Decision, the PolyForm-reserves-commerce reasoning, the future control-plane scope, and the privatization trigger. Net −3 lines.
+
+### 🐛 Fixed
+
+- **A step that declares zero eval criteria is now refused at the resolution boundary, closing a latent fail-open.** `runEvalGate(step, [], output)` returns `pass` vacuously — `[].some(...)` is `false` — so a step that FORGETS its criteria would clear the gate in silence, the exact fail-open the eval brick exists to prevent. A `NO_CRITERIA` guard is added at the resolution frontier (`src/manifest/load-manifest.ts`, sibling of the existing `EMPTY_SPINE` guard), NOT inside `runEvalGate`, whose "never throws" contract stays intact. Measured before shipping: all 52 resolved steps already carry ≥1 criterion, so this guards an INVARIANT, not an accepted design. Ships with a `NO_CRITERIA` test (`test/manifest.test.ts`) and a corrected misleading test-variable name (`sansCriteres` → `sansCriteresSucces` in `test/eval-gate.test.ts`, which asserted an empty advisory field, not an empty criteria list). Found and closed in one lot by the 2026-08-30 targeted review of the eval core + spines.
 
 ## [0.16.0] - 2026-08-23 — A fix from an audit, reverted by the next one: a case variant costs a warning again, the reference floor matches the card, and four claims stop overstating 🔁
 
@@ -874,7 +878,9 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.16.0...v0.17.0
+[0.16.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.12.0...v0.13.0
