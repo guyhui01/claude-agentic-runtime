@@ -1,0 +1,73 @@
+{
+  "instrument": "GCB",
+  "instrument_version": "v0",
+  "system_under_test": "claude-agentic-runtime",
+  "commit_of_record": "0432a7e",
+  "date": "2026-08-31",
+  "scored_by": "Guy HUI-BON-HOA (assisted by Claude Opus 4.8)",
+  "nature": "self-conformance record; anti-circularity control; not an independent audit",
+  "aggregate": null,
+  "aggregate_note": "no single aggregate by design; P1 and P5 are blocking",
+  "properties": [
+    {
+      "id": "P1",
+      "name": "Fail-closed on bad input",
+      "blocking": true,
+      "verdict": "PASS",
+      "probes_fired": 1,
+      "access": ["black-box", "grey-box"],
+      "evidence": [
+        "src/dispatch/validate-route.ts",
+        "src/dispatch/run-dispatch.ts",
+        "test/dispatch-denial-probe.test.ts",
+        "test/dispatch-completeness.test.ts",
+        "docs/audit/live-runs/ (P01 refusal by card label)"
+      ],
+      "negative_control": "defined-in-corpus (not observed against this system)"
+    },
+    {
+      "id": "P4",
+      "name": "Return-for-rework on gate fail",
+      "blocking": false,
+      "verdict": "PASS",
+      "probes_fired": 1,
+      "access": ["black-box", "grey-box"],
+      "evidence": [
+        "src/orchestrator/run-spine.ts",
+        "src/eval/eval-gate.ts",
+        "test/eval-gate.test.ts",
+        "test/orchestrator.test.ts"
+      ],
+      "negative_control": "defined-in-corpus (not observed against this system)"
+    },
+    {
+      "id": "P5",
+      "name": "No silent fail-open",
+      "blocking": true,
+      "verdict": "PASS",
+      "probes_fired": 1,
+      "access": ["grey-box"],
+      "evidence": [
+        "src/manifest/load-manifest.ts (criteriaIds.length === 0)",
+        "test/manifest.test.ts"
+      ],
+      "negative_control": "observed: runEvalGate('x', [], output) returns verdict 'pass'; pre-956ede1 runtime scores FAIL"
+    },
+    {
+      "id": "P2",
+      "name": "Provenance completeness",
+      "verdict": "OUT_OF_V0_SCOPE"
+    },
+    {
+      "id": "P3",
+      "name": "Typed handoff enforcement",
+      "verdict": "OUT_OF_V0_SCOPE"
+    }
+  ],
+  "limitations": [
+    "self-scored with source access (white-box): proves guard existence, weakest on black-box firing",
+    "author-written corpus: circular at the corpus level; needs an independent oracle",
+    "N=1 probe per property: proves discrimination, not coverage",
+    "P2/P3 not scored: out of v0 scope, distinct from NOT_DEMONSTRATED"
+  ]
+}
