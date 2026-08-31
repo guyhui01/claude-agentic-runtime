@@ -7,6 +7,38 @@
 
 ---
 
+## ✅ 2026-08-31 — ADR-0011 (gouvernance non-optionnelle testable) + GCB v0 self-scored (2 commits locaux, NON poussés)
+
+> **Session dédiée désignée par Guy** (aucun `▶▶ NEXT UNIT` vivant : le repo avait tout livré ;
+> la désignation EST l'unité). Deux lots locaux sur `main` (**ahead 2**, `a9584be`←`0432a7e`),
+> `[Unreleased]` porte désormais ADR-0011 + GCB (release **non urgente**). Suite **643/24**,
+> typecheck strict OK, `npm audit` 0, alertes Dependabot 0.
+>
+> **① ADR-0011** (`docs/adr/0011-…`) *implémente* la clause DEC-0003 « gouvernance non-optionnelle »
+> (cite vers la DEC, ne la chapeaute pas). Guard-set fermé énuméré ; clause (a) « no feature may
+> weaken a guard » = discipline de revue ; clause (b) « no vendor coupling into core » = **testable
+> mécaniquement** (adapter = `src/sdk/`, import vendor **runtime** hors adapter = violation). **Verdict
+> arbre courant : CONFORME** — les 3 `import type { AgentDefinition }` (dispatch/manifest/orchestrator)
+> sont type-only (effacés au runtime), consignés comme carve-out toléré, clôture différée à DEC-0003
+> Axis 1 (directionnel). Enforcement = `test/governance-adapter-boundary.test.ts` (+2 tests),
+> **falsifié avant d'être cru** (un import value en core le rougit ; reverté propre).
+>
+> **②③ GCB v0** (`docs/gcb/`) — l'instrument (README), le corpus stack-agnostic P1/P4/P5 (N=1/propriété,
+> contrôle négatif par sonde), et le **scorecard self-scored** de ce runtime (P1/P4/P5 PASS, evidence
+> pointers vers les guards de l'ADR). **Discrimination prouvée non-circulairement sur P5** : `runEvalGate([])`
+> rend un `pass` vacuous observable ; pré-`956ede1` = FAIL, ce runtime = PASS. Limites écrites : self-scored
+> + source access (prouve l'existence du garde, pas le tir en aveugle), corpus author-written (circulaire au
+> niveau corpus), N=1. **Aucun tiers nommé** (scrub Hypha/LangGraph vérifié) — scorer un concurrent reste une
+> décision de positionnement séparée et **privée** (« Hypha en renseignement privé »).
+>
+> ▫ **Signal hors chantier (consigné, non traité)** : 2 PR Dependabot ouvertes le 2026-08-31 — **#58**
+> `@anthropic-ai/claude-agent-sdk` 0.3.239→0.3.250 (dép. porteuse) et **#57** `@types/node` (dev group).
+> À traiter en session déps dédiée. ▫ **Aval cross-repo** : `agentic-strategy/next_steps.md` liste encore
+> ADR-runtime + GCB comme « downstream pulled but uncommitted » — MAJ à porter là-bas (repo distinct, hors
+> périmètre d'écriture de cette session).
+
+---
+
 ## ✅ 2026-08-30 — RELEASE `v0.17.0` PUBLIÉE (garde NO_CRITERIA + trim ADR-0009)
 
 > **Tag `v0.17.0` + GitHub Release `Latest`, poussés le 2026-08-30.** Replie l'`[Unreleased]`
