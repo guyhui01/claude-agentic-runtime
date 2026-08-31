@@ -6,7 +6,7 @@
 
 ---
 
-## [Unreleased]
+## [0.18.0] - 2026-09-01 — Governance made testable: an enumerated guard-set, an enforced adapter/core boundary, and a first self-scored conformance bench 🛡️
 
 > Model: Claude Opus 4.8.
 
@@ -887,7 +887,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.14.0...v0.15.0
