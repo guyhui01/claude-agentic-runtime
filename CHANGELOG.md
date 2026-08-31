@@ -6,6 +6,14 @@
 
 ---
 
+## [Unreleased]
+
+> Model: Claude Opus 4.8.
+
+### ✨ Added
+
+- **ADR-0011 makes DEC-0003's non-optional-governance clauses testable, and enforces the adapter/core boundary in the suite.** DEC-0003 (strategy repo) hardened the governance doctrine into a non-optional constraint with two violation clauses but left "adapter layer" and "for flexibility" undefined — cosmetic until a runtime ADR implements them. ADR-0011 (`docs/adr/0011-non-optional-governance-made-testable.md`) enumerates the closed **guard-set** the doctrine protects (route-or-refuse, param validation, fail-closed eval gate, `NO_CRITERIA`, typed handoff, no-LLM-judge, BYO-key), gives clause (a) — *no feature may weaken a guard* — a review-discipline definition, and gives clause (b) — *no vendor coupling may cross into the core* — a mechanical one: adapter layer = `src/sdk/`, and a **runtime** vendor import (`@anthropic-ai/*`) anywhere in the core is a violation. **Current-tree verdict: CONFORMANT** — the three `import type { AgentDefinition }` in `run-dispatch.ts`/`load-manifest.ts`/`orchestrator/types.ts` are type-only (erased at runtime), recorded as a tolerated carve-out whose closure is deferred to DEC-0003 Axis 1 (directional, not achieved), not a debt this clause requires. Clause (b) is enforced by `test/governance-adapter-boundary.test.ts`, which scans `src/**`, fails on any runtime vendor import in the core, and pins the type-only carve-out to exactly those three files so a fourth surfaces for a decision. The guard proved falsifiable before being trusted: a value import injected into a core file turns it red; reverted clean. The ADR *cites up* to DEC-0003 and does not crown it (repo boundary). Suite 643/24, typecheck strict OK.
+
 ## [0.17.0] - 2026-08-30 — A step that forgets its eval criteria is refused at the boundary, not passed in silence 🔒
 
 > Model: Claude Opus 4.8.
