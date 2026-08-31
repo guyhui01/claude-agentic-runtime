@@ -5,7 +5,7 @@
 > applied to the tool itself: *"not demonstrated" ≠ "passed"*, and every probe must
 > be able to **FAIL** or it is vacuous.
 
-This instrument is legitimized by the upstream doctrine decision (positioning) and
+This instrument is legitimized by the upstream governance doctrine and
 implemented in this runtime by [ADR-0011](../adr/0011-non-optional-governance-made-testable.md),
 which enumerates the guard-set the doctrine protects. v0 is a **hand-written proof
 that the instrument discriminates**, produced before investing in any tooling.
@@ -67,6 +67,6 @@ property: verdict + **evidence pointer** (the exact probe and the observed outpu
 
 - First scorecard: **this runtime, scored on itself** —
   [`scorecards/claude-agentic-runtime.v0.md`](./scorecards/claude-agentic-runtime.v0.md).
-  A self-conformance record and the anti-circularity control, not a competitive claim.
-- Scoring a third-party system against this corpus is a **separate positioning
-  decision**; any such scorecard is competitive intelligence and is **not** published here.
+  A self-conformance record and the anti-circularity control the instrument requires.
+- Scoring another system against this corpus is out of scope for v0, which is a
+  self-conformance record.

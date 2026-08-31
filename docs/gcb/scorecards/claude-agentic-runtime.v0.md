@@ -4,7 +4,7 @@
 - **Instrument:** GCB v0 ([`../README.md`](../README.md)), corpus [`../corpus-v0.md`](../corpus-v0.md).
 - **Date:** 2026-08-31 · **Scored by:** Guy HUI-BON-HOA (assisted by Claude Opus 4.8).
 - **Nature:** a **self-conformance record** and the anti-circularity control the instrument
-  requires — **not** a competitive claim, not an independent audit.
+  requires — **not** an independent audit.
 
 ## Verdicts
 
