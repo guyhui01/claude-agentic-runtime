@@ -7,6 +7,30 @@
 
 ---
 
+## ✅ 2026-09-01 — SESSION DÉPS : #57 + #58 mergés (freshness, pas sécurité)
+
+> Les 2 PR Dependabot restées en attente après `v0.18.0` sont **mergées sur `main`**, en
+> **2 lots isolés** (revert chirurgical préservé), protocole rebase-d'abord respecté.
+>
+> - **#57** `@types/node` 26.2.0→26.4.0 (dev-only) — mergé en premier. Était `behind_by 6` →
+>   `@dependabot rebase` → head `703d94f` `behind_by 0`, **pas de re-ciblage** (26.4.0 = npm latest) →
+>   **squash-merge `a900c8b`**, CI 3/3 verte sur le head rebasé (real-sidecar au pin inclus).
+> - **#58** `@anthropic-ai/claude-agent-sdk` 0.3.239→**0.3.251** (dép. porteuse) — lot séparé. Était
+>   `behind_by 2` après #57 → `@dependabot rebase` → head `ee1d1a4` `behind_by 0`. **Re-lecture version
+>   au source (feedback-rebase-dependabot-recible-la-version)** : Dependabot **n'a PAS re-ciblé**, cible
+>   restée **0.3.251** (`^0.3.251` + `resolved` npmjs cohérent), **alors que npm latest = 0.3.252** →
+>   **squash-merge `fad852b`**, CI 3/3 verte sur le head rebasé.
+>
+> **État mergé re-validé hors-ligne en local (`fad852b`) : typecheck strict OK · suite 643/24 ·
+> `npm audit` 0 · `origin/main == HEAD` · 0 PR Dependabot restante.**
+>
+> ⚠ **Non couvert (honnête)** : le SDK porte le chemin **LIVE_RUN facturé** — validation **offline
+> seulement**, aucune preuve live (souscription seule, pas de clé API). Squash isolé `fad852b` =
+> revert chirurgical si un run live démentait. ▫ **Reliquat non urgent** : **SDK 0.3.252** dispo sur
+> npm ; Dependabot rouvrira une PR — prochaine micro-session déps, même protocole.
+
+---
+
 ## ✅ 2026-09-01 — RELEASE `v0.18.0` PUBLIÉE (governance made testable + GCB v0)
 
 > **Tag `v0.18.0` + GitHub Release `Latest`, poussés le 2026-09-01.** Replie le `[Unreleased]`
@@ -15,6 +39,7 @@
 > · suite 643/24 · typecheck strict OK · npm audit 0 · alertes 0 · `[Unreleased]` vide.**
 > Liens CHANGELOG rebasés (`[Unreleased]` → `v0.18.0...HEAD`, `[0.18.0]` ajouté). `package.json` 0.18.0.
 > ▫ **Reste en attente** : PR Dependabot #58 (SDK porteur) / #57 (@types/node) → session déps.
+> **→ SOLDÉ le 2026-09-01, cf. bloc « SESSION DÉPS » ci-dessus.**
 
 ---
 
