@@ -32,7 +32,15 @@
 > (pas de PR Dependabot ouverte) sur branche `deps/claude-agent-sdk-0.3.252` → **PR #59** → CI 3/3
 > verte (real-sidecar au pin inclus) → **squash-merge `2436886`**. `package.json` `^0.3.252` (= npm
 > latest, plus de retard SDK). Re-validé offline sur main : typecheck strict OK · 643/24 · audit 0.
-> **0 PR Dependabot restante.** Même limite LIVE_RUN : offline-only, revert chirurgical via `2436886`.
+> **0 PR Dependabot restante.**
+>
+> ▫ **LIVE-PROVEN le 2026-09-01** (réserve LIVE_RUN fermée pour `0.3.252`) : smoke `WF-001` lancé
+> sur **souscription OAuth** (`LIVE_RUN=1`, le runner `src/sdk/query-runner.ts` **refuse** toute
+> `ANTHROPIC_API_KEY` — conforme règle #7), capé (`maxBudgetUsd 1.0`, `maxTurns 6`, read-only).
+> Résultat : **`status: completed`, `failure: none`**, STEP-01/03/04 (BA/PO-SCRUM/QA-AGILE) @v4.4.0
+> tous **`pass`**, 12/12 critères, 0 FAIL (~111 s). Le chemin facturé tourne bien sur le SDK bumpé.
+> La trace versionnée curée a été **restaurée** (pas d'écrasement par la sortie brute — convention
+> « committed by decision after review »). Reste offline-only pour un futur bump non re-testé live.
 
 ---
 
