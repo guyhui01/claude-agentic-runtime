@@ -26,8 +26,13 @@
 >
 > ⚠ **Non couvert (honnête)** : le SDK porte le chemin **LIVE_RUN facturé** — validation **offline
 > seulement**, aucune preuve live (souscription seule, pas de clé API). Squash isolé `fad852b` =
-> revert chirurgical si un run live démentait. ▫ **Reliquat non urgent** : **SDK 0.3.252** dispo sur
-> npm ; Dependabot rouvrira une PR — prochaine micro-session déps, même protocole.
+> revert chirurgical si un run live démentait.
+>
+> ▫ **Reliquat SOLDÉ le 2026-09-01 (même séance)** : **SDK 0.3.251→0.3.252** exécuté à la main
+> (pas de PR Dependabot ouverte) sur branche `deps/claude-agent-sdk-0.3.252` → **PR #59** → CI 3/3
+> verte (real-sidecar au pin inclus) → **squash-merge `2436886`**. `package.json` `^0.3.252` (= npm
+> latest, plus de retard SDK). Re-validé offline sur main : typecheck strict OK · 643/24 · audit 0.
+> **0 PR Dependabot restante.** Même limite LIVE_RUN : offline-only, revert chirurgical via `2436886`.
 
 ---
 
