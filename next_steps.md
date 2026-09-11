@@ -7,7 +7,7 @@
 
 ---
 
-## ▶ RESUME HERE — prochaine séance déps : rattraper l'écart SDK (0.3.269+) + #62 dev-deps
+## ▶ RESUME HERE — prochaine séance déps : rattraper l'écart SDK (0.3.269+)
 
 > Prompt paste-ready. Les numéros datent du 2026-09-11 → **RE-VÉRIFIER à la source**, ne pas les
 > croire (`feedback-tracker-ne-pas-epingler-head`, check factuel).
@@ -16,24 +16,13 @@
 Repo : claude-agentic-runtime (~/CLAUDE/claude-agentic-runtime).
 Applique le rituel de démarrage, puis lis d'abord next_steps.md EN LOCAL.
 
-CHANTIER : fraicheur des deps (pas securite). Deux sujets ouverts au 2026-09-11
+CHANTIER : fraicheur des deps (pas securite). Un sujet ouvert au 2026-09-11
 (A RE-VERIFIER a la source, ne pas croire ces chiffres) :
 - SDK @anthropic-ai/claude-agent-sdk : merge 0.3.252->0.3.265 le 2026-09-11 (#63, live-proven).
   npm latest etait deja 0.3.269 (ecart residuel de 4 patchs) : verifier si Dependabot a
   ouvert une PR de rattrapage, sinon la creer/attendre.
-- #62 (dev-dependencies group) : encore ouverte, MAIS PAS TRIVIALE. Groupe 2 updates :
-  @types/node 26.4->26.5 (patch, absorbe par ^26) ET *** vitest 4.1.11 -> 5.0.0 (MAJEUR) ***.
-  Diagnostic offline du 2026-09-11 (head #62 rebase, node>=22 OK) : la suite CASSE, 3 echecs,
-  cause unique = vitest 5 rend expect(...).toMatchFileSnapshot(...) STRICTEMENT async : non-awaite
-  il erreure au lieu de passer en silence (bug latent reel revele). Fichiers a corriger (async + await) :
-    test/dispatch-denial-probe.test.ts:307
-    test/dispatch-live-seed-controls.test.ts:250
-    test/dispatch-policy-consistency.test.ts:319
-  Reste 640 pass / 24 skip, typecheck OK. NE PAS merger #62 tel quel (bump majeur non teste).
-  Traiter en BRANCHE DE MIGRATION dediee (pattern maison, cf. #59) : branche basee sur le head
-  #62 + les 3 correctifs await, PR, CI 3/3 verte (Node 22/24), fermer #62 comme superseded.
-  Verifier au passage d'autres ruptures vitest 5 (config lookup, options sequential, snapshots).
-  Dev-only => pas de smoke live requis.
+- #62 (dev-deps group : vitest 5 majeur + @types/node) : SOLDE le 2026-09-11 via #66
+  (superseding), voir la section ✅ ci-dessous. Rien a faire.
 
 Etape 0 : gh pr list --label dependencies --state open + npm view @anthropic-ai/claude-agent-sdk version
 (cf. memoire feedback-lister-pr-dependabot-avant-fix-manuel).
@@ -56,6 +45,29 @@ Si le smoke live echoue : rapporter brut (STEP-XX), ne pas merger, checkpoint pr
 
 > Note commit : le lot doc (CHANGELOG + ce tracker) reste en **commit local sur `main`**,
 > **prêt à pousser** — push sur ordre explicite de Guy.
+
+---
+
+## ✅ 2026-09-11 — SESSION DÉPS : vitest 4.1.11→5.0.0 (majeur) mergé via #66
+
+> **MERGÉ sur `main` via PR #66 (squash `614dd47`) le 2026-09-11 ; branche `deps/vitest-5`
+> supprimée. #62 fermée (superseded, auto-close Dependabot).** Bump **dev-only** (pas de smoke live).
+>
+> **Un bump majeur de harness, pas un lot trivial.** Le groupe Dependabot #62 portait
+> `vitest 4.1.11 → 5.0.0` (MAJEUR) + `@types/node → 26.5.0` (patch, absorbé par `^26`).
+> **Diagnostic empirique** sur le head #62 rebasé : la suite CASSAIT (3 échecs), **cause unique** =
+> vitest 5 rend `expect(...).toMatchFileSnapshot(...)` **strictement async** et erreure si non-`await`é
+> (vitest 4 le laissait passer en silence → **bug latent réel révélé**, le snapshot pouvait ne pas être
+> comparé). **Corrigé** (callback `async` + `await`) dans 3 tests de garde dispatch :
+> `dispatch-denial-probe`, `dispatch-live-seed-controls`, `dispatch-policy-consistency`.
+>
+> **Vérifié au-delà du vert de suite (`feedback-criteres-de-test-aveugles-au-defaut`)** : aucun
+> `__snapshots__` régénéré (sérialisation identique en v5), `vitest.config.ts` minimal sans option
+> supprimée, aucune API v5 supprimée/dépréciée en usage dans le test tree.
+>
+> **Validé** : suite **643/24** sur vitest 5.0.0 · typecheck strict OK · `npm audit` 0 · **CI 3/3 verte
+> sur Node 22 ET 24** (plancher v5) · re-validé sur le merge commit (`614dd47`, `origin/main == HEAD`).
+> Traité en **branche de migration dédiée** (pattern maison) plutôt que merge direct d'un majeur non testé.
 
 ---
 
