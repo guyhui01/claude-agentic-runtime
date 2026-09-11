@@ -21,7 +21,19 @@ CHANTIER : fraicheur des deps (pas securite). Deux sujets ouverts au 2026-09-11
 - SDK @anthropic-ai/claude-agent-sdk : merge 0.3.252->0.3.265 le 2026-09-11 (#63, live-proven).
   npm latest etait deja 0.3.269 (ecart residuel de 4 patchs) : verifier si Dependabot a
   ouvert une PR de rattrapage, sinon la creer/attendre.
-- #62 (dev-dependencies group, dev-only) : encore ouverte, lot separe, pas de smoke live requis.
+- #62 (dev-dependencies group) : encore ouverte, MAIS PAS TRIVIALE. Groupe 2 updates :
+  @types/node 26.4->26.5 (patch, absorbe par ^26) ET *** vitest 4.1.11 -> 5.0.0 (MAJEUR) ***.
+  Diagnostic offline du 2026-09-11 (head #62 rebase, node>=22 OK) : la suite CASSE, 3 echecs,
+  cause unique = vitest 5 rend expect(...).toMatchFileSnapshot(...) STRICTEMENT async : non-awaite
+  il erreure au lieu de passer en silence (bug latent reel revele). Fichiers a corriger (async + await) :
+    test/dispatch-denial-probe.test.ts:307
+    test/dispatch-live-seed-controls.test.ts:250
+    test/dispatch-policy-consistency.test.ts:319
+  Reste 640 pass / 24 skip, typecheck OK. NE PAS merger #62 tel quel (bump majeur non teste).
+  Traiter en BRANCHE DE MIGRATION dediee (pattern maison, cf. #59) : branche basee sur le head
+  #62 + les 3 correctifs await, PR, CI 3/3 verte (Node 22/24), fermer #62 comme superseded.
+  Verifier au passage d'autres ruptures vitest 5 (config lookup, options sequential, snapshots).
+  Dev-only => pas de smoke live requis.
 
 Etape 0 : gh pr list --label dependencies --state open + npm view @anthropic-ai/claude-agent-sdk version
 (cf. memoire feedback-lister-pr-dependabot-avant-fix-manuel).
