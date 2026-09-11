@@ -6,6 +6,21 @@
 
 ---
 
+## [Unreleased]
+
+> Model: Claude Opus 4.8.
+
+### ⬆️ Dependencies
+
+- **Nine open Dependabot alerts (4 high / 5 moderate) closed by a lockfile-only refresh — every remedy stayed inside the parent's declared range, so no direct dependency, and not the Agent SDK, was re-versioned.** The nine alerts collapsed to three transitive packages, triaged by **reachability, not advertised severity**:
+  - **`fast-uri` `3.1.5` → `3.1.7` — the four `high` alerts, and the only ones on the execution path.** Reached through **`ajv`**, a direct dependency that validates every dispatch brief and step handoff, so host-confusion / SSRF in its URI resolver is the finding that mattered here. `ajv@8.20.0` declares `fast-uri: ^3.0.1`, and the patched `3.1.7` sits inside that range — a plain lockfile bump, no `overrides`.
+  - **`hono` `4.13.0` → `4.13.7` and `qs` `6.15.2` → `6.16.0` — five `moderate` alerts, all unreachable here.** Both live under `@anthropic-ai/claude-agent-sdk → @modelcontextprotocol/sdk` (`hono` directly, `qs` through `express → body-parser`); this runtime never instantiates the Hono/Express server and calls the SDK's `query()` locally. They were patched all the same because each fix falls inside the parent's declared range (`hono: ^4.11.4`, `qs: ^6.15.2`) — closing them cost nothing and forced no major override.
+- `npm audit` now reports **0 vulnerabilities**; `package.json` is unchanged. Re-validated offline on the bumped lockfile: strict `typecheck` OK, suite **643 passed / 24 skipped**. Offline only — the SDK version is untouched, so no live smoke was required; the versioned live-run traces are unaffected.
+
+### 📝 Documentation
+
+- **The README ADR index listed only 0001–0007 while `docs/adr/` holds eleven records** — the four most recent (0008 dispatch gate, 0009 open-core boundary, 0010 schema-owns-structure / criteria-own-DoD, 0011 non-optional governance made testable) were added to the list, matching the concise style of the existing entries.
+
 ## [0.18.0] - 2026-09-01 — Governance made testable: an enumerated guard-set, an enforced adapter/core boundary, and a first self-scored conformance bench 🛡️
 
 > Model: Claude Opus 4.8.
