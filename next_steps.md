@@ -7,9 +7,47 @@
 
 ---
 
+## ▶ RESUME HERE — prochaine séance déps : bump du SDK porteur (fraîcheur + smoke live)
+
+> Prompt paste-ready. Les numéros datent du 2026-09-11 → **RE-VÉRIFIER à la source**, ne pas les
+> croire (`feedback-tracker-ne-pas-epingler-head`, check factuel).
+
+```
+Repo : claude-agentic-runtime (~/CLAUDE/claude-agentic-runtime).
+Applique le rituel de démarrage, puis lis d'abord next_steps.md EN LOCAL.
+
+CHANTIER : bump du SDK porteur @anthropic-ai/claude-agent-sdk (fraîcheur, pas sécurité).
+Point de départ au 2026-09-11 (À RE-VÉRIFIER à la source, ne pas croire ces chiffres) :
+- installé 0.3.252 ; npm latest ~0.3.269 ; PR Dependabot #63 ouverte cible 0.3.260.
+- aussi ouverte : #62 (dev-dependencies group, dev-only) — lot séparé.
+- 0 alerte Dependabot ouverte (séance sécurité du 2026-09-11 close via #65).
+
+Etape 0 : gh pr list --label dependencies --state open + npm view @anthropic-ai/claude-agent-sdk version
+(cf. memoire feedback-lister-pr-dependabot-avant-fix-manuel).
+
+Protocole :
+1. Rebase #63 (@dependabot rebase), attendre behind_by 0.
+2. RE-LIRE la version cible sur le head rebase (feedback-rebase-dependabot-recible-la-version) :
+   Dependabot peut re-cibler vers le latest. Confirmer cote package.json + resolved lockfile.
+3. Valider offline : npm audit / typecheck strict / suite complete, sur le head.
+4. PREUVE LIVE OBLIGATOIRE (chemin facture) : smoke WF-001 sur SOUSCRIPTION OAuth
+   (LIVE_RUN=1 ; le runner refuse toute ANTHROPIC_API_KEY - regle #7), cape
+   (maxBudgetUsd, maxTurns, read-only). Viser status: completed / failure: none.
+   Restaurer la trace curee versionnee (ne pas ecraser par la sortie brute).
+   Ref memoire : feedback-live-run-smoke-ferme-reserve-offline.
+5. CHANGELOG [Unreleased] (§ Dependencies) + next_steps.md dans le lot.
+
+GARDES : push/merge/run live = sur mon ordre explicite uniquement. Livrables en anglais US pro.
+Si le smoke live echoue : rapporter brut (STEP-XX), ne pas merger, checkpoint propre.
+```
+
+> Lot séparé du même sujet : **#62** dev-dependencies group (dev-only, pas de smoke live requis).
+
+---
+
 ## ✅ 2026-09-11 — SESSION SÉCURITÉ : 9 alertes Dependabot soldées + liste ADR complétée
 
-> **Branche `deps/audit-fix-transitives-2026-09-11` (commits locaux, PAS poussée).**
+> **MERGÉ sur `main` via PR #65 (`227386b`, squash) le 2026-09-11 ; branche supprimée.**
 > Deux sujets traités dans la même séance ; livrables en anglais, tracker en français.
 >
 > **① Alertes Dependabot — 9 (4 high / 5 moderate) → 0** (`chore(deps)` `b501a8a`).
@@ -33,8 +71,9 @@
 > structure) / 0011 (non-optional governance). **Déjà poussé sur `main`** (`ce66751`, séparé).
 > CHANGELOG `[Unreleased]` consigne les deux sujets (§ Dependencies + § Documentation).
 >
-> ▫ **Reste à faire** : pousser la branche `deps/audit-fix-transitives-2026-09-11` **sur ordre
-> explicite** de Guy (commit `b501a8a`). Pas de release nécessaire (patch de deps + doc).
+> ▫ **Nettoyage post-merge** : PR Dependabot redondantes #60 (fast-uri) / #61 (qs) / #64 (hono)
+> auto-fermées (versions cibles déjà sur `main`). `npm audit` sur `main` = 0. Pas de release
+> nécessaire (patch de deps + doc). Leçon consignée : `feedback-lister-pr-dependabot-avant-fix-manuel`.
 
 ---
 
