@@ -47,6 +47,10 @@ Building blocks (the rest is carried by the Claude Agent SDK):
   - [ADR-0005 — Feedback through human PR](docs/adr/0005-feedback-par-pr-humaine.md)
   - [ADR-0006 — Quality standards (ISO 42010 / 25012 / 25010 / 42001)](docs/adr/0006-referentiels-qualite.md)
   - [ADR-0007 — Contracts & criteria: a spine manifest owned by the runtime](docs/adr/0007-source-contrats-criteres-manifeste-runtime.md)
+  - [ADR-0008 — Dispatch gate: route or refuse, never run an unrouted brief](docs/adr/0008-dispatch-gate-route-or-refuse.md)
+  - [ADR-0009 — Open-core boundary: public runtime proves the method, private control plane owns governed execution](docs/adr/0009-open-core-boundary.md)
+  - [ADR-0010 — The output schema owns structure; eval criteria own DoD semantics](docs/adr/0010-schema-owns-structure-criteria-own-dod.md)
+  - [ADR-0011 — Non-optional governance made testable: an enumerated guard-set and an adapter/core boundary](docs/adr/0011-non-optional-governance-made-testable.md)
 - 🔬 [Live-run traces](docs/audit/live-runs/) — every billed live run is versioned verbatim, `completed` and returned-for-rework alike
 - 🚦 [Dispatch discovery](docs/discovery/) — the WF-000 brief contract, coverage matrix, router draft, and V0 plan
 - 📏 [Contributing & conventions](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
