@@ -295,7 +295,7 @@ function render(): string {
 }
 
 describe("denial probe — the guard's regression floor, not a verdict", () => {
-  it("records what paramFilled does with denials today", () => {
+  it("records what paramFilled does with denials today", async () => {
     // ⛔ A REGISTRY-SIZE ASSERTION WAS WRITTEN HERE AND REMOVED, falsification
     // having shown it dead. The sibling probes carry one because they ITERATE
     // `DEFAULT_MANIFESTS` and a shrunken registry renders them an empty table;
@@ -304,7 +304,7 @@ describe("denial probe — the guard's regression floor, not a verdict", () => {
     // wrong key turns the resolvability test below red while a `length >= 10`
     // assertion stays green, the registry still holding ten entries. A guard that
     // cannot catch the failure it names reads as protection being applied.
-    expect(render()).toMatchFileSnapshot("./__snapshots__/denial-probe.md");
+    await expect(render()).toMatchFileSnapshot("./__snapshots__/denial-probe.md");
   });
 
   it("keeps every probed spec resolvable, so the corpora cannot rot silently", () => {

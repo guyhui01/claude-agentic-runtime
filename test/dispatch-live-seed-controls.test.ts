@@ -246,8 +246,8 @@ function render(): string {
 }
 
 describe("live-seed controls — an independent source, not a verdict", () => {
-  it("matches the reviewed snapshot of what each live seed fills", () => {
-    expect(render()).toMatchFileSnapshot("./__snapshots__/live-seed-controls.md");
+  it("matches the reviewed snapshot of what each live seed fills", async () => {
+    await expect(render()).toMatchFileSnapshot("./__snapshots__/live-seed-controls.md");
   });
 
   it("GUARDS THE GUARD — every seed string is still in its harness, WHOLE", () => {
