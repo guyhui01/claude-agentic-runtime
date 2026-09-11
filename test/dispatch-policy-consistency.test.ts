@@ -312,11 +312,11 @@ function renderTable(): string {
 }
 
 describe("policy consistency across manifests — a frozen table, not a verdict", () => {
-  it("matches the reviewed snapshot of cross-manifest policy", () => {
+  it("matches the reviewed snapshot of cross-manifest policy", async () => {
     // Guard the guard: a shrunken registry would render an empty table that
     // reads as "no divergence".
     expect(Object.keys(DEFAULT_MANIFESTS).length).toBeGreaterThanOrEqual(6);
-    expect(renderTable()).toMatchFileSnapshot("./__snapshots__/policy-consistency.md");
+    await expect(renderTable()).toMatchFileSnapshot("./__snapshots__/policy-consistency.md");
   });
 
   it("maps `submittedBy` in no manifest — the role-invariance the live probes proved", () => {
