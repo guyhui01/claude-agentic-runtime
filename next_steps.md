@@ -7,7 +7,7 @@
 
 ---
 
-## ▶ RESUME HERE — prochaine séance déps : bump du SDK porteur (fraîcheur + smoke live)
+## ▶ RESUME HERE — prochaine séance déps : rattraper l'écart SDK (0.3.269+) + #62 dev-deps
 
 > Prompt paste-ready. Les numéros datent du 2026-09-11 → **RE-VÉRIFIER à la source**, ne pas les
 > croire (`feedback-tracker-ne-pas-epingler-head`, check factuel).
@@ -16,32 +16,62 @@
 Repo : claude-agentic-runtime (~/CLAUDE/claude-agentic-runtime).
 Applique le rituel de démarrage, puis lis d'abord next_steps.md EN LOCAL.
 
-CHANTIER : bump du SDK porteur @anthropic-ai/claude-agent-sdk (fraîcheur, pas sécurité).
-Point de départ au 2026-09-11 (À RE-VÉRIFIER à la source, ne pas croire ces chiffres) :
-- installé 0.3.252 ; npm latest ~0.3.269 ; PR Dependabot #63 ouverte cible 0.3.260.
-- aussi ouverte : #62 (dev-dependencies group, dev-only) — lot séparé.
-- 0 alerte Dependabot ouverte (séance sécurité du 2026-09-11 close via #65).
+CHANTIER : fraicheur des deps (pas securite). Deux sujets ouverts au 2026-09-11
+(A RE-VERIFIER a la source, ne pas croire ces chiffres) :
+- SDK @anthropic-ai/claude-agent-sdk : merge 0.3.252->0.3.265 le 2026-09-11 (#63, live-proven).
+  npm latest etait deja 0.3.269 (ecart residuel de 4 patchs) : verifier si Dependabot a
+  ouvert une PR de rattrapage, sinon la creer/attendre.
+- #62 (dev-dependencies group, dev-only) : encore ouverte, lot separe, pas de smoke live requis.
 
 Etape 0 : gh pr list --label dependencies --state open + npm view @anthropic-ai/claude-agent-sdk version
 (cf. memoire feedback-lister-pr-dependabot-avant-fix-manuel).
 
-Protocole :
-1. Rebase #63 (@dependabot rebase), attendre behind_by 0.
+Protocole (bump SDK) :
+1. Rebase la PR SDK (@dependabot rebase), attendre behind_by 0.
 2. RE-LIRE la version cible sur le head rebase (feedback-rebase-dependabot-recible-la-version) :
    Dependabot peut re-cibler vers le latest. Confirmer cote package.json + resolved lockfile.
 3. Valider offline : npm audit / typecheck strict / suite complete, sur le head.
 4. PREUVE LIVE OBLIGATOIRE (chemin facture) : smoke WF-001 sur SOUSCRIPTION OAuth
    (LIVE_RUN=1 ; le runner refuse toute ANTHROPIC_API_KEY - regle #7), cape
    (maxBudgetUsd, maxTurns, read-only). Viser status: completed / failure: none.
-   Restaurer la trace curee versionnee (ne pas ecraser par la sortie brute).
-   Ref memoire : feedback-live-run-smoke-ferme-reserve-offline.
+   Rediriger la sortie brute vers le scratchpad (LIVE_RESULT_FILE) : ne pas ecraser la
+   trace curee versionnee. Ref memoire : feedback-live-run-smoke-ferme-reserve-offline.
 5. CHANGELOG [Unreleased] (§ Dependencies) + next_steps.md dans le lot.
 
 GARDES : push/merge/run live = sur mon ordre explicite uniquement. Livrables en anglais US pro.
 Si le smoke live echoue : rapporter brut (STEP-XX), ne pas merger, checkpoint propre.
 ```
 
-> Lot séparé du même sujet : **#62** dev-dependencies group (dev-only, pas de smoke live requis).
+> Note commit : le lot doc (CHANGELOG + ce tracker) reste en **commit local sur `main`**,
+> **prêt à pousser** — push sur ordre explicite de Guy.
+
+---
+
+## ✅ 2026-09-11 — SESSION DÉPS : #63 SDK 0.3.252→0.3.265 mergé + LIVE-PROVEN
+
+> **MERGÉ sur `main` via PR #63 (squash `87b2bd3`) le 2026-09-11 ; branche supprimée.**
+> Bump **fraîcheur** du SDK porteur (pas sécurité). Livrables en anglais, tracker en français.
+>
+> **Rebase + re-ciblage (`feedback-rebase-dependabot-recible-la-version`)** : #63 était `behind_by 3`
+> et ciblait `0.3.260` ; `@dependabot rebase` → head `00ea082` `behind_by 0`, **re-ciblé vers
+> `0.3.265`** (le titre/branche gardaient l'ancien `0.3.260`, piège). Version **confirmée au source**,
+> pas au titre : `package.json` `^0.3.265` + lockfile `resolved` `0.3.265` npmjs, cohérent.
+>
+> **Validé offline sur le head puis re-validé sur le merge commit (`87b2bd3`, `origin/main == HEAD`)** :
+> `npm ci` 0 vuln · `npm audit` **0** · typecheck strict OK · suite **643/24** · CI 3/3 verte.
+>
+> **LIVE-PROVEN (réserve LIVE_RUN fermée pour `0.3.265`)** : smoke `WF-001` sur **souscription OAuth**
+> (`LIVE_RUN=1` ; runner `src/sdk/query-runner.ts` **refuse** toute `ANTHROPIC_API_KEY` — règle #7),
+> capé (`maxBudgetUsd 1.0`, `maxTurns 6`, read-only). Résultat : **`status: completed`,
+> `failure: none`**, STEP-01/03/04 (BA/PO-SCRUM/QA-AGILE) @ catalog `v4.4.0` tous **`pass`**,
+> **12/12 critères, 0 FAIL** (~132 s) — advisory `po-us-format-invest` passe ici. Sortie brute
+> isolée au scratchpad (`LIVE_RESULT_FILE`) : **trace versionnée intacte**, pas d'écrasement.
+> Le chemin facturé tourne bien sur le SDK bumpé.
+>
+> **⚠ Écart résiduel (honnête)** : npm `latest` = **0.3.269** au moment du merge (publié trop récemment
+> pour que Dependabot re-cible dessus) → **4 patchs de retard**, laissés à Dependabot (cf. RESUME HERE).
+> CHANGELOG `[Unreleased]` § Dependencies consigne le bump live-proven. **Pas de release** (bump de dép.).
+> ▫ **#62** (dev-dependencies group) reste ouverte, lot séparé.
 
 ---
 
