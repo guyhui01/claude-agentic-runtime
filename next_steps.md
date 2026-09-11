@@ -7,7 +7,22 @@
 
 ---
 
-## ▶ RESUME HERE — prochaine séance déps : rattraper l'écart SDK (0.3.269+)
+## ▶ RESUME HERE — écart SDK (0.3.269+) : LAISSÉ À DEPENDABOT (pas de fix manuel)
+
+> **DÉCISION 2026-09-12 (Guy) : l'écart résiduel SDK est laissé à Dependabot — aucun bump
+> manuel.** Vérifié à la source ce jour : `package.json` `^0.3.265`, npm `latest` `0.3.269`
+> (écart de 4 patchs bien réel), **0 PR Dependabot ouverte** à cet instant. La config
+> (`.github/dependabot.yml`) est **armée** sur npm (`schedule: weekly`) → Dependabot **ouvrira
+> seul** la PR de rattrapage à sa prochaine passe hebdo.
+>
+> **⚠ « Dependabot gère seul » s'arrête à l'OUVERTURE de la PR.** Pas d'`auto-merge` ; ADR-0002
+> impose que propager une version = un acte explicite tracé (une PR qu'on merge). Le SDK est la
+> dép. **porteuse** → merge conditionné à la **preuve live obligatoire** (smoke WF-001 sur
+> souscription, chemin facturé) **sur ordre explicite de Guy**. **Il ne fera donc PAS atterrir
+> l'écart seul** : le protocole ci-dessous ne se déclenche que **quand la PR arrive**.
+>
+> Le vrai next step n'est pas une tâche à lancer maintenant, c'est un **déclencheur** :
+> *quand Dependabot ouvre la PR SDK → appliquer le protocole bump ci-dessous.*
 
 > Prompt paste-ready. Les numéros datent du 2026-09-11 → **RE-VÉRIFIER à la source**, ne pas les
 > croire (`feedback-tracker-ne-pas-epingler-head`, check factuel).
