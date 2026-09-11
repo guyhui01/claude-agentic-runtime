@@ -7,6 +7,37 @@
 
 ---
 
+## ✅ 2026-09-11 — SESSION SÉCURITÉ : 9 alertes Dependabot soldées + liste ADR complétée
+
+> **Branche `deps/audit-fix-transitives-2026-09-11` (commits locaux, PAS poussée).**
+> Deux sujets traités dans la même séance ; livrables en anglais, tracker en français.
+>
+> **① Alertes Dependabot — 9 (4 high / 5 moderate) → 0** (`chore(deps)` `b501a8a`).
+> Les 9 alertes se ramènent à **3 paquets transitifs**, toutes corrigeables **dans la plage
+> déclarée du parent** (`feedback-advisory-transitive-remonter-le-parent`) → **fix lockfile-only**,
+> `package.json` inchangé, **SDK non re-versionné**, pas d'`overrides`, pas de `--force` :
+> - **`fast-uri` 3.1.5→3.1.7** (les 4 high, **seul sur le chemin d'exécution**) — via `ajv`
+>   (dép. directe qui valide chaque brief de dispatch et chaque handoff). `ajv` déclare
+>   `fast-uri: ^3.0.1`, 3.1.7 est dans la plage.
+> - **`hono` 4.13.0→4.13.7 + `qs` 6.15.2→6.16.0** (les 5 moderate, **injoignables ici**) — sous
+>   `claude-agent-sdk → @modelcontextprotocol/sdk` (`hono` direct, `qs` via `express → body-parser`).
+>   Le runtime n'instancie jamais le serveur Hono/Express, il appelle `query()` en local. Patchés
+>   quand même car chaque fix tient dans la plage parent (`hono ^4.11.4`, `qs ^6.15.2`), à coût nul.
+>
+> **Re-validé offline sur le lockfile bumpé** : `npm audit` **0** · typecheck strict OK · suite
+> **643/24**. ⚠ **Offline-only** : version SDK intacte ⇒ aucun smoke live requis, traces live
+> versionnées inchangées (`feedback-live-run-smoke-ferme-reserve-offline`).
+>
+> **② Liste ADR du README complétée** — l'index ne listait que 0001→0007 alors que `docs/adr/`
+> en tient **11** ; ajout de 0008 (dispatch gate) / 0009 (open-core boundary) / 0010 (schema owns
+> structure) / 0011 (non-optional governance). **Déjà poussé sur `main`** (`ce66751`, séparé).
+> CHANGELOG `[Unreleased]` consigne les deux sujets (§ Dependencies + § Documentation).
+>
+> ▫ **Reste à faire** : pousser la branche `deps/audit-fix-transitives-2026-09-11` **sur ordre
+> explicite** de Guy (commit `b501a8a`). Pas de release nécessaire (patch de deps + doc).
+
+---
+
 ## ✅ 2026-09-01 — SESSION DÉPS : #57 + #58 mergés (freshness, pas sécurité)
 
 > Les 2 PR Dependabot restées en attente après `v0.18.0` sont **mergées sur `main`**, en
