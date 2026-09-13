@@ -1,4 +1,4 @@
-# ADR-0011 — Non-optional governance made testable: an enumerated guard-set no feature may weaken, and an adapter/core boundary no vendor coupling may cross
+# ADR-0011 — Non-optional governance, made testable: no feature may weaken a guard, and no vendor coupling may cross into the core
 
 - **Status**: Accepted (decided 2026-08-31)
 - **Decision-maker**: Guy HUI-BON-HOA (assisted by Claude Opus 4.8)
