@@ -7,43 +7,47 @@
 
 ---
 
-## ▶ RESUME HERE — le déclencheur SDK a sauté : Dependabot #69 + #70 ouvertes (2026-09-21)
+## ▶ RESUME HERE — Dependabot #70 (groupe dev-deps) : seule PR ouverte
 
-> **Le déclencheur prévu le 2026-09-12 s'est produit.** Mesuré à la source le 2026-09-26 :
-> **#69** `@anthropic-ai/claude-agent-sdk` 0.3.265 → 0.3.275 et **#70** (groupe dev-deps), toutes
-> deux OUVERTES depuis le 2026-09-21. Rien n'est mergé. **RE-VÉRIFIER** : Dependabot peut avoir
-> re-ciblé ou remplacé ces PR depuis.
->
-> Ordre voulu (Guy, 2026-09-26) : le re-pin catalogue `v5.0.0` est livré **AVANT** #69, dans sa
-> propre session (✅ ci-dessous), pour que le smoke live de #69 ne prouve QU'UN changement — le SDK.
-> ⚠ Ce smoke tournera au catalogue `v5.0.0` : les cartes WF-001 sont identiques octet pour octet à
-> `v4.4.0`, il n'y a donc pas de 2ᵉ variable côté workflow.
+> Mesuré le 2026-09-27 — **RE-VÉRIFIER à la source** : #69 (SDK) est **MERGÉE** (✅ ci-dessous) ;
+> reste **#70** « dev-dependencies group, 2 updates » (lu dans son diff : `vitest` `^5.0.0` →
+> `^5.0.1` + transitives du toolchain, dont `@oxc-project/types`, `@rolldown/*`). Dev-only ⟹ pas
+> de smoke live requis, SAUF si un membre touche le chemin d'exécution.
+> Écart SDK résiduel : npm `latest` `0.3.283` vs `^0.3.281` — laissé à Dependabot (décision du
+> 2026-09-12 inchangée : le déclencheur est l'OUVERTURE d'une PR SDK, puis protocole live).
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: Dependabot #69
-(SDK 0.3.265 -> 0.3.275, carrier dependency). Factual check FIRST, never from memory:
+Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: Dependabot #70
+(dev-dependencies group). Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open
-  npm view @anthropic-ai/claude-agent-sdk version
-  grep -ho 'catalogTag: "v[0-9.]*"' src/dispatch/manifests/*.ts | sort -u   (expected v5.0.0)
-Protocol (SDK bump):
-1. @dependabot rebase #69, wait for behind_by 0.
-2. RE-READ the target version on the rebased head (package.json + lockfile resolved):
-   Dependabot may re-target to the latest.
-3. Offline: npm audit / strict typecheck / full suite on the head (bash harness,
-   global expected-total guard).
-4. MANDATORY live proof (billed path, on my explicit order): WF-001 smoke on SUBSCRIPTION
-   OAuth (LIVE_RUN=1; the runner rejects any ANTHROPIC_API_KEY), capped (maxBudgetUsd,
-   maxTurns, read-only). Target status: completed / failure: none. Raw output to the
-   scratchpad (LIVE_RESULT_FILE), never over the curated versioned trace.
-5. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
-#70 (dev group) is a separate unit: unfold each member's from->to (a major can hide in a
-"dev-only" title) before merging. Do NOT bundle it with #69.
+Protocol:
+1. @dependabot rebase #70, wait for behind_by 0; RE-READ every member's from->to on the
+   rebased head (package.json + lockfile) -- a major can hide in a "dev-only" group title.
+2. Offline: npm audit / strict typecheck / full suite on the head in a worktree
+   (bash harness, global expected-total guard, CATALOG_ROOT on a v5.0.0 clone).
+3. Merge on my explicit order, pinned to the tested head (--match-head-commit).
+4. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
-If the live smoke fails: report raw (STEP-XX), do not merge, clean checkpoint.
 ```
 
 ---
+
+## ✅ 2026-09-27 — DEPENDABOT #69 : SDK 0.3.265 → 0.3.281 MERGÉ + LIVE-PROVEN
+
+> Ouverte en `0.3.275` ; le rebase a **re-ciblé `0.3.281`** — confirmé sur le head rebasé
+> `e3b88a5` (`package.json`, lockfile `resolved`, `npm ls`). Lockfile : SEULEMENT le SDK + ses 8
+> paquets plateforme. Offline sur le head (worktree, `CATALOG_ROOT` = clone v5.0.0) : `npm audit` 0,
+> `tsc` strict OK, **643 / 24 / 0 sur 667**, CI de la PR verte (3 jobs).
+>
+> **Smoke live WF-001 sur souscription OAuth** (aucune `ANTHROPIC_API_KEY` dans l'env), capé
+> (`maxBudgetUsd 1.0`, `maxTurns 6`, read-only) : **`completed`, `failure: null`**, STEP-01/03/04
+> (BA/PO-SCRUM/QA-AGILE) @ catalog **`v5.0.0`** tous `pass`, **12/12 critères** (9 bloquants +
+> 3 advisory), ~112 s. Sortie brute au scratchpad (`LIVE_RESULT_FILE`) : trace versionnée intacte.
+> Le re-pin étant livré AVANT (carte WF-001 identique v4.4.0↔v5.0.0), le smoke ne prouve QUE le SDK.
+>
+> Squash-merge `4fe595b`, **épinglé au head testé** (`--match-head-commit`) ; arbre mergé
+> identique à `e3b88a5`, vérifié.
 
 ## ✅ 2026-09-26 — RE-PIN CATALOGUE v4.4.0 → v5.0.0 — POUSSÉ `c029307`, CI VERTE (2026-09-27)
 
