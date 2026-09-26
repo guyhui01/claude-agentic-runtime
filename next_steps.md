@@ -26,7 +26,6 @@ Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: Dependa
   git status -sb · git describe --tags · gh pr list --state open
   npm view @anthropic-ai/claude-agent-sdk version
   grep -ho 'catalogTag: "v[0-9.]*"' src/dispatch/manifests/*.ts | sort -u   (expected v5.0.0)
-Check that the catalog re-pin is PUSHED before starting (it was local-only on 2026-09-26).
 Protocol (SDK bump):
 1. @dependabot rebase #69, wait for behind_by 0.
 2. RE-READ the target version on the rebased head (package.json + lockfile resolved):
@@ -46,7 +45,7 @@ If the live smoke fails: report raw (STEP-XX), do not merge, clean checkpoint.
 
 ---
 
-## ✅ 2026-09-26 — RE-PIN CATALOGUE v4.4.0 → v5.0.0 (commit local, PAS encore poussé)
+## ✅ 2026-09-26 — RE-PIN CATALOGUE v4.4.0 → v5.0.0 — POUSSÉ `c029307`, CI VERTE (2026-09-27)
 
 > **Blindage AVANT édition** (clones superficiels des deux tags) : `workflows/` **identique octet
 > pour octet** ; les assets agent + workflow du sidecar, labels de version neutralisés, ne
@@ -67,7 +66,9 @@ If the live smoke fails: report raw (STEP-XX), do not merge, clean checkpoint.
 > **exactement 1 rouge** (le test WF-005 du sidecar réel), fichier restauré (`cmp` identique).
 > Offline seulement — aucun smoke live requis (cartes exécutées inchangées).
 >
-> ▫ **Prêt à pousser**, sur ordre de Guy. Aval vitrine : RIEN à mettre à jour — vérifié le
+> ▫ **Poussé le 2026-09-27** sur ordre de Guy. CI run 36275129684 sur `c029307` : 3 jobs verts ;
+> job `real-sidecar` lu AU LOG — clone `--branch "v5.0.0"`, **643 passed / 24 skipped (667)**,
+> identique au local. Aval vitrine : RIEN à mettre à jour — vérifié le
 > 2026-09-26, `guyhui-showcase/docs` ne cite `catalogTag` que dans des relevés figés de runs live
 > (`live_proofs.md`, v3.27.0 → v4.2.0), jamais le pin courant du runtime.
 
