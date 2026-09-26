@@ -7,61 +7,69 @@
 
 ---
 
-## ▶ RESUME HERE — écart SDK (0.3.269+) : LAISSÉ À DEPENDABOT (pas de fix manuel)
+## ▶ RESUME HERE — le déclencheur SDK a sauté : Dependabot #69 + #70 ouvertes (2026-09-21)
 
-> **DÉCISION 2026-09-12 (Guy) : l'écart résiduel SDK est laissé à Dependabot — aucun bump
-> manuel.** Vérifié à la source ce jour : `package.json` `^0.3.265`, npm `latest` `0.3.269`
-> (écart de 4 patchs bien réel), **0 PR Dependabot ouverte** à cet instant. La config
-> (`.github/dependabot.yml`) est **armée** sur npm (`schedule: weekly`) → Dependabot **ouvrira
-> seul** la PR de rattrapage à sa prochaine passe hebdo.
+> **Le déclencheur prévu le 2026-09-12 s'est produit.** Mesuré à la source le 2026-09-26 :
+> **#69** `@anthropic-ai/claude-agent-sdk` 0.3.265 → 0.3.275 et **#70** (groupe dev-deps), toutes
+> deux OUVERTES depuis le 2026-09-21. Rien n'est mergé. **RE-VÉRIFIER** : Dependabot peut avoir
+> re-ciblé ou remplacé ces PR depuis.
 >
-> **⚠ « Dependabot gère seul » s'arrête à l'OUVERTURE de la PR.** Pas d'`auto-merge` ; ADR-0002
-> impose que propager une version = un acte explicite tracé (une PR qu'on merge). Le SDK est la
-> dép. **porteuse** → merge conditionné à la **preuve live obligatoire** (smoke WF-001 sur
-> souscription, chemin facturé) **sur ordre explicite de Guy**. **Il ne fera donc PAS atterrir
-> l'écart seul** : le protocole ci-dessous ne se déclenche que **quand la PR arrive**.
->
-> Le vrai next step n'est pas une tâche à lancer maintenant, c'est un **déclencheur** :
-> *quand Dependabot ouvre la PR SDK → appliquer le protocole bump ci-dessous.*
-
-> Prompt paste-ready. Les numéros datent du 2026-09-11 → **RE-VÉRIFIER à la source**, ne pas les
-> croire (`feedback-tracker-ne-pas-epingler-head`, check factuel).
+> Ordre voulu (Guy, 2026-09-26) : le re-pin catalogue `v5.0.0` est livré **AVANT** #69, dans sa
+> propre session (✅ ci-dessous), pour que le smoke live de #69 ne prouve QU'UN changement — le SDK.
+> ⚠ Ce smoke tournera au catalogue `v5.0.0` : les cartes WF-001 sont identiques octet pour octet à
+> `v4.4.0`, il n'y a donc pas de 2ᵉ variable côté workflow.
 
 ```
-Repo : claude-agentic-runtime (~/CLAUDE/claude-agentic-runtime).
-Applique le rituel de démarrage, puis lis d'abord next_steps.md EN LOCAL.
-
-CHANTIER : fraicheur des deps (pas securite). Un sujet ouvert au 2026-09-11
-(A RE-VERIFIER a la source, ne pas croire ces chiffres) :
-- SDK @anthropic-ai/claude-agent-sdk : merge 0.3.252->0.3.265 le 2026-09-11 (#63, live-proven).
-  npm latest etait deja 0.3.269 (ecart residuel de 4 patchs) : verifier si Dependabot a
-  ouvert une PR de rattrapage, sinon la creer/attendre.
-- #62 (dev-deps group : vitest 5 majeur + @types/node) : SOLDE le 2026-09-11 via #66
-  (superseding), voir la section ✅ ci-dessous. Rien a faire.
-
-Etape 0 : gh pr list --label dependencies --state open + npm view @anthropic-ai/claude-agent-sdk version
-(cf. memoire feedback-lister-pr-dependabot-avant-fix-manuel).
-
-Protocole (bump SDK) :
-1. Rebase la PR SDK (@dependabot rebase), attendre behind_by 0.
-2. RE-LIRE la version cible sur le head rebase (feedback-rebase-dependabot-recible-la-version) :
-   Dependabot peut re-cibler vers le latest. Confirmer cote package.json + resolved lockfile.
-3. Valider offline : npm audit / typecheck strict / suite complete, sur le head.
-4. PREUVE LIVE OBLIGATOIRE (chemin facture) : smoke WF-001 sur SOUSCRIPTION OAuth
-   (LIVE_RUN=1 ; le runner refuse toute ANTHROPIC_API_KEY - regle #7), cape
-   (maxBudgetUsd, maxTurns, read-only). Viser status: completed / failure: none.
-   Rediriger la sortie brute vers le scratchpad (LIVE_RESULT_FILE) : ne pas ecraser la
-   trace curee versionnee. Ref memoire : feedback-live-run-smoke-ferme-reserve-offline.
-5. CHANGELOG [Unreleased] (§ Dependencies) + next_steps.md dans le lot.
-
-GARDES : push/merge/run live = sur mon ordre explicite uniquement. Livrables en anglais US pro.
-Si le smoke live echoue : rapporter brut (STEP-XX), ne pas merger, checkpoint propre.
+Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
+Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: Dependabot #69
+(SDK 0.3.265 -> 0.3.275, carrier dependency). Factual check FIRST, never from memory:
+  git status -sb · git describe --tags · gh pr list --state open
+  npm view @anthropic-ai/claude-agent-sdk version
+  grep -ho 'catalogTag: "v[0-9.]*"' src/dispatch/manifests/*.ts | sort -u   (expected v5.0.0)
+Check that the catalog re-pin is PUSHED before starting (it was local-only on 2026-09-26).
+Protocol (SDK bump):
+1. @dependabot rebase #69, wait for behind_by 0.
+2. RE-READ the target version on the rebased head (package.json + lockfile resolved):
+   Dependabot may re-target to the latest.
+3. Offline: npm audit / strict typecheck / full suite on the head (bash harness,
+   global expected-total guard).
+4. MANDATORY live proof (billed path, on my explicit order): WF-001 smoke on SUBSCRIPTION
+   OAuth (LIVE_RUN=1; the runner rejects any ANTHROPIC_API_KEY), capped (maxBudgetUsd,
+   maxTurns, read-only). Target status: completed / failure: none. Raw output to the
+   scratchpad (LIVE_RESULT_FILE), never over the curated versioned trace.
+5. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
+#70 (dev group) is a separate unit: unfold each member's from->to (a major can hide in a
+"dev-only" title) before merging. Do NOT bundle it with #69.
+GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
+If the live smoke fails: report raw (STEP-XX), do not merge, clean checkpoint.
 ```
-
-> Note commit : le lot doc (CHANGELOG + ce tracker) reste en **commit local sur `main`**,
-> **prêt à pousser** — push sur ordre explicite de Guy.
 
 ---
+
+## ✅ 2026-09-26 — RE-PIN CATALOGUE v4.4.0 → v5.0.0 (commit local, PAS encore poussé)
+
+> **Blindage AVANT édition** (clones superficiels des deux tags) : `workflows/` **identique octet
+> pour octet** ; les assets agent + workflow du sidecar, labels de version neutralisés, ne
+> diffèrent QUE par 36 entrées `dependsOn` d'agents (dossiers de skills renommés `_` → `-` par
+> v5.0.0). Le runtime ne lit `dependsOn` que pour sa résolution interne au même sidecar
+> (`src/sidecar/integrity.ts`) ; aucun id ni chemin de skill codé en dur dans `src/` ; aucun test
+> sur sidecar réel ne lit de skill (les cas skill passent par la fixture hermétique).
+>
+> **Édités** (même périmètre que `5e0283a`) : 10 manifestes, stubs de test hermétiques,
+> `completeness-check.ts`, notes « pinned tag » des 8 audits de discrimination. **Non réécrits** :
+> les deux relevés datés « measured at v4.4.0 » (spine WF-009 + son audit), CHANGELOG historique,
+> traces live.
+>
+> **Mesuré** (script bash, garde total attendu = 667) : AVANT, sibling sur v5.0.0 ⟹ 633 / **10
+> rouges** (le garde de dérive, attendu) ; `CATALOG_ROOT` = clone v4.4.0 ⟹ 643 / 0. APRÈS :
+> **643 passed / 24 skipped / 0 failed** en défaut ET avec `CATALOG_ROOT` = clone v5.0.0 ;
+> `tsc` strict OK. **Garde de dérive re-falsifié** : faux tag `v9.9.9` dans `wf-005.ts` ⟹
+> **exactement 1 rouge** (le test WF-005 du sidecar réel), fichier restauré (`cmp` identique).
+> Offline seulement — aucun smoke live requis (cartes exécutées inchangées).
+>
+> ▫ **Prêt à pousser**, sur ordre de Guy. Aval vitrine : RIEN à mettre à jour — vérifié le
+> 2026-09-26, `guyhui-showcase/docs` ne cite `catalogTag` que dans des relevés figés de runs live
+> (`live_proofs.md`, v3.27.0 → v4.2.0), jamais le pin courant du runtime.
 
 ## ✅ 2026-09-11 — SESSION DÉPS : vitest 4.1.11→5.0.0 (majeur) mergé via #66
 
@@ -339,7 +347,7 @@ Si le smoke live echoue : rapporter brut (STEP-XX), ne pas merger, checkpoint pr
 
 ```
 Resume session — runtime /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, `gh api repos/guyhui01/claude-agentic-runtime/dependabot/alerts --jq '[.[]|select(.state=="open")]|length'` (expected: **0** since 2026-08-12 — the Hono/Windows alert this line used to expect is CLOSED: `GHSA-frvp-7c67-39w9` was fixed by `8a2ca11` (`@hono/node-server` 1.19.15 → 2.1.0), which is the upstream widening the previous expectation was waiting for. Anything ABOVE 0 is untriaged. ⚠️ This endpoint is NOT the whole picture: on 2026-08-12 `npm audit` reported a HIGH that has **no** Dependabot alert at all — run `npm audit` too, and read the two as independent sources), `gh run list --branch main --limit 5 --json name,conclusion,headSha --jq '.[]|select(.name=="CI")|"\(.conclusion) \(.headSha[0:7])"'` (expected `success` at HEAD; ⚠️ **CORRECTED 2026-08-31 — the earlier "`main` is NOT branch-protected" was FALSE**: `main` carries a ruleset that REFUSES force-push (proven when a targeted history rewrite was rejected, `remote rejected … repository rule violations`). But CI is **not a required status check** — a *normal* push is not gated on it, so a red CI still blocks nothing mechanically and is only seen if someone looks, which is why it is checked here. ⛔ Corollary: an in-history secret cannot be purged by force-push without lifting the ruleset (a deliberate admin decision), so scrub public artifacts BEFORE committing — see [[feedback-scrub-public-repo-avant-commit]]). ⚠️ **This line used to read `--limit 1` without a name filter, and it did NOT measure the CI**: on 2026-08-12 it returned a *Dependabot* run (`npm_and_yarn in /. - Update`) whose `success` says nothing about the test suite. Filter on the workflow NAME, or the check is theatre), `git ls-remote --tags https://github.com/guyhui01/claude-agents.git | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1` **vs** the tag the manifests pin (`grep -ho 'catalogTag: "v[0-9.]*"' src/dispatch/manifests/*.ts | sort -u`) — **a difference is not a CI failure, it is freshness debt**: CI pins the manifests' own tag by design (ADR-0002 accepts that freshness is not immediate), so drift against the latest catalog release is answered HERE, at session start, and never by a red build. ⚠️ **CORRECTED 2026-08-12 — "not a failure" is true of CI and FALSE of your own machine.** If the sibling `claude-agents` checkout sits on `main` (or on any tag newer than the pin), `test/dispatch-real-sidecar.test.ts` turns **10 tests red** — `expected 'v4.2.0' to be 'v4.3.0'` — because that guard reads the LOCAL sidecar while CI clones the catalog AT the pinned tag. Measured that day: local suite 388 passed / **10 failed**, the same 398 tests CI sees green. To get a clean local baseline without touching the catalog checkout, reproduce what CI does: `git clone --depth 1 --branch <pinned tag> https://github.com/guyhui01/claude-agents.git <tmp>` then `CATALOG_ROOT=<tmp> npx vitest run` → 398 passed / 23 skipped. **Do not read a red local suite as a regression before checking the sibling's tag.** ✅ **The v4.2.0 → v4.3.0 drift that produced this measurement was CLOSED the same day (commit `c43abc4`)** — the ten manifests now pin **v4.4.0** (re-pinned 2026-08-22 from v4.3.0; cards byte-identical, so a pure label bump) and the local suite is green with no override because the sibling checkout is on the same tag. This paragraph stays because the SHAPE recurs at every catalog release, not because that drift is still open: re-read the pin at source rather than trusting this sentence. docs/NEXT_STEPS.md — never from memory.
+Apply the startup ritual (prompt_demarrage.md). Factual check FIRST: `git status -sb`, `gh pr list`, `gh api repos/guyhui01/claude-agentic-runtime/dependabot/alerts --jq '[.[]|select(.state=="open")]|length'` (expected: **0** since 2026-08-12 — the Hono/Windows alert this line used to expect is CLOSED: `GHSA-frvp-7c67-39w9` was fixed by `8a2ca11` (`@hono/node-server` 1.19.15 → 2.1.0), which is the upstream widening the previous expectation was waiting for. Anything ABOVE 0 is untriaged. ⚠️ This endpoint is NOT the whole picture: on 2026-08-12 `npm audit` reported a HIGH that has **no** Dependabot alert at all — run `npm audit` too, and read the two as independent sources), `gh run list --branch main --limit 5 --json name,conclusion,headSha --jq '.[]|select(.name=="CI")|"\(.conclusion) \(.headSha[0:7])"'` (expected `success` at HEAD; ⚠️ **CORRECTED 2026-08-31 — the earlier "`main` is NOT branch-protected" was FALSE**: `main` carries a ruleset that REFUSES force-push (proven when a targeted history rewrite was rejected, `remote rejected … repository rule violations`). But CI is **not a required status check** — a *normal* push is not gated on it, so a red CI still blocks nothing mechanically and is only seen if someone looks, which is why it is checked here. ⛔ Corollary: an in-history secret cannot be purged by force-push without lifting the ruleset (a deliberate admin decision), so scrub public artifacts BEFORE committing — see [[feedback-scrub-public-repo-avant-commit]]). ⚠️ **This line used to read `--limit 1` without a name filter, and it did NOT measure the CI**: on 2026-08-12 it returned a *Dependabot* run (`npm_and_yarn in /. - Update`) whose `success` says nothing about the test suite. Filter on the workflow NAME, or the check is theatre), `git ls-remote --tags https://github.com/guyhui01/claude-agents.git | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1` **vs** the tag the manifests pin (`grep -ho 'catalogTag: "v[0-9.]*"' src/dispatch/manifests/*.ts | sort -u`) — **a difference is not a CI failure, it is freshness debt**: CI pins the manifests' own tag by design (ADR-0002 accepts that freshness is not immediate), so drift against the latest catalog release is answered HERE, at session start, and never by a red build. ⚠️ **CORRECTED 2026-08-12 — "not a failure" is true of CI and FALSE of your own machine.** If the sibling `claude-agents` checkout sits on `main` (or on any tag newer than the pin), `test/dispatch-real-sidecar.test.ts` turns **10 tests red** — `expected 'v4.2.0' to be 'v4.3.0'` — because that guard reads the LOCAL sidecar while CI clones the catalog AT the pinned tag. Measured that day: local suite 388 passed / **10 failed**, the same 398 tests CI sees green. To get a clean local baseline without touching the catalog checkout, reproduce what CI does: `git clone --depth 1 --branch <pinned tag> https://github.com/guyhui01/claude-agents.git <tmp>` then `CATALOG_ROOT=<tmp> npx vitest run` → 398 passed / 23 skipped. **Do not read a red local suite as a regression before checking the sibling's tag.** ✅ **The v4.2.0 → v4.3.0 drift that produced this measurement was CLOSED the same day (commit `c43abc4`)** — the ten manifests now pin **v5.0.0** (re-pinned 2026-09-26 from v4.4.0; workflow cards byte-identical, only skill folder names changed, nothing the runtime consumes) and the local suite is green with no override because the sibling checkout is on the same tag. This paragraph stays because the SHAPE recurs at every catalog release, not because that drift is still open: re-read the pin at source rather than trusting this sentence. docs/NEXT_STEPS.md — never from memory.
 
 Then FIND THE SINGLE LIVE `▶▶ NEXT UNIT` MARKER in this file and work from it. Do not take a unit name from anywhere else — not from this prompt, not from a framing block, not from a memory: every one of those has already gone stale here while still reading as current.
 

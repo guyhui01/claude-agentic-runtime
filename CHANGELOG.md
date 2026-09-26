@@ -8,7 +8,11 @@
 
 ## [Unreleased]
 
-> Model: Claude Opus 4.8.
+> Model: Claude Opus 4.8, then Claude Opus 5.5 (the catalog re-pin to `v5.0.0`).
+
+### 🔄 Changed
+
+- **The ten dispatch manifests re-pinned to catalog `v5.0.0` (from `v4.4.0`) — a major catalog release that changes nothing the runtime consumes, proven before editing.** `v5.0.0` repackaged the 37 skills in the Agent Skills format: 35 skill folders renamed `_` → `-` and skill paths moved `README.md` → `SKILL.md`. Against shallow clones of both tags: `workflows/` is **byte-identical**; the agent and workflow sidecar assets, version labels aside, differ **only** in 36 agent `dependsOn` entries now pointing at the renamed skill folders. The runtime reads `dependsOn` only to check that each entry resolves inside the same sidecar (`src/sidecar/integrity.ts`), which the catalog's own gate already guarantees, and no id or path of a skill is hard-coded in `src/` or read by any real-sidecar test (skill cases use the hermetic fixture). Edited the ten manifests' functional `catalogTag`, the hermetic dispatch test stubs, `completeness-check.ts`, and the discrimination-audit headers' pin note; the two dated "measured at `v4.4.0`" records (WF-009 spine and audit) keep their tag. Validated: strict `typecheck` OK; suite **643 passed / 24 skipped / 0 failed of 667** both on the default sibling checkout and with `CATALOG_ROOT` on a clone at `v5.0.0` (before the edit, the sibling run showed the expected 10 tag-drift reds); drift guard re-falsified — a fake tag in one manifest turns **exactly 1** test red. Freshness debt per ADR-0002, offline only: the cards the live runs execute are unchanged, so no live smoke is required.
 
 ### ⬆️ Dependencies
 
