@@ -7,29 +7,44 @@
 
 ---
 
-## ▶ RESUME HERE — Dependabot #70 (groupe dev-deps) : seule PR ouverte
+## ▶ RESUME HERE — Corpus de régression comportementale (unité de session, ouverte le 2026-10-15)
 
-> Mesuré le 2026-09-27 — **RE-VÉRIFIER à la source** : #69 (SDK) est **MERGÉE** (✅ ci-dessous) ;
-> reste **#70** « dev-dependencies group, 2 updates » (lu dans son diff : `vitest` `^5.0.0` →
-> `^5.0.1` + transitives du toolchain, dont `@oxc-project/types`, `@rolldown/*`). Dev-only ⟹ pas
-> de smoke live requis, SAUF si un membre touche le chemin d'exécution.
-> Écart SDK résiduel : npm `latest` `0.3.283` vs `^0.3.281` — laissé à Dependabot (décision du
-> 2026-09-12 inchangée : le déclencheur est l'OUVERTURE d'une PR SDK, puis protocole live).
+> Unité décidée par Guy le 2026-10-15 depuis `agentic-strategy` (DEC-0009 : ce corpus est sa
+> condition de revue). Constat : les gates de CI sont **structurels** ; un changement de prose d'un
+> workflow dans `claude-agents` peut dégrader sa production et passer vert, et les tests du runtime
+> ne voient le catalogue qu'au **tag épinglé**, donc aucun contrôle de comportement au moment où l'on
+> écrit le changement. ⚠ Le choix (a) vs (b) ci-dessous est une **inférence non vérifiée dans le
+> code** : l'étape 0 la tranche.
 
 ```
-Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: Dependabot #70
-(dev-dependencies group). Factual check FIRST, never from memory:
-  git status -sb · git describe --tags · gh pr list --state open
-Protocol:
-1. @dependabot rebase #70, wait for behind_by 0; RE-READ every member's from->to on the
-   rebased head (package.json + lockfile) -- a major can hide in a "dev-only" group title.
-2. Offline: npm audit / strict typecheck / full suite on the head in a worktree
-   (bash harness, global expected-total guard, CATALOG_ROOT on a v5.0.0 clone).
-3. Merge on my explicit order, pinned to the tested head (--match-head-commit).
-4. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
-GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
+Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime. Unit: behavioral regression corpus.
+Factual check first: git status -sb, latest tag, read next_steps.md.
+Context (verified 2026-10-15 from agentic-strategy): CI gates are structural only — a change to a
+workflow's prose can degrade what it produces and still pass green; runtime tests only see the
+catalog at the PINNED tag. Spec inputs: agentic-strategy/market/sparring_review_2026-10-15_ai_factory.md
+(§ "Input for the regression corpus") and DEC-0009 (this corpus is its review condition).
+Constraints: deterministic assertions only (no LLM judge, ADR-0011); live runs on subscription
+OAuth only, never an API key; any live run needs Guy's explicit go.
+Step 0: inventory docs/audit/live-runs/ (15 results) and the existing eval-gate tests — what
+already replays, what doesn't. Then decide the design: (a) offline replay of gates on recorded
+outputs vs (b) live re-run on fixed inputs with invariant assertions. Start with 2 cases:
+WF-001 (completed) + WF-008 (governed refusal must reproduce). Record the unit in next_steps.md
+before writing code.
 ```
+
+### ▫ En attente, hors de cette unité : 4 PR Dependabot ouvertes (mesuré le 2026-10-15)
+
+> Toutes `CLEAN`, `behind_by 0`, CI verte sur 3 jobs. Membres dépliés depuis le diff des heads :
+> - **#75** `@modelcontextprotocol/sdk` (via `overrides`) `^1.30.0` → `^1.32.1` : corrige l'**alerte
+>   HIGH #30** (patchée en 1.31.0). Transitif, sous `claude-agent-sdk`.
+> - **#72** `ip-address` 10.4.0 → 10.7.2, lockfile seul : corrige les alertes MEDIUM #28 et #29
+>   (chemin `MCP sdk → express-rate-limit`).
+> - **#74** SDK porteur `0.3.281` → `0.3.295` : il faut le protocole live (smoke WF-001 sur la
+>   souscription).
+> - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
+>   transitives du toolchain. Pas de majeur.
+> Les quatre touchent `package-lock.json`. Merger l'une forcera le rebase des autres, et il faudra
+> relire chaque `from → to` sur le head rebasé.
 
 ---
 
