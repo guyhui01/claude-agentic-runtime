@@ -7,32 +7,54 @@
 
 ---
 
-## ▶ RESUME HERE — Corpus de régression comportementale (unité de session, ouverte le 2026-10-15)
+## ▶ RESUME HERE — 4 PR Dependabot, #75 (alerte HIGH) en premier
 
-> Unité décidée par Guy le 2026-10-15 depuis `agentic-strategy` (DEC-0009 : ce corpus est sa
-> condition de revue). Constat : les gates de CI sont **structurels** ; un changement de prose d'un
-> workflow dans `claude-agents` peut dégrader sa production et passer vert, et les tests du runtime
-> ne voient le catalogue qu'au **tag épinglé**, donc aucun contrôle de comportement au moment où l'on
-> écrit le changement. ⚠ Le choix (a) vs (b) ci-dessous est une **inférence non vérifiée dans le
-> code** : l'étape 0 la tranche.
+> Mesuré le 2026-10-15 — **RE-VÉRIFIER à la source** (les états bougent : Dependabot re-cible au
+> rebase). 4 PR ouvertes, toutes `behind_by 5` après le push du corpus, CI verte avant ce push :
+> - **#75** `@modelcontextprotocol/sdk` (le bump porte sur l'`overrides` du `package.json`)
+>   `^1.30.0` → `^1.32.1` : corrige l'**alerte HIGH #30** (patchée en 1.31.0). Transitif, sous
+>   `claude-agent-sdk`.
+> - **#72** `ip-address` 10.4.0 → 10.7.2, lockfile seul : corrige les alertes MEDIUM #28 et #29
+>   (chemin `MCP sdk → express-rate-limit`).
+> - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
+>   transitives du toolchain. Pas de majeur au relevé, à re-déplier après rebase.
+> - **#74** SDK porteur `0.3.281` → `0.3.295` : protocole live (smoke WF-001 sur la souscription).
+> Les quatre touchent `package-lock.json` : chaque merge force le rebase des suivantes.
 
 ```
-Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime. Unit: behavioral regression corpus.
-Factual check first: git status -sb, latest tag, read next_steps.md.
-Context (verified 2026-10-15 from agentic-strategy): CI gates are structural only — a change to a
-workflow's prose can degrade what it produces and still pass green; runtime tests only see the
-catalog at the PINNED tag. Spec inputs: agentic-strategy/market/sparring_review_2026-10-15_ai_factory.md
-(§ "Input for the regression corpus") and DEC-0009 (this corpus is its review condition).
-Constraints: deterministic assertions only (no LLM judge, ADR-0011); live runs on subscription
-OAuth only, never an API key; any live run needs Guy's explicit go.
-Step 0: inventory docs/audit/live-runs/ (15 results) and the existing eval-gate tests — what
-already replays, what doesn't. Then decide the design: (a) offline replay of gates on recorded
-outputs vs (b) live re-run on fixed inputs with invariant assertions. Start with 2 cases:
-WF-001 (completed) + WF-008 (governed refusal must reproduce). Record the unit in next_steps.md
-before writing code.
+Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
+Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: the four open Dependabot
+PRs, in this order: #75 (HIGH alert #30) -> #72 (alerts #28/#29) -> #70 (dev group) -> #74 (SDK).
+Factual check FIRST, never from memory:
+  git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
+Per PR, one at a time:
+1. @dependabot rebase, wait for behind_by 0; RE-READ every from->to on the rebased head
+   (package.json + lockfile) -- a rebase can re-target, a group can hide a major.
+2. Offline on the head in a worktree: npm audit / strict typecheck / full suite (bash harness,
+   global expected-total guard = 681, CATALOG_ROOT on a v5.0.0 clone). Check the alert it
+   targets is closed by the lockfile actually installed.
+3. #74 only: live smoke WF-001 on subscription OAuth (never an API key), on my explicit go.
+4. Merge on my explicit order, pinned to the tested head (--match-head-commit).
+5. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
+GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
 
-### Étape 0 — inventaire (2026-10-15) et design retenu par Guy
+---
+
+## ✅ 2026-10-15 — CORPUS DE RÉGRESSION COMPORTEMENTALE : livré, référence live conforme, POUSSÉ
+
+> Unité décidée par Guy depuis `agentic-strategy` (DEC-0009 : ce corpus est sa condition de revue).
+> Constat de départ : CI structurelle seulement ; les tests du runtime ne voient le catalogue qu'au
+> tag épinglé ⟹ aucun contrôle de comportement au moment où l'on modifie la prose d'un workflow.
+> Poussé le 2026-10-15 sur ordre de Guy ; CI verte sur 3 jobs.
+> **Déclencheur du prochain usage** : la prochaine modification de prose d'un workflow dans
+> `claude-agents` ⟹ dans CETTE session-là (repo en écriture : `claude-agents`), lancer
+> `LIVE_RUN=1 CATALOG_ROOT=<checkout de la branche> npx vitest run test/regression-corpus-live.test.ts`
+> depuis le runtime, sur GO de Guy (aucune écriture dans le runtime : sorties git-ignorées).
+> Le résultat enregistre `catalogCommit` + `catalogDirty` ; un `CATALOG_ROOT` qui n'est pas la
+> racine d'un checkout git est refusé avant tout appel facturé.
+
+#### Étape 0 — inventaire (2026-10-15) et design retenu par Guy
 
 > **Ce qui rejoue déjà (couche a, faite pour les 10 spines)** : les
 > `test/spine-wf-00X-discrimination.test.ts` importent les traces commitées et rejouent les gates
@@ -54,7 +76,7 @@ before writing code.
 > `jur-tier-not-unacceptable`. L'arrêt à STEP-06C du 2026-07-11 reste une observation hors corpus :
 > c'était un jugement du modèle, son retour à « cleared » serait légitime, donc un test instable.
 
-### État (2026-10-15) : corpus prouvé hors ligne ET référence live conforme
+#### État (2026-10-15) : corpus prouvé hors ligne ET référence live conforme
 
 > - `test/regression-corpus.ts` : cas + `checkInvariants` + `toRecordedRun`. Les entrées sont
 >   définies ICI (et non importées des harnais) pour rester fixes.
@@ -71,23 +93,9 @@ before writing code.
 > **WF-008 : `failed` à STEP-01 en `eval-gate`, `tier` = `"Unacceptable"`, 0 violation (~64 s)** ;
 > **WF-001 : `completed`, 3/3 étapes, tous les bloquants passés, 0 violation (~116 s)**. Sorties
 > brutes au scratchpad seulement, non versionnées.
-> **Suite** : lancer le corpus sur une branche modifiée de `claude-agents` (c'est l'usage visé). ⚠ Risque connu du cas WF-008 : le gate compare
+> ⚠ Risque connu du cas WF-008 : le gate compare
 > `tier` à la valeur exacte `"Unacceptable"` ; une variante (« Unacceptable risk ») le laisserait
 > passer et l'audit continuerait. Le corpus le DÉTECTERAIT : c'est son rôle, pas un défaut du corpus.
-
-### ▫ En attente, hors de cette unité : 4 PR Dependabot ouvertes (mesuré le 2026-10-15)
-
-> Toutes `CLEAN`, `behind_by 0`, CI verte sur 3 jobs. Membres dépliés depuis le diff des heads :
-> - **#75** `@modelcontextprotocol/sdk` (via `overrides`) `^1.30.0` → `^1.32.1` : corrige l'**alerte
->   HIGH #30** (patchée en 1.31.0). Transitif, sous `claude-agent-sdk`.
-> - **#72** `ip-address` 10.4.0 → 10.7.2, lockfile seul : corrige les alertes MEDIUM #28 et #29
->   (chemin `MCP sdk → express-rate-limit`).
-> - **#74** SDK porteur `0.3.281` → `0.3.295` : il faut le protocole live (smoke WF-001 sur la
->   souscription).
-> - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
->   transitives du toolchain. Pas de majeur.
-> Les quatre touchent `package-lock.json`. Merger l'une forcera le rebase des autres, et il faudra
-> relire chaque `from → to` sur le head rebasé.
 
 ---
 
