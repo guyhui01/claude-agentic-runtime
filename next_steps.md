@@ -7,52 +7,58 @@
 
 ---
 
-## ▶ RESUME HERE — PR Dependabot #70 → #74, puis le lot des 3 advisories sans alerte
+## ▶ RESUME HERE — aucune unité ouverte dans ce repo (série Dependabot close le 2026-10-16)
 
-> Mesuré le 2026-10-15 — **RE-VÉRIFIER à la source** (les états bougent : Dependabot re-cible au
-> rebase ; chaque merge remet les suivantes en retard).
-> - ✅ **#75** `@modelcontextprotocol/sdk` 1.30.0 → 1.32.1 (via `overrides`) : **MERGÉE `b20df04`**,
->   épinglée au head testé `71c78aa` (arbre identique), offline 655/26/0 sur 681, CI verte,
->   **alerte HIGH #30 `fixed`**. CHANGELOG `[Unreleased]` écrit.
-> - ✅ **#72** `ip-address` 10.4.0 → **10.7.4** (re-ciblée au rebase, ouverte en 10.7.2), lockfile
->   seul (chemin `MCP sdk → express-rate-limit`, plage `^10.2.0`) : **MERGÉE `f768bca`**, épinglée au
->   head testé `6c2df20` (arbre identique), offline 655/26/0 sur 681, CI verte ; alertes #28/#29.
->   CHANGELOG `[Unreleased]` écrit.
-> - **#70** — rebase demandé le 2026-10-15 après le merge de #72.
-> - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
->   transitives du toolchain. Pas de majeur au relevé, à re-déplier après rebase.
-> - **#74** SDK porteur `0.3.281` → `0.3.295` : protocole live (smoke WF-001 sur la souscription).
-> Toutes touchent `package-lock.json` : chaque merge force le rebase des suivantes.
->
-> ⚠ **Constat hors Dependabot (2026-10-15) : 3 advisories revus par GitHub, SANS alerte Dependabot**
-> (cause non vérifiée), présents sur `main` — relevés par `npm audit`, aucun couvert par #70/#72/#74 :
-> - `proxy-addr` 2.0.7 → **2.0.8**, **critique** (GHSA-jqcg-44mw-7w3h) ; chemin runtime
->   `claude-agent-sdk → MCP sdk → express`. Grep : aucun usage d'Express / serveur MCP dans `src/`
->   ⟹ probablement inatteignable, **à confirmer** dans le lot.
-> - `source-map-js` 1.2.1 → **1.2.2**, high (GHSA-68fv-2mgg-jv7q) ; dev seul (`vitest → vite → postcss`).
-> - `fast-uri` 3.1.7 → **3.1.8**, moderate (GHSA-hrr3-gc8f-f4qj) ; runtime via `ajv`.
-> **Plan décidé par Guy** : lot lockfile-only APRÈS les 4 PR (sinon un rebase de plus), chaque
-> correctif vérifié DANS la plage déclarée du parent ; même protocole offline (`npm audit` 0,
-> typecheck, 681) ; PR, merge sur ordre.
+> Mesuré le 2026-10-16 — **RE-VÉRIFIER à la source**. 0 PR ouverte, 0 alerte Dependabot ouverte,
+> `npm audit` 0. Aucune unité n'est engagée ici ; trois points d'entrée, aucun à démarrer sans Guy :
+> 1. **Usage du corpus** : à la prochaine modification de prose d'un workflow dans `claude-agents`,
+>    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
+>    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
+> 2. **Nouvelles PR Dependabot** : même protocole que la série du 2026-10-15 (ci-dessous). Le SDK
+>    porteur est à `0.3.296`, npm `latest` = `0.3.301` au relevé : écart laissé à Dependabot.
+> 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
+>    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
+> Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
+> d'équipe). Le changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif
+> au fil de l'eau.
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: the open Dependabot PRs
-(#75, #72 merged), in this order: #70 (dev group) -> #74 (SDK); then the
-lockfile-only lot for the 3 advisories without alerts (proxy-addr, source-map-js, fast-uri).
+Apply the startup ritual, then read next_steps.md LOCALLY. No unit is open in this repo.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
-Per PR, one at a time:
-1. @dependabot rebase, wait for behind_by 0; RE-READ every from->to on the rebased head
-   (package.json + lockfile) -- a rebase can re-target, a group can hide a major.
-2. Offline on the head in a worktree: npm audit / strict typecheck / full suite (bash harness,
-   global expected-total guard = 681, CATALOG_ROOT on a v5.0.0 clone). Check the alert it
-   targets is closed by the lockfile actually installed.
-3. #74 only: live smoke WF-001 on subscription OAuth (never an API key), on my explicit go.
-4. Merge on my explicit order, pinned to the tested head (--match-head-commit).
-5. CHANGELOG [Unreleased] (Dependencies) + next_steps.md in the same lot.
+Then lead with a recommendation among the three entry points in the resume block (corpus use from
+a claude-agents session, new Dependabot PRs, a v0.19.0 release cut) and wait for my choice.
+Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
+on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
+(npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
+clone) -> SDK carrier only: live smoke WF-001 on subscription OAuth (never an API key) -> merge
+pinned to the tested head (--match-head-commit) -> CHANGELOG [Unreleased] + next_steps.md.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
+
+---
+
+## ✅ 2026-10-15/16 — SÉRIE DEPENDABOT : 6 PR MERGÉES, 0 ALERTE OUVERTE
+
+> Ordre de Guy, une PR à la fois, chacune rebasée puis re-dépliée sur son head, testée hors ligne
+> dans un worktree (`CATALOG_ROOT` = clone `v5.0.0`, garde de total = 681 : **655 / 26 / 0** à
+> chaque fois), CI verte, squash-merge épinglé au head testé (arbre mergé identique, vérifié) :
+> - **#75** MCP sdk 1.30.0 → 1.32.1 (`overrides`) ⟹ alerte HIGH #30. `b20df04`.
+> - **#72** `ip-address` → **10.7.4** (re-ciblée, ouverte en 10.7.2) ⟹ #28/#29. `f768bca`.
+> - **#70** groupe dev, re-ciblé : `vitest` **5.0.4**, `@types/node` **26.6.5** ; **2 majeurs
+>   transitifs cachés** (`obug` 3, `why-is-node-running` 3, déclarés par vitest lui-même, importés
+>   nulle part) ; embarque `source-map-js` 1.2.2 ⟹ #35, d'où la fermeture auto de #77. `81d0bc0`.
+> - **#78** `proxy-addr` 2.0.8 ⟹ **CRITIQUE #34**. `79d5db0`.
+> - **#76** `fast-uri` 3.1.8 ⟹ #33 ; `npm audit` 0. `6ac846b`.
+> - **#74** SDK porteur → **0.3.296** (re-ciblée, ouverte en 0.3.295). Smoke live WF-001 sur
+>   souscription OAuth, sans clé : **`completed`, 3/3 étapes, 9/9 bloquants, 11/12** (advisory
+>   `po-us-format-invest` : 2 US sur 14 en « we want »), ~111 s ; sortie brute au scratchpad.
+>   `31125a6`.
+> **Leçon** : les 3 advisories `proxy-addr` / `source-map-js` / `fast-uri` étaient dans `npm audit`
+> sans alerte Dependabot ; les alertes (#33–#35) et les PR (#76–#78) sont arrivées au rescan
+> déclenché par le merge de #75. Le lot manuel prévu entre-temps est devenu sans objet : lister les
+> PR ouvertes à nouveau avant tout fix manuel.
 
 ---
 
