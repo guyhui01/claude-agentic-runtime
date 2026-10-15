@@ -13,11 +13,16 @@
  * Options: `REGRESSION_CASE=<id>` runs one case only; `LIVE_MODEL=<alias|id>` routes every step;
  *          `LIVE_RESULT_DIR=<dir>` (default: `docs/audit/live-runs/`, raw `.json` gitignored).
  *
+ * Provenance: the result records the catalog checkout's commit and whether its tree was dirty —
+ * the sidecar's `catalogTag` would still name the pinned tag on a modified branch. A catalog that
+ * is not a git checkout is refused BEFORE any billed call: an unattributable run proves nothing.
+ *
  * Cost note: the WF-008 refusal case is expected to halt at STEP-01. If a regression lets the
  * audit continue, the full spine runs (caps $4.0 / 15 turns per step) — that cost IS the finding.
  */
 import { describe, it, expect } from "vitest";
-import { existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, writeFileSync, mkdirSync, realpathSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
@@ -33,11 +38,25 @@ if (ONLY && !REGRESSION_CASES.some((c) => c.id === ONLY)) {
   throw new Error(`REGRESSION_CASE=${ONLY}: unknown case (known: ${REGRESSION_CASES.map((c) => c.id).join(", ")})`);
 }
 
+/**
+ * Commit and dirty state of the catalog checkout. Throws unless `root` is itself the top of a git
+ * checkout — a plain folder nested in another repo would otherwise borrow that repo's commit.
+ */
+function catalogProvenance(root: string): { commit: string; dirty: boolean } {
+  const git = (...args: string[]) => execFileSync("git", ["-C", root, ...args], { encoding: "utf-8" }).trim();
+  const top = git("rev-parse", "--show-toplevel");
+  if (realpathSync(top) !== realpathSync(root)) {
+    throw new Error(`CATALOG_ROOT=${root} is not the top of a git checkout (enclosing repo: ${top})`);
+  }
+  return { commit: git("rev-parse", "HEAD"), dirty: git("status", "--porcelain") !== "" };
+}
+
 describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", () => {
   for (const c of REGRESSION_CASES.filter((x) => !ONLY || x.id === ONLY)) {
     it(
       `${c.id} (${c.workflow}) reproduces its expected outcome`,
       async () => {
+        const catalog = catalogProvenance(CATALOG_ROOT);
         const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
         const res = await c.run({
           sidecar,
@@ -54,6 +73,8 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
             {
               case: c.id,
               catalogRoot: CATALOG_ROOT,
+              catalogCommit: catalog.commit,
+              catalogDirty: catalog.dirty,
               violations,
               ...recorded,
               outputs: res.traces.map((t) => ({ stepId: t.provenance.stepId, output: t.output })),
