@@ -54,7 +54,7 @@ before writing code.
 > `jur-tier-not-unacceptable`. L'arrêt à STEP-06C du 2026-07-11 reste une observation hors corpus :
 > c'était un jugement du modèle, son retour à « cleared » serait légitime, donc un test instable.
 
-### État (2026-10-15) : corpus écrit et prouvé hors ligne, JAMAIS lancé en live
+### État (2026-10-15) : corpus prouvé hors ligne ET référence live conforme
 
 > - `test/regression-corpus.ts` : cas + `checkInvariants` + `toRecordedRun`. Les entrées sont
 >   définies ICI (et non importées des harnais) pour rester fixes.
@@ -66,10 +66,12 @@ before writing code.
 > - Suite **655 / 26 / 0 sur 681** (= 643/24 + 12 hors ligne + 2 live ignorés), `tsc` strict OK,
 >   nouveaux fichiers typés en strict via un tsconfig jetable (le `tsc` du repo ne couvre que `src/`).
 >
-> **Prochaine étape, sur GO explicite de Guy (facturé sur la souscription)** : premier run live,
-> cas par cas, catalogue au tag épinglé d'abord (référence avant de tester une branche modifiée) :
-> `REGRESSION_CASE=wf-008-prohibited-practice-refusal` (bon marché si l'arrêt à STEP-01 tient),
-> puis `wf-001-completed` (plafond 1,0 $ par étape). ⚠ Risque connu du cas WF-008 : le gate compare
+> **Référence live, 2026-10-15, sur GO de Guy** (OAuth, aucune `ANTHROPIC_API_KEY` dans l'env,
+> `CATALOG_ROOT` = clone superficiel `v5.0.0` au scratchpad, le voisin étant sur `main`) :
+> **WF-008 : `failed` à STEP-01 en `eval-gate`, `tier` = `"Unacceptable"`, 0 violation (~64 s)** ;
+> **WF-001 : `completed`, 3/3 étapes, tous les bloquants passés, 0 violation (~116 s)**. Sorties
+> brutes au scratchpad seulement, non versionnées.
+> **Suite** : lancer le corpus sur une branche modifiée de `claude-agents` (c'est l'usage visé). ⚠ Risque connu du cas WF-008 : le gate compare
 > `tier` à la valeur exacte `"Unacceptable"` ; une variante (« Unacceptable risk ») le laisserait
 > passer et l'audit continuerait. Le corpus le DÉTECTERAIT : c'est son rôle, pas un défaut du corpus.
 
