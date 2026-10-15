@@ -54,6 +54,25 @@ before writing code.
 > `jur-tier-not-unacceptable`. L'arrêt à STEP-06C du 2026-07-11 reste une observation hors corpus :
 > c'était un jugement du modèle, son retour à « cleared » serait légitime, donc un test instable.
 
+### État (2026-10-15) : corpus écrit et prouvé hors ligne, JAMAIS lancé en live
+
+> - `test/regression-corpus.ts` : cas + `checkInvariants` + `toRecordedRun`. Les entrées sont
+>   définies ICI (et non importées des harnais) pour rester fixes.
+> - `test/regression-corpus.test.ts` (12 tests, dans `npm test`) : la trace WF-001 commitée passe ;
+>   ses copies altérées échouent ; l'arrêt STEP-06C commité est rejeté comme mauvais gate.
+>   **Mutation des 8 règles du vérificateur, une à une ⟹ chacune fait rougir ≥ 1 test.**
+> - `test/regression-corpus-live.test.ts` : `LIVE_RUN=1`, `REGRESSION_CASE=<id>` en option, sortie
+>   brute `regression-<id>-live-result.json` (git-ignorée).
+> - Suite **655 / 26 / 0 sur 681** (= 643/24 + 12 hors ligne + 2 live ignorés), `tsc` strict OK,
+>   nouveaux fichiers typés en strict via un tsconfig jetable (le `tsc` du repo ne couvre que `src/`).
+>
+> **Prochaine étape, sur GO explicite de Guy (facturé sur la souscription)** : premier run live,
+> cas par cas, catalogue au tag épinglé d'abord (référence avant de tester une branche modifiée) :
+> `REGRESSION_CASE=wf-008-prohibited-practice-refusal` (bon marché si l'arrêt à STEP-01 tient),
+> puis `wf-001-completed` (plafond 1,0 $ par étape). ⚠ Risque connu du cas WF-008 : le gate compare
+> `tier` à la valeur exacte `"Unacceptable"` ; une variante (« Unacceptable risk ») le laisserait
+> passer et l'audit continuerait. Le corpus le DÉTECTERAIT : c'est son rôle, pas un défaut du corpus.
+
 ### ▫ En attente, hors de cette unité : 4 PR Dependabot ouvertes (mesuré le 2026-10-15)
 
 > Toutes `CLEAN`, `behind_by 0`, CI verte sur 3 jobs. Membres dépliés depuis le diff des heads :
