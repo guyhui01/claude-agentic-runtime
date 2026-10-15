@@ -7,24 +7,36 @@
 
 ---
 
-## ▶ RESUME HERE — 4 PR Dependabot, #75 (alerte HIGH) en premier
+## ▶ RESUME HERE — PR Dependabot #72 → #70 → #74, puis le lot des 3 advisories sans alerte
 
 > Mesuré le 2026-10-15 — **RE-VÉRIFIER à la source** (les états bougent : Dependabot re-cible au
-> rebase). 4 PR ouvertes, toutes `behind_by 5` après le push du corpus, CI verte avant ce push :
-> - **#75** `@modelcontextprotocol/sdk` (le bump porte sur l'`overrides` du `package.json`)
->   `^1.30.0` → `^1.32.1` : corrige l'**alerte HIGH #30** (patchée en 1.31.0). Transitif, sous
->   `claude-agent-sdk`.
+> rebase ; chaque merge remet les suivantes en retard).
+> - ✅ **#75** `@modelcontextprotocol/sdk` 1.30.0 → 1.32.1 (via `overrides`) : **MERGÉE `b20df04`**,
+>   épinglée au head testé `71c78aa` (arbre identique), offline 655/26/0 sur 681, CI verte,
+>   **alerte HIGH #30 `fixed`**. CHANGELOG `[Unreleased]` écrit.
 > - **#72** `ip-address` 10.4.0 → 10.7.2, lockfile seul : corrige les alertes MEDIUM #28 et #29
->   (chemin `MCP sdk → express-rate-limit`).
+>   (chemin `MCP sdk → express-rate-limit`). Rebase demandé le 2026-10-15 après le merge de #75.
 > - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
 >   transitives du toolchain. Pas de majeur au relevé, à re-déplier après rebase.
 > - **#74** SDK porteur `0.3.281` → `0.3.295` : protocole live (smoke WF-001 sur la souscription).
-> Les quatre touchent `package-lock.json` : chaque merge force le rebase des suivantes.
+> Toutes touchent `package-lock.json` : chaque merge force le rebase des suivantes.
+>
+> ⚠ **Constat hors Dependabot (2026-10-15) : 3 advisories revus par GitHub, SANS alerte Dependabot**
+> (cause non vérifiée), présents sur `main` — relevés par `npm audit`, aucun couvert par #70/#72/#74 :
+> - `proxy-addr` 2.0.7 → **2.0.8**, **critique** (GHSA-jqcg-44mw-7w3h) ; chemin runtime
+>   `claude-agent-sdk → MCP sdk → express`. Grep : aucun usage d'Express / serveur MCP dans `src/`
+>   ⟹ probablement inatteignable, **à confirmer** dans le lot.
+> - `source-map-js` 1.2.1 → **1.2.2**, high (GHSA-68fv-2mgg-jv7q) ; dev seul (`vitest → vite → postcss`).
+> - `fast-uri` 3.1.7 → **3.1.8**, moderate (GHSA-hrr3-gc8f-f4qj) ; runtime via `ajv`.
+> **Plan décidé par Guy** : lot lockfile-only APRÈS les 4 PR (sinon un rebase de plus), chaque
+> correctif vérifié DANS la plage déclarée du parent ; même protocole offline (`npm audit` 0,
+> typecheck, 681) ; PR, merge sur ordre.
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: the four open Dependabot
-PRs, in this order: #75 (HIGH alert #30) -> #72 (alerts #28/#29) -> #70 (dev group) -> #74 (SDK).
+Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: the open Dependabot PRs
+(#75 merged), in this order: #72 (alerts #28/#29) -> #70 (dev group) -> #74 (SDK); then the
+lockfile-only lot for the 3 advisories without alerts (proxy-addr, source-map-js, fast-uri).
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 Per PR, one at a time:
