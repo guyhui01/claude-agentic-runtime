@@ -32,6 +32,28 @@ WF-001 (completed) + WF-008 (governed refusal must reproduce). Record the unit i
 before writing code.
 ```
 
+### Étape 0 — inventaire (2026-10-15) et design retenu par Guy
+
+> **Ce qui rejoue déjà (couche a, faite pour les 10 spines)** : les
+> `test/spine-wf-00X-discrimination.test.ts` importent les traces commitées et rejouent les gates
+> dessus (pôle positif partout ; vrai pôle négatif pour WF-008 à STEP-06C et WF-009). Elle protège
+> les GATES, pas l'effet d'un changement de prose ⟹ ne pas la reconstruire.
+> **Ce qui ne rejoue pas** : les 10 harnais `test/wf-00X-run-live.test.ts` finissent tous par
+> `expect(["completed","failed"]).toContain(res.status)` : tout résultat est vert, ce sont des
+> scripts d'observation. Ils lisent le catalogue via `CATALOG_ROOT` (copie de travail voisine par
+> défaut). Aucun contrôle de tag trouvé sur ce chemin (vérifié par grep, pas par exécution) ⟹ un
+> run sur une branche modifiée de `claude-agents` est déjà possible ; il lui manque des assertions.
+>
+> **Design (b)** : un corpus versionné de cas (entrée fixe, résultat attendu, invariants
+> déterministes : statut, étapes atteintes dans l'ordre, étape et type de l'arrêt, critères qui
+> DOIVENT échouer, tout bloquant passé ailleurs) ; un harnais live qui les affirme sur
+> `CATALOG_ROOT` = la branche en cours ; les assertions sont testées hors ligne d'abord (elles
+> doivent passer sur la trace WF-001 commitée et échouer sur des traces altérées).
+> **Deux premiers cas** : WF-001 `completed` (l'entrée du 2026-07-02) ; WF-008 refus gouverné par un
+> système interdit par l'article 5 de l'AI Act ⟹ arrêt attendu à STEP-01 sur
+> `jur-tier-not-unacceptable`. L'arrêt à STEP-06C du 2026-07-11 reste une observation hors corpus :
+> c'était un jugement du modèle, son retour à « cleared » serait légitime, donc un test instable.
+
 ### ▫ En attente, hors de cette unité : 4 PR Dependabot ouvertes (mesuré le 2026-10-15)
 
 > Toutes `CLEAN`, `behind_by 0`, CI verte sur 3 jobs. Membres dépliés depuis le diff des heads :
