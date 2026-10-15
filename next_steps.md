@@ -7,15 +7,18 @@
 
 ---
 
-## ▶ RESUME HERE — PR Dependabot #72 → #70 → #74, puis le lot des 3 advisories sans alerte
+## ▶ RESUME HERE — PR Dependabot #70 → #74, puis le lot des 3 advisories sans alerte
 
 > Mesuré le 2026-10-15 — **RE-VÉRIFIER à la source** (les états bougent : Dependabot re-cible au
 > rebase ; chaque merge remet les suivantes en retard).
 > - ✅ **#75** `@modelcontextprotocol/sdk` 1.30.0 → 1.32.1 (via `overrides`) : **MERGÉE `b20df04`**,
 >   épinglée au head testé `71c78aa` (arbre identique), offline 655/26/0 sur 681, CI verte,
 >   **alerte HIGH #30 `fixed`**. CHANGELOG `[Unreleased]` écrit.
-> - **#72** `ip-address` 10.4.0 → 10.7.2, lockfile seul : corrige les alertes MEDIUM #28 et #29
->   (chemin `MCP sdk → express-rate-limit`). Rebase demandé le 2026-10-15 après le merge de #75.
+> - ✅ **#72** `ip-address` 10.4.0 → **10.7.4** (re-ciblée au rebase, ouverte en 10.7.2), lockfile
+>   seul (chemin `MCP sdk → express-rate-limit`, plage `^10.2.0`) : **MERGÉE `f768bca`**, épinglée au
+>   head testé `6c2df20` (arbre identique), offline 655/26/0 sur 681, CI verte ; alertes #28/#29.
+>   CHANGELOG `[Unreleased]` écrit.
+> - **#70** — rebase demandé le 2026-10-15 après le merge de #72.
 > - **#70** groupe dev : `@types/node` 26.5.0 → 26.6.2, `vitest` 5.0.0 → 5.0.1, plus des
 >   transitives du toolchain. Pas de majeur au relevé, à re-déplier après rebase.
 > - **#74** SDK porteur `0.3.281` → `0.3.295` : protocole live (smoke WF-001 sur la souscription).
@@ -35,7 +38,7 @@
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
 Apply the startup ritual, then read next_steps.md LOCALLY. One chantier: the open Dependabot PRs
-(#75 merged), in this order: #72 (alerts #28/#29) -> #70 (dev group) -> #74 (SDK); then the
+(#75, #72 merged), in this order: #70 (dev group) -> #74 (SDK); then the
 lockfile-only lot for the 3 advisories without alerts (proxy-addr, source-map-js, fast-uri).
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
