@@ -10,7 +10,7 @@
 ## ▶ RESUME HERE — aucune unité ouverte dans ce repo (série Dependabot close le 2026-10-16)
 
 > Mesuré le 2026-10-16 — **RE-VÉRIFIER à la source**. 0 PR ouverte, 0 alerte Dependabot ouverte,
-> `npm audit` 0. Aucune unité n'est engagée ici ; trois points d'entrée, aucun à démarrer sans Guy :
+> `npm audit` 0. Aucune unité n'est engagée ici ; quatre points d'entrée, aucun à démarrer sans Guy :
 > 1. **Usage du corpus** : à la prochaine modification de prose d'un workflow dans `claude-agents`,
 >    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
@@ -18,6 +18,7 @@
 >    porteur est à `0.3.296`, npm `latest` = `0.3.301` au relevé : écart laissé à Dependabot.
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
 >    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
+> 4. **Trace review / KO matrix** (consigné le 2026-10-29) : voir la section 2026-10-29 ci-dessous.
 > Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
 > d'équipe). Le changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif
 > au fil de l'eau.
@@ -27,8 +28,9 @@ Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-age
 Apply the startup ritual, then read next_steps.md LOCALLY. No unit is open in this repo.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
-Then lead with a recommendation among the three entry points in the resume block (corpus use from
-a claude-agents session, new Dependabot PRs, a v0.19.0 release cut) and wait for my choice.
+Then lead with a recommendation among the four entry points in the resume block (corpus use from
+a claude-agents session, new Dependabot PRs, a v0.19.0 release cut, the trace-review KO matrix)
+and wait for my choice.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
@@ -36,6 +38,65 @@ clone) -> SDK carrier only: live smoke WF-001 on subscription OAuth (never an AP
 pinned to the tested head (--match-head-commit) -> CHANGELOG [Unreleased] + next_steps.md.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
+
+---
+
+## ⏸ 2026-10-29 — TRACE REVIEW → GOVERNED IMPROVEMENT: logged, not opened
+
+> **Term.** *Reverse prompt agentic* (Guy's term, not standard): recover from the traces the
+> policy an agent actually follows, compare it with its written instructions, and draw
+> improvement **candidates** from the gap. A candidate becomes a rule only after the KO matrix,
+> a deterministic guard where possible, Guy's ratification and a corpus case.
+> Trigger: ChatGPT proposed a method for it (compare successful and failed runs, turn the
+> differences into prompt rules, critic agent, reflection loop), triaged with Guy against the
+> ADRs and DEC-0009. Not started; a unit opens only on Guy's go.
+>
+> **Facts (2026-10-29):** 15 live-run results for 11 workflows (WF-000…WF-010,
+> `docs/audit/live-runs/`), about one run each. The behavioral regression corpus exists since
+> 2026-10-15 (section below): 2 cases (WF-001 `completed`; WF-008 refused at STEP-01), offline
+> checks in `npm test`, live harness on Guy's go — 2 of 11 workflows covered.
+>
+> **First unit — the KO matrix.** Sort every run, a green one included, into one type before
+> any fix. Per type: the trace signal, the written instruction vs. the observed practice, the
+> admissible response, what is forbidden and who decides — never a fix applied by rule
+> (DEC-0009 §1). Each real case is filed with the run that proves it and becomes a candidate
+> corpus case with its invariants: the matrix sorts, the corpus pins. Extracted practices are
+> "observed", not "best", until a corpus case confirms them.
+>
+> | Type | Admissible response | Forbidden | Decides |
+> |---|---|---|---|
+> | A. Legitimate gate refusal | none on the agent; maybe the upstream input | weakening the guard (ADR-0011 §2) | Guy |
+> | B. Wrongful refusal (false red) | criterion revised by PR + a corpus case | dropping the criterion without a replacement | Guy (DEC-0005, DEC-0009 §1) |
+> | C. Agent fault | a deterministic guard first, then the agent/skill text, by catalog PR | the runtime writing the catalog (ADR-0001) | Guy (ADR-0005) |
+> | D. Infrastructure fault | runtime fix; `--resume` | blaming the agent | Guy |
+> | E. False green | the deterministic criterion that would have caught it + a corpus case | counting it as a success in a proof | Guy |
+>
+> Signals per type are still to be checked against the 15 result files (the ADR-0011 codes are
+> named, not yet seen in the traces). Known A/B ambiguity: the WF-008 STEP-06C halt of
+> 2026-07-11, kept out of the corpus because it was a model judgment.
+>
+> **Kept from the proposal:** mining traces; clearer skill descriptions and dispatch routing
+> (WF-000, ADR-0008); better error handling, provided it stays fail-closed (ADR-0004,
+> ADR-0011 §1).
+>
+> **Rejected or limited, with grounds:**
+> - Applying changes ("update the system prompt / skill descriptions") — only by a human PR
+>   to `claude-agents`, ratified by Guy (ADR-0001, ADR-0005, DEC-0009 §1).
+> - A critic agent or reflection loop as a gate — not as a default tier: verdicts stay
+>   deterministic, an LLM judge is an opt-in calibrated exception (ADR-0011 §1). As advice to
+>   Guy it is admissible: assistance is not approval (DEC-0009 §2).
+> - "Re-run and compare" as proof — valid only for a change some corpus case discriminates;
+>   no improvement is claimed as measured otherwise.
+> - "Take 5–10 successful and 5–10 failed runs" — premise false: about one run per workflow.
+> - Editing a live-proven workflow — only with an explicitly accepted re-run.
+> - Loosening a criterion so a halted run passes — not an ADR violation (ADR-0011 §2 leaves
+>   criteria content out of clause (a)), but Guy's ratification (DEC-0009 §1, DEC-0005).
+> - Few-shot "good trajectories" in a prompt — open: an example drawn from a corpus case's
+>   input would contaminate that case.
+> - Memory/context lever — out of scope until a concrete case needs it.
+> - Not used: REVEAL (arXiv 2610.16288), cited by Grok as close work — it steers a frozen
+>   open-weight model's internal states from many rollouts per task; this stack runs Claude
+>   through the SDK, with no access to internals and about one run per workflow.
 
 ---
 
