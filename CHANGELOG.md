@@ -36,6 +36,7 @@
 
 ### 📝 Documentation
 
+- **ADR-0007 gains a provenance note: three ADRs cited it for a rule its text does not state** (2026-10-29, Claude Opus 5.5, approved by Guy). ADR-0008, ADR-0009 and ADR-0011 cite ADR-0007 as "no LLM-judge-LLM"; ADR-0007 decides that criteria are deterministic code, not that rule. The choice was made in the same unit (§2.4-B.2, 2026-06-04) and recorded only in `docs/NEXT_STEPS.md` and `src/eval/types.ts`; its accepted wording is ADR-0011 §1 (verdicts stay deterministic; an LLM judge is an opt-in calibrated exception, not a tier). The note adds no decision and rewrites no ADR: it points the three citations at their sources. The rule is unchanged.
 - **The README ADR index listed only 0001–0007 while `docs/adr/` holds eleven records** — the four most recent (0008 dispatch gate, 0009 open-core boundary, 0010 schema-owns-structure / criteria-own-DoD, 0011 non-optional governance made testable) were added to the list, matching the concise style of the existing entries.
 
 ## [0.18.0] - 2026-09-01 — Governance made testable: an enumerated guard-set, an enforced adapter/core boundary, and a first self-scored conformance bench 🛡️

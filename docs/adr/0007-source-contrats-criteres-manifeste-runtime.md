@@ -39,3 +39,6 @@ Logging criteria as code maximizes expressiveness but makes them **non-editable 
 ## Rejected alternatives
 - **Extend the sidecar** (contracts + criteria-as-DSL carried by the catalog): rejected — pushes the judgment policy into the catalog (coupling), forces a criteria DSL right now, contradicts the *descriptive* rationale of ADR-0003.
 - **Hybrid** (contracts → sidecar, criteria → runtime registry): rejected for the POC — forces the prose-first catalog to generate JSON Schema per asset (a heavy step) and creates two sources for a single handoff. Re-assessable if I/O contracts become a descriptive deliverable of the catalog.
+
+## Provenance note (2026-10-29)
+ADR-0008, ADR-0009 and ADR-0011 cite this ADR as "no LLM-judge-LLM". The text above decides that criteria are deterministic code; it does not state that rule. The choice was made in the same unit (§2.4-B.2, 2026-06-04) and recorded in `docs/NEXT_STEPS.md` ("Eval gate choice: **deterministic** criteria, no LLM-as-judge … LLM judge = later extension if needed") and in `src/eval/types.ts`. Its accepted wording is ADR-0011 §1: verdicts stay deterministic; an LLM judge is an opt-in calibrated exception, not a tier. This note adds no decision; it points the citations at their sources.
