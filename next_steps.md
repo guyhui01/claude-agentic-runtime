@@ -47,9 +47,9 @@ GUARDS: push / merge / live run on my explicit order only. Deliverables in US En
 > policy an agent actually follows, compare it with its written instructions, and draw
 > improvement **candidates** from the gap. A candidate becomes a rule only after the KO matrix,
 > a deterministic guard where possible, Guy's ratification and a corpus case.
-> Trigger: ChatGPT proposed a method for it (compare successful and failed runs, turn the
-> differences into prompt rules, critic agent, reflection loop), triaged with Guy against the
-> ADRs and DEC-0009. Not started; a unit opens only on Guy's go.
+> Trigger: an external review proposed a method for it (compare successful and failed runs,
+> turn the differences into prompt rules, critic agent, reflection loop), triaged with Guy
+> against the ADRs and DEC-0009. Not started; a unit opens only on Guy's go.
 >
 > **Facts (2026-10-29):** 15 live-run results for 11 workflows (WF-000…WF-010,
 > `docs/audit/live-runs/`), about one run each. The behavioral regression corpus exists since
@@ -84,7 +84,7 @@ GUARDS: push / merge / live run on my explicit order only. Deliverables in US En
 >   to `claude-agents`, ratified by Guy (ADR-0001, ADR-0005, DEC-0009 §1).
 > - A critic agent or reflection loop as a gate — not as a default tier: verdicts stay
 >   deterministic, an LLM judge is an opt-in calibrated exception (ADR-0011 §1). As advice to
->   Guy it is admissible: assistance is not approval (DEC-0009 §2).
+>   Guy it is admissible (DEC-0009 §2).
 > - "Re-run and compare" as proof — valid only for a change some corpus case discriminates;
 >   no improvement is claimed as measured otherwise.
 > - "Take 5–10 successful and 5–10 failed runs" — premise false: about one run per workflow.
@@ -94,7 +94,7 @@ GUARDS: push / merge / live run on my explicit order only. Deliverables in US En
 > - Few-shot "good trajectories" in a prompt — open: an example drawn from a corpus case's
 >   input would contaminate that case.
 > - Memory/context lever — out of scope until a concrete case needs it.
-> - Not used: REVEAL (arXiv 2610.16288), cited by Grok as close work — it steers a frozen
+> - Not used: REVEAL (arXiv 2610.16288), cited as close work — it steers a frozen
 >   open-weight model's internal states from many rollouts per task; this stack runs Claude
 >   through the SDK, with no access to internals and about one run per workflow.
 
