@@ -7,15 +7,20 @@
 
 ---
 
-## ▶ RESUME HERE — aucune unité ouverte dans ce repo (série Dependabot close le 2026-10-16)
+## ▶ RESUME HERE — nouvelle série Dependabot ouverte (relevé du 2026-11-12), non démarrée
 
-> Mesuré le 2026-10-16 — **RE-VÉRIFIER à la source**. 0 PR ouverte, 0 alerte Dependabot ouverte,
-> `npm audit` 0. Aucune unité n'est engagée ici ; quatre points d'entrée, aucun à démarrer sans Guy :
+> Mesuré le 2026-11-12 — **RE-VÉRIFIER à la source**. **7 PR Dependabot ouvertes, 8 alertes
+> ouvertes (2 HIGH), `npm audit` = 6 (4 moderate, 2 high).** Aucune unité n'est engagée ici ;
+> quatre points d'entrée, aucun à démarrer sans Guy :
 > 1. **Usage du corpus** : à la prochaine modification de prose d'un workflow dans `claude-agents`,
 >    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
-> 2. **Nouvelles PR Dependabot** : même protocole que la série du 2026-10-15 (ci-dessous). Le SDK
->    porteur est à `0.3.296`, npm `latest` = `0.3.301` au relevé : écart laissé à Dependabot.
+> 2. **Série Dependabot — prioritaire (2 HIGH)** : même protocole que la série du 2026-10-15
+>    (ci-dessous). Ordre proposé : #84 body-parser 2.4.0 (alerte #38 HIGH) → #86 zod 4.6.7
+>    (#42 HIGH ; saut 4.4→4.6, relire la cible sur le head rebasé) → #83 fast-uri 3.1.9
+>    (#37/#39/#40/#41) → #81 hono 4.13.13 (#36) → #87 @hono/node-server 2.1.6 (#43) → #85 groupe
+>    dev (`@types/node` 26.6.6, `vitest` 5.0.5 ; aucune alerte) → **#82 SDK porteur en dernier**
+>    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
 >    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
 > 4. **Trace review / KO matrix** (consigné le 2026-10-29) : voir la section 2026-10-29 ci-dessous.
@@ -74,6 +79,15 @@ GUARDS: push / merge / live run on my explicit order only. Deliverables in US En
 > Signals per type are still to be checked against the 15 result files (the ADR-0011 codes are
 > named, not yet seen in the traces). Known A/B ambiguity: the WF-008 STEP-06C halt of
 > 2026-07-11, kept out of the corpus because it was a model judgment.
+>
+> **First type-B candidate (logged 2026-11-12): WF-000 router, P11.** In the live router run of
+> 2026-07-19 (`docs/audit/live-runs/wf-000-router-live-result.json`, 19/20, catalog v4.2.0), P11
+> (pre-signature ask, no RFP document; oracle WF-006 per the card's "Direct solicitation" type)
+> got `NO_MATCH` with `nearestMiss: "WF-006"`: the router sees only the sidecar arrow ("RFP
+> received"), narrower than the card. Safe direction (under-match, nearest miss named, operator
+> overrides). The V1 router rule for pre-signature commercial states is **not implemented**
+> (nothing in `src/` as of 2026-11-12). The four off-catalog briefs P14–P17 got an honest
+> `NO_MATCH` in the same run; not re-run live on catalog v5.0.0. Fix only on Guy's ratification.
 >
 > **Kept from the proposal:** mining traces; clearer skill descriptions and dispatch routing
 > (WF-000, ADR-0008); better error handling, provided it stays fail-closed (ADR-0004,
