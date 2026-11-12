@@ -16,9 +16,11 @@
 >    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
 > 2. **Série Dependabot — prioritaire (2 HIGH)** : même protocole que la série du 2026-10-15
->    (ci-dessous). Ordre proposé : #84 body-parser 2.4.0 (alerte #38 HIGH) → #86 zod 4.6.7
+>    (ci-dessous). ✅ **#84 body-parser 2.4.0 mergée le 2026-11-12** (`ee19457` ; `@dependabot
+>    rebase` sans réponse → close/reopen a produit le rebase ; alerte #38 passée à `fixed` au
+>    rescan, quelques minutes après le merge). Reste, dans l'ordre : #86 zod 4.6.7
 >    (#42 HIGH ; saut 4.4→4.6, relire la cible sur le head rebasé) → #83 fast-uri 3.1.9
->    (#37/#39/#40/#41) → #81 hono 4.13.13 (#36) → #87 @hono/node-server 2.1.6 (#43) → #85 groupe
+>    (#37/#39/#40/#41) → #81 hono 4.13.13 (#36) → #87 @hono/node-server 2.1.6 (#43, + #44 apparue au rescan du 2026-11-12, corrigée en 2.1.6) → #85 groupe
 >    dev (`@types/node` 26.6.6, `vitest` 5.0.5 ; aucune alerte) → **#82 SDK porteur en dernier**
 >    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
