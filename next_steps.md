@@ -7,7 +7,7 @@
 
 ---
 
-## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (2 PR sur 7 mergées)
+## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (3 PR sur 7 mergées)
 
 > Mesuré le 2026-11-12 — **RE-VÉRIFIER à la source**. **7 PR Dependabot ouvertes, 8 alertes
 > ouvertes (2 HIGH), `npm audit` = 6 (4 moderate, 2 high).** Aucune unité n'est engagée ici ;
@@ -19,9 +19,8 @@
 >    (ci-dessous). ✅ **#84 body-parser 2.4.0 mergée le 2026-11-12** (`ee19457` ; `@dependabot
 >    rebase` sans réponse → close/reopen a produit le rebase ; alerte #38 passée à `fixed` au
 >    rescan, quelques minutes après le merge). ✅ **#86 zod 4.6.7 mergée le 2026-11-12** (`7f6102a` ; zod est
->    sur le chemin live via le SDK : couvert par le smoke de #82, pas de smoke dédié). Reste, dans
->    l'ordre : #83 fast-uri 3.1.9
->    (#37/#39/#40/#41) → #81 hono 4.13.13 (#36) → #87 @hono/node-server 2.1.6 (#43, + #44 apparue au rescan du 2026-11-12, corrigée en 2.1.6) → #85 groupe
+>    sur le chemin live via le SDK : couvert par le smoke de #82, pas de smoke dédié). ✅ **#83 fast-uri 3.1.9 mergée le 2026-11-12** (`27dc5bb`).
+>    Reste, dans l'ordre : #81 hono 4.13.13 (#36) → #87 @hono/node-server 2.1.6 (#43, + #44 apparue au rescan du 2026-11-12, corrigée en 2.1.6) → #85 groupe
 >    dev (`@types/node` 26.6.6, `vitest` 5.0.5 ; aucune alerte) → **#82 SDK porteur en dernier**
 >    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
