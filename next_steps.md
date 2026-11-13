@@ -7,11 +7,24 @@
 
 ---
 
-## ▶ RESUME HERE — aucune unité ouverte dans ce repo (série Dependabot close le 2026-11-13)
+## ▶ RESUME HERE — prochaine unité désignée : la KO matrix (décidé par Guy le 2026-11-13)
+
+> **Prochaine session, à froid : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
+> section 2026-10-29). Local, zéro run facturé, zéro écriture dans le catalogue, zéro correctif :
+> 1. Lire les **16** fichiers de résultat de `docs/audit/live-runs/` (`*-live-result*.json`, hors
+>    `*-live-progress.json`) : 13 `completed`, 2 `failed` (WF-008 halt STEP-06C du 2026-07-11,
+>    ambigu A/B ; WF-009 `gate-halt`), 1 score (routeur WF-000 19/20, dont P11 = candidat B).
+>    Commencer par les deux `failed`, puis P11 ; un `completed` se trie aussi (type E possible).
+> 2. Classer chaque run dans A–E en **citant le signal de la trace** ; vérifier dans les traces les
+>    codes ADR-0011 (nommés, jamais encore vus).
+> 3. Par cas réel : instruction écrite vs pratique observée, réponse admise, interdit, qui décide ;
+>    chaque cas = candidat cas de corpus avec ses invariants.
+> 4. Livrable : `docs/audit/ko-matrix.md` (US English), commit local ; push sur ordre de Guy.
+> Limite assumée : ~1 run par workflow ⟹ la matrice trie des cas, elle ne mesure aucune tendance.
 
 > Mesuré le 2026-11-13 — **RE-VÉRIFIER à la source**. 0 PR ouverte, 0 alerte Dependabot ouverte,
 > `npm audit` 0. SDK porteur à `0.3.322` (npm `latest` = `0.3.323` au relevé : écart laissé à
-> Dependabot). Aucune unité n'est engagée ici ; quatre points d'entrée, aucun à démarrer sans Guy :
+> Dependabot). `v0.19.0` publiée. Quatre points d'entrée, aucun à démarrer sans Guy :
 > 1. **Usage du corpus** : à la prochaine modification de prose d'un workflow dans `claude-agents`,
 >    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
@@ -27,13 +40,13 @@
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
-Apply the startup ritual, then read next_steps.md LOCALLY. No unit is open in this repo.
+Apply the startup ritual, then read next_steps.md LOCALLY.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
-Then lead with a recommendation among the four entry points in the resume block (corpus use from
-a claude-agents session, new Dependabot PRs, a release cut once [Unreleased] has content, the
-trace-review KO matrix)
-and wait for my choice.
+Designated unit (my decision, 2026-11-13): the KO MATRIX, plan at the top of the resume block.
+If a new Dependabot alert is open, say so first and let me choose; otherwise start the matrix
+with the two failed runs (WF-008, WF-009 gate-halt), then P11. Local only: no billed run, no
+catalog write, no fix. Deliverable docs/audit/ko-matrix.md, committed locally; push on my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
@@ -82,7 +95,8 @@ GUARDS: push / merge / live run on my explicit order only. Deliverables in US En
 > turn the differences into prompt rules, critic agent, reflection loop), triaged with Guy
 > against the ADRs and DEC-0009. Not started; a unit opens only on Guy's go.
 >
-> **Facts (2026-10-29):** 15 live-run results for 11 workflows (WF-000…WF-010,
+> **Facts (2026-10-29):** 15 live-run results for 11 workflows — recounted 2026-11-13: **16**
+> result files, progress files excluded (WF-000…WF-010,
 > `docs/audit/live-runs/`), about one run each. The behavioral regression corpus exists since
 > 2026-10-15 (section below): 2 cases (WF-001 `completed`; WF-008 refused at STEP-01), offline
 > checks in `npm test`, live harness on Guy's go — 2 of 11 workflows covered.
