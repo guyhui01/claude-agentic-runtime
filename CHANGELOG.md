@@ -6,7 +6,7 @@
 
 ---
 
-## [Unreleased]
+## [0.19.0] - 2026-11-13 — A behavioral regression corpus, the catalog re-pinned to `v5.0.0`, and three live-proven dependency series 🧪
 
 > Model: Claude Opus 4.8, then Claude Opus 5.5 (the catalog re-pin to `v5.0.0`, the SDK `0.3.281` bump, the behavioral regression corpus, and the 2026-10-15 Dependabot series: MCP SDK `1.32.1`, `ip-address`, the dev group, `proxy-addr`, `fast-uri` and the SDK `0.3.296` bump; then the 2026-11-12 series, starting with `body-parser` `2.4.0`, `zod` `4.6.7`, `fast-uri` `3.1.9`, `hono` `4.13.18`, `@hono/node-server` `2.1.8` and the dev group with `vitest` `5.1.0`, closed by the SDK `0.3.322` bump).
 
@@ -927,7 +927,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.15.0...v0.16.0

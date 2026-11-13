@@ -17,8 +17,8 @@
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
 > 2. **Nouvelles PR Dependabot** : protocole du prompt ci-dessous (bilan de la série du 2026-11-12
 >    dans la section dédiée plus bas).
-> 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et trois séries de dépendances
->    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
+> 3. **Release** : **`v0.19.0` coupée le 2026-11-13** (corpus, re-pin `v5.0.0`, trois séries de
+>    dépendances). Prochaine release = décision de Guy, quand `[Unreleased]` aura du contenu.
 > 4. **Trace review / KO matrix** (consigné le 2026-10-29) : voir la section 2026-10-29 ci-dessous ;
 >    premier candidat de type B consigné le 2026-11-12 (WF-000, P11).
 > Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
@@ -31,7 +31,8 @@ Apply the startup ritual, then read next_steps.md LOCALLY. No unit is open in th
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 Then lead with a recommendation among the four entry points in the resume block (corpus use from
-a claude-agents session, new Dependabot PRs, a v0.19.0 release cut, the trace-review KO matrix)
+a claude-agents session, new Dependabot PRs, a release cut once [Unreleased] has content, the
+trace-review KO matrix)
 and wait for my choice.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
