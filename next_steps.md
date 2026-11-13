@@ -7,30 +7,23 @@
 
 ---
 
-## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (6 PR sur 7 mergées ; 0 alerte ouverte)
+## ▶ RESUME HERE — aucune unité ouverte dans ce repo (série Dependabot close le 2026-11-13)
 
-> Mesuré le 2026-11-12 — **RE-VÉRIFIER à la source**. **7 PR Dependabot ouvertes, 8 alertes
-> ouvertes (2 HIGH), `npm audit` = 6 (4 moderate, 2 high).** Aucune unité n'est engagée ici ;
-> quatre points d'entrée, aucun à démarrer sans Guy :
+> Mesuré le 2026-11-13 — **RE-VÉRIFIER à la source**. 0 PR ouverte, 0 alerte Dependabot ouverte,
+> `npm audit` 0. SDK porteur à `0.3.322` (npm `latest` = `0.3.323` au relevé : écart laissé à
+> Dependabot). Aucune unité n'est engagée ici ; quatre points d'entrée, aucun à démarrer sans Guy :
 > 1. **Usage du corpus** : à la prochaine modification de prose d'un workflow dans `claude-agents`,
 >    dans CETTE session-là (repo en écriture : `claude-agents`), lancer le corpus live depuis ce
 >    runtime sur GO de Guy, sans y écrire (voir la section corpus ci-dessous).
-> 2. **Série Dependabot — prioritaire (2 HIGH)** : même protocole que la série du 2026-10-15
->    (ci-dessous). ✅ **#84 body-parser 2.4.0 mergée le 2026-11-12** (`ee19457` ; `@dependabot
->    rebase` sans réponse → close/reopen a produit le rebase ; alerte #38 passée à `fixed` au
->    rescan, quelques minutes après le merge). ✅ **#86 zod 4.6.7 mergée le 2026-11-12** (`7f6102a` ; zod est
->    sur le chemin live via le SDK : couvert par le smoke de #82, pas de smoke dédié). ✅ **#83 fast-uri 3.1.9 mergée le 2026-11-12** (`27dc5bb`).
->    ✅ **#81 hono mergée le 2026-11-12** (`619c736` ; re-ciblée 4.13.13 → **4.13.18** au rebase).
->    ✅ **#87 @hono/node-server mergée le 2026-11-13** (`912cdbd` ; re-ciblée 2.1.6 →
->    **2.1.8** ; couvre #43 et #44 ; `npm audit` 0). ✅ **#85 groupe dev mergée le 2026-11-13** (`36d73b0` ; re-ciblée `vitest` 5.0.5 → **5.1.0**,
->    26 versions dépliées, aucun majeur). Reste : **#82 SDK porteur en dernier**
->    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
-> 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
+> 2. **Nouvelles PR Dependabot** : protocole du prompt ci-dessous (bilan de la série du 2026-11-12
+>    dans la section dédiée plus bas).
+> 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et trois séries de dépendances
 >    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
-> 4. **Trace review / KO matrix** (consigné le 2026-10-29) : voir la section 2026-10-29 ci-dessous.
+> 4. **Trace review / KO matrix** (consigné le 2026-10-29) : voir la section 2026-10-29 ci-dessous ;
+>    premier candidat de type B consigné le 2026-11-12 (WF-000, P11).
 > Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
-> d'équipe). Le changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif
-> au fil de l'eau.
+> d'équipe) — raté au smoke `0.3.296`, passé au smoke `0.3.322` : variance de formulation. Le
+> changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif au fil de l'eau.
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
@@ -50,6 +43,31 @@ A reopened PR without conflicts is NOT rebased on its own: post @dependabot reba
 the reopen (2026-11-13, #87).] -> CHANGELOG [Unreleased] + next_steps.md.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
+
+---
+
+## ✅ 2026-11-12/13 — SÉRIE DEPENDABOT : 7 PR MERGÉES, 0 ALERTE OUVERTE
+
+> Relevé de départ : 7 PR, 8 alertes (2 HIGH), `npm audit` 6. Une PR à la fois, chacune rebasée puis
+> re-dépliée sur son head, testée hors ligne dans un worktree (`CATALOG_ROOT` = clone `v5.0.0`,
+> garde de total = 681 : **655 / 26 / 0** à chaque fois), CI verte, squash-merge épinglé au head
+> testé (arbre mergé identique, vérifié) :
+> - **#84** `body-parser` 2.4.0 ⟹ #38 HIGH. `ee19457`.
+> - **#86** `zod` 4.6.7 ⟹ #42 HIGH ; sur le chemin live via le SDK, couvert par le smoke de #82. `7f6102a`.
+> - **#83** `fast-uri` 3.1.9 ⟹ #37/#39/#40/#41 (via `ajv`, chemin d'exécution). `27dc5bb`.
+> - **#81** `hono` → **4.13.18** (re-ciblée, ouverte en 4.13.13) ⟹ #36. `619c736`.
+> - **#87** `@hono/node-server` → **2.1.8** (re-ciblée, ouverte en 2.1.6) ⟹ #43/#44/#45 ; `npm audit` 0. `912cdbd`.
+> - **#85** groupe dev : `vitest` → **5.1.0** (re-ciblée, ouverte en 5.0.5), `@types/node` 26.6.6 ;
+>   26 versions dépliées, aucun majeur. `36d73b0`.
+> - **#82** SDK porteur → **0.3.322** (re-ciblée, ouverte en 0.3.309). Smoke live WF-001 sur
+>   souscription OAuth, sans clé : **`completed`, 3/3 étapes, 9/9 bloquants, 12/12**, ~116 s ;
+>   sortie brute au scratchpad. `6a0c1af`.
+> **Leçons** : (1) 4 rebases sur 7 ont re-ciblé la version — relire la cible sur le head rebasé
+> reste obligatoire. (2) `@dependabot rebase` peut rester sans effet ; fermer la PR = « ignore this
+> release » (la réouverture l'annule), et une PR rouverte sans conflit n'est pas rebasée d'elle-même :
+> reposter `@dependabot rebase` après la réouverture (consigné dans le protocole du prompt).
+> (3) Une erreur GraphQL transitoire au merge (#83) : vérifier l'état réel (PR ouverte, `main`
+> inchangé) avant de relancer la même commande épinglée.
 
 ---
 
