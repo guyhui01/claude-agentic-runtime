@@ -7,7 +7,7 @@
 
 ---
 
-## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (4 PR sur 7 mergées)
+## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (5 PR sur 7 mergées)
 
 > Mesuré le 2026-11-12 — **RE-VÉRIFIER à la source**. **7 PR Dependabot ouvertes, 8 alertes
 > ouvertes (2 HIGH), `npm audit` = 6 (4 moderate, 2 high).** Aucune unité n'est engagée ici ;
@@ -21,7 +21,8 @@
 >    rescan, quelques minutes après le merge). ✅ **#86 zod 4.6.7 mergée le 2026-11-12** (`7f6102a` ; zod est
 >    sur le chemin live via le SDK : couvert par le smoke de #82, pas de smoke dédié). ✅ **#83 fast-uri 3.1.9 mergée le 2026-11-12** (`27dc5bb`).
 >    ✅ **#81 hono mergée le 2026-11-12** (`619c736` ; re-ciblée 4.13.13 → **4.13.18** au rebase).
->    Reste, dans l'ordre : #87 @hono/node-server 2.1.6 (#43, + #44 apparue au rescan du 2026-11-12, corrigée en 2.1.6) → #85 groupe
+>    ✅ **#87 @hono/node-server mergée le 2026-11-13** (`912cdbd` ; re-ciblée 2.1.6 →
+>    **2.1.8** ; couvre #43 et #44 ; `npm audit` 0). Reste, dans l'ordre : #85 groupe
 >    dev (`@types/node` 26.6.6, `vitest` 5.0.5 ; aucune alerte) → **#82 SDK porteur en dernier**
 >    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
@@ -43,7 +44,10 @@ Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-R
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
 clone) -> SDK carrier only: live smoke WF-001 on subscription OAuth (never an API key) -> merge
-pinned to the tested head (--match-head-commit) -> CHANGELOG [Unreleased] + next_steps.md.
+pinned to the tested head (--match-head-commit)
+[no rebase within 15 min: CLOSING a Dependabot PR = "ignore this release"; reopening cancels it.
+A reopened PR without conflicts is NOT rebased on its own: post @dependabot rebase again after
+the reopen (2026-11-13, #87).] -> CHANGELOG [Unreleased] + next_steps.md.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
 
