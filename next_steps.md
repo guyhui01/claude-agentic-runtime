@@ -7,7 +7,7 @@
 
 ---
 
-## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (5 PR sur 7 mergées)
+## ▶ RESUME HERE — série Dependabot du 2026-11-12 en cours (6 PR sur 7 mergées ; 0 alerte ouverte)
 
 > Mesuré le 2026-11-12 — **RE-VÉRIFIER à la source**. **7 PR Dependabot ouvertes, 8 alertes
 > ouvertes (2 HIGH), `npm audit` = 6 (4 moderate, 2 high).** Aucune unité n'est engagée ici ;
@@ -22,8 +22,8 @@
 >    sur le chemin live via le SDK : couvert par le smoke de #82, pas de smoke dédié). ✅ **#83 fast-uri 3.1.9 mergée le 2026-11-12** (`27dc5bb`).
 >    ✅ **#81 hono mergée le 2026-11-12** (`619c736` ; re-ciblée 4.13.13 → **4.13.18** au rebase).
 >    ✅ **#87 @hono/node-server mergée le 2026-11-13** (`912cdbd` ; re-ciblée 2.1.6 →
->    **2.1.8** ; couvre #43 et #44 ; `npm audit` 0). Reste, dans l'ordre : #85 groupe
->    dev (`@types/node` 26.6.6, `vitest` 5.0.5 ; aucune alerte) → **#82 SDK porteur en dernier**
+>    **2.1.8** ; couvre #43 et #44 ; `npm audit` 0). ✅ **#85 groupe dev mergée le 2026-11-13** (`36d73b0` ; re-ciblée `vitest` 5.0.5 → **5.1.0**,
+>    26 versions dépliées, aucun majeur). Reste : **#82 SDK porteur en dernier**
 >    (ouverte en 0.3.309, npm `latest` = 0.3.322 au relevé ⟹ re-ciblage probable ; smoke live WF-001).
 > 3. **Release** : `[Unreleased]` porte le corpus, le re-pin `v5.0.0` et deux séries de dépendances
 >    depuis `v0.18.0`. Couper une `v0.19.0` = décision de Guy (tag + GitHub Release).
