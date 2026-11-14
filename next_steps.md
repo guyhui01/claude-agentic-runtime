@@ -7,9 +7,21 @@
 
 ---
 
-## ▶ RESUME HERE — prochaine unité désignée : la KO matrix (décidé par Guy le 2026-11-13)
+## ▶ RESUME HERE — KO matrix LIVRÉE le 2026-11-14 ; next step = décisions de Guy sur la matrice
 
-> **Prochaine session, à froid : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
+> **Livré 2026-11-14 :** [`docs/audit/ko-matrix.md`](docs/audit/ko-matrix.md), commit local, non
+> poussé. Next step, chaque point = décision de Guy, aucun correctif sans son ordre :
+> 1. **Isoler le runner** (`settingSources: []`, facteur commun D des 16 runs) — touche les 10
+>    workflows prouvés live ⟹ ordre + smoke WF-001. À trancher AVANT tout nouveau cas de corpus.
+> 2. **K1 WF-008** : critère `audit-verdict-cleared` plus strict que la carte (« cleared, or
+>    returned with documented reservations ») — aligner le critère ou la carte ; et l'entrée de
+>    STEP-06C (le contre-relecteur ne voit que STEP-06, la carte dit STEP-01…06B).
+> 3. **K2 WF-009** : `rh-scored-cvs` / `rh-fraud-report` passent sur une sentinelle (E latent).
+> 4. **K3 P11** : flèche sidecar WF-006 vs « Direct solicitation » (PR catalogue ou règle routeur).
+> 5. Choisir les cas de corpus parmi les 3 candidats de la matrice.
+> Le plan d'origine ci-dessous est exécuté (gardé comme référence).
+
+> **Plan d'origine (exécuté) : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
 > section 2026-10-29). Local, zéro run facturé, zéro écriture dans le catalogue, zéro correctif :
 > 1. Lire les **16** fichiers de résultat de `docs/audit/live-runs/` (`*-live-result*.json`, hors
 >    `*-live-progress.json`) : 13 `completed`, 2 `failed` (WF-008 halt STEP-06C du 2026-07-11,
