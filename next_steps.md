@@ -13,8 +13,10 @@
 > vérifié à `13b87af` le 2026-11-14). Next step, chaque point = décision de Guy, aucun correctif sans son ordre :
 > 1. **Isoler le runner** — **code fait le 2026-11-14 sur ordre de Guy** (`settingSources: []`,
 >    garde 5 de `createQueryRunner`, CHANGELOG `[Unreleased]`), validé hors ligne 655/26/0 sur 681,
->    commit local non poussé. **Reste : smoke live WF-001 sur ordre de Guy** ; y relever à l'init si
->    les outils MCP claude.ai sont encore exposés (non mesuré par la sonde). Puis push sur ordre.
+>    smoke live WF-001 **`completed` 3/3, tous critères ok** (2026-11-14, OAuth, clone `v5.0.0`,
+>    ~129 s). Non poussé : **push sur ordre de Guy**. Non mesuré : exposition des outils MCP
+>    claude.ai aux agents (le runner ne garde pas le message d'init). « Guy HUI-BON-HOA » en sortie
+>    STEP-04 = prose catalogue (`AGENT-QA-AGILE.md` l. 18), pas une fuite.
 > 2. **K1 WF-008** : critère `audit-verdict-cleared` plus strict que la carte (« cleared, or
 >    returned with documented reservations ») — aligner le critère ou la carte ; et l'entrée de
 >    STEP-06C (le contre-relecteur ne voit que STEP-06, la carte dit STEP-01…06B).
@@ -62,9 +64,8 @@ Apply the startup ritual, then read next_steps.md LOCALLY.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). Runner isolation (settingSources: [])
-is coded and committed locally, offline-green, NOT pushed, live smoke WF-001 pending. If a new
-Dependabot alert is open, say so first and let me choose; otherwise propose the WF-001 smoke
-(my order needed), then the remaining matrix decisions (K1, K2, K3, corpus). No fix without my order.
+is committed, offline-green and live-smoked (WF-001 completed 3/3); check whether it is pushed. If a new
+Dependabot alert is open, say so first and let me choose; otherwise present the remaining matrix decisions (K1, K2, K3, corpus). No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
