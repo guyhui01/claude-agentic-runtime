@@ -32,7 +32,7 @@ No result below can be read as the behavior of the catalog agent alone. Isolatin
 
 | Run (file) | Status | Type | Signal in the trace |
 |---|---|---|---|
-| `wf-008-live-result.json` | `failed` STEP-06C | **A** (agent) + **B** candidate (gate) + **D** (input) | K1 |
+| `wf-008-live-result.json` | `failed` STEP-06C | **A** (agent) + **B** candidate (gate, reassessed: card ambiguity) + **D** (input) | K1 |
 | `wf-009-live-result-gate-halt.json` | `failed` STEP-04 | **A** + latent **E**, masked by construction (reassessed) | K2 |
 | `wf-000-router-live-result.json` P11 | `NO_MATCH` (oracle WF-006) | **B** candidate | K3 |
 | `wf-000-router-live-result.json`, other 19 | 19 matches | A for P14–P18 (`NO_MATCH` ×4, `REJECT_INCOMPLETE`); green elsewhere | per-brief `status` = oracle |
@@ -74,6 +74,16 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   cleared by default' behavior" conflates the verdict rule with the halt rule. Admissible: align
   the criterion with the card, or the card with the criterion, by PR. Forbidden: dropping the
   clearance check without a replacement. A corpus case pins either reading.
+- **Gate side — reassessed 2026-11-14, Guy's decision: the runtime stays strict, no code
+  change.** The card contradicts itself: the `condition_passage` above (line 359 at `v5.0.0`)
+  can be read either as "either outcome lets STEP-07 run" or as "a documented verdict must exist
+  before STEP-07", while the deliverables checklist (line 403) requires a "**cleared audit**";
+  in audit usage, *returned* means sent back for rework. The runtime follows the checklist and
+  models the step as a return-for-rework gate (header of
+  [`src/spines/wf-008-audit.ts`](../../src/spines/wf-008-audit.ts)); relaxing it would change a
+  live-proven behavior and remove the only live proof that this gate can say *no*. The defect is
+  the card's ambiguous `condition_passage`: a **catalog PR** in `claude-agents` (separate
+  session) should make it say that a returned verdict halts before STEP-07.
 - **Input side — D.** Written: STEP-06C input = "All audit outputs (STEP-01 to STEP-06B)" plus
   stakes and the STEP-01 tier. Observed: the linear orchestrator passes only the previous step's
   output (`src/orchestrator/run-spine.ts`, `input = output`), so the reviewer saw the ADKAR plan
@@ -84,7 +94,7 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   the only file with them; the item schemas do not set `additionalProperties: false`.
 - **Corpus candidate:** STEP-06C fed a fixture of all upstream outputs; invariants: verdict in
   {cleared, returned}; returned ⇒ ≥ 1 reservation citing a checkable artifact; the halt rule
-  matches whichever reading Guy ratifies.
+  matches whichever reading Guy ratifies (ratified 2026-11-14: returned ⇒ halt before STEP-07).
 
 ### K2 — WF-009, shortlist halt at STEP-04 (2026-07-12, `v4.1.0`)
 
@@ -156,7 +166,7 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 
 | # | From | Invariant to pin |
 |---|---|---|
-| 1 | K1 | STEP-06C halt rule = the ratified reading of the card; returned ⇒ checkable reservations |
+| 1 | K1 | returned ⇒ halt before STEP-07 (ratified 2026-11-14) and ≥ 1 checkable reservation |
 | 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14) |
 | 3 | K3 | P11 ⇒ WF-006 (routed, or named as nearest miss) |
 

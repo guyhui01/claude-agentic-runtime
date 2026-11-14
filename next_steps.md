@@ -17,9 +17,11 @@
 >    ~129 s). Non poussé : **push sur ordre de Guy**. Non mesuré : exposition des outils MCP
 >    claude.ai aux agents (le runner ne garde pas le message d'init). « Guy HUI-BON-HOA » en sortie
 >    STEP-04 = prose catalogue (`AGENT-QA-AGILE.md` l. 18), pas une fuite.
-> 2. **K1 WF-008** : critère `audit-verdict-cleared` plus strict que la carte (« cleared, or
->    returned with documented reservations ») — aligner le critère ou la carte ; et l'entrée de
->    STEP-06C (le contre-relecteur ne voit que STEP-06, la carte dit STEP-01…06B).
+> 2. **K1 WF-008** — **moitié gate tranchée 2026-11-14 (Guy) : runtime strict conservé, aucun
+>    code.** La carte se contredit (`condition_passage` l. 359 ambigu vs checklist l. 403
+>    « cleared audit ») ⟹ **PR catalogue** dans une session `claude-agents` (avec K3) : écrire
+>    qu'un verdict `returned` arrête avant STEP-07. **Moitié entrée OUVERTE** : STEP-06C ne voit
+>    que STEP-06 (la carte dit STEP-01…06B) — touche l'orchestrateur linéaire.
 > 3. **K2 WF-009 — tranché 2026-11-14, pas de correctif** (ordre de Guy) : E masqué par
 >    construction (même étape que le gate, `f2afce2`) ; `affirmativeString` rejetterait « None
 >    detected… ». Matrice annotée ; cas de corpus réduit à « halt sur `rh-shortlist-validated` ».
@@ -67,7 +69,7 @@ Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). Runner isolation (settingSources: [])
 is committed, offline-green and live-smoked (WF-001 completed 3/3); check whether it is pushed. If a new
-Dependabot alert is open, say so first and let me choose; otherwise present the remaining matrix decisions (K1, K3, corpus). No fix without my order.
+Dependabot alert is open, say so first and let me choose; otherwise present the remaining matrix decisions (K1 input side, corpus; K1 card + K3 = catalog session). No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
