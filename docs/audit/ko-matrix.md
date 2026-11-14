@@ -33,7 +33,7 @@ No result below can be read as the behavior of the catalog agent alone. Isolatin
 | Run (file) | Status | Type | Signal in the trace |
 |---|---|---|---|
 | `wf-008-live-result.json` | `failed` STEP-06C | **A** (agent) + **B** candidate (gate) + **D** (input) | K1 |
-| `wf-009-live-result-gate-halt.json` | `failed` STEP-04 | **A** + latent **E** | K2 |
+| `wf-009-live-result-gate-halt.json` | `failed` STEP-04 | **A** + latent **E**, masked by construction (reassessed) | K2 |
 | `wf-000-router-live-result.json` P11 | `NO_MATCH` (oracle WF-006) | **B** candidate | K3 |
 | `wf-000-router-live-result.json`, other 19 | 19 matches | A for P14–P18 (`NO_MATCH` ×4, `REJECT_INCOMPLETE`); green elsewhere | per-brief `status` = oracle |
 | `wf-000-pilot-p01-dispatch-live-result.json` | `PARAMS_MISSING` then `ROUTED` | A (return loop by design) | missing set = offline prediction |
@@ -99,8 +99,20 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   the array; the honest answer had to live in free text.
 - **Historical E:** the first run, before `f2afce2`, was a hollow `completed` on the same
   refusal (not versioned).
-- **Corpus candidate:** STEP-04 with no CVs; invariants: halt, and no blocking criterion of the
-  step passes on a sentinel entry.
+- **Reassessed 2026-11-14 — masked by construction, no fix.** The three criteria belong to the
+  same step, and a step fails as soon as one blocking criterion fails
+  ([`src/eval/eval-gate.ts`](../../src/eval/eval-gate.ts)); with no CVs, `rh-shortlist-validated`
+  halts STEP-04 whatever its siblings report, so the "gate removed" reading above is a
+  counterfactual, not a reachable hollow `completed`. This is the recorded decision of `f2afce2`:
+  "Hardening the two gateways suffices — once the valves fail closed, downstream completeness
+  criteria only ever see real content." Hardening `rh-fraud-report` with `affirmativeString`
+  would also be wrong: probed against the sentinel matcher, it rejects the honest finding
+  "None detected across the 5 CVs." and accepts the refusal "Unable to assess: no CVs were
+  provided.". Residual gap, **not observed in any trace**: real CVs with a refused fraud check
+  would pass `rh-fraud-report`; no guard is added for an unproven input class.
+- **Corpus candidate:** STEP-04 with no CVs; invariant: halt at STEP-04 on
+  `rh-shortlist-validated`. (The earlier invariant "no blocking criterion of the step passes on a
+  sentinel entry" is withdrawn: it fails by construction, see the reassessment.)
 
 ### K3 — WF-000 router, P11 (2026-07-19, `v4.2.0`)
 
@@ -145,8 +157,9 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 | # | From | Invariant to pin |
 |---|---|---|
 | 1 | K1 | STEP-06C halt rule = the ratified reading of the card; returned ⇒ checkable reservations |
-| 2 | K2 | no blocking STEP-04 criterion passes on a sentinel entry; no CVs ⇒ halt |
+| 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14) |
 | 3 | K3 | P11 ⇒ WF-006 (routed, or named as nearest miss) |
 
 The corpus has 2 cases today (WF-001 `completed`, WF-008 refused at STEP-01). Any new case
-inherits the common factor until the runner is isolated.
+inherits the common factor until the runner is isolated. *(2026-11-14: runner isolated by
+`settingSources: []` in `855423d`, live smoke WF-001 `completed` 3/3; new cases run isolated.)*
