@@ -37,6 +37,10 @@
 > Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
 > d'équipe) — raté au smoke `0.3.296`, passé au smoke `0.3.322` : variance de formulation. Le
 > changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif au fil de l'eau.
+> **Décision en attente (Guy), 2026-11-14** : isoler les runs live par `settingSources: []` dans
+> `createQueryRunner` — voir la section « sonde de chargement des instructions » ci-dessous. Touche
+> le lancement des 10 workflows prouvés live ⟹ jamais sans ordre de Guy, smoke WF-001 ensuite.
+> Facteur commun à toute la KO matrix : les 16 runs ont tourné avec le contexte utilisateur complet.
 
 ```
 Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-agentic-runtime).
@@ -57,6 +61,41 @@ A reopened PR without conflicts is NOT rebased on its own: post @dependabot reba
 the reopen (2026-11-13, #87).] -> CHANGELOG [Unreleased] + next_steps.md.
 GUARDS: push / merge / live run on my explicit order only. Deliverables in US English.
 ```
+
+---
+
+## ✅ 2026-11-14 — SONDE DE CHARGEMENT DES INSTRUCTIONS : prouvée, rien de modifié dans `src/`
+
+> Demandée par Guy avant la migration des règles de `claude-config` vers `~/.claude/rules/`.
+> **Chemins de lancement** : le runtime n'en a qu'un, `query()` du SDK (`0.3.322`) via
+> `createQueryRunner` (`src/sdk/query-runner.ts`), pour les spines et le dispatch ; `settingSources`
+> n'y est pas fixé ; aucun `claude -p`, aucun sous-agent défini (`agents`). `omitClaudeMd` ne
+> s'applique qu'à un sous-agent (« No effect on the main session agent », `sdk.d.ts`) : sans objet ici.
+> **Méthode** (celle de RAWLY, `a2660e4`) : sonde sans outil (`tools: []` / `--tools ""`), un
+> marqueur ne compte PRÉSENT que cité verbatim, témoin positif ; options du SDK = celles du runner
+> (`systemPrompt` chaîne, `permissionMode: "plan"`) ; cwd = ce repo ; Opus 5.5 ; souscription
+> (`apiKeySource=none` sur tous les lancements relevés). Marqueurs : « Behavior Rules » et
+> « HUI-BON-HOA » (`~/.claude/CLAUDE.md`), « RÈGLES D'OR » (hook `SessionStart`), une règle témoin
+> `~/.claude/rules/zz_probe_canary.md` posée ~3 min puis retirée (le dossier n'existait pas, il
+> n'existe plus).
+>
+> | Lancement | `CLAUDE.md` | hook `SessionStart` | `~/.claude/rules/` |
+> |---|---|---|---|
+> | SDK, options du runner (rien de fixé) | PRÉSENT | PRÉSENT | PRÉSENT |
+> | SDK `settingSources: []` | absent | absent | absent |
+> | SDK `settingSources: ["project","local"]` | **PRÉSENT** | absent | **PRÉSENT** |
+> | `claude -p` | PRÉSENT | PRÉSENT | PRÉSENT |
+> | `claude -p --setting-sources ""` | absent | absent | absent |
+> | `claude -p --bare` | refusé : `Not logged in`, coût 0 | — | — |
+>
+> **Constats** : (1) retirer `'user'` ne suffit pas — seuls les hooks partent ; la seule isolation
+> est la liste vide. (2) `--bare` lit exclusivement `ANTHROPIC_API_KEY`/`apiKeyHelper` (« OAuth and
+> keychain are never read », `claude --help` 2.1.325) ⟹ interdit par la règle de facturation.
+> (3) Les 16 runs live de `docs/audit/live-runs/` ont tourné avec `CLAUDE.md`, le rituel, l'audit
+> mémoire et le MCP claude.ai Docs exposé aux agents (outils listés à l'init) : piste plausible,
+> non prouvée, pour les fuites de méta-commentaire de WF-005. (4) L'e-mail du compte reste injecté
+> même avec la liste vide. Non vérifié : qu'une étape puisse lancer un sous-agent (`allowedTools`
+> auto-approuve, il ne restreint pas). Sorties brutes au scratchpad de la session, non versionnées.
 
 ---
 
