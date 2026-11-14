@@ -59,10 +59,9 @@ Resume — /Users/guyhui/CLAUDE/claude-agentic-runtime (repo guyhui01/claude-age
 Apply the startup ritual, then read next_steps.md LOCALLY.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
-Designated unit (my decision, 2026-11-13): the KO MATRIX, plan at the top of the resume block.
-If a new Dependabot alert is open, say so first and let me choose; otherwise start the matrix
-with the two failed runs (WF-008, WF-009 gate-halt), then P11. Local only: no billed run, no
-catalog write, no fix. Deliverable docs/audit/ko-matrix.md, committed locally; push on my order.
+KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). If a new Dependabot alert is open,
+say so first and let me choose; otherwise present the five matrix decisions at the top of the
+resume block, runner isolation first, and wait for my choice. No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0
