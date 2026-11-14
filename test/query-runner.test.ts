@@ -61,7 +61,7 @@ function fakeQuery(
 const emptyEnv: Record<string, string | undefined> = {};
 
 describe("createQueryRunner — query() → StepRunner adapter (§2.4-B.3)", () => {
-  it("maps the agent to query() options (systemPrompt, tools, model) + forced plan", async () => {
+  it("maps the agent to query() options (systemPrompt, tools, model) + forced plan and isolation", async () => {
     const q = fakeQuery([successResult({ result: "ok" })]);
     const runner = createQueryRunner({ query: q, env: emptyEnv });
     await runner(
@@ -72,6 +72,7 @@ describe("createQueryRunner — query() → StepRunner adapter (§2.4-B.3)", () 
     expect(opts.allowedTools).toEqual(["Read", "Grep", "Glob"]);
     expect(opts.model).toBe("claude-opus-4-8");
     expect(opts.permissionMode).toBe("plan");
+    expect(opts.settingSources).toEqual([]);
     expect(opts.maxBudgetUsd).toBe(DEFAULT_CAPS.maxBudgetUsd);
   });
 

@@ -6,6 +6,16 @@
 
 ---
 
+## [Unreleased]
+
+> Model: Claude Opus 5.5.
+
+### 🔄 Changed
+
+- **Live runs are isolated from the operator's settings: `createQueryRunner` now forces `settingSources: []` (guard 5, not overridable by an agent).** The 2026-11-14 instruction-loading probe showed that every SDK launch with nothing set loaded the operator's `~/.claude/CLAUDE.md`, the `SessionStart` hook and `~/.claude/rules/`, so all 16 recorded live runs in `docs/audit/live-runs/` ran with that context (the common factor D of `docs/audit/ko-matrix.md`). Only the empty list isolates: `["project", "local"]` still loads `CLAUDE.md` and the rules, and `--bare` is ruled out because it reads only a metered API key. `createQueryRunner` is the runtime's single launch path (the ten spines and the dispatch router), so one option covers all of them; the project loses nothing, as this repo has no `CLAUDE.md` and no `.claude/` settings. Not covered: the account e-mail is still injected with the empty list (probe finding). Validated offline: the runner test asserts the option, and removing it turns exactly that test red; strict `typecheck` OK; `npm audit` 0; suite **655 passed / 26 skipped / 0 failed of 681** both on the sibling catalog checkout and with `CATALOG_ROOT` on a clone at `v5.0.0`. **Live smoke WF-001 pending** (it changes the launch conditions of the ten live-proven workflows), which will also show whether the claude.ai MCP tools are still exposed to the agents.
+
+---
+
 ## [0.19.0] - 2026-11-13 — A behavioral regression corpus, the catalog re-pinned to `v5.0.0`, and three live-proven dependency series 🧪
 
 > Model: Claude Opus 4.8, then Claude Opus 5.5 (the catalog re-pin to `v5.0.0`, the SDK `0.3.281` bump, the behavioral regression corpus, and the 2026-10-15 Dependabot series: MCP SDK `1.32.1`, `ip-address`, the dev group, `proxy-addr`, `fast-uri` and the SDK `0.3.296` bump; then the 2026-11-12 series, starting with `body-parser` `2.4.0`, `zod` `4.6.7`, `fast-uri` `3.1.9`, `hono` `4.13.18`, `@hono/node-server` `2.1.8` and the dev group with `vitest` `5.1.0`, closed by the SDK `0.3.322` bump).

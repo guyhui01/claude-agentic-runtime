@@ -16,6 +16,10 @@
  *   3. HARD per-step caps (low `maxBudgetUsd` + low `maxTurns`), never exceeded
  *      even if the agent asks for more.
  *   4. Any non-`success` result (budget/turns/error) ⇒ we throw (fail-closed).
+ *   5. `settingSources: []` FORCED (isolation, not overridable): no user, project
+ *      or local settings reach a step — no `CLAUDE.md`, no `~/.claude/rules/`, no
+ *      hooks. Probed 2026-11-14: only the empty list isolates; dropping `'user'`
+ *      alone still loads `CLAUDE.md` and the rules.
  *
  * ENFORCED output format (§2.4-B.3): when the call carries an `outputSchema`
  * (= `contract.output`), the runner appends an instruction to the prompt asking
@@ -157,6 +161,8 @@ export function createQueryRunner(deps: QueryRunnerDeps = {}): StepRunner {
       maxBudgetUsd: caps.maxBudgetUsd,
       // Guard 2: read-only forced (ADR-0001), not overridable by the agent.
       permissionMode: "plan",
+      // Guard 5: isolated from the operator's settings (CLAUDE.md, rules, hooks).
+      settingSources: [],
     };
     if (agent.tools) options.allowedTools = agent.tools;
     if (agent.disallowedTools) options.disallowedTools = agent.disallowedTools;
