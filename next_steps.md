@@ -27,10 +27,15 @@
 >    construction (même étape que le gate, `f2afce2`) ; `affirmativeString` rejetterait « None
 >    detected… ». Matrice annotée ; cas de corpus réduit à « halt sur `rh-shortlist-validated` ».
 > 4. **K3 P11** : flèche sidecar WF-006 vs « Direct solicitation » (PR catalogue ou règle routeur).
-> 5. **Corpus — cas n° 2 (K2) retenu 2026-11-15 puis BLOQUÉ** : le seed « sans CV » du 2026-07-12
->    est antérieur au passthrough ; `candidatePool` est désormais REQUIS (`minItems: 5`) dans la
->    sortie de STEP-01 et l'entrée de STEP-04 (`wf-009-recrutement.ts`) ⟹ un seed sans pool ne peut
->    plus atteindre STEP-04. Décision de Guy en attente ; n° 3 (P11) et n° 1 (K1) ensuite.
+> 5. **Corpus — cas n° 2 (K2) retenu 2026-11-15 puis NON DÉTERMINÉ** : le seed « sans CV » du
+>    2026-07-12 est antérieur au passthrough ; `candidatePool` est désormais REQUIS (`minItems: 5`)
+>    en sortie de STEP-01 (`wf-009-recrutement.ts`), imposé live comme format de sortie
+>    (`query-runner.ts`, `outputFormat`). Deux issues possibles, NON mesurées : pool omis ⟹ halt
+>    `handoff` à STEP-01 ; pool fabriqué ⟹ STEP-04 (halt si placeholders, faux vert E si profils
+>    plausibles). Non vérifié : que le SDK applique `minItems`. Invariant juste = « sans CV, jamais
+>    `completed` », inexprimable par `checkInvariants` (point d'arrêt exact) ⟹ pas d'extension sans
+>    ordre de Guy. `spine-wf-009.test.ts` ne couvre que 3 placeholders à STEP-04, pas un pool
+>    fabriqué. Suite retenue : n° 3 (P11), puis n° 1 (K1).
 > Le plan d'origine ci-dessous est exécuté (gardé comme référence).
 
 > **Plan d'origine (exécuté) : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la

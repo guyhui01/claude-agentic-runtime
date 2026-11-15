@@ -124,6 +124,12 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 - **Corpus candidate:** STEP-04 with no CVs; invariant: halt at STEP-04 on
   `rh-shortlist-validated`. (The earlier invariant "no blocking criterion of the step passes on a
   sentinel entry" is withdrawn: it fails by construction, see the reassessment.)
+  *(2026-11-15: not determinable as written. The no-CV seed predates the `candidatePool`
+  passthrough; the pool is now required (`minItems: 5`) in STEP-01's output and enforced live as
+  the output format. Unmeasured outcomes: the pool is omitted (handoff halt at STEP-01), or it is
+  fabricated (STEP-04 is reached: a halt on placeholders, a type E false green on plausible
+  profiles). Whether the SDK applies `minItems` is unverified. The sound invariant, "no CVs ⇒
+  never `completed`", needs a non-exact halt point that `checkInvariants` does not express.)*
 
 ### K3 — WF-000 router, P11 (2026-07-19, `v4.2.0`)
 
@@ -168,7 +174,7 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 | # | From | Invariant to pin |
 |---|---|---|
 | 1 | K1 | returned ⇒ halt before STEP-07 (ratified 2026-11-14) and ≥ 1 checkable reservation |
-| 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14) |
+| 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14; **not determinable as written**, 2026-11-15, see K2) |
 | 3 | K3 | P11 ⇒ WF-006 (routed, or named as nearest miss) |
 
 The corpus has 2 cases today (WF-001 `completed`, WF-008 refused at STEP-01). Any new case
