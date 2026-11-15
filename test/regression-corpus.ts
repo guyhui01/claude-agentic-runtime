@@ -23,7 +23,10 @@ import type { CriterionResult } from "../src/eval/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
 import type { QueryRunnerDeps } from "../src/sdk/query-runner.js";
 import { runWf001 } from "../src/spines/run-wf-001.js";
-import { runWf008 } from "../src/spines/run-wf-008.js";
+import { runWf008, assembleWf008Spine } from "../src/spines/run-wf-008.js";
+import { runSpine } from "../src/orchestrator/run-spine.js";
+import { toAgentDefinition } from "../src/sdk/to-agent-definition.js";
+import wf008Step06cSeed from "./fixtures/regression-wf-008-step06c-seed.json" with { type: "json" };
 import { runDispatch, type DispatchOutcome } from "../src/dispatch/run-dispatch.js";
 import type { NeedBrief } from "../src/dispatch/types.js";
 import { createQueryRunner } from "../src/sdk/query-runner.js";
@@ -50,12 +53,26 @@ export interface RunContext {
   model?: string;
 }
 
+/** One step's output, as the live corpus run records it. */
+export interface StepOutput {
+  stepId: string;
+  output: unknown;
+}
+
 export interface RegressionCase {
   id: string;
   workflow: string;
   /** Where the fixed input comes from (a proven live run, or why it was built). */
   inputProvenance: string;
-  expected: ExpectedOutcome;
+  /**
+   * The expected outcome, or the admissible outcomes when more than one is legitimate (a model
+   * judgment): the run conforms if it matches ANY of them.
+   */
+  expected: ExpectedOutcome | ExpectedOutcome[];
+  /** First step run, when the case runs a tail of the spine (default: the spine's first step). */
+  startsAt?: string;
+  /** Deterministic checks on the agents' outputs, beyond the run's shape. */
+  checkOutputs?: (outputs: StepOutput[]) => string[];
   run: (ctx: RunContext) => Promise<SpineResult>;
 }
 
@@ -115,6 +132,41 @@ export function checkInvariants(expected: ExpectedOutcome, run: RecordedRun): st
   return v;
 }
 
+/**
+ * Checks a run against admissible outcomes: conforms (empty) if it matches any of them; otherwise
+ * returns every alternative's violations, prefixed with the alternative's index.
+ */
+export function checkAnyOf(expected: ExpectedOutcome[], run: RecordedRun): string[] {
+  const all = expected.map((e) => checkInvariants(e, run));
+  if (all.some((v) => v.length === 0)) return [];
+  return all.flatMap((v, i) => v.map((x) => `[alt ${i}] ${x}`));
+}
+
+/** Checks a run against a case: its shape (one or several admissible outcomes), then its outputs. */
+export function checkCase(c: RegressionCase, run: RecordedRun, outputs: StepOutput[]): string[] {
+  const shape = Array.isArray(c.expected) ? checkAnyOf(c.expected, run) : checkInvariants(c.expected, run);
+  return [...shape, ...(c.checkOutputs?.(outputs) ?? [])];
+}
+
+/**
+ * WF-008 counter-review output check: the verdict is one of the two words the step defines, and
+ * a returned audit carries at least one reservation. Whether a reservation cites a checkable
+ * artifact is not tested: it would take an LLM judge (ADR-0011).
+ */
+export function checkCounterReviewOutput(outputs: StepOutput[]): string[] {
+  const o = outputs.find((x) => x.stepId === "STEP-06C")?.output as
+    | { verdict?: unknown; reservations?: unknown }
+    | undefined;
+  if (o === undefined) return ["STEP-06C: no output recorded"];
+  if (o.verdict !== "cleared" && o.verdict !== "returned") {
+    return [`STEP-06C: verdict expected "cleared" or "returned", got ${JSON.stringify(o.verdict)}`];
+  }
+  if (o.verdict === "returned" && !(Array.isArray(o.reservations) && o.reservations.length > 0)) {
+    return ["STEP-06C: returned without any reservation"];
+  }
+  return [];
+}
+
 /** Shared caps of the live observation harnesses (WF-001 1.0 / 6, WF-008 4.0 / 15). */
 const WF001_CAPS: QueryRunnerDeps = { caps: { maxBudgetUsd: 1.0, maxTurns: 6 } };
 const WF008_CAPS: QueryRunnerDeps = { caps: { maxBudgetUsd: 4.0, maxTurns: 15 } };
@@ -172,6 +224,37 @@ export const REGRESSION_CASES: RegressionCase[] = [
         },
         runnerDeps: WF008_CAPS,
       }),
+  },
+  {
+    id: "wf-008-counter-review-full-input",
+    workflow: "WF-008",
+    inputProvenance:
+      "Built for this corpus (2026-11-15), KO matrix K1: the counter-review fed every upstream " +
+      "audit output, which the linear orchestrator never gives it (it passes STEP-06's output " +
+      "only). The seed (test/fixtures/regression-wf-008-step06c-seed.json) merges the real " +
+      "STEP-01 to STEP-06 outputs of the 2026-07-11 live run (docs/audit/live-runs/" +
+      "wf-008-live-result.json) with the audit context of the WF-008 live harness default " +
+      "(last changed 2026-07-11, the run's day; identity with that run's seed not proven). " +
+      "STEP-06B, named by the card, is not part of the runtime spine. Those outputs were " +
+      "produced before the runner isolation. Cleared and returned are both legitimate: a " +
+      "returned verdict halts before STEP-07 (ratified 2026-11-14).",
+    startsAt: "STEP-06C",
+    expected: [
+      {
+        status: "failed",
+        stepsReached: ["STEP-06C"],
+        haltedAt: { stepId: "STEP-06C", kind: "eval-gate", mustFail: ["audit-verdict-cleared"] },
+      },
+      { status: "completed", stepsReached: ["STEP-06C", "STEP-07"] },
+    ],
+    checkOutputs: checkCounterReviewOutput,
+    run: (ctx) => {
+      const overrides = ctx.model ? { model: ctx.model } : {};
+      const steps = assembleWf008Spine(ctx.sidecar, (asset) => toAgentDefinition(asset, ctx.catalogRoot, overrides));
+      const from = steps.findIndex((s) => s.contract.stepId === "STEP-06C");
+      if (from < 0) throw new Error("wf-008-counter-review-full-input: STEP-06C not in the WF-008 spine");
+      return runSpine(steps.slice(from), createQueryRunner(WF008_CAPS), wf008Step06cSeed);
+    },
   },
 ];
 

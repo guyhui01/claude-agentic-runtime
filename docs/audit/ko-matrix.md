@@ -93,6 +93,9 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   input gap is a known limitation, and the live-runs README claim is corrected.)*
 - **Minor — C, low stakes.** 10 `"": ""` empty keys inside `biasLog` / `exitCriteria` items,
   the only file with them; the item schemas do not set `additionalProperties: false`.
+- *(2026-11-15: added as `wf-008-counter-review-full-input`, the tail STEP-06C → STEP-07 on
+  the real 2026-07-11 STEP-01–06 outputs; "checkable" reservation reduced to "≥ 1 reservation",
+  as the rest needs an LLM judge; proven offline, not yet run live.)*
 - **Corpus candidate:** STEP-06C fed a fixture of all upstream outputs; invariants: verdict in
   {cleared, returned}; returned ⇒ ≥ 1 reservation citing a checkable artifact; the halt rule
   matches whichever reading Guy ratifies (ratified 2026-11-14: returned ⇒ halt before STEP-07).

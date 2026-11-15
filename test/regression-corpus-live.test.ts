@@ -19,7 +19,8 @@
  *
  * Dispatch cases (WF-000 router) make a single router call each (caps $0.5 / 2 turns).
  *
- * Cost note: the WF-008 refusal case is expected to halt at STEP-01. If a regression lets the
+ * Cost note: the WF-008 counter-review case runs STEP-06C and, on a cleared verdict, STEP-07
+ * (caps $4.0 / 15 turns per step). The WF-008 refusal case is expected to halt at STEP-01. If a regression lets the
  * audit continue, the full spine runs (caps $4.0 / 15 turns per step) — that cost IS the finding.
  */
 import { describe, it, expect } from "vitest";
@@ -32,7 +33,7 @@ import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
 import {
   REGRESSION_CASES,
   DISPATCH_REGRESSION_CASES,
-  checkInvariants,
+  checkCase,
   checkDispatchInvariants,
   toRecordedRun,
 } from "./regression-corpus.js";
@@ -73,7 +74,8 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
           ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
         });
         const recorded = toRecordedRun(res);
-        const violations = checkInvariants(c.expected, recorded);
+        const outputs = res.traces.map((t) => ({ stepId: t.provenance.stepId, output: t.output }));
+        const violations = checkCase(c, recorded, outputs);
 
         mkdirSync(RESULT_DIR, { recursive: true });
         writeFileSync(
@@ -86,7 +88,7 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
               catalogDirty: catalog.dirty,
               violations,
               ...recorded,
-              outputs: res.traces.map((t) => ({ stepId: t.provenance.stepId, output: t.output })),
+              outputs,
             },
             null,
             2,

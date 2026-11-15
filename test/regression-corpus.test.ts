@@ -8,6 +8,8 @@
  *     a halt at the wrong gate must NOT count as the governed refusal;
  *   · references guard: every stepId / criterion id a case names exists in the spine definition,
  *     so a rename surfaces here for free rather than in a billed run.
+ * The WF-008 counter-review case (two admissible outcomes) uses the committed STEP-06C trace as
+ * its returned pole and a cleared run built from the real STEP-06C gate report as the other.
  * Dispatch cases (WF-000 router) use the committed router live run: P11 and P06 as positive
  * poles, other real decisions (wrong nearest miss, none, wrong route, intake reject) as negatives.
  */
@@ -16,7 +18,12 @@ import {
   REGRESSION_CASES,
   DISPATCH_REGRESSION_CASES,
   checkInvariants,
+  checkCase,
+  checkAnyOf,
+  checkCounterReviewOutput,
   checkDispatchInvariants,
+  type ExpectedOutcome,
+  type StepOutput,
   type RecordedRun,
   type RegressionCase,
 } from "./regression-corpus.js";
@@ -27,6 +34,7 @@ import wf008Trace from "../docs/audit/live-runs/wf-008-live-result.json" with { 
 import routerRun from "../docs/audit/live-runs/wf-000-router-live-result.json" with { type: "json" };
 import type { DispatchOutcome } from "../src/dispatch/run-dispatch.js";
 import { DEFAULT_MANIFESTS } from "../src/dispatch/run-dispatch.js";
+import wf008Seed from "./fixtures/regression-wf-008-step06c-seed.json" with { type: "json" };
 
 const caseOf = (id: string): RegressionCase => {
   const c = REGRESSION_CASES.find((x) => x.id === id);
@@ -35,6 +43,13 @@ const caseOf = (id: string): RegressionCase => {
 };
 const WF001 = caseOf("wf-001-completed");
 const WF008 = caseOf("wf-008-prohibited-practice-refusal");
+/** The single expected outcome of a one-outcome case. */
+const single = (c: RegressionCase): ExpectedOutcome => {
+  if (Array.isArray(c.expected)) throw new Error(`${c.id}: several admissible outcomes`);
+  return c.expected;
+};
+const E001 = single(WF001);
+const E008 = single(WF008);
 
 const clone = (r: RecordedRun): RecordedRun => structuredClone(r);
 const REAL_WF001 = wf001Trace as unknown as RecordedRun;
@@ -50,13 +65,13 @@ function syntheticRefusal(): RecordedRun {
 
 describe("regression corpus — WF-001 completed", () => {
   it("the committed 2026-07-02 live trace conforms (positive pole)", () => {
-    expect(checkInvariants(WF001.expected, REAL_WF001)).toEqual([]);
+    expect(checkInvariants(E001, REAL_WF001)).toEqual([]);
   });
 
   it("a blocking failure on a step is a violation", () => {
     const run = clone(REAL_WF001);
     run.traces[1]!.results.find((r) => r.severity === "blocking")!.passed = false;
-    expect(checkInvariants(WF001.expected, run)).toContainEqual(expect.stringMatching(/^STEP-03: blocking .* failed$/));
+    expect(checkInvariants(E001, run)).toContainEqual(expect.stringMatching(/^STEP-03: blocking .* failed$/));
   });
 
   it("a missing step and a failed status are violations", () => {
@@ -64,7 +79,7 @@ describe("regression corpus — WF-001 completed", () => {
     run.traces.pop();
     run.status = "failed";
     run.failure = { stepId: "STEP-04", kind: "handoff" };
-    const v = checkInvariants(WF001.expected, run);
+    const v = checkInvariants(E001, run);
     expect(v).toContainEqual(expect.stringMatching(/^status:/));
     expect(v).toContainEqual(expect.stringMatching(/^stepsReached:/));
     expect(v).toContainEqual(expect.stringMatching(/^failure:/));
@@ -73,23 +88,23 @@ describe("regression corpus — WF-001 completed", () => {
   it("a step with no blocking result is a violation (no vacuous pass)", () => {
     const run = clone(REAL_WF001);
     run.traces[0]!.results = run.traces[0]!.results.filter((r) => r.severity !== "blocking");
-    expect(checkInvariants(WF001.expected, run)).toContain("STEP-01: no blocking result (vacuous pass)");
+    expect(checkInvariants(E001, run)).toContain("STEP-01: no blocking result (vacuous pass)");
   });
 
   it("an advisory failure is not a violation (the real trace carries one)", () => {
     const advisoryFails = REAL_WF001.traces.flatMap((t) => t.results).filter((r) => r.severity === "advisory" && !r.passed);
     expect(advisoryFails.length).toBeGreaterThan(0);
-    expect(checkInvariants(WF001.expected, REAL_WF001)).toEqual([]);
+    expect(checkInvariants(E001, REAL_WF001)).toEqual([]);
   });
 });
 
 describe("regression corpus — WF-008 prohibited-practice refusal", () => {
   it("a STEP-01 halt on jur-tier-not-unacceptable conforms", () => {
-    expect(checkInvariants(WF008.expected, syntheticRefusal())).toEqual([]);
+    expect(checkInvariants(E008, syntheticRefusal())).toEqual([]);
   });
 
   it("the committed STEP-06C halt does NOT count as the governed refusal (real negative control)", () => {
-    const v = checkInvariants(WF008.expected, REAL_WF008);
+    const v = checkInvariants(E008, REAL_WF008);
     expect(v).toContainEqual(expect.stringMatching(/^haltedAt: expected eval-gate at STEP-01, got eval-gate at STEP-06C$/));
     expect(v).toContainEqual(expect.stringMatching(/^stepsReached:/));
   });
@@ -97,19 +112,19 @@ describe("regression corpus — WF-008 prohibited-practice refusal", () => {
   it("a STEP-01 halt for another reason (tier passed) is a violation", () => {
     const run = syntheticRefusal();
     for (const r of run.traces[0]!.results) r.passed = r.id !== "jur-obligations-matrix";
-    expect(checkInvariants(WF008.expected, run)).toContain("STEP-01: jur-tier-not-unacceptable expected to fail, passed");
+    expect(checkInvariants(E008, run)).toContain("STEP-01: jur-tier-not-unacceptable expected to fail, passed");
   });
 
   it("a renamed mustFail criterion is a violation, not a silent pass", () => {
     const run = syntheticRefusal();
     run.traces[0]!.results = run.traces[0]!.results.filter((r) => r.id !== "jur-tier-not-unacceptable");
-    expect(checkInvariants(WF008.expected, run)).toContain(
+    expect(checkInvariants(E008, run)).toContain(
       "STEP-01: mustFail criterion jur-tier-not-unacceptable absent from the gate report",
     );
   });
 
   it("the audit continuing past STEP-01 is a violation", () => {
-    const v = checkInvariants(WF008.expected, { ...clone(REAL_WF008), status: "completed", failure: null });
+    const v = checkInvariants(E008, { ...clone(REAL_WF008), status: "completed", failure: null });
     expect(v).toContainEqual(expect.stringMatching(/^status:/));
     expect(v).toContainEqual(expect.stringMatching(/^stepsReached:/));
   });
@@ -131,18 +146,25 @@ describe("regression corpus — references guard", () => {
     for (const c of REGRESSION_CASES) {
       const spine = SPINES[c.workflow];
       expect(spine, `${c.id}: no spine definition registered for ${c.workflow}`).toBeDefined();
-      for (const s of c.expected.stepsReached) expect(spine!.stepIds, `${c.id}: ${s}`).toContain(s);
-      if (c.expected.haltedAt) {
-        expect(spine!.stepIds).toContain(c.expected.haltedAt.stepId);
-        for (const id of c.expected.haltedAt.mustFail) expect(spine!.criterionIds, `${c.id}: ${id}`).toContain(id);
+      if (c.startsAt) expect(spine!.stepIds, `${c.id}: startsAt`).toContain(c.startsAt);
+      for (const e of [c.expected].flat()) {
+        for (const s of e.stepsReached) expect(spine!.stepIds, `${c.id}: ${s}`).toContain(s);
+        if (e.haltedAt) {
+          expect(spine!.stepIds).toContain(e.haltedAt.stepId);
+          for (const id of e.haltedAt.mustFail) expect(spine!.criterionIds, `${c.id}: ${id}`).toContain(id);
+        }
       }
     }
   });
 
   it("a completed case lists every step of its spine; a failed case declares where it halts", () => {
     for (const c of REGRESSION_CASES) {
-      if (c.expected.status === "completed") expect(c.expected.stepsReached).toEqual(SPINES[c.workflow]!.stepIds);
-      else expect(c.expected.haltedAt, c.id).toBeDefined();
+      const ids = SPINES[c.workflow]!.stepIds;
+      const tail = c.startsAt ? ids.slice(ids.indexOf(c.startsAt)) : ids;
+      for (const e of [c.expected].flat()) {
+        if (e.status === "completed") expect(e.stepsReached, c.id).toEqual(tail);
+        else expect(e.haltedAt, c.id).toBeDefined();
+      }
     }
   });
 });
@@ -190,5 +212,106 @@ describe("regression corpus — WF-000 dispatch, P11 direct solicitation", () =>
 
   it("every dispatch case names a workflow the router can route to", () => {
     for (const c of DISPATCH_REGRESSION_CASES) expect(Object.keys(DEFAULT_MANIFESTS), c.id).toContain(c.expectedRoute);
+  });
+});
+
+describe("regression corpus — WF-008 counter-review on the full audit input", () => {
+  const K1 = caseOf("wf-008-counter-review-full-input");
+  const ALTS = K1.expected as ExpectedOutcome[];
+  const real06c = () => clone(REAL_WF008).traces.find((t) => t.stepId === "STEP-06C")!;
+  const realOutput06c = () =>
+    structuredClone((wf008Trace as unknown as { traces: { stepId: string; output: Record<string, unknown> }[] }).traces.find(
+      (t) => t.stepId === "STEP-06C",
+    )!.output);
+
+  /** The committed 2026-07-11 STEP-06C halt, as a run starting at STEP-06C. */
+  function returnedRun(): { run: RecordedRun; outputs: StepOutput[] } {
+    return {
+      run: { status: "failed", failure: { stepId: "STEP-06C", kind: "eval-gate" }, traces: [real06c()] },
+      outputs: [{ stepId: "STEP-06C", output: realOutput06c() }],
+    };
+  }
+
+  /** A cleared run: the real STEP-06C gate report with the verdict passed, then a passing STEP-07. */
+  function clearedRun(): { run: RecordedRun; outputs: StepOutput[] } {
+    const t06c = real06c();
+    t06c.verdict = "pass";
+    for (const r of t06c.results) if (r.id === "audit-verdict-cleared") r.passed = true;
+    const ids07 = WF_008_AUDIT_MANIFEST.steps.find((x) => x.stepId === "STEP-07")!.criteriaIds;
+    const results07 = WF_008_AUDIT_CRITERIA.filter((c) => ids07.includes(c.id)).map((c) => ({
+      id: c.id,
+      description: c.description,
+      severity: c.severity,
+      passed: true,
+    }));
+    const out = realOutput06c();
+    out["verdict"] = "cleared";
+    return {
+      run: { status: "completed", failure: null, traces: [t06c, { stepId: "STEP-07", verdict: "pass", results: results07 }] },
+      outputs: [{ stepId: "STEP-06C", output: out }],
+    };
+  }
+
+  it("the committed STEP-06C halt (returned, 5 reservations) conforms", () => {
+    const { run, outputs } = returnedRun();
+    expect(outputs[0]!.output).toMatchObject({ verdict: "returned" });
+    expect(checkCase(K1, run, outputs)).toEqual([]);
+  });
+
+  it("a cleared verdict that reaches STEP-07 conforms", () => {
+    const { run, outputs } = clearedRun();
+    expect(checkCase(K1, run, outputs)).toEqual([]);
+  });
+
+  it("a returned verdict without reservations is a violation", () => {
+    const { run, outputs } = returnedRun();
+    (outputs[0]!.output as Record<string, unknown>)["reservations"] = [];
+    expect(checkCase(K1, run, outputs)).toEqual(["STEP-06C: returned without any reservation"]);
+  });
+
+  it("a verdict outside the two words is a violation, even though the gate halts on it", () => {
+    const { run, outputs } = returnedRun();
+    (outputs[0]!.output as Record<string, unknown>)["verdict"] = "cleared with reservations";
+    expect(checkCase(K1, run, outputs)).toEqual([
+      'STEP-06C: verdict expected "cleared" or "returned", got "cleared with reservations"',
+    ]);
+  });
+
+  it("a STEP-06C halt on another blocking criterion matches neither outcome", () => {
+    const { run, outputs } = clearedRun();
+    run.status = "failed";
+    run.failure = { stepId: "STEP-06C", kind: "eval-gate" };
+    run.traces = [run.traces[0]!];
+    run.traces[0]!.verdict = "fail";
+    for (const r of run.traces[0]!.results) if (r.id === "audit-bias-log") r.passed = false;
+    const v = checkCase(K1, run, outputs);
+    expect(v).toContain("[alt 0] STEP-06C: audit-verdict-cleared expected to fail, passed");
+    expect(v).toContainEqual(expect.stringMatching(/^\[alt 1\] status:/));
+  });
+
+  it("a run that stops after STEP-06C without STEP-07 on a cleared verdict matches neither outcome", () => {
+    const { run, outputs } = clearedRun();
+    run.traces.pop();
+    expect(checkCase(K1, run, outputs)).not.toEqual([]);
+  });
+
+  it("no STEP-06C output is a violation", () => {
+    expect(checkCounterReviewOutput([])).toEqual(["STEP-06C: no output recorded"]);
+  });
+
+  it("checkAnyOf with a single alternative behaves like checkInvariants, prefixed", () => {
+    const { run } = returnedRun();
+    const wrong: ExpectedOutcome = { status: "completed", stepsReached: ["STEP-06C", "STEP-07"] };
+    expect(checkAnyOf([wrong], run)).toEqual(checkInvariants(wrong, run).map((x) => `[alt 0] ${x}`));
+    expect(checkAnyOf(ALTS, run)).toEqual([]);
+  });
+
+  it("the seed carries every upstream output the trace recorded (STEP-01 to STEP-06) and the adkarPlan contract key", () => {
+    const keys = Object.keys(wf008Seed);
+    for (const t of (wf008Trace as unknown as { traces: { stepId: string; output: Record<string, unknown> }[] }).traces) {
+      if (t.stepId === "STEP-06C") continue;
+      for (const k of Object.keys(t.output)) expect(keys, `${t.stepId}.${k}`).toContain(k);
+    }
+    expect(keys).toContain("adkarPlan");
   });
 });
