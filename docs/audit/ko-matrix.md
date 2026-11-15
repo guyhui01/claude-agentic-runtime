@@ -143,6 +143,8 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 - **Admissible:** widen the WF-006 arrow in the catalog (catalog PR), or a router rule for
   pre-signature commercial states (runtime). The V1 router rule is not implemented.
 - **Corpus candidate:** P11 brief; invariant: `ROUTED` WF-006, or `NO_MATCH` naming WF-006.
+  *(2026-11-15: added as `wf-000-p11-direct-solicitation`, `PARAMS_MISSING` on WF-006 also
+  admitted; proven offline, not yet run live.)*
 
 ### K4 — WF-001 advisory `po-us-format-invest` (2026-07-02, `v4.0.0`)
 

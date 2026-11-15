@@ -35,7 +35,10 @@
 >    plausibles). Non vérifié : que le SDK applique `minItems`. Invariant juste = « sans CV, jamais
 >    `completed` », inexprimable par `checkInvariants` (point d'arrêt exact) ⟹ pas d'extension sans
 >    ordre de Guy. `spine-wf-009.test.ts` ne couvre que 3 placeholders à STEP-04, pas un pool
->    fabriqué. Suite retenue : n° 3 (P11), puis n° 1 (K1).
+>    fabriqué. **Cas n° 3 (P11) ÉCRIT 2026-11-15** (`wf-000-p11-direct-solicitation`), prouvé hors
+>    ligne (663/27/0 sur 690, retrait-et-rejeu des 4 règles), **PAS ENCORE LANCÉ LIVE** : GO de Guy,
+>    `LIVE_RUN=1 REGRESSION_CASE=wf-000-p11-direct-solicitation npx vitest run test/regression-corpus-live.test.ts`
+>    (1 appel routeur, $0.5 / 2 tours). Ensuite n° 1 (K1).
 > Le plan d'origine ci-dessous est exécuté (gardé comme référence).
 
 > **Plan d'origine (exécuté) : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
@@ -77,8 +80,8 @@ Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). Runner isolation (settingSources: [])
 is pushed (855423d) and live-smoked (WF-001 completed 3/3). If a new Dependabot alert is open,
-say so first and let me choose; otherwise resume the corpus cases (K2 first, then P11, then K1;
-live runs on my GO only). K1 card + K3 = catalog session. No fix without my order.
+say so first and let me choose; otherwise resume the corpus: P11 case written, live run pending
+my GO; then K1. K2 is not determinable as written (see item 5). K1 card + K3 = catalog session. No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0

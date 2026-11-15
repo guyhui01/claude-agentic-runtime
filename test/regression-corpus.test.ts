@@ -8,11 +8,15 @@
  *     a halt at the wrong gate must NOT count as the governed refusal;
  *   · references guard: every stepId / criterion id a case names exists in the spine definition,
  *     so a rename surfaces here for free rather than in a billed run.
+ * Dispatch cases (WF-000 router) use the committed router live run: P11 and P06 as positive
+ * poles, other real decisions (wrong nearest miss, none, wrong route, intake reject) as negatives.
  */
 import { describe, it, expect } from "vitest";
 import {
   REGRESSION_CASES,
+  DISPATCH_REGRESSION_CASES,
   checkInvariants,
+  checkDispatchInvariants,
   type RecordedRun,
   type RegressionCase,
 } from "./regression-corpus.js";
@@ -20,6 +24,9 @@ import { WF_001_CADRAGE_MANIFEST, WF_001_CADRAGE_CRITERIA } from "../src/spines/
 import { WF_008_AUDIT_MANIFEST, WF_008_AUDIT_CRITERIA } from "../src/spines/wf-008-audit.js";
 import wf001Trace from "../docs/audit/live-runs/wf-001-live-result.json" with { type: "json" };
 import wf008Trace from "../docs/audit/live-runs/wf-008-live-result.json" with { type: "json" };
+import routerRun from "../docs/audit/live-runs/wf-000-router-live-result.json" with { type: "json" };
+import type { DispatchOutcome } from "../src/dispatch/run-dispatch.js";
+import { DEFAULT_MANIFESTS } from "../src/dispatch/run-dispatch.js";
 
 const caseOf = (id: string): RegressionCase => {
   const c = REGRESSION_CASES.find((x) => x.id === id);
@@ -137,5 +144,51 @@ describe("regression corpus — references guard", () => {
       if (c.expected.status === "completed") expect(c.expected.stepsReached).toEqual(SPINES[c.workflow]!.stepIds);
       else expect(c.expected.haltedAt, c.id).toBeDefined();
     }
+  });
+});
+
+describe("regression corpus — WF-000 dispatch, P11 direct solicitation", () => {
+  const P11 = DISPATCH_REGRESSION_CASES.find((c) => c.id === "wf-000-p11-direct-solicitation")!;
+  const live = (id: string): DispatchOutcome => {
+    const r = routerRun.results.find((x) => x.id === id);
+    if (!r) throw new Error(`no live router result for ${id}`);
+    return r.detail as unknown as DispatchOutcome;
+  };
+
+  it("the committed live P11 decision (NO_MATCH, nearest miss WF-006) conforms", () => {
+    expect(live("P11")).toMatchObject({ status: "NO_MATCH", nearestMiss: "WF-006" });
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P11"))).toEqual([]);
+  });
+
+  it("a real ROUTED WF-006 decision (P06) conforms", () => {
+    expect(live("P06")).toMatchObject({ status: "ROUTED", route: "WF-006" });
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P06"))).toEqual([]);
+  });
+
+  it("PARAMS_MISSING on WF-006 conforms (the gap is the brief's)", () => {
+    const o: DispatchOutcome = { status: "PARAMS_MISSING", route: "WF-006", missingParams: ["Response deadline"] };
+    expect(checkDispatchInvariants(P11.expectedRoute, o)).toEqual([]);
+  });
+
+  it("a NO_MATCH naming another workflow (real P14, WF-008) is a violation", () => {
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P14"))).toEqual(["nearestMiss: expected WF-006, got WF-008"]);
+  });
+
+  it("a NO_MATCH with no nearest miss (real P17) is a violation", () => {
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P17"))).toEqual(["nearestMiss: expected WF-006, got none"]);
+  });
+
+  it("a route to another workflow (real P12, WF-004) is a violation", () => {
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P12"))).toEqual(["route: expected WF-006, got ROUTED WF-004"]);
+  });
+
+  it("a non-decision (real P18 intake reject) is a violation", () => {
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P18"))).toEqual([
+      "status: expected a decision on WF-006, got REJECT_INCOMPLETE",
+    ]);
+  });
+
+  it("every dispatch case names a workflow the router can route to", () => {
+    for (const c of DISPATCH_REGRESSION_CASES) expect(Object.keys(DEFAULT_MANIFESTS), c.id).toContain(c.expectedRoute);
   });
 });

@@ -17,6 +17,8 @@
  * the sidecar's `catalogTag` would still name the pinned tag on a modified branch. A catalog that
  * is not a git checkout is refused BEFORE any billed call: an unattributable run proves nothing.
  *
+ * Dispatch cases (WF-000 router) make a single router call each (caps $0.5 / 2 turns).
+ *
  * Cost note: the WF-008 refusal case is expected to halt at STEP-01. If a regression lets the
  * audit continue, the full spine runs (caps $4.0 / 15 turns per step) — that cost IS the finding.
  */
@@ -27,15 +29,22 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSidecar } from "../src/loader/load-sidecar.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
-import { REGRESSION_CASES, checkInvariants, toRecordedRun } from "./regression-corpus.js";
+import {
+  REGRESSION_CASES,
+  DISPATCH_REGRESSION_CASES,
+  checkInvariants,
+  checkDispatchInvariants,
+  toRecordedRun,
+} from "./regression-corpus.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_DIR = process.env.LIVE_RESULT_DIR ?? join(HERE, "..", "docs", "audit", "live-runs");
 const ENABLED = !!process.env.LIVE_RUN && existsSync(SIDECAR_PATH);
 const ONLY = process.env.REGRESSION_CASE;
 
-if (ONLY && !REGRESSION_CASES.some((c) => c.id === ONLY)) {
-  throw new Error(`REGRESSION_CASE=${ONLY}: unknown case (known: ${REGRESSION_CASES.map((c) => c.id).join(", ")})`);
+const ALL_IDS = [...REGRESSION_CASES, ...DISPATCH_REGRESSION_CASES].map((c) => c.id);
+if (ONLY && !ALL_IDS.includes(ONLY)) {
+  throw new Error(`REGRESSION_CASE=${ONLY}: unknown case (known: ${ALL_IDS.join(", ")})`);
 }
 
 /**
@@ -88,6 +97,43 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
         expect(violations).toEqual([]);
       },
       1_800_000,
+    );
+  }
+
+  for (const c of DISPATCH_REGRESSION_CASES.filter((x) => !ONLY || x.id === ONLY)) {
+    it(
+      `${c.id} (WF-000 dispatch) decides on ${c.expectedRoute}`,
+      async () => {
+        const catalog = catalogProvenance(CATALOG_ROOT);
+        const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
+        const outcome = await c.run({
+          sidecar,
+          catalogRoot: CATALOG_ROOT,
+          ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
+        });
+        const violations = checkDispatchInvariants(c.expectedRoute, outcome);
+
+        mkdirSync(RESULT_DIR, { recursive: true });
+        writeFileSync(
+          join(RESULT_DIR, `regression-${c.id}-live-result.json`),
+          JSON.stringify(
+            {
+              case: c.id,
+              catalogRoot: CATALOG_ROOT,
+              catalogCommit: catalog.commit,
+              catalogDirty: catalog.dirty,
+              violations,
+              outcome,
+            },
+            null,
+            2,
+          ),
+          "utf-8",
+        );
+
+        expect(violations).toEqual([]);
+      },
+      300_000,
     );
   }
 });

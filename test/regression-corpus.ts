@@ -24,6 +24,9 @@ import type { Sidecar } from "../src/sidecar/types.js";
 import type { QueryRunnerDeps } from "../src/sdk/query-runner.js";
 import { runWf001 } from "../src/spines/run-wf-001.js";
 import { runWf008 } from "../src/spines/run-wf-008.js";
+import { runDispatch, type DispatchOutcome } from "../src/dispatch/run-dispatch.js";
+import type { NeedBrief } from "../src/dispatch/types.js";
+import { createQueryRunner } from "../src/sdk/query-runner.js";
 
 /** Serialized run — the shape of the committed `docs/audit/live-runs/*-live-result.json`. */
 export interface RecordedRun {
@@ -168,6 +171,76 @@ export const REGRESSION_CASES: RegressionCase[] = [
           highStakes: true,
         },
         runnerDeps: WF008_CAPS,
+      }),
+  },
+];
+
+/**
+ * DISPATCH CASES — the WF-000 router, a single routing decision rather than a spine, so they
+ * carry their own shape and checker. The invariant bears on the decision only: the expected
+ * workflow is either reached (`ROUTED`, or `PARAMS_MISSING` — the gap is the brief's, not the
+ * router's, as in the live router harness) or named as the nearest miss of a `NO_MATCH`.
+ */
+export interface DispatchRegressionCase {
+  id: string;
+  /** Where the fixed brief comes from. */
+  inputProvenance: string;
+  brief: NeedBrief;
+  /** The workflow the decision must reach or name. */
+  expectedRoute: string;
+  run: (ctx: RunContext) => Promise<DispatchOutcome>;
+}
+
+/**
+ * Checks a routing decision against its expected workflow. Returns the violations (empty =
+ * conforms). Any other status (`REJECT_INCOMPLETE`, `REJECT_ROUTER_OUTPUT`), another route, or a
+ * `NO_MATCH` without the expected nearest miss is a violation.
+ */
+export function checkDispatchInvariants(expectedRoute: string, outcome: DispatchOutcome): string[] {
+  switch (outcome.status) {
+    case "ROUTED":
+    case "PARAMS_MISSING":
+      return outcome.route === expectedRoute
+        ? []
+        : [`route: expected ${expectedRoute}, got ${outcome.status} ${outcome.route}`];
+    case "NO_MATCH":
+      return outcome.nearestMiss === expectedRoute
+        ? []
+        : [`nearestMiss: expected ${expectedRoute}, got ${outcome.nearestMiss ?? "none"}`];
+    default:
+      return [`status: expected a decision on ${expectedRoute}, got ${outcome.status}`];
+  }
+}
+
+/** Router call caps of the live router harness (`dispatch-run-live.test.ts`): $0.5 / 2 turns. */
+const DISPATCH_CAPS: QueryRunnerDeps = { caps: { maxBudgetUsd: 0.5, maxTurns: 2 } };
+
+const P11_BRIEF: NeedBrief = {
+  need: "Prospect Kestrel Mutual asked what an AI scoping mission with us would cost; nothing is signed, this is a pre-signature commercial ask to answer.",
+  domain: "Management & Consulting",
+  expectedDeliverable: "Commercial proposal for a scoping mission",
+  constraints: ["no RFP document, direct solicitation"],
+  context: "Mutual insurer prospect, first contact through referral, scoping-mission scope only.",
+  submittedBy: "Account Executive",
+};
+
+export const DISPATCH_REGRESSION_CASES: DispatchRegressionCase[] = [
+  {
+    id: "wf-000-p11-direct-solicitation",
+    inputProvenance:
+      "Oracle brief P11 (test/fixtures/dispatch-briefs.ts), copied verbatim on 2026-11-15. Live " +
+      "on 2026-07-19 (docs/audit/live-runs/wf-000-router-live-result.json): NO_MATCH, nearest " +
+      "miss WF-006 — the router sees only the sidecar arrow \"RFP received → …\" while the WF-006 " +
+      "card also lists direct solicitation (KO matrix K3). Both readings are admitted until K3 is " +
+      "settled in the catalog; a decision that loses WF-006 is the regression.",
+    brief: P11_BRIEF,
+    expectedRoute: "WF-006",
+    run: (ctx) =>
+      runDispatch(P11_BRIEF, {
+        sidecar: ctx.sidecar,
+        catalogRoot: ctx.catalogRoot,
+        runner: createQueryRunner(DISPATCH_CAPS),
+        ...(ctx.model ? { model: ctx.model } : {}),
       }),
   },
 ];
