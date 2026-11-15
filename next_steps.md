@@ -42,8 +42,12 @@
 >    NON attribué (isolation ou variance). **Cas n° 1 (K1) ÉCRIT 2026-11-15**
 >    (`wf-008-counter-review-full-input`) : queue STEP-06C → STEP-07 sur les sorties réelles
 >    STEP-01–06 du 2026-07-11, deux issues admises, prouvé hors ligne (672/28/0 sur 700,
->    retrait-et-rejeu des 8 règles), **PAS ENCORE LANCÉ LIVE** : GO de Guy, clone `v5.0.0`,
->    `REGRESSION_CASE=wf-008-counter-review-full-input` ($4 / 15 tours par étape, ≤ 2 étapes).
+>    retrait-et-rejeu des 8 règles). **Live 2026-11-15 sur GO de Guy : conforme, 0 violation** —
+>    `returned`, 7 réserves, halt STEP-06C, STEP-07 non lancé, ~65 s, OAuth, runner isolé, clone
+>    `v5.0.0`. **Observation (1 run, à trancher par Guy)** : avec l'entrée complète, les réserves
+>    attaquent la chaîne tier → obligations (Annexe III, DORA vs NIS2, RGPD art. 22) alors que la
+>    carte garde la qualification juridique à STEP-01 ⟹ franchissement de périmètre ou relecture
+>    légitime de la méthode ? Contenu juridique des réserves NON vérifié.
 > Le plan d'origine ci-dessous est exécuté (gardé comme référence).
 
 > **Plan d'origine (exécuté) : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
@@ -85,8 +89,9 @@ Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). Runner isolation (settingSources: [])
 is pushed (855423d) and live-smoked (WF-001 completed 3/3). If a new Dependabot alert is open,
-say so first and let me choose; otherwise resume the corpus: P11 live-conformant (2026-11-15); K1 case
-written, live run pending my GO. K2 is not determinable as written (see item 5). K1 card + K3 = catalog session. No fix without my order.
+say so first and let me choose; otherwise: the three corpus decisions are done (P11 and K1 live-conformant
+2026-11-15, K2 not determinable). Open: the K1 scope observation (my call); K1 card + K3 =
+catalog session. K2 is not determinable as written (see item 5). K1 card + K3 = catalog session. No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0

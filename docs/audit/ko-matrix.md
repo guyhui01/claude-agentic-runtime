@@ -95,7 +95,10 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   the only file with them; the item schemas do not set `additionalProperties: false`.
 - *(2026-11-15: added as `wf-008-counter-review-full-input`, the tail STEP-06C → STEP-07 on
   the real 2026-07-11 STEP-01–06 outputs; "checkable" reservation reduced to "≥ 1 reservation",
-  as the rest needs an LLM judge; proven offline, not yet run live.)*
+  as the rest needs an LLM judge; proven offline. First live run 2026-11-15, isolated runner,
+  catalog `v5.0.0`: `returned`, 7 reservations, 0 violations. On the full input the reservations
+  reach the tier → obligations chain (Annex III classification, DORA vs NIS2, GDPR Art. 22),
+  which bears on the scope-boundary question; one run, not decided here.)*
 - **Corpus candidate:** STEP-06C fed a fixture of all upstream outputs; invariants: verdict in
   {cleared, returned}; returned ⇒ ≥ 1 reservation citing a checkable artifact; the halt rule
   matches whichever reading Guy ratifies (ratified 2026-11-14: returned ⇒ halt before STEP-07).
