@@ -14,19 +14,23 @@
 > 1. **Isoler le runner** — **code fait le 2026-11-14 sur ordre de Guy** (`settingSources: []`,
 >    garde 5 de `createQueryRunner`, CHANGELOG `[Unreleased]`), validé hors ligne 655/26/0 sur 681,
 >    smoke live WF-001 **`completed` 3/3, tous critères ok** (2026-11-14, OAuth, clone `v5.0.0`,
->    ~129 s). Non poussé : **push sur ordre de Guy**. Non mesuré : exposition des outils MCP
+>    ~129 s). **Poussé** (`855423d` sur `origin/main`, vérifié le 2026-11-15). Non mesuré : exposition des outils MCP
 >    claude.ai aux agents (le runner ne garde pas le message d'init). « Guy HUI-BON-HOA » en sortie
 >    STEP-04 = prose catalogue (`AGENT-QA-AGILE.md` l. 18), pas une fuite.
 > 2. **K1 WF-008** — **moitié gate tranchée 2026-11-14 (Guy) : runtime strict conservé, aucun
 >    code.** La carte se contredit (`condition_passage` l. 359 ambigu vs checklist l. 403
 >    « cleared audit ») ⟹ **PR catalogue** dans une session `claude-agents` (avec K3) : écrire
->    qu'un verdict `returned` arrête avant STEP-07. **Moitié entrée OUVERTE** : STEP-06C ne voit
->    que STEP-06 (la carte dit STEP-01…06B) — touche l'orchestrateur linéaire.
+>    qu'un verdict `returned` arrête avant STEP-07. **Moitié entrée tranchée 2026-11-15 (Guy) :
+>    orchestrateur NON modifié** (STEP-06C ne voit que STEP-06, la carte dit STEP-01…06B) ;
+>    limite consignée comme connue, l'affirmation « scope boundary held live » corrigée.
 > 3. **K2 WF-009 — tranché 2026-11-14, pas de correctif** (ordre de Guy) : E masqué par
 >    construction (même étape que le gate, `f2afce2`) ; `affirmativeString` rejetterait « None
 >    detected… ». Matrice annotée ; cas de corpus réduit à « halt sur `rh-shortlist-validated` ».
 > 4. **K3 P11** : flèche sidecar WF-006 vs « Direct solicitation » (PR catalogue ou règle routeur).
-> 5. Choisir les cas de corpus parmi les 3 candidats de la matrice.
+> 5. **Corpus — cas n° 2 (K2) retenu 2026-11-15 puis BLOQUÉ** : le seed « sans CV » du 2026-07-12
+>    est antérieur au passthrough ; `candidatePool` est désormais REQUIS (`minItems: 5`) dans la
+>    sortie de STEP-01 et l'entrée de STEP-04 (`wf-009-recrutement.ts`) ⟹ un seed sans pool ne peut
+>    plus atteindre STEP-04. Décision de Guy en attente ; n° 3 (P11) et n° 1 (K1) ensuite.
 > Le plan d'origine ci-dessous est exécuté (gardé comme référence).
 
 > **Plan d'origine (exécuté) : KO matrix** (point 4 ci-dessous ; méthode et types A–E dans la
@@ -57,9 +61,8 @@
 > Observation, non engagée : `po-us-format-invest` (advisory WF-001) rejette « we want » (persona
 > d'équipe) — raté au smoke `0.3.296`, passé au smoke `0.3.322` : variance de formulation. Le
 > changer touche un critère de spine prouvé live ⟹ décision de Guy, pas un correctif au fil de l'eau.
-> **Décision en attente (Guy), 2026-11-14** : isoler les runs live par `settingSources: []` dans
-> `createQueryRunner` — voir la section « sonde de chargement des instructions » ci-dessous. Touche
-> le lancement des 10 workflows prouvés live ⟹ jamais sans ordre de Guy, smoke WF-001 ensuite.
+> **Tranché et livré 2026-11-14** : runs live isolés par `settingSources: []` dans
+> `createQueryRunner` (`855423d`, poussé) — voir la section « sonde de chargement des instructions ».
 > Facteur commun à toute la KO matrix : les 16 runs ont tourné avec le contexte utilisateur complet.
 
 ```
@@ -68,8 +71,9 @@ Apply the startup ritual, then read next_steps.md LOCALLY.
 Factual check FIRST, never from memory:
   git status -sb · git describe --tags · gh pr list --state open · open Dependabot alerts
 KO matrix delivered 2026-11-14 (docs/audit/ko-matrix.md). Runner isolation (settingSources: [])
-is committed, offline-green and live-smoked (WF-001 completed 3/3); check whether it is pushed. If a new
-Dependabot alert is open, say so first and let me choose; otherwise present the remaining matrix decisions (K1 input side, corpus; K1 card + K3 = catalog session). No fix without my order.
+is pushed (855423d) and live-smoked (WF-001 completed 3/3). If a new Dependabot alert is open,
+say so first and let me choose; otherwise resume the corpus cases (K2 first, then P11, then K1;
+live runs on my GO only). K1 card + K3 = catalog session. No fix without my order.
 Dependabot protocol, one PR at a time: @dependabot rebase -> behind_by 0 -> RE-READ every from->to
 on the rebased head (a rebase can re-target, a group can hide a major) -> offline in a worktree
 (npm audit, strict typecheck, full suite with the expected-total guard, CATALOG_ROOT on a v5.0.0

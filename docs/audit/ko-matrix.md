@@ -89,7 +89,8 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   output (`src/orchestrator/run-spine.ts`, `input = output`), so the reviewer saw the ADKAR plan
   alone. All five reservations attack change management; none could test "tier → obligations →
   measures". The README's "the scope boundary held live" is an effect of the input, not evidence
-  of the agent's discipline.
+  of the agent's discipline. *(Decided 2026-11-15 by Guy: the orchestrator is not changed; the
+  input gap is a known limitation, and the live-runs README claim is corrected.)*
 - **Minor — C, low stakes.** 10 `"": ""` empty keys inside `biasLog` / `exitCriteria` items,
   the only file with them; the item schemas do not set `additionalProperties: false`.
 - **Corpus candidate:** STEP-06C fed a fixture of all upstream outputs; invariants: verdict in
