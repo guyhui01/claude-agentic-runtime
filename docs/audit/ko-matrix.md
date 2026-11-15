@@ -144,7 +144,9 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   pre-signature commercial states (runtime). The V1 router rule is not implemented.
 - **Corpus candidate:** P11 brief; invariant: `ROUTED` WF-006, or `NO_MATCH` naming WF-006.
   *(2026-11-15: added as `wf-000-p11-direct-solicitation`, `PARAMS_MISSING` on WF-006 also
-  admitted; proven offline, not yet run live.)*
+  admitted; proven offline. First live run 2026-11-15, isolated runner, catalog `v5.0.0`:
+  `PARAMS_MISSING` on WF-006, 0 violations. One run each: the change from `NO_MATCH` is not
+  attributed to the isolation rather than to variance.)*
 
 ### K4 — WF-001 advisory `po-us-format-invest` (2026-07-02, `v4.0.0`)
 
