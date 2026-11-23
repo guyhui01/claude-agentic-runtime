@@ -26,7 +26,13 @@
 > 3. **K2 WF-009 — tranché 2026-11-14, pas de correctif** (ordre de Guy) : E masqué par
 >    construction (même étape que le gate, `f2afce2`) ; `affirmativeString` rejetterait « None
 >    detected… ». Matrice annotée ; cas de corpus réduit à « halt sur `rh-shortlist-validated` ».
-> 4. **K3 P11** : flèche sidecar WF-006 vs « Direct solicitation » (PR catalogue ou règle routeur).
+> 4. **K3 P11 — tranché 2026-11-23 (Guy) : PR catalogue, aucune règle routeur, aucun code
+>    runtime.** La carte WF-006 se contredit : l. 59 « Direct solicitation » et l. 76 « qualified
+>    opportunity » vs la flèche « RFP received → … » à trois endroits (carte l. 3, `sidecar.json`
+>    l. 1124, `skills/orchestrateur-workflow/workflow-catalog.md` l. 126 — relevé sur le clone
+>    local, 9 commits après `v5.0.0` : RE-LIRE sur `main` à jour). Aligner la flèche sur l. 59/76,
+>    dans la même session `claude-agents` que K1 ; puis corpus live sur GO de Guy
+>    (`wf-000-p11-direct-solicitation` fige l'invariant).
 > 5. **Corpus — cas n° 2 (K2) retenu 2026-11-15 puis NON DÉTERMINÉ** : le seed « sans CV » du
 >    2026-07-12 est antérieur au passthrough ; `candidatePool` est désormais REQUIS (`minItems: 5`)
 >    en sortie de STEP-01 (`wf-009-recrutement.ts`), imposé live comme format de sortie

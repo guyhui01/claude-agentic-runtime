@@ -148,6 +148,10 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   miss named, the operator overrides).
 - **Admissible:** widen the WF-006 arrow in the catalog (catalog PR), or a router rule for
   pre-signature commercial states (runtime). The V1 router rule is not implemented.
+  *(2026-11-23, decided by Guy: catalog PR, no router rule. The card contradicts itself, and the
+  sidecar belongs to the catalog (ADR-0003): the arrow is aligned with lines 59 and 76 at its
+  three occurrences (card line 3, `sidecar.json`, the orchestrator skill's `workflow-catalog.md`),
+  in the same `claude-agents` session as the K1 PR. The corpus case pins the invariant.)*
 - **Corpus candidate:** P11 brief; invariant: `ROUTED` WF-006, or `NO_MATCH` naming WF-006.
   *(2026-11-15: added as `wf-000-p11-direct-solicitation`, `PARAMS_MISSING` on WF-006 also
   admitted; proven offline. First live run 2026-11-15, isolated runner, catalog `v5.0.0`:
