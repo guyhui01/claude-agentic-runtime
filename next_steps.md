@@ -14,9 +14,12 @@
 > `wf-008-audit.ts` aligné sur le nouveau `condition_passage`. Suite 672/28/0 sur 700 (sibling ET
 > clone `v5.0.1`), typecheck strict OK, garde de dérive re-falsifié (1 rouge exactement). Gardés à
 > `v5.0.0` à dessein : en-têtes d'audit « measured against » et note de `completeness-check.ts`.
-> **Next step = corpus live P11** (`LIVE_RUN=1 REGRESSION_CASE=wf-000-p11-direct-solicitation`,
-> `CATALOG_ROOT` = clone `v5.0.1`, OAuth) **sur GO de Guy**. Ouvert, décision de Guy : le cas admet
-> encore `NO_MATCH` « tant que K3 n'est pas réglé dans le catalogue » — K3 l'est désormais.
+> **Corpus live P11 sur `v5.0.1` FAIT le 2026-11-23 (GO de Guy) : conforme, 0 violation** —
+> `PARAMS_MISSING` WF-006, mêmes 10 trous qu'au run `v5.0.0` du 2026-11-15, ~4 s, OAuth, clone
+> `21dec9b` propre. Même issue sur les deux tags ⟹ prouve que le re-pin ne casse rien, PAS que la
+> nouvelle flèche est ce qui retient WF-006. Trace locale non versionnée (`live-runs/.gitignore`).
+> **Ouvert, décision de Guy** : retirer `NO_MATCH` des issues admises par le cas, maintenant que
+> K3 est réglé (`test/regression-corpus.ts`). Push du lot = sur ordre de Guy.
 
 > **Passage de relais vers le catalogue (2026-11-23).** K1 et K3 sont tranchés ⟹ UNE PR dans
 > `claude-agents`, dans une session dédiée à ce repo. Ce tracker ne peut pas écrire dans le
