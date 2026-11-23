@@ -9,6 +9,15 @@
 
 ## ▶ RESUME HERE — KO matrix LIVRÉE le 2026-11-14 ; next step = décisions de Guy sur la matrice
 
+> **2026-11-23 — catalogue `v5.0.1` publié (K1 + K3 réglés côté catalogue), re-pin FAIT ici.**
+> Les 10 manifests + stubs hermétiques passent `v5.0.0` → `v5.0.1` ; commentaire STEP-06C de
+> `wf-008-audit.ts` aligné sur le nouveau `condition_passage`. Suite 672/28/0 sur 700 (sibling ET
+> clone `v5.0.1`), typecheck strict OK, garde de dérive re-falsifié (1 rouge exactement). Gardés à
+> `v5.0.0` à dessein : en-têtes d'audit « measured against » et note de `completeness-check.ts`.
+> **Next step = corpus live P11** (`LIVE_RUN=1 REGRESSION_CASE=wf-000-p11-direct-solicitation`,
+> `CATALOG_ROOT` = clone `v5.0.1`, OAuth) **sur GO de Guy**. Ouvert, décision de Guy : le cas admet
+> encore `NO_MATCH` « tant que K3 n'est pas réglé dans le catalogue » — K3 l'est désormais.
+
 > **Passage de relais vers le catalogue (2026-11-23).** K1 et K3 sont tranchés ⟹ UNE PR dans
 > `claude-agents`, dans une session dédiée à ce repo. Ce tracker ne peut pas écrire dans le
 > tracker du catalogue (lecture seule hors chantier catalogue) : la session catalogue l'y reporte

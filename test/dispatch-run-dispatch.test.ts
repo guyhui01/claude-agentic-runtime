@@ -26,14 +26,14 @@ const WF001_ASSET: Asset = {
   path: "workflows/WF-001.md",
   title: "AI Product Scoping",
   description: "Client brief → prioritized backlog + acceptance criteria",
-  catalogVersion: "v5.0.0",
-  source: { file: "workflows/WF-001.md", catalogTag: "v5.0.0" },
+  catalogVersion: "v5.0.1",
+  source: { file: "workflows/WF-001.md", catalogTag: "v5.0.1" },
   dependsOn: ["AGENT-BUSINESS-ANALYST"],
 };
 
 const SIDECAR: Sidecar = {
   schemaVersion: "1.0",
-  catalog: { name: "claude-agents", version: "v5.0.0" },
+  catalog: { name: "claude-agents", version: "v5.0.1" },
   generatedAt: "2026-07-19T00:00:00Z",
   assets: [
     {
@@ -42,8 +42,8 @@ const SIDECAR: Sidecar = {
       path: "agents/ba.md",
       title: "BA",
       description: "d",
-      catalogVersion: "v5.0.0",
-      source: { file: "agents/ba.md", catalogTag: "v5.0.0" },
+      catalogVersion: "v5.0.1",
+      source: { file: "agents/ba.md", catalogTag: "v5.0.1" },
     },
     WF001_ASSET,
   ],

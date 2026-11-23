@@ -235,8 +235,9 @@ const STEP06_CRITERIA: Criterion[] = [
  * STEP-06C — AGENT-AUDIT-METHODO-IA — INDEPENDENT COUNTER-REVIEW GATE.
  * DoD: cognitive-bias log · ISTQB exit criteria applied to the audit deliverable
  * · verdict cleared / returned with reservations — never cleared by default.
- * condition_passage: audit cleared (or returned with documented reservations)
- * before the final report (STEP-07).
+ * condition_passage (card at v5.0.1): audit cleared before the final report
+ * (STEP-07); a returned verdict stops the workflow before STEP-07 — documented
+ * reservations go back for rework, never through.
  * Scope: challenges the methodological RIGOR of the audit; does NOT re-qualify the
  * legal substance (AI Act / GDPR qualification remains STEP-01, JURIDIQUE-IA).
  */

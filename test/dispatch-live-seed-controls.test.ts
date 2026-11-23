@@ -174,7 +174,7 @@ const NOTES: Record<string, string> = {
 function sidecarFor(id: string): Sidecar {
   return {
     schemaVersion: "1.0",
-    catalog: { name: "claude-agents", version: "v5.0.0" },
+    catalog: { name: "claude-agents", version: "v5.0.1" },
     generatedAt: "2026-07-19T00:00:00Z",
     assets: [
       {
@@ -183,9 +183,9 @@ function sidecarFor(id: string): Sidecar {
         path: `workflows/${id}.md`,
         title: id,
         description: "d",
-        catalogVersion: "v5.0.0",
+        catalogVersion: "v5.0.1",
         steps: [{ id: "STEP-01", agent: "AGENT-BUSINESS-ANALYST" }],
-        source: { file: `workflows/${id}.md`, catalogTag: "v5.0.0" },
+        source: { file: `workflows/${id}.md`, catalogTag: "v5.0.1" },
       },
       {
         id: "AGENT-BUSINESS-ANALYST",
@@ -193,8 +193,8 @@ function sidecarFor(id: string): Sidecar {
         path: "agents/ba.md",
         title: "BA",
         description: "d",
-        catalogVersion: "v5.0.0",
-        source: { file: "agents/ba.md", catalogTag: "v5.0.0" },
+        catalogVersion: "v5.0.1",
+        source: { file: "agents/ba.md", catalogTag: "v5.0.1" },
       },
     ],
   } as unknown as Sidecar;
