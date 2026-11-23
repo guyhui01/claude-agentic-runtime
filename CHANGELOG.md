@@ -8,6 +8,10 @@
 
 ## [Unreleased]
 
+---
+
+## [0.20.0] - 2026-11-23 — Live runs isolated from the operator's settings, two KO-matrix corpus cases, and the catalog re-pinned to `v5.0.1` 🔒
+
 > Model: Claude Opus 5.5.
 
 ### ✨ Added
@@ -950,7 +954,8 @@ Milestone: the runtime is now **100% US English** (source, tests, schema, docs) 
 
 ---
 
-[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/guyhui01/claude-agentic-runtime/compare/v0.16.0...v0.17.0

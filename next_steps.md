@@ -13,8 +13,9 @@
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot
 > (ouvert en `0.3.329`). **#89 (`vitest` `5.1.1`, dev group) fusionné le même jour** (squash
 > `5012dbb`, rebasé, suite 672/28/0). **Série close : 0 PR ouverte au 2026-11-23** — re-mesurer.
-> Restent, décisions de Guy, rien d'engagé : corpus K2 (WF-009 sans CV), tests d'attaque, release
-> (`[Unreleased]` porte re-pin `v5.0.1`, cas P11 resserré, SDK `0.3.330`, vitest `5.1.1`).
+> **Release `v0.20.0` coupée le 2026-11-23** (runner isolé, cas corpus K1 + P11, re-pin `v5.0.1`,
+> SDK `0.3.330`, vitest `5.1.1`) ; `[Unreleased]` vide. Restent, décisions de Guy, rien
+> d'engagé : corpus K2 (WF-009 sans CV), tests d'attaque.
 
 > **2026-11-23 — catalogue `v5.0.1` publié (K1 + K3 réglés côté catalogue), re-pin FAIT ici.**
 > Les 10 manifests + stubs hermétiques passent `v5.0.0` → `v5.0.1` ; commentaire STEP-06C de
