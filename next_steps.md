@@ -11,9 +11,10 @@
 
 > **2026-11-23 — SDK `0.3.330` fusionné (#90, squash `4e4f8f7`)**, prouvé live : smoke WF-001
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot
-> (ouvert en `0.3.329`). **Next = #89 (`vitest` `5.1.1`, dev group)** : `@dependabot rebase`
-> d'abord (sa base précède #90 et le re-pin), relire le `from→to` sur la tête rebasée, suite
-> locale, puis merge sur ordre de Guy. Pas de smoke live (dev-only).
+> (ouvert en `0.3.329`). **#89 (`vitest` `5.1.1`, dev group) fusionné le même jour** (squash
+> `5012dbb`, rebasé, suite 672/28/0). **Série close : 0 PR ouverte au 2026-11-23** — re-mesurer.
+> Restent, décisions de Guy, rien d'engagé : corpus K2 (WF-009 sans CV), tests d'attaque, release
+> (`[Unreleased]` porte re-pin `v5.0.1`, cas P11 resserré, SDK `0.3.330`, vitest `5.1.1`).
 
 > **2026-11-23 — catalogue `v5.0.1` publié (K1 + K3 réglés côté catalogue), re-pin FAIT ici.**
 > Les 10 manifests + stubs hermétiques passent `v5.0.0` → `v5.0.1` ; commentaire STEP-06C de
