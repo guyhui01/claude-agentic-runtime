@@ -9,6 +9,38 @@
 
 ## ▶ RESUME HERE — KO matrix LIVRÉE le 2026-11-14 ; next step = décisions de Guy sur la matrice
 
+> **Passage de relais vers le catalogue (2026-11-23).** K1 et K3 sont tranchés ⟹ UNE PR dans
+> `claude-agents`, dans une session dédiée à ce repo. Ce tracker ne peut pas écrire dans le
+> tracker du catalogue (lecture seule hors chantier catalogue) : la session catalogue l'y reporte
+> elle-même, en premier acte. Prompt à coller dans une session ouverte sur `claude-agents` :
+>
+> ```text
+> Reprise session — catalogue /Users/guyhui/CLAUDE/claude-agents (repo guyhui01/claude-agents).
+> Applique le rituel de démarrage et le CHECK FACTUEL du prompt en tête de next_steps.md
+> (git status, git describe, validate:sidecar, validate:skill-mapping, npm audit), puis
+> git fetch + pull : le clone était 9 commits après v5.0.0 au 2026-11-23.
+> Chantier = UNE PR catalogue, tranchée par Guy, source : claude-agentic-runtime
+> docs/audit/ko-matrix.md (K1, K3) et son next_steps.md.
+> Premier acte : reporter ce chantier dans claude-agents/next_steps.md.
+>  K1 (WF-008) — la carte se contredit : condition_passage (~l. 359 à v5.0.0) admet
+>   « returned with documented reservations » avant STEP-07, la checklist (~l. 403) exige un
+>   audit « cleared ». Décision : le runtime reste strict ⟹ écrire dans la carte qu'un verdict
+>   `returned` arrête le workflow avant STEP-07 (aligner condition_passage sur la checklist).
+>  K3 (WF-006) — la flèche « RFP received → … » est plus étroite que la carte (l. 59 « Direct
+>   solicitation », l. 76 « qualified opportunity »). L'aligner aux TROIS occurrences : carte
+>   l. 3, sidecar.json (~l. 1124, via le générateur s'il existe, jamais à la main si le sidecar
+>   est généré), skills/orchestrateur-workflow/workflow-catalog.md (~l. 126).
+> Numéros de ligne relevés sur le clone non à jour : RE-LIRE sur main avant d'éditer.
+> Hors périmètre : tout code runtime, toute autre carte. Commit local, CHANGELOG dans le lot,
+> PR et push uniquement sur ordre explicite de Guy. Après merge : corpus live P11
+> (wf-000-p11-direct-solicitation) relancé depuis le runtime, sur GO de Guy, après re-pin.
+> ```
+>
+> **Point ouvert, décision de Guy (2026-11-23) — tests d'attaque.** Giskard écarté (mémoire
+> `project-outils-eval-externes-giskard-ecarte`) ; le seul manque qu'il couvrait, l'injection de
+> prompt et le contournement des consignes, se bâtirait ici en cas de corpus à invariants
+> déterministes (« jamais `completed` », refus au routeur). Rien d'engagé sans ordre de Guy.
+
 > **Livré 2026-11-14 :** [`docs/audit/ko-matrix.md`](docs/audit/ko-matrix.md), poussé (`origin/main`
 > vérifié à `13b87af` le 2026-11-14). Next step, chaque point = décision de Guy, aucun correctif sans son ordre :
 > 1. **Isoler le runner** — **code fait le 2026-11-14 sur ordre de Guy** (`settingSources: []`,
