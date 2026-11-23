@@ -18,8 +18,11 @@
 > `PARAMS_MISSING` WF-006, mêmes 10 trous qu'au run `v5.0.0` du 2026-11-15, ~4 s, OAuth, clone
 > `21dec9b` propre. Même issue sur les deux tags ⟹ prouve que le re-pin ne casse rien, PAS que la
 > nouvelle flèche est ce qui retient WF-006. Trace locale non versionnée (`live-runs/.gitignore`).
-> **Ouvert, décision de Guy** : retirer `NO_MATCH` des issues admises par le cas, maintenant que
-> K3 est réglé (`test/regression-corpus.ts`). Push du lot = sur ordre de Guy.
+> **`NO_MATCH` retiré des issues admises (ordre de Guy, 2026-11-23)** : `checkDispatchInvariants`
+> refuse tout `NO_MATCH` ; le P11 du 2026-07-19 devient contrôle négatif ; falsifié (rétablir
+> l'admission ⟹ 1 rouge exactement). Suite 672/28/0, typecheck strict OK (corpus compris).
+> **Next = push des 3 commits locaux, sur ordre de Guy.** K2 (corpus WF-009) et tests d'attaque
+> restent des décisions ouvertes de Guy, rien d'engagé.
 
 > **Passage de relais vers le catalogue (2026-11-23).** K1 et K3 sont tranchés ⟹ UNE PR dans
 > `claude-agents`, dans une session dédiée à ce repo. Ce tracker ne peut pas écrire dans le

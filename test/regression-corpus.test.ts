@@ -10,8 +10,9 @@
  *     so a rename surfaces here for free rather than in a billed run.
  * The WF-008 counter-review case (two admissible outcomes) uses the committed STEP-06C trace as
  * its returned pole and a cleared run built from the real STEP-06C gate report as the other.
- * Dispatch cases (WF-000 router) use the committed router live run: P11 and P06 as positive
- * poles, other real decisions (wrong nearest miss, none, wrong route, intake reject) as negatives.
+ * Dispatch cases (WF-000 router) use the committed router live run: P06 as the positive pole,
+ * other real decisions (P11's own NO_MATCH, other NO_MATCHes, wrong route, intake reject) as
+ * negatives.
  */
 import { describe, it, expect } from "vitest";
 import {
@@ -177,9 +178,11 @@ describe("regression corpus — WF-000 dispatch, P11 direct solicitation", () =>
     return r.detail as unknown as DispatchOutcome;
   };
 
-  it("the committed live P11 decision (NO_MATCH, nearest miss WF-006) conforms", () => {
+  it("the committed live P11 decision (NO_MATCH, nearest miss WF-006) is a violation since K3 is settled", () => {
     expect(live("P11")).toMatchObject({ status: "NO_MATCH", nearestMiss: "WF-006" });
-    expect(checkDispatchInvariants(P11.expectedRoute, live("P11"))).toEqual([]);
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P11"))).toEqual([
+      "route: expected WF-006, got NO_MATCH (nearest miss WF-006)",
+    ]);
   });
 
   it("a real ROUTED WF-006 decision (P06) conforms", () => {
@@ -193,11 +196,11 @@ describe("regression corpus — WF-000 dispatch, P11 direct solicitation", () =>
   });
 
   it("a NO_MATCH naming another workflow (real P14, WF-008) is a violation", () => {
-    expect(checkDispatchInvariants(P11.expectedRoute, live("P14"))).toEqual(["nearestMiss: expected WF-006, got WF-008"]);
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P14"))).toEqual(["route: expected WF-006, got NO_MATCH (nearest miss WF-008)"]);
   });
 
   it("a NO_MATCH with no nearest miss (real P17) is a violation", () => {
-    expect(checkDispatchInvariants(P11.expectedRoute, live("P17"))).toEqual(["nearestMiss: expected WF-006, got none"]);
+    expect(checkDispatchInvariants(P11.expectedRoute, live("P17"))).toEqual(["route: expected WF-006, got NO_MATCH (nearest miss none)"]);
   });
 
   it("a route to another workflow (real P12, WF-004) is a violation", () => {

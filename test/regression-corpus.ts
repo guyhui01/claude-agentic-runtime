@@ -261,8 +261,9 @@ export const REGRESSION_CASES: RegressionCase[] = [
 /**
  * DISPATCH CASES — the WF-000 router, a single routing decision rather than a spine, so they
  * carry their own shape and checker. The invariant bears on the decision only: the expected
- * workflow is either reached (`ROUTED`, or `PARAMS_MISSING` — the gap is the brief's, not the
- * router's, as in the live router harness) or named as the nearest miss of a `NO_MATCH`.
+ * workflow must be reached (`ROUTED`, or `PARAMS_MISSING` — the gap is the brief's, not the
+ * router's, as in the live router harness). A `NO_MATCH` is a violation even when it names the
+ * expected workflow as its nearest miss (admitted until catalog v5.0.1 settled K3).
  */
 export interface DispatchRegressionCase {
   id: string;
@@ -276,8 +277,8 @@ export interface DispatchRegressionCase {
 
 /**
  * Checks a routing decision against its expected workflow. Returns the violations (empty =
- * conforms). Any other status (`REJECT_INCOMPLETE`, `REJECT_ROUTER_OUTPUT`), another route, or a
- * `NO_MATCH` without the expected nearest miss is a violation.
+ * conforms). Any other status (`NO_MATCH`, `REJECT_INCOMPLETE`, `REJECT_ROUTER_OUTPUT`) or
+ * another route is a violation.
  */
 export function checkDispatchInvariants(expectedRoute: string, outcome: DispatchOutcome): string[] {
   switch (outcome.status) {
@@ -287,9 +288,7 @@ export function checkDispatchInvariants(expectedRoute: string, outcome: Dispatch
         ? []
         : [`route: expected ${expectedRoute}, got ${outcome.status} ${outcome.route}`];
     case "NO_MATCH":
-      return outcome.nearestMiss === expectedRoute
-        ? []
-        : [`nearestMiss: expected ${expectedRoute}, got ${outcome.nearestMiss ?? "none"}`];
+      return [`route: expected ${expectedRoute}, got NO_MATCH (nearest miss ${outcome.nearestMiss ?? "none"})`];
     default:
       return [`status: expected a decision on ${expectedRoute}, got ${outcome.status}`];
   }
@@ -314,8 +313,9 @@ export const DISPATCH_REGRESSION_CASES: DispatchRegressionCase[] = [
       "Oracle brief P11 (test/fixtures/dispatch-briefs.ts), copied verbatim on 2026-11-15. Live " +
       "on 2026-07-19 (docs/audit/live-runs/wf-000-router-live-result.json): NO_MATCH, nearest " +
       "miss WF-006 — the router sees only the sidecar arrow \"RFP received → …\" while the WF-006 " +
-      "card also lists direct solicitation (KO matrix K3). Both readings are admitted until K3 is " +
-      "settled in the catalog; a decision that loses WF-006 is the regression.",
+      "card also lists direct solicitation (KO matrix K3). Catalog v5.0.1 settled K3 (arrow \"RFP " +
+      "received / qualified opportunity → …\"), so only a decision that reaches WF-006 conforms; " +
+      "that NO_MATCH is now a violation.",
     brief: P11_BRIEF,
     expectedRoute: "WF-006",
     run: (ctx) =>
