@@ -14,8 +14,14 @@
 > (ouvert en `0.3.329`). **#89 (`vitest` `5.1.1`, dev group) fusionné le même jour** (squash
 > `5012dbb`, rebasé, suite 672/28/0). **Série close : 0 PR ouverte au 2026-11-23** — re-mesurer.
 > **Release `v0.20.0` coupée le 2026-11-23** (runner isolé, cas corpus K1 + P11, re-pin `v5.0.1`,
-> SDK `0.3.330`, vitest `5.1.1`) ; `[Unreleased]` vide. Restent, décisions de Guy, rien
-> d'engagé : corpus K2 (WF-009 sans CV), tests d'attaque.
+> SDK `0.3.330`, vitest `5.1.1`) ; `[Unreleased]` vide.
+> **▶ Prochaine session (choix de Guy, 2026-11-23) = corpus K2, WF-009 sans CV — MESURER avant
+> d'écrire.** Hors ligne d'abord, zéro run facturé : déterminer ce que produit aujourd'hui un seed
+> sans `candidatePool` (halt `handoff` à STEP-01 si le pool est omis ; STEP-04 si le pool est
+> fabriqué), vérifier si le SDK applique `minItems: 5` (`wf-009-recrutement.ts`, `outputFormat`
+> de `query-runner.ts`), puis seulement proposer l'invariant (« sans CV, jamais `completed` ») et
+> sa forme — `checkInvariants` ne l'exprime pas tel quel (voir point 5 plus bas). Tout run live =
+> GO de Guy. Tests d'attaque : toujours une décision ouverte, rien d'engagé.
 
 > **2026-11-23 — catalogue `v5.0.1` publié (K1 + K3 réglés côté catalogue), re-pin FAIT ici.**
 > Les 10 manifests + stubs hermétiques passent `v5.0.0` → `v5.0.1` ; commentaire STEP-06C de
