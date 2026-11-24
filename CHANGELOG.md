@@ -8,6 +8,12 @@
 
 ## [Unreleased]
 
+> Model: Claude Opus 5.5.
+
+### 🔒 Fixed
+
+- **A WF-009 recruitment run with no CVs is now refused before any agent runs.** Candidate 2 of `docs/audit/ko-matrix.md` (K2). Measured offline on the real spine with a mocked runner: the handoff contract checks only the shape of STEP-01's `candidatePool` (required, at least 5 items), never where it came from. An omitted, empty or 4-profile pool halts at the STEP-01 handoff, but five fabricated profiles — placeholders or plausible ones — pass every gate and handoff to STEP-04, and nothing compares the output pool to the seed. `runWf009` now throws `Wf009ConfigError` when the seed's `candidatePool` is missing, not an array, or shorter than the pool schema's `minItems` (read from `candidatePoolSchema`, now exported, not copied). The orchestrator is unchanged. Not covered: a model altering a real pool between STEP-01 and STEP-03, which no trace shows. Whether the SDK enforces `minItems` in the output format is still unverified; the strict handoff check enforces it either way. Pinned by five hermetic cases in `test/run-wf-009.test.ts` (no pool, empty, 4 profiles, non-array, no seed), each asserting that no agent is called; removing the precondition turns exactly those five red. Existing wiring tests now pass a seed with a pool. Suite **677 passed / 28 skipped / 0 failed of 705**, strict `typecheck` OK.
+
 ---
 
 ## [0.20.0] - 2026-11-23 — Live runs isolated from the operator's settings, two KO-matrix corpus cases, and the catalog re-pinned to `v5.0.1` 🔒

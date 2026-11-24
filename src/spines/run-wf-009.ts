@@ -28,6 +28,7 @@ import { createQueryRunner, type QueryRunnerDeps } from "../sdk/query-runner.js"
 import {
   WF_009_RECRUTEMENT_MANIFEST,
   buildWf009RecrutementRegistry,
+  candidatePoolSchema,
 } from "./wf-009-recrutement.js";
 
 /** Call configuration error (insufficient parameters). */
@@ -99,7 +100,35 @@ export async function runWf009(opts: RunWf009Options): Promise<SpineResult> {
     resolveAgent = (asset) => toAgentDefinition(asset, root, overrides);
   }
 
+  assertSeedCarriesCandidatePool(opts.initialInput);
+
   const steps = assembleWf009Spine(opts.sidecar, resolveAgent);
   const runner = createQueryRunner(opts.runnerDeps);
   return runSpine(steps, runner, opts.initialInput ?? {}, opts.onStep);
+}
+
+/**
+ * Seed precondition: the recruitment context must carry the sourced candidate pool
+ * (at least the pool schema's `minItems` entries) BEFORE any agent runs.
+ *
+ * Why here and not in the spine: the handoff contract only checks the pool's SHAPE in
+ * STEP-01's output, never where it came from. Measured offline (2026-11-24): a seed with
+ * no pool, followed by a STEP-01 output carrying five fabricated but plausible profiles,
+ * passes every gate and handoff — the spine has no rule comparing the output pool to the
+ * seed. Refusing a seed without CVs closes that path with no orchestrator change and no
+ * model call: a recruitment run with no candidates never starts, so it never completes.
+ */
+function assertSeedCarriesCandidatePool(seed: unknown): void {
+  const min = candidatePoolSchema["minItems"] as number;
+  const pool =
+    typeof seed === "object" && seed !== null
+      ? (seed as Record<string, unknown>)["candidatePool"]
+      : undefined;
+  const size = Array.isArray(pool) ? pool.length : 0;
+  if (size < min) {
+    throw new Wf009ConfigError(
+      `runWf009: the seed must carry a \`candidatePool\` of at least ${min} profiles (got ${size}); ` +
+        "a recruitment run with no CVs is refused before any agent runs.",
+    );
+  }
 }

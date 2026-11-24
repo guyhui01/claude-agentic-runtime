@@ -5,7 +5,7 @@ import type { AgentResolver } from "../src/manifest/load-manifest.js";
 import type { QueryFn } from "../src/sdk/query-runner.js";
 import { QueryRunnerError } from "../src/sdk/query-runner.js";
 import type { Sidecar } from "../src/sidecar/types.js";
-import { wf009HappyOutputs as happyOutputs } from "./fixtures/wf-009-outputs.js";
+import { wf009HappyOutputs as happyOutputs, wf009CandidatePool } from "./fixtures/wf-009-outputs.js";
 
 /**
  * HERMETIC end-to-end test of the WF-009 run wiring (§2.4-B.4):
@@ -67,12 +67,15 @@ function fakeQuery(outputs: Record<string, unknown>): QueryFn {
 
 const emptyEnv: Record<string, string | undefined> = {};
 
+/** Minimal seed that satisfies the candidate-pool precondition. */
+const seed = { role: "Senior AI Engineer", candidatePool: wf009CandidatePool };
+
 describe("runWf009 — WF-009 spine run wiring (§2.4-B.4)", () => {
   it("DoD-conformant outputs → spine completed via the real runner query()", async () => {
     const res = await runWf009({
       sidecar,
       resolveAgent,
-      initialInput: { role: "Senior AI Engineer", contract: "Permanent" },
+      initialInput: { role: "Senior AI Engineer", contract: "Permanent", candidatePool: wf009CandidatePool },
       runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv },
     });
     expect(res.status).toBe("completed");
@@ -88,6 +91,7 @@ describe("runWf009 — WF-009 spine run wiring (§2.4-B.4)", () => {
     const res = await runWf009({
       sidecar,
       resolveAgent,
+      initialInput: seed,
       runnerDeps: { query: fakeQuery(broken), env: emptyEnv },
     });
     expect(res.status).toBe("failed");
@@ -101,6 +105,7 @@ describe("runWf009 — WF-009 spine run wiring (§2.4-B.4)", () => {
       runWf009({
         sidecar,
         resolveAgent,
+        initialInput: seed,
         runnerDeps: { query: fakeQuery(happyOutputs), env: { ANTHROPIC_API_KEY: "sk-xxx" } },
       }),
     ).rejects.toBeInstanceOf(QueryRunnerError);
@@ -110,5 +115,27 @@ describe("runWf009 — WF-009 spine run wiring (§2.4-B.4)", () => {
     await expect(
       runWf009({ sidecar, runnerDeps: { query: fakeQuery(happyOutputs), env: emptyEnv } }),
     ).rejects.toBeInstanceOf(Wf009ConfigError);
+  });
+
+  // K2 (docs/audit/ko-matrix.md): a recruitment run with no CVs must never complete. The
+  // spine checks only the pool's shape in STEP-01's output, so a model that fabricates five
+  // plausible profiles would pass every gate; the seed precondition refuses the run first.
+  it.each([
+    ["no candidatePool", { role: "Senior AI Engineer" }],
+    ["an empty candidatePool", { role: "Senior AI Engineer", candidatePool: [] }],
+    ["4 profiles (below minItems)", { role: "Senior AI Engineer", candidatePool: wf009CandidatePool.slice(0, 4) }],
+    ["a non-array candidatePool", { role: "Senior AI Engineer", candidatePool: "CVs to follow" }],
+    ["no seed at all", undefined],
+  ])("seed with %s ⇒ Wf009ConfigError, no agent called", async (_label, initialInput) => {
+    let calls = 0;
+    const inner = fakeQuery(happyOutputs);
+    const counting: QueryFn = (params) => {
+      calls++;
+      return inner(params);
+    };
+    await expect(
+      runWf009({ sidecar, resolveAgent, initialInput, runnerDeps: { query: counting, env: emptyEnv } }),
+    ).rejects.toThrow(/candidatePool/);
+    expect(calls).toBe(0);
   });
 });

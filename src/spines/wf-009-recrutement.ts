@@ -370,7 +370,7 @@ const candidateItemSchema = objSchema([], {
 });
 
 /** Passthrough candidate pool carried STEP-01→03 to reach STEP-04 sourcing (see header). */
-const candidatePoolSchema: JsonSchema = {
+export const candidatePoolSchema: JsonSchema = {
   type: "array",
   minItems: 5,
   items: candidateItemSchema,

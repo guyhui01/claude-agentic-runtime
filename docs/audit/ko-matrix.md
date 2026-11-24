@@ -136,6 +136,15 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   fabricated (STEP-04 is reached: a halt on placeholders, a type E false green on plausible
   profiles). Whether the SDK applies `minItems` is unverified. The sound invariant, "no CVs ⇒
   never `completed`", needs a non-exact halt point that `checkInvariants` does not express.)*
+  *(2026-11-24: measured offline, then closed at the seed. With a mocked runner on the real spine,
+  a STEP-01 output with the pool omitted, empty or of 4 profiles halts at the STEP-01 handoff; five
+  placeholder or five plausible profiles pass every gate and handoff to STEP-04 — nothing compares
+  the output pool to the seed. Whether the SDK applies `minItems` is still unverified and no longer
+  decides the outcome: the strict handoff check applies it either way. Fix, on Guy's order:
+  `runWf009` refuses a seed whose `candidatePool` has fewer than the schema's `minItems` profiles
+  (`Wf009ConfigError`) before any agent runs; pinned by a hermetic test in
+  `test/run-wf-009.test.ts`, no model call. A no-CV run is now refused at intake, so this case
+  needs no live corpus run.)*
 
 ### K3 — WF-000 router, P11 (2026-07-19, `v4.2.0`)
 
@@ -188,7 +197,7 @@ before any billed call), typed-handoff rejection, the API-key refusal.
 | # | From | Invariant to pin |
 |---|---|---|
 | 1 | K1 | returned ⇒ halt before STEP-07 (ratified 2026-11-14) and ≥ 1 checkable reservation |
-| 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14; **not determinable as written**, 2026-11-15, see K2) |
+| 2 | K2 | no CVs ⇒ halt at STEP-04 on `rh-shortlist-validated` (reassessed 2026-11-14; **not determinable as written**, 2026-11-15; **closed 2026-11-24 by a seed precondition, hermetic test**, see K2) |
 | 3 | K3 | P11 ⇒ WF-006 (routed, or named as nearest miss) |
 
 The corpus has 2 cases today (WF-001 `completed`, WF-008 refused at STEP-01). Any new case

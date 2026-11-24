@@ -9,6 +9,19 @@
 
 ## ▶ RESUME HERE — KO matrix LIVRÉE le 2026-11-14 ; next step = décisions de Guy sur la matrice
 
+> **2026-11-24 — K2 (WF-009 sans CV) MESURÉ puis FERMÉ à l'entrée, sur ordre de Guy.** Mesure
+> hors ligne (spine réel, runner mocké) : pool absent / vide / 4 profils ⟹ halt `handoff` à
+> STEP-01 ; 5 profils fabriqués (placeholders OU plausibles) ⟹ tous gates et handoffs passent
+> jusqu'à STEP-04 — rien ne compare le pool de sortie au seed. `minItems` côté SDK : toujours non
+> vérifié, plus décisif (le handoff ajv strict l'applique de toute façon). Correctif : `runWf009`
+> refuse un seed sans `candidatePool` ≥ `minItems` du schéma (`Wf009ConfigError`, aucun agent
+> lancé), orchestrateur inchangé. 5 cas hermétiques (`test/run-wf-009.test.ts`), retrait-et-rejeu
+> = 5 rouges exactement. Suite 677/28/0 sur 705, typecheck strict OK. Matrice annotée, CHANGELOG
+> `[Unreleased]`. **Pas de run live nécessaire pour K2** (refus déterministe avant tout appel).
+> Non couvert à dessein : un modèle qui altère un pool réel entre STEP-01 et STEP-03 (jamais
+> observé). **Next = push sur ordre de Guy.** Restent ouverts, décisions de Guy : tests d'attaque ;
+> observation K1 (réserves STEP-06C sur la qualification juridique : franchissement de périmètre ?).
+
 > **2026-11-23 — SDK `0.3.330` fusionné (#90, squash `4e4f8f7`)**, prouvé live : smoke WF-001
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot
 > (ouvert en `0.3.329`). **#89 (`vitest` `5.1.1`, dev group) fusionné le même jour** (squash
