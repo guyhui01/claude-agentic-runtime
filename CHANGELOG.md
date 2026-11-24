@@ -8,6 +8,10 @@
 
 ## [Unreleased]
 
+---
+
+## [0.22.0] - 2026-11-24 — Live traces name the model that wrote them, and two more router attack cases 🛡️
+
 > Model: Claude Opus 5.5.
 
 ### ✨ Added
