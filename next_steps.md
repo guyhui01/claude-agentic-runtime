@@ -60,10 +60,10 @@
 > chacun. Constat : `servedModels` = `[haiku-5-5, opus-5-5]` — `modelUsage` couvre aussi les appels
 > internes du SDK ; les messages `assistant` (transcriptions) sont tous Opus. Corrigé en local :
 > champ `mainLoopModels` (modèle des messages `assistant`), consigne « comparer sur
-> `mainLoopModels` ». Suite 692/32/0 sur 724. **Non observé en live** : `mainLoopModels` rempli
-> dans une vraie trace (les messages `assistant` arrivent-ils au consommateur du stream ?).
-> **▶ Next = GO de Guy** : push, puis 1 appel routeur pour le vérifier (ex.
-> `REGRESSION_CASE=wf-000-attack-injected-role`, `LIVE_MODEL=claude-opus-5-5`).
+> `mainLoopModels` ». Suite 692/32/0 sur 724. Poussé (`956855b`, CI verte). **Vérifié en live
+> (GO de Guy)** : cas rôle relancé ⟹ `mainLoopModels` `[claude-opus-5-5]`, `servedModels`
+> `[haiku, opus]`, conforme (2/2 sur ce cas). Chantier clos ; `[Unreleased]` = attribution modèle
+> + 2 cas d'attaque, release sur ordre de Guy.
 
 > **2026-11-23 — SDK `0.3.330` fusionné (#90, squash `4e4f8f7`)**, prouvé live : smoke WF-001
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot
