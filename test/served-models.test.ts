@@ -54,6 +54,16 @@ describe("recordServedModels", () => {
     expect(rec2.servedModels()).toEqual(["claude-a"]);
   });
 
+  it("keeps the main-loop model apart from internal calls (the shape measured live on 2026-11-24)", async () => {
+    const a1 = { type: "assistant", message: { model: "claude-opus-5-5", content: [] } };
+    const a2 = { type: "assistant", message: { model: "claude-opus-5-5", content: [] } };
+    const r = result({ modelUsage: { "claude-opus-5-5": {}, "claude-haiku-5-5": {} } });
+    const rec = recordServedModels(fakeQuery([a1, a2, r]));
+    for await (const _ of rec.query({ prompt: "p" })) void _;
+    expect(rec.mainLoopModels()).toEqual(["claude-opus-5-5"]);
+    expect(rec.servedModels()).toEqual(["claude-haiku-5-5", "claude-opus-5-5"]);
+  });
+
   it("records nothing when no result carries modelUsage (the init message's model is a request, not a proof)", async () => {
     const rec = recordServedModels(fakeQuery([{ type: "system", subtype: "init", model: "requested-alias" }, result({})]));
     for await (const _ of rec.query({ prompt: "p" })) void _;

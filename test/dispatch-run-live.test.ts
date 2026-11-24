@@ -16,8 +16,9 @@
  * Optional: `LIVE_MODEL=<model>` routes the router call.
  *
  * Model: for a run meant as proof or compared with another, set `LIVE_MODEL` to a full model id —
- * the default model moves with the SDK and CLI. The trace records `requestedModel` and the
- * `servedModels` the SDK reports; compare runs on `servedModels`, never on the request.
+ * the default model moves with the SDK and CLI. The trace records `requestedModel`,
+ * `mainLoopModels` (the model that wrote the answers) and `servedModels` (every model billed,
+ * internal calls included); compare runs on `mainLoopModels`, never on the request.
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
@@ -87,6 +88,7 @@ describe.skipIf(!ENABLED)("WF-000 dispatch — LIVE router accuracy (billed, obs
           {
             ranAt: new Date().toISOString(),
             requestedModel: requestedModel(),
+            mainLoopModels: recorder.mainLoopModels(),
             servedModels: recorder.servedModels(),
             score: `${score}/${results.length}`,
             results,

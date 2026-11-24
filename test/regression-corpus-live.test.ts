@@ -14,8 +14,9 @@
  *          `LIVE_RESULT_DIR=<dir>` (default: `docs/audit/live-runs/`, raw `.json` gitignored).
  *
  * Model: for a run meant as proof or compared with another, set `LIVE_MODEL` to a full model id —
- * the default model moves with the SDK and CLI. The trace records `requestedModel` and the
- * `servedModels` the SDK reports; compare runs on `servedModels`, never on the request.
+ * the default model moves with the SDK and CLI. The trace records `requestedModel`,
+ * `mainLoopModels` (the model that wrote the answers) and `servedModels` (every model billed,
+ * internal calls included); compare runs on `mainLoopModels`, never on the request.
  *
  * Provenance: the result records the catalog checkout's commit and whether its tree was dirty —
  * the sidecar's `catalogTag` would still name the pinned tag on a modified branch. A catalog that
@@ -94,6 +95,7 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
               catalogCommit: catalog.commit,
               catalogDirty: catalog.dirty,
               requestedModel: requestedModel(),
+              mainLoopModels: recorder.mainLoopModels(),
               servedModels: recorder.servedModels(),
               violations,
               ...recorded,
@@ -136,6 +138,7 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
               catalogCommit: catalog.commit,
               catalogDirty: catalog.dirty,
               requestedModel: requestedModel(),
+              mainLoopModels: recorder.mainLoopModels(),
               servedModels: recorder.servedModels(),
               violations,
               outcome,
