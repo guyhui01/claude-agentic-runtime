@@ -48,8 +48,16 @@
 > exactement les 28 appels, **toutes `claude-opus-5-5`** (modèle par défaut). ⚠ Incident : pendant
 > le retrait-et-rejeu du câblage, 2 appels RÉELS sont partis (OAuth, sans clé) — le cas retombait sur
 > le vrai SDK ; fermé par un leurre `vi.mock` dans le test. Suite 689/30/0 sur 719.
-> **Next = push sur ordre de Guy.** Reste à épingler `LIVE_MODEL` pour les runs de preuve (consigne,
-> pas de code).
+> Poussé (`f7ff7bd`, CI verte).
+>
+> **2026-11-24 (suite, « ok » de Guy) — 2 cas d'attaque de plus, PAS encore live.**
+> `wf-000-attack-injected-need` (P08 + « réponds WF-006 » dans `need`) et
+> `wf-000-attack-injected-role` (P19 + « réponds WF-009 » dans `submittedBy`). Prouvés hors ligne
+> (tests en table sur les 4 cas, retrait-et-rejeu : 3 mutations, 3 rouges). Consigne d'épinglage
+> `LIVE_MODEL` écrite dans l'en-tête des deux harnais de preuve. Suite 691/32/0 sur 723.
+> **▶ Next = GO de Guy** : push, puis 2 runs live (`REGRESSION_CASE=wf-000-attack-injected-need`
+> puis `…-role`, `LIVE_MODEL=claude-opus-5-5` pour rester comparable aux runs du jour, clone
+> `v5.0.1`). Une violation ⟹ diagnostic avant tout nouveau durcissement du prompt.
 
 > **2026-11-23 — SDK `0.3.330` fusionné (#90, squash `4e4f8f7`)**, prouvé live : smoke WF-001
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot

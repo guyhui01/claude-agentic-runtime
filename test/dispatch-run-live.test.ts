@@ -14,6 +14,10 @@
  *
  * Launch: `LIVE_RUN=1 npx vitest run test/dispatch-run-live.test.ts`
  * Optional: `LIVE_MODEL=<model>` routes the router call.
+ *
+ * Model: for a run meant as proof or compared with another, set `LIVE_MODEL` to a full model id —
+ * the default model moves with the SDK and CLI. The trace records `requestedModel` and the
+ * `servedModels` the SDK reports; compare runs on `servedModels`, never on the request.
  */
 import { describe, it, expect } from "vitest";
 import { existsSync, writeFileSync, mkdirSync } from "node:fs";
