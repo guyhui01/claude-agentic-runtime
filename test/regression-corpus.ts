@@ -21,7 +21,7 @@
 import type { SpineResult, SpineFailure } from "../src/orchestrator/types.js";
 import type { CriterionResult } from "../src/eval/types.js";
 import type { Sidecar } from "../src/sidecar/types.js";
-import type { QueryRunnerDeps } from "../src/sdk/query-runner.js";
+import type { QueryRunnerDeps, QueryFn } from "../src/sdk/query-runner.js";
 import { runWf001 } from "../src/spines/run-wf-001.js";
 import { runWf008, assembleWf008Spine } from "../src/spines/run-wf-008.js";
 import { runSpine } from "../src/orchestrator/run-spine.js";
@@ -51,7 +51,13 @@ export interface RunContext {
   sidecar: Sidecar;
   catalogRoot: string;
   model?: string;
+  /** `query()` the case's runner must use (live: the served-model recorder); default: the SDK's. */
+  query?: QueryFn;
 }
+
+/** Runner deps for a case: its caps, plus the context's `query()` when one is given. */
+const depsFor = (caps: QueryRunnerDeps, ctx: RunContext): QueryRunnerDeps =>
+  ctx.query ? { ...caps, query: ctx.query } : caps;
 
 /** One step's output, as the live corpus run records it. */
 export interface StepOutput {
@@ -189,7 +195,7 @@ export const REGRESSION_CASES: RegressionCase[] = [
             "Rebuild an insurer's B2B customer portal: self-care area, " +
             "policy tracking and claims filing, web and mobile.",
         },
-        runnerDeps: WF001_CAPS,
+        runnerDeps: depsFor(WF001_CAPS, ctx),
       }),
   },
   {
@@ -222,7 +228,7 @@ export const REGRESSION_CASES: RegressionCase[] = [
           frameworks: "AI Act + GDPR",
           highStakes: true,
         },
-        runnerDeps: WF008_CAPS,
+        runnerDeps: depsFor(WF008_CAPS, ctx),
       }),
   },
   {
@@ -253,7 +259,7 @@ export const REGRESSION_CASES: RegressionCase[] = [
       const steps = assembleWf008Spine(ctx.sidecar, (asset) => toAgentDefinition(asset, ctx.catalogRoot, overrides));
       const from = steps.findIndex((s) => s.contract.stepId === "STEP-06C");
       if (from < 0) throw new Error("wf-008-counter-review-full-input: STEP-06C not in the WF-008 spine");
-      return runSpine(steps.slice(from), createQueryRunner(WF008_CAPS), wf008Step06cSeed);
+      return runSpine(steps.slice(from), createQueryRunner(depsFor(WF008_CAPS, ctx)), wf008Step06cSeed);
     },
   },
 ];
@@ -360,7 +366,7 @@ export const DISPATCH_REGRESSION_CASES: DispatchRegressionCase[] = [
       runDispatch(P11_BRIEF, {
         sidecar: ctx.sidecar,
         catalogRoot: ctx.catalogRoot,
-        runner: createQueryRunner(DISPATCH_CAPS),
+        runner: createQueryRunner(depsFor(DISPATCH_CAPS, ctx)),
         ...(ctx.model ? { model: ctx.model } : {}),
       }),
   },
@@ -376,7 +382,7 @@ export const DISPATCH_REGRESSION_CASES: DispatchRegressionCase[] = [
       runDispatch(P06_INJECTED_REROUTE, {
         sidecar: ctx.sidecar,
         catalogRoot: ctx.catalogRoot,
-        runner: createQueryRunner(DISPATCH_CAPS),
+        runner: createQueryRunner(depsFor(DISPATCH_CAPS, ctx)),
         ...(ctx.model ? { model: ctx.model } : {}),
       }),
   },
@@ -392,7 +398,7 @@ export const DISPATCH_REGRESSION_CASES: DispatchRegressionCase[] = [
       runDispatch(P17_INJECTED_FORCE_FIT, {
         sidecar: ctx.sidecar,
         catalogRoot: ctx.catalogRoot,
-        runner: createQueryRunner(DISPATCH_CAPS),
+        runner: createQueryRunner(depsFor(DISPATCH_CAPS, ctx)),
         ...(ctx.model ? { model: ctx.model } : {}),
       }),
   },

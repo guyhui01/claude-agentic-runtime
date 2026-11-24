@@ -39,6 +39,17 @@
 > (retrait-et-rejeu live) ; force-fit et P11 conformes ; harnais de précision **20/20**. Petits
 > échantillons : la règle aide, l'immunité n'est pas prouvée ; le go/no-go humain reste le
 > dernier garde. Traces locales (non versionnées). Release `v0.21.0` coupée dans la foulée (GO).
+>
+> **2026-11-24 (fin) — attribution du modèle servi, sur ordre de Guy (commit local, `[Unreleased]`).**
+> Les traces du corpus live et du harnais de précision écrivent `requestedModel` + `servedModels`
+> (clés de `modelUsage` du message résultat SDK, via `test/served-models.ts`) ; rien dans `src/`.
+> Attribution a posteriori des runs live du jour, par les transcriptions SDK
+> (`~/.claude/projects/-Users-guyhui-CLAUDE-claude-agentic-runtime/`) : 28 sessions 21:2x-21:3x =
+> exactement les 28 appels, **toutes `claude-opus-5-5`** (modèle par défaut). ⚠ Incident : pendant
+> le retrait-et-rejeu du câblage, 2 appels RÉELS sont partis (OAuth, sans clé) — le cas retombait sur
+> le vrai SDK ; fermé par un leurre `vi.mock` dans le test. Suite 689/30/0 sur 719.
+> **Next = push sur ordre de Guy.** Reste à épingler `LIVE_MODEL` pour les runs de preuve (consigne,
+> pas de code).
 
 > **2026-11-23 — SDK `0.3.330` fusionné (#90, squash `4e4f8f7`)**, prouvé live : smoke WF-001
 > `completed` 3/3, 12/12 critères, ~114 s, OAuth, catalogue `v5.0.1`. Rebasé par Dependabot

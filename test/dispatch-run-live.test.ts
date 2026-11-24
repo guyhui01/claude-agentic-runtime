@@ -24,6 +24,7 @@ import { runDispatch, type DispatchOutcome } from "../src/dispatch/run-dispatch.
 import { createQueryRunner } from "../src/sdk/query-runner.js";
 import { DISPATCH_FIXTURES } from "./fixtures/dispatch-briefs.js";
 import { CATALOG_ROOT, SIDECAR_PATH } from "./catalog-root.js";
+import { recordServedModels, requestedModel } from "./served-models.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_FILE =
@@ -44,7 +45,8 @@ describe.skipIf(!ENABLED)("WF-000 dispatch — LIVE router accuracy (billed, obs
     "proposes on the 20 oracle fixtures and reports the score verbatim",
     async () => {
       const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
-      const runner = createQueryRunner({ caps: { maxBudgetUsd: 0.5, maxTurns: 2 } });
+      const recorder = recordServedModels();
+      const runner = createQueryRunner({ caps: { maxBudgetUsd: 0.5, maxTurns: 2 }, query: recorder.query });
 
       const results: Array<{
         id: string;
@@ -78,7 +80,13 @@ describe.skipIf(!ENABLED)("WF-000 dispatch — LIVE router accuracy (billed, obs
       writeFileSync(
         RESULT_FILE,
         JSON.stringify(
-          { ranAt: new Date().toISOString(), score: `${score}/${results.length}`, results },
+          {
+            ranAt: new Date().toISOString(),
+            requestedModel: requestedModel(),
+            servedModels: recorder.servedModels(),
+            score: `${score}/${results.length}`,
+            results,
+          },
           null,
           2,
         ),

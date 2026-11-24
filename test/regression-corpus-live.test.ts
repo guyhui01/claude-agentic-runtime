@@ -37,6 +37,7 @@ import {
   checkDispatchInvariants,
   toRecordedRun,
 } from "./regression-corpus.js";
+import { recordServedModels, requestedModel } from "./served-models.js";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const RESULT_DIR = process.env.LIVE_RESULT_DIR ?? join(HERE, "..", "docs", "audit", "live-runs");
@@ -68,10 +69,12 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
       async () => {
         const catalog = catalogProvenance(CATALOG_ROOT);
         const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
+        const recorder = recordServedModels();
         const res = await c.run({
           sidecar,
           catalogRoot: CATALOG_ROOT,
           ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
+          query: recorder.query,
         });
         const recorded = toRecordedRun(res);
         const outputs = res.traces.map((t) => ({ stepId: t.provenance.stepId, output: t.output }));
@@ -86,6 +89,8 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
               catalogRoot: CATALOG_ROOT,
               catalogCommit: catalog.commit,
               catalogDirty: catalog.dirty,
+              requestedModel: requestedModel(),
+              servedModels: recorder.servedModels(),
               violations,
               ...recorded,
               outputs,
@@ -108,10 +113,12 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
       async () => {
         const catalog = catalogProvenance(CATALOG_ROOT);
         const sidecar = loadSidecar(SIDECAR_PATH, CATALOG_ROOT);
+        const recorder = recordServedModels();
         const outcome = await c.run({
           sidecar,
           catalogRoot: CATALOG_ROOT,
           ...(process.env.LIVE_MODEL ? { model: process.env.LIVE_MODEL } : {}),
+          query: recorder.query,
         });
         const violations = checkDispatchInvariants(c.expectedRoute, outcome);
 
@@ -124,6 +131,8 @@ describe.skipIf(!ENABLED)("regression corpus — LIVE RUN (billed, asserted)", (
               catalogRoot: CATALOG_ROOT,
               catalogCommit: catalog.commit,
               catalogDirty: catalog.dirty,
+              requestedModel: requestedModel(),
+              servedModels: recorder.servedModels(),
               violations,
               outcome,
             },

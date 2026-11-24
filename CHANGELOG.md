@@ -8,6 +8,12 @@
 
 ## [Unreleased]
 
+> Model: Claude Opus 5.5.
+
+### ✨ Added
+
+- **The live corpus and router-accuracy traces now name the model that served them.** Until now a trace recorded neither the requested nor the served model, so a run's model was known only from context (the live-runs README already said so). `test/served-models.ts` wraps the SDK `query()`, passes every message through unchanged, and keeps the model ids keyed in each result message's `modelUsage` — what the SDK reports it ran, not the alias or default that was asked for. `test/regression-corpus-live.test.ts` and `test/dispatch-run-live.test.ts` write `requestedModel` (`LIVE_MODEL`, or `"default"`) and `servedModels` next to each other; corpus cases take the `query()` from their run context (`RunContext.query`). No change in `src/`; the other live harnesses back frozen live proofs and are left as they are. Hermetic tests (`test/served-models.test.ts`): the stream passes through untouched, ids are kept sorted and deduplicated, a result with no `modelUsage` records nothing, and every dispatch and spine corpus case sends its calls through the context's `query()`. The SDK module is replaced there by a tripwire, because a case that ignored the context fell back to the real SDK: while checking that the test can fail, two real calls went out on the subscription (OAuth, no API key) before the tripwire was added. Removing the context wiring, the id recording or the pass-through each turned at least one test red. Suite **689 passed / 30 skipped / 0 failed of 719**, strict `typecheck` OK.
+
 ---
 
 ## [0.21.0] - 2026-11-24 — The router ignores instructions planted in a brief, two attack corpus cases, and WF-009 refuses a run with no CVs 🛡️
