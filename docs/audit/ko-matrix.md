@@ -99,6 +99,20 @@ before any billed call), typed-handoff rejection, the API-key refusal.
   catalog `v5.0.0`: `returned`, 7 reservations, 0 violations. On the full input the reservations
   reach the tier → obligations chain (Annex III classification, DORA vs NIS2, GDPR Art. 22),
   which bears on the scope-boundary question; one run, not decided here.)*
+- *(2026-11-24: the seven reservations read against the card at `v5.0.1`. The card's
+  `perimetre` (line 360) bars STEP-06C from re-qualifying the legal substance, while its
+  expected outputs (lines 354-356) ask for a tier → obligations → measures consistency review, a
+  check that no impacted framework was silently dropped, and a bias log. **In scope:** R-05
+  (missing objective evidence), R-06 (missing deliverables), the "DORA is missing" half of R-02
+  (a dropped framework) and R-01 as worded (classification "not demonstrated", sent back to
+  STEP-01 for a memo). **Across the line:** R-04 (contests the Art. 22 argument on CJEU case
+  law), the "NIS2 is lex specialis-displaced" half of R-02, and the containment orders of R-03
+  (suspend use, suspend transfers). Mixed: R-07. So the boundary is partly crossed on the full
+  input. The crossing only adds reservations to a `returned` verdict, so it fails in the safe
+  direction: it can delay STEP-07, never clear an audit that should not be cleared. No runtime
+  change: telling methodology from legal substance in prose would need an LLM judge (ADR-0011).
+  One run; the legal content of the reservations is still not verified. If it recurs, the fix
+  belongs to the AUDIT-METHODO-IA prompt in the catalog.)*
 - **Corpus candidate:** STEP-06C fed a fixture of all upstream outputs; invariants: verdict in
   {cleared, returned}; returned ⇒ ≥ 1 reservation citing a checkable artifact; the halt rule
   matches whichever reading Guy ratifies (ratified 2026-11-14: returned ⇒ halt before STEP-07).
