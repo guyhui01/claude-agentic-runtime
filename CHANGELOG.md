@@ -8,6 +8,10 @@
 
 ## [Unreleased]
 
+---
+
+## [0.21.0] - 2026-11-24 — The router ignores instructions planted in a brief, two attack corpus cases, and WF-009 refuses a run with no CVs 🛡️
+
 > Model: Claude Opus 5.5.
 
 ### ✨ Added
